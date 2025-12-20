@@ -74,6 +74,13 @@ export function generatePrompt(
 }
 
 /**
+ * In-memory cache for template contents
+ * Key: "${templateSetName}:${templatePath}"
+ * Value: Template content string
+ */
+const templateCache = new Map<string, string>();
+
+/**
  * Load prompt from template
  * @param templatePath Relative path to template from template set root directory (e.g., 'chat/basic.md')
  * @returns Template content
@@ -81,6 +88,13 @@ export function generatePrompt(
  */
 export function loadPromptFromTemplate(templatePath: string): string {
   const templateSetName = process.env.TEMPLATES_USE || "en";
+
+  // Check cache first
+  const cacheKey = `${templateSetName}:${templatePath}`;
+  if (templateCache.has(cacheKey)) {
+    return templateCache.get(cacheKey)!;
+  }
+
   const dataDir = process.env.DATA_DIR;
   const builtInTemplatesBaseDir = __dirname;
 
@@ -134,5 +148,10 @@ export function loadPromptFromTemplate(templatePath: string): string {
   }
 
   // 5. Read the found file
-  return fs.readFileSync(finalPath, "utf-8");
+  const content = fs.readFileSync(finalPath, "utf-8");
+
+  // Store in cache
+  templateCache.set(cacheKey, content);
+
+  return content;
 }

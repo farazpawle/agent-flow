@@ -33,8 +33,10 @@ export async function loadTaskRelatedFiles(
     [RelatedFileType.TO_MODIFY]: 1,
     [RelatedFileType.REFERENCE]: 2,
     [RelatedFileType.DEPENDENCY]: 3,
-    [RelatedFileType.CREATE]: 4,
-    [RelatedFileType.OTHER]: 5,
+    [RelatedFileType.TEST]: 4,
+    [RelatedFileType.CREATE]: 5,
+    [RelatedFileType.DOCUMENT]: 6,
+    [RelatedFileType.OTHER]: 7,
   };
 
   const sortedFiles = [...relatedFiles].sort(
@@ -52,18 +54,15 @@ export async function loadTaskRelatedFiles(
     const fileInfo = generateFileInfo(file);
 
     // Add to total content
-    const fileHeader = `\n### ${file.type}: ${file.path}${
-      file.description ? ` - ${file.description}` : ""
-    }${
-      file.lineStart && file.lineEnd
+    const fileHeader = `\n### ${file.type}: ${file.path}${file.description ? ` - ${file.description}` : ""
+      }${file.lineStart && file.lineEnd
         ? ` (lines ${file.lineStart}-${file.lineEnd})`
         : ""
-    }\n\n`;
+      }\n\n`;
 
     totalContent += fileHeader + "```\n" + fileInfo + "\n```\n\n";
-    filesSummary += `- **${file.path}**${
-      file.description ? ` - ${file.description}` : ""
-    } (${fileInfo.length} characters)\n`;
+    filesSummary += `- **${file.path}**${file.description ? ` - ${file.description}` : ""
+      } (${fileInfo.length} characters)\n`;
 
     totalLength += fileInfo.length + fileHeader.length + 8; // 8 for "```\n" and "\n```"
   }

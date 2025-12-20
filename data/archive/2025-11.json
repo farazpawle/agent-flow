@@ -1,0 +1,14 @@
+{
+  "tasks": [
+    {
+      "id": "old-completed",
+      "name": "Old completed",
+      "description": "Completed 45 days ago",
+      "status": "Completed",
+      "dependencies": [],
+      "createdAt": "2025-11-04T18:38:44.219Z",
+      "updatedAt": "2025-11-04T18:38:44.219Z",
+      "completedAt": "2025-11-04T18:38:44.219Z"
+    }
+  ]
+}

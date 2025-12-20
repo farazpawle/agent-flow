@@ -11,12 +11,26 @@ export interface TaskDependency {
   taskId: string; // Unique identifier of the prerequisite task that must be completed before the current task
 }
 
+// Project: defines a project that contains related tasks
+export interface Project {
+  id: string;              // Unique identifier of the project
+  name: string;            // Human-readable project name
+  description?: string;    // Description for agent identification across sessions
+  path?: string;           // Workspace path associated with this project
+  techStack?: string[];    // Technologies used in this project
+  taskCount?: number;      // Number of tasks in this project
+  createdAt: Date;         // Timestamp when the project was created
+  updatedAt: Date;         // Timestamp when the project was last updated
+}
+
 // Related file type: defines the relationship type between files and tasks
 export enum RelatedFileType {
   TO_MODIFY = "TO_MODIFY", // Files that need to be modified in the task
   REFERENCE = "REFERENCE", // Reference materials or related documents for the task
   CREATE = "CREATE", // Files that need to be created in the task
   DEPENDENCY = "DEPENDENCY", // Component or library files that the task depends on
+  TEST = "TEST", // Test files related to the task
+  DOCUMENT = "DOCUMENT", // Documentation files
   OTHER = "OTHER", // Other types of related files
 }
 
@@ -59,9 +73,12 @@ export interface Task {
 
   // Additional field: save verification standards and testing methods
   verificationCriteria?: string; // Clear verification standards, test points, and acceptance conditions
-  
+
   // Additional field: save conversation history for detailed mode
   conversationHistory?: ConversationMessage[]; // History of conversations related to this task (only used when detailed mode is enabled)
+
+  // Project association: links task to a specific project
+  projectId?: string; // ID of the project this task belongs to
 }
 
 // Parameters for planning a task: used to initialize the task planning phase

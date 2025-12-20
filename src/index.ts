@@ -1,4 +1,28 @@
-import "dotenv/config";
+import path from "path";
+import fs from "fs";
+import fsPromises from "fs/promises";
+import { fileURLToPath } from "url";
+import dotenv from "dotenv";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const PROJECT_ROOT = path.resolve(__dirname, "..");
+
+// Explicitly load .env from project root and override inherited variables
+dotenv.config({ path: path.join(PROJECT_ROOT, ".env"), override: true });
+
+// Debug logging
+const debugLog = (msg: string) => {
+  const logMsg = `[CoT Debug] ${new Date().toISOString()} - ${msg}\n`;
+  try {
+    fs.appendFileSync(path.join(PROJECT_ROOT, "debug_server.log"), logMsg);
+  } catch (e) { }
+};
+
+debugLog(`Server starting. CWD: ${process.cwd()}`);
+debugLog(`ENABLE_GUI: ${process.env.ENABLE_GUI}`);
+debugLog(`DATA_DIR: ${process.env.DATA_DIR}`);
+
 import { loadPromptFromTemplate } from "./prompts/loader.js";
 import { Server } from "@modelcontextprotocol/sdk/server/index.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
@@ -9,11 +33,8 @@ import {
   ListToolsRequestSchema,
 } from "@modelcontextprotocol/sdk/types.js";
 import express, { Request, Response, NextFunction } from "express";
-import getPort from "get-port";
-import path from "path";
-import fs from "fs";
-import fsPromises from "fs/promises";
-import { fileURLToPath } from "url";
+import { isPortInUse } from "./utils/portUtils.js";
+import open from "open";
 
 // Import tool functions
 import {
@@ -53,17 +74,44 @@ import {
 
 // Import project tools
 import {
-  initProjectRules,
-  initProjectRulesSchema,
+  createProject,
+  createProjectSchema,
+  listProjects,
+  listProjectsSchema,
+  getProjectContext,
+  getProjectContextSchema,
 } from "./tools/projectTools.js";
 
 // Import task model functions
-import { updateTaskConversationHistory, getTaskById } from "./models/taskModel.js";
+import {
+  updateTaskConversationHistory,
+  getTaskById,
+  getAllTasks,
+  ensureDataDir,
+  updateTask
+} from "./models/taskModel.js";
+import { taskEvents, TASK_EVENTS } from "./utils/events.js";
+
+// Import client model
+import {
+  getAllClients,
+  getClientById,
+  registerClient,
+  updateClientHeartbeat,
+  getCurrentClientId,
+  markClientInactive,
+  markAllClientsInactive,
+  cleanupStaleClients,
+  deleteInactiveClients
+} from "./models/clientModel.js";
 
 async function main() {
   try {
     const ENABLE_GUI = process.env.ENABLE_GUI === "true";
     const ENABLE_DETAILED_MODE = process.env.ENABLE_DETAILED_MODE === "true";
+
+    // Initialize Database
+    await ensureDataDir();
 
     if (ENABLE_GUI) {
       // Create Express application
@@ -89,29 +137,156 @@ async function main() {
       }
 
       // Set up static file directory
-      const __filename = fileURLToPath(import.meta.url);
-      const __dirname = path.dirname(__filename);
       const publicPath = path.join(__dirname, "public");
-      const DATA_DIR = process.env.DATA_DIR || path.join(__dirname, "data");
-      const TASKS_FILE_PATH = path.join(DATA_DIR, "tasks.json"); // Extract file path
+      const DATA_DIR_FOR_GUI = process.env.DATA_DIR || path.join(__dirname, "data");
 
       app.use(express.static(publicPath));
+      app.use(express.json()); // Enable JSON body parsing
 
-      // Set up API routes
-      app.get("/api/tasks", async (req: Request, res: Response) => {
+      // ==================== CLIENT API ENDPOINTS ====================
+
+      // Get all clients
+      app.get("/api/clients", async (req: Request, res: Response) => {
         try {
-          // Use fsPromises to maintain asynchronous reading
-          const tasksData = await fsPromises.readFile(TASKS_FILE_PATH, "utf-8");
-          res.json(JSON.parse(tasksData));
+          const clients = await getAllClients();
+          res.json({ clients });
         } catch (error) {
-          // Ensure returning empty task list when file doesn't exist
-          if ((error as NodeJS.ErrnoException).code === "ENOENT") {
-            res.json({ tasks: [] });
-          } else {
-            res.status(500).json({ error: "Failed to read tasks data" });
-          }
+          res.status(500).json({ error: "Failed to fetch clients" });
         }
       });
+
+      // Get client count only
+      app.get("/api/clients/count", async (req: Request, res: Response) => {
+        try {
+          const clients = await getAllClients();
+          const count = clients.filter((c: any) => c.isActive).length;
+          res.json({ count });
+        } catch (error) {
+          res.status(500).json({ error: "Failed to fetch client count" });
+        }
+      });
+
+      // Get single client
+      app.get("/api/clients/:id", async (req: Request, res: Response) => {
+        try {
+          const client = await getClientById(req.params.id);
+          if (!client) {
+            res.status(404).json({ error: "Client not found" });
+            return;
+          }
+          res.json({ client });
+        } catch (error) {
+          res.status(500).json({ error: "Failed to fetch client" });
+        }
+      });
+
+      // Update client heartbeat
+      app.patch("/api/clients/:id/heartbeat", async (req: Request, res: Response) => {
+        try {
+          await updateClientHeartbeat(req.params.id);
+          res.json({ success: true });
+        } catch (error) {
+          res.status(500).json({ error: "Failed to update heartbeat" });
+        }
+      });
+
+      // ==================== PROJECT API ENDPOINTS ====================
+
+      // Get all projects
+      app.get("/api/projects", async (req: Request, res: Response) => {
+        try {
+          const { getAllProjects } = await import("./models/projectModel.js");
+          const projects = await getAllProjects(true);
+          res.json({ projects });
+        } catch (error) {
+          res.status(500).json({ error: "Failed to fetch projects" });
+        }
+      });
+
+      // Get single project
+      app.get("/api/projects/:id", async (req: Request, res: Response) => {
+        try {
+          const { getProjectById } = await import("./models/projectModel.js");
+          const project = await getProjectById(req.params.id);
+          if (!project) {
+            res.status(404).json({ error: "Project not found" });
+            return;
+          }
+          res.json({ project });
+        } catch (error) {
+          res.status(500).json({ error: "Failed to fetch project" });
+        }
+      });
+
+      // ==================== TASK API ENDPOINTS ====================
+
+      // Get all tasks (with optional project or client filter)
+      app.get("/api/tasks", async (req: Request, res: Response) => {
+        try {
+          let tasks = await getAllTasks();
+
+          // Filter by project_id if provided
+          const projectId = req.query.project_id as string;
+          if (projectId && projectId !== "all") {
+            tasks = tasks.filter(t => (t as any).projectId === projectId);
+          }
+
+          // Filter by client_id if provided (backward compatibility)
+          const clientId = req.query.client_id as string;
+          if (clientId && clientId !== "all") {
+            tasks = tasks.filter(t => (t as any).clientId === clientId);
+          }
+
+          res.json({ tasks });
+        } catch (error) {
+          res.status(500).json({ error: "Failed to read tasks data" });
+        }
+      });
+
+      // Get single task
+      app.get("/api/tasks/:id", async (req: Request, res: Response) => {
+        try {
+          const task = await getTaskById(req.params.id);
+          if (!task) {
+            res.status(404).json({ error: "Task not found" });
+            return;
+          }
+          res.json({ task });
+        } catch (error) {
+          res.status(500).json({ error: "Failed to fetch task" });
+        }
+      });
+
+      // Update task (PATCH)
+      app.patch("/api/tasks/:id", async (req: Request, res: Response) => {
+        try {
+          const taskId = req.params.id;
+          const updates = req.body;
+
+          // Validate task exists
+          const existingTask = await getTaskById(taskId);
+          if (!existingTask) {
+            res.status(404).json({ error: "Task not found" });
+            return;
+          }
+
+          // Apply updates
+          const updatedTask = await updateTask(taskId, updates);
+          if (!updatedTask) {
+            res.status(400).json({ error: "Failed to update task" });
+            return;
+          }
+
+          // Trigger SSE update
+          sendSseUpdate();
+
+          res.json({ success: true, task: updatedTask });
+        } catch (error) {
+          console.error("Error updating task:", error);
+          res.status(500).json({ error: "Failed to update task" });
+        }
+      });
+
 
       // Add: SSE endpoint
       app.get("/api/tasks/stream", (req: Request, res: Response) => {
@@ -119,8 +294,7 @@ async function main() {
           "Content-Type": "text/event-stream",
           "Cache-Control": "no-cache",
           Connection: "keep-alive",
-          // Optional: CORS headers, if frontend and backend are not on the same origin
-          // "Access-Control-Allow-Origin": "*",
+          // Optional: CORS headers
         });
 
         // Send an initial event or keep the connection
@@ -140,7 +314,7 @@ async function main() {
         app.get("/api/tasks/:taskId/conversation", async (req: Request, res: Response) => {
           try {
             const taskId = req.params.taskId;
-            
+
             // Validate taskId
             if (!taskId) {
               res.status(400).json({ error: "Task ID is required" });
@@ -149,13 +323,13 @@ async function main() {
 
             // Get task by ID
             const task = await getTaskById(taskId);
-            
+
             // If task doesn't exist, return 404
             if (!task) {
               res.status(404).json({ error: "Task not found" });
               return;
             }
-            
+
             // Return conversation history or empty array if it doesn't exist
             res.json({ conversationHistory: task.conversationHistory || [] });
           } catch (error) {
@@ -165,49 +339,122 @@ async function main() {
         });
       }
 
-      // Get available port
-      const port = await getPort();
+      // Fixed port configuration
+      const SERVER_PORT = parseInt(process.env.SERVER_PORT || "54544", 10);
 
-      // Start HTTP server
-      const httpServer = app.listen(port, () => {
-        // Start monitoring file changes after server starts
-        try {
-          // Check if file exists, if not, don't watch (avoid watch errors)
-          if (fs.existsSync(TASKS_FILE_PATH)) {
-            fs.watch(TASKS_FILE_PATH, (eventType, filename) => {
-              if (
-                filename &&
-                (eventType === "change" || eventType === "rename")
-              ) {
-                // Slightly delay sending to prevent multiple triggers in a short time (e.g., when saving in editor)
-                // debounce sendSseUpdate if needed
-                sendSseUpdate();
-              }
-            });
-          }
-        } catch (watchError) {}
-      });
+      // Check if another instance is already running FIRST
+      const portInUse = await isPortInUse(SERVER_PORT);
 
-      // Write the URL to WebGUI.md
+      // Client registration - behavior differs based on whether this is primary server or client-only mode
+      let currentClient: { id: string; name: string } | null = null;
       try {
-        const websiteUrl = `[Task Manager UI](http://localhost:${port})`;
-        const websiteFilePath = path.join(DATA_DIR, "WebGUI.md");
-        await fsPromises.writeFile(websiteFilePath, websiteUrl, "utf-8");
-      } catch (error) {}
+        if (!portInUse) {
+          // This is the PRIMARY server - clean up all stale clients first
+          // Mark all as inactive, then delete them to clean up old duplicates
+          await markAllClientsInactive();
+          await deleteInactiveClients();
+          console.error("[CoT] Primary server starting - cleaned up stale clients");
+        }
 
-      // Set up process termination event handler (ensure watcher is removed)
-      const shutdownHandler = async () => {
-        // Close all SSE connections
-        sseClients.forEach((client) => client.end());
-        sseClients = [];
+        // Register this instance as a client (both primary and client-only modes)
+        currentClient = await registerClient();
+        console.error(`[CoT] Registered as client: ${currentClient.name} (${currentClient.id})`);
 
-        // Close HTTP server
-        await new Promise<void>((resolve) => httpServer.close(() => resolve()));
-        process.exit(0);
-      };
+        // Start heartbeat interval (every 1 minute) - for all instances
+        setInterval(async () => {
+          try {
+            if (currentClient) {
+              await updateClientHeartbeat(currentClient.id);
+            }
+          } catch (err) {
+            console.error("[CoT] Heartbeat failed:", err);
+          }
+        }, 60000);
 
-      process.on("SIGINT", shutdownHandler);
-      process.on("SIGTERM", shutdownHandler);
+        if (!portInUse) {
+          // Only primary server runs periodic cleanup for stale clients (every 2 minutes)
+          setInterval(async () => {
+            try {
+              await cleanupStaleClients();
+            } catch (err) {
+              console.error("[CoT] Stale client cleanup failed:", err);
+            }
+          }, 120000);
+        }
+      } catch (err) {
+        console.error("[CoT] Failed to register client:", err);
+      }
+
+      if (portInUse) {
+        console.error(`[CoT] Server already running on port ${SERVER_PORT}`);
+        console.error(`[CoT] This instance will run in client-only mode (no GUI server)`);
+        // Skip starting GUI server, just continue with MCP handler
+      } else {
+        // Start HTTP server on fixed port
+        const httpServer = app.listen(SERVER_PORT, async () => {
+          // Subscribe to task updates
+          taskEvents.on(TASK_EVENTS.UPDATED, () => {
+            sendSseUpdate();
+          });
+
+          console.error(`[CoT] Web GUI available at: http://localhost:${SERVER_PORT}`);
+
+          // Write the URL to WebGUI.md
+          try {
+            const websiteUrl = `[Task Manager UI](http://localhost:${SERVER_PORT})`;
+            const targetDir = process.env.DATA_DIR || path.join(__dirname, "data");
+            const websiteFilePath = path.join(targetDir, "WebGUI.md");
+
+            if (!fs.existsSync(targetDir)) {
+              await fsPromises.mkdir(targetDir, { recursive: true });
+            }
+
+            await fsPromises.writeFile(websiteFilePath, websiteUrl, "utf-8");
+            console.error(`[CoT] GUI link saved to: ${websiteFilePath}`);
+          } catch (error) {
+            console.error("[CoT] Failed to write WebGUI.md:", error);
+          }
+
+          // Auto-open browser if enabled
+          if (process.env.ENABLE_AUTO_OPEN === "true") {
+            try {
+              await open(`http://localhost:${SERVER_PORT}`);
+              console.error(`[CoT] Opened GUI in browser`);
+            } catch (error) {
+              console.error(`[CoT] Could not auto-open browser:`, error);
+            }
+          }
+        });
+
+        // Handle server errors
+        httpServer.on("error", (err: NodeJS.ErrnoException) => {
+          if (err.code === "EADDRINUSE") {
+            console.error(`[CoT] Port ${SERVER_PORT} is already in use. Running in client-only mode.`);
+          } else {
+            console.error(`[CoT] Server error:`, err);
+          }
+        });
+
+        // Cleanup on exit
+        const shutdownHandler = async () => {
+          // Mark current client as inactive before shutdown
+          if (currentClient) {
+            try {
+              await markClientInactive(currentClient.id);
+              console.error(`[CoT] Client ${currentClient.id} marked as inactive`);
+            } catch (err) {
+              console.error("[CoT] Failed to mark client inactive:", err);
+            }
+          }
+          sseClients.forEach((client) => client.end());
+          sseClients = [];
+          await new Promise<void>((resolve) => httpServer.close(() => resolve()));
+          process.exit(0);
+        };
+
+        process.on("SIGINT", shutdownHandler);
+        process.on("SIGTERM", shutdownHandler);
+      }
     }
 
     // Create MCP server
@@ -323,11 +570,19 @@ async function main() {
             inputSchema: zodToJsonSchema(processThoughtSchema),
           },
           {
-            name: "init_project_rules",
-            description: loadPromptFromTemplate(
-              "toolsDescription/initProjectRules.md"
-            ),
-            inputSchema: zodToJsonSchema(initProjectRulesSchema),
+            name: "create_project",
+            description: "Create or update a project with a description and metadata. Use this tool to create projects that agents can identify across sessions. REQUIRED: project_name and project_description.",
+            inputSchema: zodToJsonSchema(createProjectSchema),
+          },
+          {
+            name: "list_projects",
+            description: "List all available projects with descriptions. Use this to identify which project to work on when resuming work across sessions. Returns project IDs, names, descriptions, tech stacks, and task counts.",
+            inputSchema: zodToJsonSchema(listProjectsSchema),
+          },
+          {
+            name: "get_project_context",
+            description: "Get the current project context for this workspace. Use this at the start of a session to understand which project you're working on. Can also be used to switch to a different project by providing project_id.",
+            inputSchema: zodToJsonSchema(getProjectContextSchema),
           },
         ],
       };
@@ -561,8 +816,40 @@ async function main() {
               result = await processThought(parsedArgs.data);
               return result;
 
-            case "init_project_rules":
-              result = await initProjectRules();
+            case "create_project":
+              parsedArgs = await createProjectSchema.safeParseAsync(
+                request.params.arguments
+              );
+              if (!parsedArgs.success) {
+                throw new Error(
+                  `Invalid arguments for tool ${request.params.name}: ${parsedArgs.error.message}`
+                );
+              }
+              result = await createProject(parsedArgs.data);
+              return result;
+
+            case "list_projects":
+              parsedArgs = await listProjectsSchema.safeParseAsync(
+                request.params.arguments
+              );
+              if (!parsedArgs.success) {
+                throw new Error(
+                  `Invalid arguments for tool ${request.params.name}: ${parsedArgs.error.message}`
+                );
+              }
+              result = await listProjects(parsedArgs.data);
+              return result;
+
+            case "get_project_context":
+              parsedArgs = await getProjectContextSchema.safeParseAsync(
+                request.params.arguments
+              );
+              if (!parsedArgs.success) {
+                throw new Error(
+                  `Invalid arguments for tool ${request.params.name}: ${parsedArgs.error.message}`
+                );
+              }
+              result = await getProjectContext(parsedArgs.data);
               return result;
 
             default:
