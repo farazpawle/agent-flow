@@ -1,4 +1,7 @@
--- Enable UUID extension if not enabled (Supabase usually has it)
+-- AgentFlow Supabase Schema
+-- Run this in your Supabase SQL Editor to initialize the database.
+
+-- Enable UUID extension
 create extension if not exists "uuid-ossp";
 
 -- Projects Table
@@ -22,14 +25,15 @@ create table if not exists tasks (
     updated_at timestamptz not null default now(),
     completed_at timestamptz,
     client_id text,
-    project_id text references projects(id),
+    project_id text references projects(id) on delete cascade,
+    execution_order integer default 0,
     content jsonb not null
 );
 
 -- Workflow Steps Table
 create table if not exists workflow_steps (
     id text primary key,
-    project_id text not null references projects(id),
+    project_id text not null references projects(id) on delete cascade,
     task_id text,
     step_type text not null,
     content text not null,
@@ -48,24 +52,28 @@ create table if not exists clients (
     is_active boolean default true
 );
 
--- Indexes
+-- Indexes for performance
 create index if not exists idx_tasks_project_id on tasks(project_id);
 create index if not exists idx_tasks_status on tasks(status);
+create index if not exists idx_tasks_execution_order on tasks(execution_order);
 create index if not exists idx_workflow_project_id on workflow_steps(project_id);
 create index if not exists idx_clients_is_active on clients(is_active);
 
--- Row Level Security (RLS) - Optional but recommended
--- For now, enable RLS but allow public access if you want 'service_role' key to bypass, 
--- or specific policies if you use Authenticated users.
--- Defaults to disabled effectively if you use Service Role Key.
+-- Enable Realtime for the tasks table
+-- Note: You may need to enable this in the Supabase UI under Database -> Replication -> public -> tasks
+-- alter publication supabase_realtime add table tasks;
+
+-- Row Level Security (RLS)
+-- If you use the Service Role Key (recommended for backends), RLS is bypassed.
+-- The following policies are for safety if using the Anon/Authenticated keys.
 alter table projects enable row level security;
 alter table tasks enable row level security;
 alter table workflow_steps enable row level security;
 alter table clients enable row level security;
 
--- Simple policies to allow full access if using Anon key (for local dev mode simplicity)
--- WARNING: In production, restrict this!
-create policy "Allow all access" on projects for all using (true);
-create policy "Allow all access" on tasks for all using (true);
-create policy "Allow all access" on workflow_steps for all using (true);
-create policy "Allow all access" on clients for all using (true);
+-- Simple "Allow All" policies for development. 
+-- WARNING: In production, you should tighten these policies!
+create policy "Allow all access for projects" on projects for all using (true);
+create policy "Allow all access for tasks" on tasks for all using (true);
+create policy "Allow all access for workflow_steps" on workflow_steps for all using (true);
+create policy "Allow all access for clients" on clients for all using (true);

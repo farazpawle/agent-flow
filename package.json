@@ -24,7 +24,9 @@
     "mcp": "node dist/index.js",
     "build:start": "npm run build && npm run start",
     "build:mcp": "npm run build && npm run mcp",
-    "test": "tsx src/tests/test-rigorous.ts"
+    "test": "tsx src/tests/test-rigorous.ts",
+    "supabase:check": "node scripts/supabase-check.mjs",
+    "supabase:migrate": "node scripts/supabase-migrate.mjs"
   },
   "keywords": [
     "mcp",

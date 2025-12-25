@@ -110,6 +110,19 @@ Register the server in your MCP client (Cursor, Claude Desktop, etc.). Since Age
 
 ---
 
+## ☁️ Supabase Cloud Setup
+
+If you want to use Supabase instead of SQLite:
+
+1.  **Initialize Tables**: Copy the content of `scripts/supabase-schema.sql` and run it in your Supabase SQL Editor.
+2.  **Verify Setup**: Run `npm run supabase:check` to ensure all tables are correctly created and accessible.
+3.  **Migrate local data**: If you have local SQLite data, run `npm run supabase:migrate` to push it to the cloud.
+4.  **Update .env**:
+    ```bash
+    DB_TYPE="supabase"
+    SUPABASE_URL="https://your-project.supabase.co"
+    SUPABASE_SERVICE_KEY="your-service-role-key"
+    ```
 
 ---
 
