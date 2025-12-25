@@ -1,67 +1,49 @@
-# AgentFlow Smithery Configuration
-# Generated based on standard Smithery requirements
+# smithery.yaml
+# Precise configuration for Smithery Cloud (Deploy from GitHub)
 
 name: "agent-flow"
-title: "AgentFlow"
-description: "AgentFlow is an intelligent agentic workflow system that manages tasks, dependencies, and reasoning for AI Agents."
 version: "2.0.0"
-author: "Faraz Pawle"
-license: "MIT"
-homepage: "https://github.com/farazpawle/agent-flow"
-repository: "https://github.com/farazpawle/agent-flow"
-bugs: "https://github.com/farazpawle/agent-flow/issues"
 
-# MCP Server metadata (CRITICAL for Smithery detection)
-mcp:
-  name: "agent-flow"
-  version: "2.0.0"
-  capabilities:
-    tools: {}
-    resources: {}
-    prompts: {}
-    streaming: true
-  transport: "stdio"
+# Using the node runtime is standard for TypeScript projects on Smithery Cloud
+# It automatically handles dependency installation if package.json is present
+runtime: node
 
-# Build and runtime configuration
-build:
-  command: "npm run build"
-  output: "dist"
+# The command to build the project
+buildCommand: npm run build
 
-runtime:
-  command: "node"
-  args:
-    - "dist/index.js"
-  env:
+# The command to start the server in MCP mode (stdio)
+startCommand: npm run mcp
+
+# Configuration schema for environment variables
+# This allows the user to configure these values in the Smithery dashboard
+configSchema:
+  type: object
+  properties:
     DATA_DIR:
-      description: "Directory for storing task data (absolute path recommended)"
-      required: true
+      type: string
+      description: "REQUIRED: Absolute path to the directory where tasks and projects will be stored."
     DB_TYPE:
-      description: "Database type to use (sqlite or supabase)"
+      type: string
+      description: "Database type to use (sqlite or supabase)."
+      enum: ["sqlite", "supabase"]
       default: "sqlite"
     ENABLE_GUI:
-      description: "Whether to enable the web-based GUI"
+      type: string
+      description: "Whether to enable the web-based visual dashboard."
       default: "true"
     ENABLE_DETAILED_MODE:
-      description: "Whether to record per-task conversation history"
+      type: string
+      description: "Whether to record detailed per-task conversation history."
       default: "false"
+  required:
+    - DATA_DIR
 
-# Smithery CLI compatibility
-clients:
-  - "claude"
-  - "cursor"
-  - "windsurf"
-  - "cline"
-  - "typescript"
-
-# Publishing configuration
-publish:
-  categories:
-    - "productivity"
-    - "tools"
-    - "developer"
-  tags:
-    - "mcp"
-    - "workflow"
-    - "agent"
-    - "reasoning"
-  visibility: "public"
+# Metadata for the Smithery registry
+title: "AgentFlow"
+description: "AgentFlow is an intelligent agentic workflow system that manages tasks, dependencies, and reasoning for AI Agents."
+repository: "https://github.com/farazpawle/agent-flow"
+license: "MIT"
+categories:
+  - "productivity"
+  - "tools"
+  - "developer"
