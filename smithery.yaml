@@ -1,27 +1,67 @@
-# smithery.yaml
-# Configures Smithery to build and run the AgentFlow server.
-# See https://smithery.ai/docs/config for more information.
+# AgentFlow Smithery Configuration
+# Generated based on standard Smithery requirements
 
-server:
-  name: agent-flow
-  version: 1.1.0
-  # The command to run the server in MCP mode (stdio)
-  startCommand: npm run mcp
-  # Source code location
-  language: typescript
-  # The build Command
-  buildCommand: npm run build
-  # Environment variables required for the server
+name: "agent-flow"
+title: "AgentFlow"
+description: "AgentFlow is an intelligent agentic workflow system that manages tasks, dependencies, and reasoning for AI Agents."
+version: "2.0.0"
+author: "Faraz Pawle"
+license: "MIT"
+homepage: "https://github.com/farazpawle/agent-flow"
+repository: "https://github.com/farazpawle/agent-flow"
+bugs: "https://github.com/farazpawle/agent-flow/issues"
+
+# MCP Server metadata (CRITICAL for Smithery detection)
+mcp:
+  name: "agent-flow"
+  version: "2.0.0"
+  capabilities:
+    tools: {}
+    resources: {}
+    prompts: {}
+    streaming: true
+  transport: "stdio"
+
+# Build and runtime configuration
+build:
+  command: "npm run build"
+  output: "dist"
+
+runtime:
+  command: "node"
+  args:
+    - "dist/index.js"
   env:
-    - name: DATA_DIR
+    DATA_DIR:
       description: "Directory for storing task data (absolute path recommended)"
       required: true
-    - name: DB_TYPE
+    DB_TYPE:
       description: "Database type to use (sqlite or supabase)"
       default: "sqlite"
-    - name: ENABLE_GUI
+    ENABLE_GUI:
       description: "Whether to enable the web-based GUI"
       default: "true"
-    - name: ENABLE_DETAILED_MODE
+    ENABLE_DETAILED_MODE:
       description: "Whether to record per-task conversation history"
       default: "false"
+
+# Smithery CLI compatibility
+clients:
+  - "claude"
+  - "cursor"
+  - "windsurf"
+  - "cline"
+  - "typescript"
+
+# Publishing configuration
+publish:
+  categories:
+    - "productivity"
+    - "tools"
+    - "developer"
+  tags:
+    - "mcp"
+    - "workflow"
+    - "agent"
+    - "reasoning"
+  visibility: "public"

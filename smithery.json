@@ -1,7 +1,9 @@
 {
+    "$schema": "https://smithery.ai/schemas/mcp-server/1.0.0.json",
     "name": "agent-flow",
+    "title": "AgentFlow",
     "description": "AgentFlow is an intelligent agentic workflow system that manages tasks, dependencies, and reasoning for AI Agents.",
-    "version": "1.1.0",
+    "version": "2.0.0",
     "repository": "https://github.com/farazpawle/agent-flow",
     "license": "MIT",
     "tags": [
@@ -9,20 +11,61 @@
         "task-manager",
         "agent",
         "workflow",
-        "reasoning"
+        "reasoning",
+        "vibe-coding"
     ],
     "tools": [
         {
-            "name": "plan_task",
-            "description": "Create a development plan for a given task or feature."
+            "name": "plan_idea",
+            "description": "Draft architectural concepts and initial planning for a project or feature."
+        },
+        {
+            "name": "analyze_idea",
+            "description": "Perform deep technical analysis and feasibility study on a planned idea."
+        },
+        {
+            "name": "reflect_idea",
+            "description": "Critically reflect on a plan to identify edge cases, security risks, and technical debt."
+        },
+        {
+            "name": "process_thought",
+            "description": "A high-fidelity thinking tool for multi-step reasoning with design tokens and focus modes."
+        },
+        {
+            "name": "split_tasks",
+            "description": "Decompose a refined plan into a topological graph of actionable tasks."
         },
         {
             "name": "execute_task",
-            "description": "Execute a specific task from the plan."
+            "description": "Mark a task as in-progress and begin execution logic."
         },
         {
             "name": "verify_task",
-            "description": "Verify the completion of a task against its criteria."
+            "description": "Validate task completion against criteria before finalizing."
+        },
+        {
+            "name": "get_project_context",
+            "description": "Automatically detect and retrieve project-specific history and context."
+        },
+        {
+            "name": "reorder_tasks",
+            "description": "Manually reorder tasks while maintaining strict dependency integrity."
         }
-    ]
+    ],
+    "runtime": {
+        "command": "node",
+        "args": [
+            "dist/index.js"
+        ],
+        "env": {
+            "DATA_DIR": {
+                "description": "Absolute path to data folder",
+                "required": true
+            },
+            "DB_TYPE": {
+                "description": "sqlite or supabase",
+                "default": "sqlite"
+            }
+        }
+    }
 }
