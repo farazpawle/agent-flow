@@ -2,42 +2,72 @@
 
 [![smithery badge](https://smithery.ai/badge/@farazpawle/agent-flow)](https://smithery.ai/server/@farazpawle/agent-flow)
 
-**AgentFlow** is a premium, high-performance agentic workflow system built on the **Model Context Protocol (MCP)**. It transforms raw AI reasoning into structured, manageable, and executable tracks, providing a stunning visual control center for autonomous agents.
+**AgentFlow** is a next-generation, premium agentic workflow system built on the **Model Context Protocol (MCP)**. It transforms the way AI agents handle complex development tasks by bridging the gap between raw LLM reasoning and structured execution.
 
 ---
 
-## ✨ The Experience
+## ✨ The Vision: "Vibe Coding" Refined
 
-AgentFlow isn't just a task list; it's a **Vibe-first** orchestration layer.
+AgentFlow is designed for the modern "Vibe Coder"—developers who prioritize high-level intent, rapid iteration, and stunning visual feedback.
 
--   **🧠 Deep Reasoning**: Integrated reasoning loops (`plan` → `analyze` → `reflect`) to ensure high-quality architectural decisions.
--   **🎨 Premium UI**: A state-of-the-art dashboard featuring **Glassmorphism**, **Dynamic Gradient Flow** animations, and full **Light/Dark theme** support.
--   **⚡ Real-Time Pulse**: Live task status updates via Server-Sent Events (SSE). Watch your agent work in real-time.
--   **📂 Project Centric**: Native support for multiple projects, persistent across sessions.
--   **🧪 Hardened Workflow**: Built-in verification loops to ensure code quality and project alignment.
-
----
-
-## 🧭 The Workflow
-
-AgentFlow promotes a structured "Thinking to Doing" pipeline:
-
-1.  **Ideate**: Start with `plan_idea` to outline a feature.
-2.  **Refine**: Use `analyze_idea` and `reflect_idea` to harden the specification.
-3.  **Decompose**: Run `split_tasks` to convert your plan into an executable DAG (Directed Acyclic Graph).
-4.  **Execute**: Move through tasks with `execute_task`, `update_task`, and `verify_task`.
-5.  **Visualize**: Monitor progress on the local dashboard at `http://localhost:54544`.
+-   **🧠 Integrated Thought Chain**: Native Support for complex multi-step reasoning (`plan` → `analyze` → `reflect`).
+-   **🎨 State-of-the-Art Dashboard**: A premium **Glassmorphism** interface with **Dynamic Background Gradients**, fluid animations (15s ease infinite shift), and meticulous **Light/Dark** themes.
+-   **🎮 Real-Time Pulse**: Live updates via **SSE (Server-Sent Events)**. Watch your agent create, update, and reorder tasks in real-time.
+-   **⚛️ Dual Persistence**: Robust storage support via **SQLite** for local portability or **Supabase** for enterprise-scale persistence.
+-   **📁 Intelligent Project Context**: Auto-detects projects based on workspace paths or Git remote URLs, mapping local work to stable project identities.
 
 ---
 
-## 🔧 Installation
+## 🧭 The Core Workflow
 
-### 🔽 Quick Start (via Smithery)
+AgentFlow promotes a high-integrity "Think-Then-Do" pipeline:
+
+1.  **💡 Plan Idea**: Draft initial concepts and design tokens.
+2.  **🔍 Analyze**: Deep dive into technical requirements and blockers.
+3.  **🤔 Reflect**: Self-critique the plan to catch edge cases before a single line of code is written.
+4.  **🧩 Split**: Automatically decompose the refined plan into a **Topological DAG** of tasks.
+5.  **▶️ Execute**: Move through tasks with built-in **Verification Loops** ensuring criteria are met.
+
+---
+
+## ⚙️ Technical Stack
+
+-   **Backend**: Node.js + TypeScript (High-performance ESM).
+-   **MCP Implementation**: `@modelcontextprotocol/sdk` for seamless tool-calling integration.
+-   **Persistence**: SQLite (Local) / Supabase (Remote) via shared `DatabaseAdapter`.
+-   **Dashboard**: Vanilla JS + CSS (Custom Tokens) + **D3.js** for real-time dependency graph visualization.
+-   **Communication**: HTTP REST API + **Server-Sent Events (SSE)** for zero-latency UI updates.
+
+---
+
+## 🛠️ Advanced Toolset
+
+### 🏗️ Reasoning Engine
+| Tool | Description |
+| :--- | :--- |
+| `plan_idea` | Draft architectural concepts with optional **Focus Modes** (logic, vibe, security, etc.). |
+| `analyze_idea` | Context-aware analysis of a planned idea. |
+| `reflect_idea` | Critical self-reflection to harden specifications. |
+| `process_thought` | High-fidelity thinking tool with support for **Design Tokens**, axioms, and focus shifts. |
+
+### 📋 Task Orchestration
+| Tool | Description |
+| :--- | :--- |
+| `split_tasks` | Converts specification into a task graph with **Dependencies**, **Priority**, and **Category**. |
+| `reorder_tasks` | Legalizes manual reordering while strictly enforcing topological constraints. |
+| `verify_task` | A mandatory validation step before task completion. |
+| `get_project_context` | Workspace-aware project identification and switching. |
+
+---
+
+## � Quick Start
+
+### 🔽 Via Smithery (Recommended)
 ```bash
 npx -y @smithery/cli install agent-flow --client claude
 ```
 
-### 🔽 Developer Setup
+### 🔽 Manual Setup
 ```bash
 git clone https://github.com/farazpawle/agent-flow.git
 cd agent-flow
@@ -49,7 +79,7 @@ npm run build
 
 ## 🔌 Configuration
 
-Add AgentFlow to your MCP client (e.g., Cursor, Claude Desktop):
+Update your MCP client config (e.g., Cursor, Claude Desktop):
 
 ```json
 {
@@ -58,10 +88,10 @@ Add AgentFlow to your MCP client (e.g., Cursor, Claude Desktop):
       "command": "npx",
       "args": ["-y", "agent-flow"],
       "env": {
-        "DATA_DIR": "C:/Path/To/Your/Data", // REQUIRED: Use absolute path
+        "DATA_DIR": "C:/Path/To/Your/Data", // REQUIRED: Absolute path
         "DB_TYPE": "sqlite",              // 'sqlite' or 'supabase'
-        "ENABLE_GUI": "true",             // Enable the web dashboard
-        "ENABLE_DETAILED_MODE": "true"    // Record conversation history
+        "ENABLE_GUI": "true",             // Enable the dashboard (default: true)
+        "ENABLE_DETAILED_MODE": "true"    // Record per-task conversation history
       }
     }
   }
@@ -70,41 +100,13 @@ Add AgentFlow to your MCP client (e.g., Cursor, Claude Desktop):
 
 ---
 
-## 🛠️ Toolset
-
-### 🏗️ Planning & Reasoning
-| Tool | Purpose |
-| :--- | :--- |
-| `plan_idea` | Draft the initial architectural concept. |
-| `analyze_idea` | Deep dive into technical requirements and blockers. |
-| `reflect_idea` | Self-critique the plan to identify edge cases. |
-| `process_thought` | General reasoning tool for logic checkpoints. |
-
-### 📋 Task Management
-| Tool | Purpose |
-| :--- | :--- |
-| `split_tasks` | Break a plan into a structured task list. |
-| `list_tasks` | Fetch tasks with filtering (status, project). |
-| `query_task` | Full-text search across all tasks. |
-| `reorder_tasks` | Fine-tune the execution sequence. |
-
-### ▶️ Action & Verification
-| Tool | Purpose |
-| :--- | :--- |
-| `execute_task` | Signal the start of implementation. |
-| `update_task` | Push updates to task content/metadata. |
-| `verify_task` | Submit work for validation & status check. |
-| `complete_task` | Finalize a verified task. |
-
----
-
 ## 🤖 Optimized Models
 
-For the best experience, we recommend:
--   **Claude 3.7 / 3.5 Sonnet**: Exceptional tool calling and reasoning.
--   **Gemini 2.0 Flash**: Ultra-fast execution and real-time responsiveness.
+AgentFlow is fine-tuned for:
+-   **Claude 3.7 / 3.5 Sonnet**: The gold standard for reasoning and complex tool interaction.
+-   **Gemini 2.0 Flash**: Ultra-responsive for real-time dashboard updates and rapid tool calling.
 
 ---
 
 ## 📄 License
-MIT License. Created with ❤️ by the AgentFlow team.
+MIT License. Created with ❤️ for the Vibe Coding community.
