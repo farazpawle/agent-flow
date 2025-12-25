@@ -125,14 +125,5 @@ If you want to use Supabase instead of SQLite:
     ```
 
 ---
-
-## 🤖 Optimized Models
-
-AgentFlow is fine-tuned for:
--   **Claude 3.7 / 3.5 Sonnet**: The gold standard for reasoning and complex tool interaction.
--   **Gemini 2.0 Flash**: Ultra-responsive for real-time dashboard updates and rapid tool calling.
-
----
-
 ## 📄 License
 MIT License. Created with ❤️ for the Vibe Coding community.
