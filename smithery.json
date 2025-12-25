@@ -1,0 +1,28 @@
+{
+    "name": "agent-flow",
+    "description": "AgentFlow is an intelligent agentic workflow system that manages tasks, dependencies, and reasoning for AI Agents.",
+    "version": "1.1.0",
+    "repository": "https://github.com/farazpawle/agent-flow",
+    "license": "MIT",
+    "tags": [
+        "mcp",
+        "task-manager",
+        "agent",
+        "workflow",
+        "reasoning"
+    ],
+    "tools": [
+        {
+            "name": "plan_task",
+            "description": "Create a development plan for a given task or feature."
+        },
+        {
+            "name": "execute_task",
+            "description": "Execute a specific task from the plan."
+        },
+        {
+            "name": "verify_task",
+            "description": "Verify the completion of a task against its criteria."
+        }
+    ]
+}

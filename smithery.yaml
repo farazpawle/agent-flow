@@ -1,0 +1,24 @@
+# smithery.yaml
+# Configures Smithery to build and run the AgentFlow server.
+# See https://smithery.ai/docs/config for more information.
+
+server:
+  name: agent-flow
+  version: 1.1.0
+  # The command to run the server in MCP mode (stdio)
+  startCommand: npm run mcp
+  # Source code location
+  language: typescript
+  # The build Command
+  buildCommand: npm run build
+  # Environment variables required for the server
+  env:
+    - name: DATA_DIR
+      description: "Directory for storing task data (absolute path recommended)"
+      required: true
+    - name: DB_TYPE
+      description: "Database type to use (sqlite or supabase)"
+      default: "sqlite"
+    - name: ENABLE_GUI
+      description: "Whether to enable the web-based GUI"
+      default: "true"
