@@ -30,12 +30,12 @@ class SearchIndex {
     initialized = false;
     constructor() {
         this.index = new MiniSearch({
-            fields: ["name", "description", "notes", "implementationGuide", "summary"],
+            fields: ["name", "description", "notes", "implementationGuide", "summary", "problemStatement", "technicalPlan", "finalOutcome", "lessonsLearned"],
             storeFields: ["id", "name", "status"],
             searchOptions: {
                 fuzzy: 0.2,
                 prefix: true,
-                boost: { name: 2, description: 1.5 }
+                boost: { name: 2, description: 1.5, problemStatement: 1.2, technicalPlan: 1.2, finalOutcome: 1.2, lessonsLearned: 1.5 }
             }
         });
     }
@@ -52,7 +52,11 @@ class SearchIndex {
             description: task.description,
             notes: task.notes || "",
             implementationGuide: task.implementationGuide || "",
-            summary: task.summary || ""
+            summary: task.summary || "",
+            problemStatement: task.problemStatement || "",
+            technicalPlan: task.technicalPlan || "",
+            finalOutcome: task.finalOutcome || "",
+            lessonsLearned: task.lessonsLearned || ""
         }));
         this.index.addAll(indexableTasks);
         this.initialized = true;
@@ -75,7 +79,11 @@ class SearchIndex {
             description: task.description,
             notes: task.notes || "",
             implementationGuide: task.implementationGuide || "",
-            summary: task.summary || ""
+            summary: task.summary || "",
+            problemStatement: task.problemStatement || "",
+            technicalPlan: task.technicalPlan || "",
+            finalOutcome: task.finalOutcome || "",
+            lessonsLearned: task.lessonsLearned || ""
         });
     }
     /**

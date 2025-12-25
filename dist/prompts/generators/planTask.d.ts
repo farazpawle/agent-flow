@@ -13,6 +13,8 @@ export interface PlanTaskPromptParams {
     completedTasks?: Task[];
     pendingTasks?: Task[];
     memoryDir: string;
+    projectId?: string;
+    checkDependencies?: boolean;
 }
 /**
  * Get the complete planTask prompt

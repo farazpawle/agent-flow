@@ -1,35 +1,42 @@
 import { z } from "zod";
-import { deleteTaskSchema, clearAllTasksSchema, updateTaskContentSchema } from "./schemas.js";
-export declare function deleteTask({ taskId }: z.infer<typeof deleteTaskSchema>): Promise<{
+import { deleteTaskSchema, updateTaskContentSchema } from "./schemas.js";
+import { splitTasksSchema } from "./schemas.js";
+export declare function deleteTask({ taskId, projectId, deleteAll, confirm }: z.infer<typeof deleteTaskSchema>): Promise<{
     content: {
         type: "text";
         text: string;
     }[];
     isError: boolean;
-}>;
-export declare function clearAllTasks({ confirm, }: z.infer<typeof clearAllTasksSchema>): Promise<{
-    content: {
-        type: "text";
-        text: string;
-    }[];
-    isError?: undefined;
 } | {
     content: {
         type: "text";
         text: string;
     }[];
-    isError: boolean;
+    isError?: undefined;
 }>;
-export declare function updateTaskContent({ taskId, name, description, notes, relatedFiles, dependencies, implementationGuide, verificationCriteria, }: z.infer<typeof updateTaskContentSchema>): Promise<{
+export declare function updateTaskContent({ taskId, name, description, notes, relatedFiles, dependencies, implementationGuide, verificationCriteria, projectId, }: z.infer<typeof updateTaskContentSchema>): Promise<{
     content: {
         type: "text";
         text: string;
     }[];
-    isError?: undefined;
+    isError: boolean;
 } | {
     content: {
         type: "text";
         text: string;
     }[];
+    isError?: undefined;
+}>;
+export declare function splitTasks({ projectId, tasks, updateMode, inputStepId }: z.infer<typeof splitTasksSchema>): Promise<{
+    content: {
+        type: "text";
+        text: string;
+    }[];
     isError: boolean;
+} | {
+    content: {
+        type: "text";
+        text: string;
+    }[];
+    isError?: undefined;
 }>;

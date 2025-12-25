@@ -4,14 +4,16 @@
  * Projects organize tasks and provide context for agent identification
  */
 
-import { db as database } from "./db.js";
+import { db } from "./db.js";
 import { createHash } from "crypto";
+import { getGitRemoteUrl } from "../utils/gitUtils.js";
 
 export interface Project {
     id: string;
     name: string;
     description?: string;
     path?: string;
+    gitRemoteUrl?: string;
     techStack?: string[];
     taskCount?: number;
     createdAt: Date;
@@ -22,6 +24,7 @@ export interface ProjectInput {
     name: string;
     description?: string;
     path?: string;
+    gitRemoteUrl?: string;
     techStack?: string[];
 }
 
@@ -47,49 +50,31 @@ export function extractProjectName(workspacePath: string): string {
 }
 
 /**
- * Initialize projects table
+ * Initialize projects table - DEPRECATED/REMOVED
+ * Tables are now initialized centrally by the adapter
  */
 export async function initProjectsTable(): Promise<void> {
-    return new Promise((resolve, reject) => {
-        database.getDb().serialize(() => {
-            // Create projects table
-            database.getDb().run(`
-                CREATE TABLE IF NOT EXISTS projects (
-                    id TEXT PRIMARY KEY,
-                    name TEXT NOT NULL,
-                    description TEXT,
-                    path TEXT UNIQUE,
-                    tech_stack TEXT,
-                    created_at INTEGER NOT NULL,
-                    updated_at INTEGER NOT NULL
-                )
-            `, (err) => {
-                if (err) {
-                    console.error("[CoT] Failed to create projects table:", err);
-                    reject(err);
-                    return;
-                }
-            });
-
-            // Add project_id column to tasks if not exists
-            database.getDb().run(`ALTER TABLE tasks ADD COLUMN project_id TEXT`, (err) => {
-                // Ignore error if column already exists
-            });
-
-            // Create index on project_id
-            database.getDb().run(`CREATE INDEX IF NOT EXISTS idx_project_id ON tasks(project_id)`, (err) => {
-                // Ignore if exists
-            });
-
-            resolve();
-        });
-    });
+    // No-op, handled by db.init()
+    return Promise.resolve();
 }
 
 /**
  * Create a new project
  */
 export async function createProject(input: ProjectInput): Promise<Project> {
+    // If gitRemoteUrl is provided, try to find existing project first
+    if (input.gitRemoteUrl) {
+        const existing = await getProjectByGitUrl(input.gitRemoteUrl);
+        if (existing) {
+            // If we have a path update, we might want to update the existing project's path
+            if (input.path && input.path !== existing.path) {
+                await updateProject(existing.id, { path: input.path });
+                existing.path = input.path;
+            }
+            return existing;
+        }
+    }
+
     const id = input.path ? generateProjectId(input.path) : `proj-${Date.now()}`;
 
     const project: Project = {
@@ -97,34 +82,15 @@ export async function createProject(input: ProjectInput): Promise<Project> {
         name: input.name,
         description: input.description,
         path: input.path,
+        gitRemoteUrl: input.gitRemoteUrl,
         techStack: input.techStack,
         createdAt: new Date(),
         updatedAt: new Date()
     };
 
-    return new Promise((resolve, reject) => {
-        database.getDb().run(`
-            INSERT OR REPLACE INTO projects (
-                id, name, description, path, tech_stack, created_at, updated_at
-            ) VALUES (?, ?, ?, ?, ?, ?, ?)
-        `, [
-            project.id,
-            project.name,
-            project.description || null,
-            project.path || null,
-            project.techStack ? JSON.stringify(project.techStack) : null,
-            project.createdAt.getTime(),
-            project.updatedAt.getTime()
-        ], function (err) {
-            if (err) {
-                console.error("[CoT] Failed to create project:", err);
-                reject(err);
-            } else {
-                console.error(`[CoT] Project created: ${project.name} (${project.id})`);
-                resolve(project);
-            }
-        });
-    });
+    await db.createProject(project);
+    console.error(`[AgentFlow] Project created: ${project.name} (${project.id})`);
+    return project;
 }
 
 /**
@@ -132,18 +98,43 @@ export async function createProject(input: ProjectInput): Promise<Project> {
  * This is the main auto-detection function
  */
 export async function getOrCreateProjectFromPath(workspacePath: string): Promise<Project> {
+    // 1. Try to detect Git URL
+    const gitUrl = await getGitRemoteUrl(workspacePath);
+
+    if (gitUrl) {
+        const existingByGit = await getProjectByGitUrl(gitUrl);
+        if (existingByGit) {
+            // Update path if changed (last active location)
+            if (existingByGit.path !== workspacePath) {
+                await updateProject(existingByGit.id, { path: workspacePath });
+                existingByGit.path = workspacePath;
+            }
+            currentProjectId = existingByGit.id;
+            return existingByGit;
+        }
+    }
+
+    // 2. Fallback to Path lookup
     const existingProject = await getProjectByPath(workspacePath);
 
     if (existingProject) {
+        // If we found it by path but it now has a git URL (and didn't before), update it?
+        // Or if we found it by path, we just use it. 
+        // If gitUrl was found but project has none, update it.
+        if (gitUrl && !existingProject.gitRemoteUrl) {
+            await updateProject(existingProject.id, { gitRemoteUrl: gitUrl });
+            existingProject.gitRemoteUrl = gitUrl;
+        }
         currentProjectId = existingProject.id;
         return existingProject;
     }
 
-    // Create new project from workspace path
+    // 3. Create new project
     const projectName = extractProjectName(workspacePath);
     const newProject = await createProject({
         name: projectName,
         path: workspacePath,
+        gitRemoteUrl: gitUrl || undefined,
         description: `Project at ${workspacePath}`
     });
 
@@ -155,85 +146,33 @@ export async function getOrCreateProjectFromPath(workspacePath: string): Promise
  * Get all projects
  */
 export async function getAllProjects(includeTaskCount: boolean = true): Promise<Project[]> {
-    return new Promise((resolve, reject) => {
-        let query = `SELECT * FROM projects ORDER BY updated_at DESC`;
-
-        if (includeTaskCount) {
-            query = `
-                SELECT p.*, COUNT(t.id) as task_count 
-                FROM projects p
-                LEFT JOIN tasks t ON t.project_id = p.id
-                GROUP BY p.id
-                ORDER BY p.updated_at DESC
-            `;
-        }
-
-        database.getDb().all(query, (err, rows: any[]) => {
-            if (err) {
-                if (err.message?.includes('no such table')) {
-                    resolve([]);
-                    return;
-                }
-                reject(err);
-            } else {
-                const projects = rows?.map(row => ({
-                    id: row.id,
-                    name: row.name,
-                    description: row.description,
-                    path: row.path,
-                    techStack: row.tech_stack ? JSON.parse(row.tech_stack) : [],
-                    taskCount: row.task_count || 0,
-                    createdAt: new Date(row.created_at),
-                    updatedAt: new Date(row.updated_at)
-                })) || [];
-                resolve(projects);
-            }
-        });
-    });
+    return await db.getAllProjects();
 }
 
 /**
  * Get project by ID
  */
 export async function getProjectById(id: string): Promise<Project | null> {
-    return new Promise((resolve, reject) => {
-        database.getDb().get(`
-            SELECT p.*, COUNT(t.id) as task_count 
-            FROM projects p
-            LEFT JOIN tasks t ON t.project_id = p.id
-            WHERE p.id = ?
-            GROUP BY p.id
-        `, [id], (err, row: any) => {
-            if (err) {
-                if (err.message?.includes('no such table')) {
-                    resolve(null);
-                    return;
-                }
-                reject(err);
-            } else if (!row) {
-                resolve(null);
-            } else {
-                resolve({
-                    id: row.id,
-                    name: row.name,
-                    description: row.description,
-                    path: row.path,
-                    techStack: row.tech_stack ? JSON.parse(row.tech_stack) : [],
-                    taskCount: row.task_count || 0,
-                    createdAt: new Date(row.created_at),
-                    updatedAt: new Date(row.updated_at)
-                });
-            }
-        });
-    });
+    return await db.getProject(id);
 }
 
 /**
- * Get project by workspace path
+ * Get project by Git URL (Helper using in-memory filter for now)
+ */
+export async function getProjectByGitUrl(gitRemoteUrl: string): Promise<Project | null> {
+    const projects = await db.getAllProjects();
+    return projects.find(p => p.gitRemoteUrl === gitRemoteUrl) || null;
+}
+
+/**
+ * Get project by workspace path (Helper using in-memory filter for now)
  */
 export async function getProjectByPath(workspacePath: string): Promise<Project | null> {
-    const projectId = generateProjectId(workspacePath);
-    return getProjectById(projectId);
+    const projects = await db.getAllProjects();
+    // In strict mode, we should favor projects that claim this path.
+    // We sort by updatedAt DESC to find the most recent usage of this path if multiple match (unlikely with path unique but possible in legacy)
+    const matches = projects.filter(p => p.path === workspacePath);
+    return matches.length > 0 ? matches[0] : null;
 }
 
 /**
@@ -247,41 +186,21 @@ export async function updateProject(id: string, updates: Partial<ProjectInput>):
         ...existing,
         name: updates.name ?? existing.name,
         description: updates.description ?? existing.description,
+        path: updates.path ?? existing.path,
+        gitRemoteUrl: updates.gitRemoteUrl ?? existing.gitRemoteUrl,
         techStack: updates.techStack ?? existing.techStack,
         updatedAt: new Date()
     };
 
-    return new Promise((resolve, reject) => {
-        database.getDb().run(`
-            UPDATE projects SET 
-                name = ?, description = ?, tech_stack = ?, updated_at = ?
-            WHERE id = ?
-        `, [
-            updated.name,
-            updated.description || null,
-            updated.techStack ? JSON.stringify(updated.techStack) : null,
-            updated.updatedAt.getTime(),
-            id
-        ], function (err) {
-            if (err) {
-                reject(err);
-            } else {
-                resolve(updated);
-            }
-        });
-    });
+    await db.createProject(updated); // Create acts as upsert
+    return updated;
 }
 
 /**
  * Delete project
  */
 export async function deleteProject(id: string): Promise<void> {
-    return new Promise((resolve, reject) => {
-        database.getDb().run(`DELETE FROM projects WHERE id = ?`, [id], (err) => {
-            if (err) reject(err);
-            else resolve();
-        });
-    });
+    return await db.deleteProject(id);
 }
 
 /**
@@ -294,7 +213,7 @@ export function getCurrentProjectId(): string | null {
 /**
  * Set current project ID
  */
-export function setCurrentProjectId(id: string): void {
+export function setCurrentProjectId(id: string | null): void {
     currentProjectId = id;
 }
 

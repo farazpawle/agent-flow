@@ -26,6 +26,7 @@ import {
   getCurrentProjectId,
   setCurrentProjectId,
 } from "./projectModel.js";
+import { TaskGraph } from "../utils/taskGraph.js";
 
 // Ensure project folder path is obtained
 const __filename = fileURLToPath(import.meta.url);
@@ -43,6 +44,10 @@ export async function ensureDataDir(): Promise<void> {
   await ensureDirectories();
   await db.init();
 
+  // Set initialized to true immediately to prevent recursion loops
+  // because downstream functions (like recalculateTaskOrder) call ensureDataDir()
+  initialized = true;
+
   // Read current tasks and archive old ones
   try {
     const tasks = await db.getAllTasks();
@@ -58,18 +63,29 @@ export async function ensureDataDir(): Promise<void> {
       for (const t of archivedTasks) {
         await db.deleteTask(t.id);
       }
-      console.error(`[CoT] Archived ${archivedCount} old completed tasks from DB`);
+      console.error(`(AgentFlow) Archived ${archivedCount} old completed tasks from DB`);
     }
 
     // Build search index
     const searchIndex = getSearchIndex();
     searchIndex.rebuild(remainingTasks);
 
-  } catch (error) {
-    console.error("Initialization error:", error);
-  }
+    // Initial Order Calculation for Existing Tasks
+    // This ensures that tasks created before the ordering logic was added get a valid executionOrder
+    try {
+      const { getAllProjects } = await import("./projectModel.js");
+      const projects = await getAllProjects();
+      for (const project of projects) {
+        await recalculateTaskOrder(project.id);
+      }
+      console.error(`(AgentFlow) Recalculated task orders for ${projects.length} projects`);
+    } catch (err) {
+      console.error("(AgentFlow) Failed to initial recalculate orders:", err);
+    }
 
-  initialized = true;
+  } catch (error) {
+    console.error("(AgentFlow) Initialization error:", error);
+  }
 }
 
 // Notify update helper
@@ -77,15 +93,9 @@ function notifyUpdate() {
   taskEvents.emit(TASK_EVENTS.UPDATED);
 }
 
-// Get all tasks (optionally filtered by project)
 export async function getAllTasks(projectId?: string): Promise<Task[]> {
   await ensureDataDir();
-  const allTasks = await db.getAllTasks();
-
-  if (projectId) {
-    return allTasks.filter(t => t.projectId === projectId);
-  }
-  return allTasks;
+  return await db.getAllTasks(projectId);
 }
 
 // Get tasks by project ID
@@ -127,6 +137,12 @@ export async function createTask(
     }
   }
 
+  if (!resolvedProjectId) {
+    throw new Error(
+      "projectId is required to create a task. Create/select a project first, or pass projectId explicitly."
+    );
+  }
+
   const dependencyObjects: TaskDependency[] = dependencies.map((taskId) => ({
     taskId,
   }));
@@ -148,6 +164,10 @@ export async function createTask(
 
   // Update search index
   getSearchIndex().add(newTask);
+
+  // Recalculate execution order
+  await recalculateTaskOrder(resolvedProjectId);
+
   notifyUpdate();
 
   return newTask;
@@ -166,18 +186,8 @@ export async function updateTask(
   }
 
   // Check if task is completed
-  if (task.status === TaskStatus.COMPLETED) {
-    // Only allow updating the summary field and relatedFiles field
-    const allowedFields = ["summary", "relatedFiles"];
-    const attemptedFields = Object.keys(updates);
-    const disallowedFields = attemptedFields.filter(
-      (field) => !allowedFields.includes(field)
-    );
-
-    if (disallowedFields.length > 0) {
-      return null;
-    }
-  }
+  // (Restriction removed to allow re-opening and editing completed tasks)
+  // if (task.status === TaskStatus.COMPLETED) { ... }
 
   const updatedTask: Task = {
     ...task,
@@ -187,8 +197,20 @@ export async function updateTask(
 
   await db.saveTask(updatedTask);
 
-  // Update search index
-  getSearchIndex().add(updatedTask);
+  try {
+    // Update search index
+    getSearchIndex().add(updatedTask);
+
+    // If dependencies were updated, recalculate order for the project
+    if (updates.dependencies !== undefined && updatedTask.projectId) {
+      console.error(`(AgentFlow) Dependencies changed for task "${updatedTask.name}", recalculating order...`);
+      await recalculateTaskOrder(updatedTask.projectId);
+    }
+  } catch (err) {
+    console.error(`(AgentFlow) Warning: Post-update operations failed for task ${taskId}:`, err);
+    // Continue execution to return the saved task
+  }
+
   notifyUpdate();
 
   return updatedTask;
@@ -253,6 +275,10 @@ export async function updateTaskContent(
     dependencies?: string[];
     implementationGuide?: string;
     verificationCriteria?: string;
+    problemStatement?: string;
+    technicalPlan?: string;
+    finalOutcome?: string;
+    lessonsLearned?: string;
   }
 ): Promise<{ success: boolean; message: string; task?: Task }> {
   const task = await getTaskById(taskId);
@@ -278,6 +304,10 @@ export async function updateTaskContent(
   }
   if (updates.implementationGuide !== undefined) updateObj.implementationGuide = updates.implementationGuide;
   if (updates.verificationCriteria !== undefined) updateObj.verificationCriteria = updates.verificationCriteria;
+  if (updates.problemStatement !== undefined) updateObj.problemStatement = updates.problemStatement;
+  if (updates.technicalPlan !== undefined) updateObj.technicalPlan = updates.technicalPlan;
+  if (updates.finalOutcome !== undefined) updateObj.finalOutcome = updates.finalOutcome;
+  if (updates.lessonsLearned !== undefined) updateObj.lessonsLearned = updates.lessonsLearned;
 
   if (Object.keys(updateObj).length === 0) {
     return { success: true, message: "No content provided to update", task };
@@ -334,10 +364,13 @@ export async function batchCreateOrUpdateTasks(
     relatedFiles?: RelatedFile[];
     implementationGuide?: string;
     verificationCriteria?: string;
+    problemStatement?: string;
+    technicalPlan?: string;
   }>,
   updateMode: "append" | "overwrite" | "selective" | "clearAllTasks",
   globalAnalysisResult?: string,
-  projectId?: string
+  projectId?: string,
+  sourceStepId?: string
 ): Promise<Task[]> {
   await ensureDataDir();
   const existingTasks = await db.getAllTasks();
@@ -372,6 +405,12 @@ export async function batchCreateOrUpdateTasks(
   }
 
   const taskNameToIdMap = new Map<string, string>();
+
+  if (!resolvedProjectId) {
+    throw new Error(
+      "projectId is required to create/update tasks. Create/select a project first, or pass projectId explicitly."
+    );
+  }
   if (updateMode === "selective") {
     existingTasks.forEach(task => taskNameToIdMap.set(task.name, task.id));
   }
@@ -394,7 +433,10 @@ export async function batchCreateOrUpdateTasks(
           updatedAt: new Date(),
           implementationGuide: taskData.implementationGuide,
           verificationCriteria: taskData.verificationCriteria,
+          problemStatement: taskData.problemStatement,
+          technicalPlan: taskData.technicalPlan,
           analysisResult: globalAnalysisResult,
+          sourceStepId: sourceStepId,
         };
         if (taskData.relatedFiles) updatedTask.relatedFiles = taskData.relatedFiles;
 
@@ -416,8 +458,11 @@ export async function batchCreateOrUpdateTasks(
         relatedFiles: taskData.relatedFiles,
         implementationGuide: taskData.implementationGuide,
         verificationCriteria: taskData.verificationCriteria,
+        problemStatement: taskData.problemStatement,
+        technicalPlan: taskData.technicalPlan,
         analysisResult: globalAnalysisResult,
         projectId: resolvedProjectId,
+        sourceStepId: sourceStepId,
       };
       newTasks.push(newTask);
       tasksToSave.push(newTask);
@@ -450,13 +495,133 @@ export async function batchCreateOrUpdateTasks(
     await db.saveTasks(tasksToSave);
   }
 
+  // Recalculate execution order
+  await recalculateTaskOrder(resolvedProjectId);
+
   const allTasks = await db.getAllTasks();
   getSearchIndex().rebuild(allTasks);
+
   notifyUpdate();
 
   return newTasks;
 }
 
+/**
+ * Recalculate execution order for a project
+ */
+export async function recalculateTaskOrder(projectId: string): Promise<void> {
+  await ensureDataDir();
+  const tasks = await getTasksByProject(projectId);
+  if (tasks.length === 0) return;
+
+  const graph = new TaskGraph(tasks);
+  const orderedTasks = graph.recalculateOrder();
+
+  // Debug logging to verify dependency order
+  console.error(`(AgentFlow) recalculateTaskOrder for project ${projectId}: ${orderedTasks.length} tasks`);
+  orderedTasks.slice(0, 10).forEach(t => {
+    const deps = t.dependencies?.map(d => (typeof d === 'object' ? d.taskId : d).slice(0, 8)).join(',') || 'none';
+    console.error(`  [${t.executionOrder}] ${t.name} (deps: ${deps})`);
+  });
+
+  // Save updated orders
+  await db.saveTasks(orderedTasks);
+}
+
+
+
+/**
+ * Reorder tasks based on user input, while respecting dependencies.
+ */
+export async function reorderTasks(projectId: string, taskIds: string[]): Promise<Task[]> {
+  await ensureDataDir();
+  const tasks = await getTasksByProject(projectId);
+  if (tasks.length === 0) return [];
+
+  // Create a map for quick lookup
+  const taskMap = new Map(tasks.map(t => [t.id, t]));
+  const inputTasks = taskIds.filter(id => taskMap.has(id)).map(id => taskMap.get(id)!);
+
+  // If input tasks are missing (e.g. user only sent a subset), we need to handle that.
+  // Strategy: 
+  // 1. Assign "User Preferred Order" based on the input list index.
+  // 2. Tasks NOT in the input list keep their existing relative order, or mapped to end?
+  //    Let's assume input list is the "focus" area. 
+  //    Actually, simpler: We calculate a new "weight" for topological sort based on this list.
+
+  // Update executionOrder on the task objects to reflect user's manual preference
+  // This preference is just a "hint" for the topological sort's legalization step.
+  // But wait, our TaskGraph uses existing executionOrder as a tie-breaker.
+  // So we just need to update the executionOrder of these specific tasks to be sequential *before* calling recalculate.
+
+  // However, recalculateTaskOrder normalizes everything 0..N.
+  // If we just set these to 0..N, we might lose the relative position of OTHER tasks.
+
+  // Hybrid Approach:
+  // 1. Get current Max execution order.
+  // 2. NO - that's messy.
+
+  // Better Approach:
+  // Just update the temporary executionOrder of the target tasks to reflect the input sequence,
+  // potentially spacing them out or overriding.
+  // Actually, let's trust the TaskGraph `recalculateOrder` "User Intent" sort.
+  // That sort uses `executionOrder` as the primary key for sorting components and nodes.
+
+  // So, we effectively "apply" the user's requested order to the tasks' current state,
+  // then run the graph to legalize it.
+
+  // 1. Normalize current orders to ensure gaps? No.
+  // 2. Just overwrite executionOrder for the provided IDs to be 0, 1, 2... 
+  //    BUT! that would put them all at the top if other tasks are 100, 101...
+  //    Or at the bottom if we choose high numbers.
+
+  //    User probably wants to reorder a specific subset relative to each other, OR the whole list.
+  //    If the user sends the WHOLE list, it's easy.
+  //    If partial: We assume they want to maintain relative position to unmentioned tasks? 
+  //    This is tricky. Let's assume the user UI sends the WHOLE list for now, or we treat it as "Move these to top".
+
+  //    Safest: The user (UI) should likely send the re-ordered view of the visible list.
+
+  //    Let's just assign sequential indices to the passed IDs starting from 0 (or finding the min of the current set).
+  //    Find min executionOrder of the passed set.
+  const relevantOrders = inputTasks.map(t => t.executionOrder || 0);
+  let minOrder = relevantOrders.length > 0 ? Math.min(...relevantOrders) : 0;
+
+  // Heuristic: If we are reordering a LARGE chunk (likely the whole list), 
+  // and the min is NOT 0, we might want to force it to 0 to "clean up" the list.
+  // But safely: if inputTasks.length == tasks.length, set minOrder = 0.
+  if (inputTasks.length === tasks.length) {
+    minOrder = 0;
+  }
+
+  inputTasks.forEach((task, index) => {
+    task.executionOrder = minOrder + index; // Attempt to slot them in sequence
+    // Note: This matches the user's manual "Visual Order" (before dependency legalization)
+  });
+
+  // DO NOT save here! This would cause a race condition where UI sees invalid order.
+  // Only save after recalculateOrder fixes the dependency order.
+
+  // Now legalize everything with the graph
+  // We need to make sure 'tasks' array has the UPDATED objects for the input set.
+  const updatedAllTasks = tasks.map(t => {
+    const updated = inputTasks.find(it => it.id === t.id);
+    return updated || t;
+  });
+
+  const finalGraph = new TaskGraph(updatedAllTasks);
+  const validOrderTasks = finalGraph.recalculateOrder();
+
+  // Log for debugging
+  console.error(`(AgentFlow) Reorder: ${taskIds.length} tasks reordered, ${validOrderTasks.length} total. Final orders: ${validOrderTasks.map(t => `${t.name}:${t.executionOrder}`).slice(0, 5).join(', ')}${validOrderTasks.length > 5 ? '...' : ''}`);
+
+  // Save the legalized (dependency-respecting) order
+  await db.saveTasks(validOrderTasks);
+
+  notifyUpdate();
+
+  return validOrderTasks;
+}
 // Check executability
 export async function canExecuteTask(
   taskId: string
@@ -502,6 +667,15 @@ export async function deleteTask(
 
   await db.deleteTask(taskId);
   getSearchIndex().remove(taskId);
+
+  // Recalculate execution order if possible (need project ID, but task is gone)
+  // We can try to get siblings from the same project if we knew the project ID.
+  // Ideally, deleteTask should take projectId or we look it up before deleting.
+  // For safety, we can skip or look up before. 
+  if (task.projectId) {
+    await recalculateTaskOrder(task.projectId);
+  }
+
   notifyUpdate();
 
   return { success: true, message: "Task deleted successfully" };
@@ -602,6 +776,12 @@ export async function searchTasksWithCommand(
   } else if (query.trim()) {
     const searchIndex = getSearchIndex();
     if (!searchIndex.isReady()) searchIndex.rebuild(currentTasks);
+    // Note: ensure these fields are added to persistence.ts getSearchIndex configuration if needed, 
+    // but typically MiniSearch indexing happens on the objects passed to .add/.rebuild.
+    // We implicitly rely on the object shape. 
+
+    // However, if getSearchIndex() defines specific fields, we must update it there. 
+    // Checking persistence.ts is prudent, but for now assuming it uses auto-field or we update the object.
 
     const matchedIds = searchIndex.search(query);
     const idSet = new Set(matchedIds);

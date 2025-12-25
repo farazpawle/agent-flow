@@ -46,6 +46,10 @@ export interface Task {
     notes?: string;
     status: TaskStatus;
     dependencies: TaskDependency[];
+    problemStatement?: string;
+    technicalPlan?: string;
+    finalOutcome?: string;
+    lessonsLearned?: string;
     createdAt: Date;
     updatedAt: Date;
     completedAt?: Date;
@@ -54,8 +58,11 @@ export interface Task {
     analysisResult?: string;
     implementationGuide?: string;
     verificationCriteria?: string;
+    verificationStatus?: string;
+    sourceStepId?: string;
     conversationHistory?: ConversationMessage[];
     projectId?: string;
+    executionOrder?: number;
 }
 export interface PlanTaskArgs {
     description: string;

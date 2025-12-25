@@ -41,16 +41,23 @@ export declare function listProjects(params: z.infer<typeof listProjectsSchema>)
         type: "text";
         text: string;
     }[];
+    isError?: undefined;
+} | {
+    content: {
+        type: "text";
+        text: string;
+    }[];
+    isError: boolean;
 }>;
 export declare const getProjectContextSchema: z.ZodObject<{
     workspace_path: z.ZodOptional<z.ZodString>;
     project_id: z.ZodOptional<z.ZodString>;
 }, "strip", z.ZodTypeAny, {
-    workspace_path?: string | undefined;
     project_id?: string | undefined;
+    workspace_path?: string | undefined;
 }, {
-    workspace_path?: string | undefined;
     project_id?: string | undefined;
+    workspace_path?: string | undefined;
 }>;
 /**
  * Get project context for the current workspace or specific project
@@ -61,4 +68,38 @@ export declare function getProjectContext(params: z.infer<typeof getProjectConte
         type: "text";
         text: string;
     }[];
+    isError?: undefined;
+} | {
+    content: {
+        type: "text";
+        text: string;
+    }[];
+    isError: boolean;
+}>;
+export declare const deleteProjectSchema: z.ZodObject<{
+    projectId: z.ZodString;
+    confirm: z.ZodBoolean;
+}, "strip", z.ZodTypeAny, {
+    projectId: string;
+    confirm: boolean;
+}, {
+    projectId: string;
+    confirm: boolean;
+}>;
+/**
+ * Delete a project and all its associated tasks
+ * This tool allows agents to clean up projects from the database
+ */
+export declare function deleteProject(params: z.infer<typeof deleteProjectSchema>): Promise<{
+    content: {
+        type: "text";
+        text: string;
+    }[];
+    isError: boolean;
+} | {
+    content: {
+        type: "text";
+        text: string;
+    }[];
+    isError?: undefined;
 }>;

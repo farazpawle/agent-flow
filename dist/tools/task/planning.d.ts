@@ -1,20 +1,41 @@
 import { z } from "zod";
-import { planTaskSchema, analyzeTaskSchema, reflectTaskSchema } from "./schemas.js";
-export declare function planTask({ description, requirements, existingTasksReference, }: z.infer<typeof planTaskSchema>): Promise<{
+import { planIdeaSchema, analyzeIdeaSchema, reflectIdeaSchema } from "./schemas.js";
+export declare function planIdea({ description, requirements, projectId, focus, }: z.infer<typeof planIdeaSchema>): Promise<{
     content: {
         type: "text";
         text: string;
     }[];
+    isError: boolean;
+} | {
+    content: {
+        type: "text";
+        text: string;
+    }[];
+    isError?: undefined;
 }>;
-export declare function analyzeTask({ summary, initialConcept, previousAnalysis, }: z.infer<typeof analyzeTaskSchema>): Promise<{
+export declare function analyzeIdea({ inputStepId, projectId: explicitProjectId, }: z.infer<typeof analyzeIdeaSchema>): Promise<{
     content: {
         type: "text";
         text: string;
     }[];
+    isError: boolean;
+} | {
+    content: {
+        type: "text";
+        text: string;
+    }[];
+    isError?: undefined;
 }>;
-export declare function reflectTask({ summary, analysis, }: z.infer<typeof reflectTaskSchema>): Promise<{
+export declare function reflectIdea({ inputStepId, analysis, projectId: explicitProjectId, }: z.infer<typeof reflectIdeaSchema>): Promise<{
     content: {
         type: "text";
         text: string;
     }[];
+    isError: boolean;
+} | {
+    content: {
+        type: "text";
+        text: string;
+    }[];
+    isError?: undefined;
 }>;

@@ -4,11 +4,11 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title data-i18n-key="app_title">Chain of Thought</title>
+  <title data-i18n-key="app_title">AgentFlow</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="style.css?v=5" />
 </head>
 
 <body>
@@ -20,11 +20,15 @@
         <div class="filters">
           <input type="text" id="search-input" placeholder="Search tasks..." data-i18n-key="search_placeholder" />
           <select id="sort-options">
+            <option value="execution-order" data-i18n-key="sort_option_execution">Sort by Execution</option>
             <option value="date-desc" data-i18n-key="sort_option_date_desc">Creation Time (New-Old)</option>
             <option value="date-asc" data-i18n-key="sort_option_date_asc">Creation Time (Old-New)</option>
             <option value="name-asc" data-i18n-key="sort_option_name_asc">Name (A-Z)</option>
             <option value="name-desc" data-i18n-key="sort_option_name_desc">Name (Z-A)</option>
             <option value="status" data-i18n-key="sort_option_status">Status</option>
+          </select>
+          <select id="project-filter">
+            <option value="all" data-i18n-key="project_filter_all">All Projects</option>
           </select>
           <select id="status-filter">
             <option value="all" data-i18n-key="status_filter_all">All Statuses</option>
@@ -32,6 +36,9 @@
             <option value="in_progress" data-i18n-key="status_filter_in_progress">In Progress</option>
             <option value="completed" data-i18n-key="status_filter_completed">Completed</option>
           </select>
+          <button id="btn-apply-order" style="display: none;">
+            <span>💾</span> <span data-i18n-key="btn_apply_order">Apply Order</span>
+          </button>
         </div>
       </div>
 
@@ -43,13 +50,16 @@
     <!-- Main Content -->
     <main>
       <header>
-        <h1 data-i18n-key="app_title">Chain of Thought</h1>
+        <button id="sidebar-toggle" class="sidebar-toggle" title="Toggle Sidebar">
+          ☰
+        </button>
+        <h1 data-i18n-key="app_title">AgentFlow</h1>
 
         <div class="header-controls">
           <!-- Client Status -->
           <div class="client-status-badge">
-             <span class="client-count-num" id="client-count">0</span>
-             <span class="client-count-label">Clients Connected</span>
+            <span class="client-count-num" id="client-count">0</span>
+            <span class="client-count-label">Clients Connected</span>
           </div>
 
           <div class="status-bar">
@@ -57,9 +67,17 @@
             <span data-i18n-key="status_indicator_online">ONLINE</span>
           </div>
 
-          <select id="lang-selector">
-            <option value="en">English</option>
-          </select>
+          <button id="theme-toggle" class="settings-btn" title="Toggle Theme" style="margin-right: 5px;">
+            <span class="icon">🌙</span>
+          </button>
+
+          <div class="settings-container">
+            <button id="settings-btn" class="settings-btn" title="Settings">⚙️</button>
+            <div id="settings-dropdown" class="settings-dropdown hidden">
+              <button id="btn-restart-server">🔄 Restart Server</button>
+              <button id="btn-stop-server">🛑 Stop Server</button>
+            </div>
+          </div>
         </div>
       </header>
 
@@ -75,77 +93,113 @@
         </div>
       </div>
 
-      <!-- Graph View -->
-      <div class="dependency-view">
-        <div class="panel-header">
-          <h2 data-i18n-key="dependency_view_title">Dependency View</h2>
-        </div>
-        <div id="dependency-graph" class="dependency-graph">
-          <p class="placeholder" data-i18n-key="dependency_graph_placeholder">Dependency relationship for all tasks</p>
-        </div>
-      </div>
+      <div class="workspace-content">
 
-      <!-- Task Details -->
-      <div class="task-details">
-        <div class="task-details-scroll-area">
-          <!-- Default View -->
-          <div id="task-details-content">
-            <p class="placeholder" data-i18n-key="task_details_placeholder">Select a task to view details</p>
+        <!-- Graph View -->
+        <div class="dependency-view">
+          <div class="panel-header">
+            <h2 data-i18n-key="dependency_view_title">Dependency View</h2>
+          </div>
+          <div id="dependency-graph" class="dependency-graph">
+            <p class="placeholder" data-i18n-key="dependency_graph_placeholder">Dependency relationship for all tasks
+            </p>
+          </div>
+        </div>
+
+        <div id="drag-divider" class="drag-divider"></div>
+
+        <!-- Task Details -->
+        <div class="task-details">
+          <div class="task-details-scroll-area">
+            <!-- Default View -->
+            <div id="task-details-content">
+              <p class="placeholder" data-i18n-key="task_details_placeholder">Select a task to view details</p>
+            </div>
+
+            <!-- Edit Form (Hidden by default) -->
+            <form id="task-edit-form" class="task-edit-form" style="display: none;">
+              <div class="task-details-header">
+                <h3 data-i18n-key="task_details_title">Edit Task</h3>
+              </div>
+
+              <div class="form-group">
+                <label for="edit-task-name" data-i18n-key="edit_task_name">Name</label>
+                <input type="text" id="edit-task-name" name="name" required />
+              </div>
+
+              <div class="form-group">
+                <label for="edit-task-status" data-i18n-key="edit_task_status">Status</label>
+                <select id="edit-task-status" name="status">
+                  <option value="pending">Pending</option>
+                  <option value="in_progress">In Progress</option>
+                  <option value="completed">Completed</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label data-i18n-key="edit_task_dependencies">Dependencies</label>
+                <div id="edit-task-dependencies-container" class="dependencies-list-container">
+                  <!-- Checkboxes generated by JS -->
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="edit-task-problem-statement">Problem Statement</label>
+                <textarea id="edit-task-problem-statement" name="problemStatement" rows="3"></textarea>
+              </div>
+
+              <div class="form-group">
+                <label for="edit-task-description" data-i18n-key="edit_task_description">Description</label>
+                <textarea id="edit-task-description" name="description" rows="4"></textarea>
+              </div>
+
+              <div class="form-group">
+                <label for="edit-task-technical-plan">Technical Plan</label>
+                <textarea id="edit-task-technical-plan" name="technicalPlan" rows="4"></textarea>
+              </div>
+
+              <div class="form-group">
+                <label for="edit-task-final-outcome">Final Outcome</label>
+                <textarea id="edit-task-final-outcome" name="finalOutcome" rows="3"></textarea>
+              </div>
+
+              <div class="form-group">
+                <label for="edit-task-lessons-learned">Lessons Learned</label>
+                <textarea id="edit-task-lessons-learned" name="lessonsLearned" rows="2"></textarea>
+              </div>
+
+              <div class="form-group">
+                <label for="edit-task-notes" data-i18n-key="edit_task_notes">Notes</label>
+                <textarea id="edit-task-notes" name="notes" rows="3"></textarea>
+              </div>
+
+              <div class="form-actions">
+                <button type="button" class="btn-secondary" id="btn-cancel-edit"
+                  data-i18n-key="btn_cancel">Cancel</button>
+                <button type="submit" class="btn-primary" id="btn-save-task" data-i18n-key="btn_save">Save
+                  Changes</button>
+              </div>
+
+              <div id="save-feedback" class="save-feedback"></div>
+            </form>
           </div>
 
-          <!-- Edit Form (Hidden by default) -->
-          <form id="task-edit-form" class="task-edit-form" style="display: none;">
-            <div class="task-details-header">
-              <h3 data-i18n-key="task_details_title">Edit Task</h3>
-            </div>
-
-            <div class="form-group">
-              <label for="edit-task-name" data-i18n-key="edit_task_name">Name</label>
-              <input type="text" id="edit-task-name" name="name" required />
-            </div>
-
-            <div class="form-group">
-              <label for="edit-task-status" data-i18n-key="edit_task_status">Status</label>
-              <select id="edit-task-status" name="status">
-                <option value="pending">Pending</option>
-                <option value="in_progress">In Progress</option>
-                <option value="completed">Completed</option>
-              </select>
-            </div>
-
-            <div class="form-group">
-              <label for="edit-task-description" data-i18n-key="edit_task_description">Description</label>
-              <textarea id="edit-task-description" name="description" rows="4"></textarea>
-            </div>
-
-            <div class="form-group">
-              <label for="edit-task-notes" data-i18n-key="edit_task_notes">Notes</label>
-              <textarea id="edit-task-notes" name="notes" rows="3"></textarea>
-            </div>
-
-            <div class="form-actions">
-              <button type="button" class="btn-secondary" id="btn-cancel-edit"
-                data-i18n-key="btn_cancel">Cancel</button>
-              <button type="submit" class="btn-primary" id="btn-save-task" data-i18n-key="btn_save">Save
-                Changes</button>
-            </div>
-
-            <div id="save-feedback" class="save-feedback"></div>
-          </form>
+          <footer>
+            <p>
+              <span data-i18n-key="footer_copyright">© 2025 AgentFlow. All rights reserved.</span>
+              <span> | </span>
+              <span id="current-time"></span>
+            </p>
+          </footer>
         </div>
 
-        <footer>
-          <p>
-            <span data-i18n-key="footer_copyright">© 2025 Chain Of Thought - Current time: </span>
-            <span id="current-time"></span>
-          </p>
-        </footer>
       </div>
-    </main>
+  </div>
+  </main>
   </div>
 
   <script src="https://d3js.org/d3.v7.min.js"></script>
-  <script src="script.js"></script>
+  <script src="script.js?v=5"></script>
 </body>
 
 </html>

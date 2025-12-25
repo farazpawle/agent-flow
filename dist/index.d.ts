@@ -1,1 +1,1 @@
-export {};
+import "./utils/envLoader.js";

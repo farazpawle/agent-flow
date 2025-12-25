@@ -2,13 +2,14 @@
 let tasks = [];
 let selectedTaskId = null;
 let searchTerm = "";
-let sortOption = "date-asc";
+let sortOption = "execution-order";
 let globalAnalysisResult = null; // Added: Store global analysis result
 let svg, g, simulation; // Modified: Define D3 related variables
 let conversationHistory = []; // Added: Store conversation history for selected task
 
 // Project and Client state
 let projects = [];
+let clients = []; // Store client list
 let selectedProjectId = "all";
 let clientCount = 0;
 let isEditingTask = false;
@@ -31,7 +32,7 @@ const dependencyGraphElement = document.getElementById("dependency-graph");
 const globalAnalysisResultElement = document.getElementById(
   "global-analysis-result"
 ); // Assuming this element exists in HTML
-const langSwitcher = document.getElementById("lang-switcher"); // Added: Get the language switcher element
+const langSwitcher = null; // Removed language switcher
 
 // Project selector elements
 const projectFilter = document.getElementById("project-filter");
@@ -43,6 +44,10 @@ const editTaskName = document.getElementById("edit-task-name");
 const editTaskStatus = document.getElementById("edit-task-status");
 const editTaskDescription = document.getElementById("edit-task-description");
 const editTaskNotes = document.getElementById("edit-task-notes");
+const editTaskProblemStatement = document.getElementById("edit-task-problem-statement");
+const editTaskTechnicalPlan = document.getElementById("edit-task-technical-plan");
+const editTaskFinalOutcome = document.getElementById("edit-task-final-outcome");
+const editTaskLessonsLearned = document.getElementById("edit-task-lessons-learned");
 const btnSaveTask = document.getElementById("btn-save-task");
 const btnCancelEdit = document.getElementById("btn-cancel-edit");
 const saveFeedback = document.getElementById("save-feedback");
@@ -108,34 +113,171 @@ document.addEventListener("DOMContentLoaded", () => {
   // Added: Set up SSE connection
   setupSSE();
 
+  // Fallback polling: if tasks are updated by a different server process,
+  // SSE events won't propagate cross-process. Poll periodically to keep UI fresh.
+  setInterval(fetchTasks, 10000);
+  setInterval(fetchProjects, 30000);
+  setInterval(fetchClientCount, 30000);
+
   // Added: Language switcher event listener
-  if (langSwitcher) {
-    langSwitcher.addEventListener("change", (e) =>
-      changeLanguage(e.target.value)
-    );
+  // Theme Logic
+  initTheme();
+
+  // Settings Menu Logic
+  initSettings();
+
+  // Sidebar Toggle Logic
+  const sidebarToggle = document.getElementById("sidebar-toggle");
+  const sidebar = document.querySelector("aside");
+  if (sidebarToggle && sidebar) {
+    sidebarToggle.addEventListener("click", () => {
+      sidebar.classList.toggle("collapsed");
+      // Wait for transition to finish then re-render graph
+      setTimeout(() => {
+        if (typeof renderDependencyGraph === 'function') renderDependencyGraph();
+      }, 350);
+    });
+  }
+
+  // Draggable Divider Logic
+  const divider = document.getElementById("drag-divider");
+  const depView = document.querySelector(".dependency-view");
+  const workspace = document.querySelector(".workspace-content");
+
+  if (divider && depView && workspace) {
+    let isDragging = false;
+
+    divider.addEventListener("mousedown", (e) => {
+      isDragging = true;
+      divider.classList.add("active");
+      document.body.style.cursor = "col-resize";
+      e.preventDefault(); // Prevent text selection
+    });
+
+    document.addEventListener("mousemove", (e) => {
+      if (!isDragging) return;
+      const workspaceRect = workspace.getBoundingClientRect();
+      const newWidth = e.clientX - workspaceRect.left;
+
+      // Constraints (min 250px)
+      if (newWidth > 250 && newWidth < workspaceRect.width - 250) {
+        depView.style.width = `${newWidth}px`;
+        depView.style.flex = "none";
+      }
+    });
+
+    document.addEventListener("mouseup", () => {
+      if (isDragging) {
+        isDragging = false;
+        divider.classList.remove("active");
+        document.body.style.cursor = "";
+        if (typeof renderDependencyGraph === 'function') renderDependencyGraph();
+      }
+    });
   }
 });
 
 // ==================== CLIENT FUNCTIONS ====================
 
+// ==================== PROJECT FUNCTIONS ====================
+
+async function fetchProjects() {
+  try {
+    const response = await fetch("/api/projects", { cache: "no-store" });
+    if (!response.ok) throw new Error("Failed to fetch projects");
+
+    const data = await response.json();
+    projects = data.projects || [];
+
+    if (!projectFilter) return;
+
+    // Rebuild dropdown
+    projectFilter.innerHTML = "";
+
+    const allOpt = document.createElement("option");
+    allOpt.value = "all";
+    allOpt.textContent = translate("project_filter_all") || "All projects";
+    projectFilter.appendChild(allOpt);
+
+    for (const project of projects) {
+      const opt = document.createElement("option");
+      opt.value = project.id;
+
+      // Show task count if API provides it
+      const count = typeof project.taskCount === "number" ? project.taskCount : null;
+      opt.textContent = count === null ? project.name : `${project.name} (${count})`;
+      projectFilter.appendChild(opt);
+    }
+
+    // Restore selection if possible
+    const hasSelected = selectedProjectId === "all" || projects.some((p) => p.id === selectedProjectId);
+    if (!hasSelected) {
+      selectedProjectId = "all";
+      localStorage.setItem("selectedProjectId", selectedProjectId);
+    }
+    projectFilter.value = selectedProjectId;
+
+    // Refresh tasks using the selected project filter
+    fetchTasks();
+  } catch (error) {
+    console.error("Error fetching projects:", error);
+  }
+}
+
+async function fetchClientCount() {
+  try {
+    const response = await fetch("/api/clients/count", { cache: "no-store" });
+    if (!response.ok) throw new Error("Failed to fetch client count");
+
+    const data = await response.json();
+    const count = typeof data.count === "number" ? data.count : 0;
+    updateClientCount(count);
+  } catch (error) {
+    console.error("Error fetching client count:", error);
+  }
+}
+
+// Helper function to update client count display
+function updateClientCount(count) {
+  const clientCountNum = document.getElementById("client-count");
+  if (clientCountNum) {
+    clientCountNum.textContent = String(count);
+  }
+}
+
+// Helper function to update connection status indicator
+function updateConnectionStatus(isOnline) {
+  const statusIndicator = document.querySelector(".status-indicator");
+  const statusText = document.querySelector(".status-bar span");
+  const statusBar = document.querySelector(".status-bar");
+
+  if (statusIndicator) {
+    statusIndicator.classList.toggle("offline", !isOnline);
+  }
+
+  if (statusBar) {
+    statusBar.classList.toggle("offline", !isOnline);
+  }
+
+  if (statusText) {
+    statusText.textContent = isOnline
+      ? (translate("status_indicator_online") || "ONLINE")
+      : (translate("status_indicator_offline") || "OFFLINE");
+  }
+}
+
 async function fetchClients() {
   try {
-    const response = await fetch("/api/clients");
+    const response = await fetch("/api/clients", { cache: "no-store" });
     if (!response.ok) throw new Error("Failed to fetch clients");
 
     const data = await response.json();
     clients = data.clients || []; // Update global clients list
 
-    // Update count display
+    // Only update the tooltip here - count is updated via SSE or fetchClientCount()
     const clientCountNum = document.getElementById("client-count");
     if (clientCountNum) {
-      // Filter active if needed, or just show total registered? 
-      // User said "3 connected". Assuming all in DB are valid/recent if we use heartbeat.
-      // Let's filter by isActive if the API returns it.
       const activeClients = clients.filter(c => c.isActive);
-      clientCountNum.textContent = activeClients.length;
-
-      // Optional: Update title to list names
       clientCountNum.title = activeClients.map(c => `${c.name} (${c.type})`).join('\n');
     }
 
@@ -155,7 +297,247 @@ function getClientIcon(type) {
   return "💻";
 }
 
+// ==================== DRAG AND DROP FUNCTIONS ====================
+
+let draggedItem = null;
+
+function handleDragStart(e) {
+  draggedItem = this;
+  e.dataTransfer.effectAllowed = 'move';
+  e.dataTransfer.setData('text/html', this.innerHTML);
+  this.style.opacity = '0.4';
+}
+
+function handleDragOver(e) {
+  if (e.preventDefault) {
+    e.preventDefault();
+  }
+  e.dataTransfer.dropEffect = 'move';
+  return false;
+}
+
+function handleDrop(e) {
+  if (e.stopPropagation) {
+    e.stopPropagation();
+  }
+
+  if (draggedItem !== this && draggedItem !== null) {
+    const allItems = [...document.querySelectorAll('.task-item')];
+    const fromIndex = allItems.indexOf(draggedItem);
+    const toIndex = allItems.indexOf(this);
+
+    if (fromIndex !== -1 && toIndex !== -1) {
+      const draggedTaskId = draggedItem.getAttribute('data-id');
+      const targetTaskId = this.getAttribute('data-id');
+
+      // Validate: Check if this drop would violate dependency constraints
+      const draggedTask = tasks.find(t => t.id === draggedTaskId);
+      const targetTask = tasks.find(t => t.id === targetTaskId);
+
+      if (draggedTask && targetTask) {
+        // Check if dragged task depends on target task (can't move before its parent)
+        const draggedDependsOnTarget = draggedTask.dependencies?.some(dep => {
+          const depId = typeof dep === 'object' ? dep.taskId : dep;
+          return depId === targetTaskId;
+        });
+
+        // If trying to move dependent task BEFORE its parent, block it
+        if (draggedDependsOnTarget && toIndex < fromIndex) {
+          console.warn(`Cannot move "${draggedTask.name}" before its dependency "${targetTask.name}"`);
+          showTemporaryError(`Cannot move task before its dependency "${targetTask.name}"`);
+          return false;
+        }
+
+        // Check if target task depends on dragged task (can't move parent after child)
+        const targetDependsOnDragged = targetTask.dependencies?.some(dep => {
+          const depId = typeof dep === 'object' ? dep.taskId : dep;
+          return depId === draggedTaskId;
+        });
+
+        // If trying to move parent task AFTER its dependent child, block it
+        if (targetDependsOnDragged && toIndex > fromIndex) {
+          console.warn(`Cannot move "${draggedTask.name}" after its dependent "${targetTask.name}"`);
+          showTemporaryError(`Cannot move task after its dependent "${targetTask.name}"`);
+          return false;
+        }
+      }
+
+      // Valid drop - proceed
+      if (fromIndex < toIndex) {
+        this.parentNode.insertBefore(draggedItem, this.nextSibling);
+      } else {
+        this.parentNode.insertBefore(draggedItem, this);
+      }
+
+      showApplyButton();
+    }
+  }
+
+  return false;
+}
+
+function handleDragEnd(e) {
+  this.style.opacity = '1';
+  draggedItem = null;
+}
+
+function showApplyButton() {
+  const btn = document.getElementById('btn-apply-order');
+  if (btn) {
+    btn.style.display = 'flex';
+    btn.onclick = handleApplyOrder;
+  }
+}
+
+async function handleApplyOrder() {
+  console.log("Applying new order...");
+  const btn = document.getElementById('btn-apply-order');
+  if (btn) btn.disabled = true;
+
+  const newTaskIds = [...document.querySelectorAll('.task-item')]
+    .map(item => item.getAttribute('data-id'))
+    .filter(id => id);
+
+  await reorderTasks(newTaskIds);
+
+  if (btn) {
+    btn.style.display = 'none';
+    btn.disabled = false;
+  }
+}
+
+async function reorderTasks(taskIds) {
+  try {
+    console.log("Reordering tasks...", taskIds, "project:", selectedProjectId);
+    // Optimistic update locally? 
+    // We already moved it in DOM, but `tasks` array is stale until we re-fetch or manually update it.
+    // Let's rely on the fetch after API call for full consistency, 
+    // but maybe we should update `tasks` locally to match visual state if we want to avoid flicker
+
+    const response = await fetch("/api/tasks/reorder", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ taskIds, projectId: selectedProjectId !== "all" ? selectedProjectId : undefined })
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to reorder tasks");
+    }
+
+    const result = await response.json();
+    console.log("Reorder success:", result);
+
+    // Optionally re-fetch to ensure backend state matches (execution_order updated)
+    fetchTasks();
+
+  } catch (error) {
+    console.error("Error reordering:", error);
+    showTemporaryError("Failed to save new order (check console)");
+    // Revert visual change? (complex to do without full re-render)
+    fetchTasks(); // Force reset to server state
+  }
+}
+
+
 // ==================== TASK EDIT FUNCTIONS ====================
+
+function toFormStatusValue(status) {
+  if (!status) return "pending";
+
+  // Backend / stored values (Title Case)
+  switch (status) {
+    case "Pending":
+      return "pending";
+    case "In Progress":
+      return "in_progress";
+    case "Completed":
+      return "completed";
+    case "Blocked":
+      return "blocked";
+  }
+
+  // Frontend / API variants
+  if (typeof status === "string") {
+    const s = status.trim().toLowerCase();
+    if (s === "pending") return "pending";
+    if (s === "in_progress" || s === "in progress") return "in_progress";
+    if (s === "completed") return "completed";
+    if (s === "blocked") return "blocked";
+  }
+
+  return "pending";
+}
+
+function toApiStatusValue(formValue) {
+  if (!formValue) return "Pending";
+
+  // If already Title Case, keep it
+  switch (formValue) {
+    case "Pending":
+    case "In Progress":
+    case "Completed":
+    case "Blocked":
+      return formValue;
+  }
+
+  // Map UI values -> backend enum strings
+  switch (formValue) {
+    case "pending":
+      return "Pending";
+    case "in_progress":
+      return "In Progress";
+    case "completed":
+      return "Completed";
+    case "blocked":
+      return "Blocked";
+    default:
+      return "Pending";
+  }
+}
+
+// Added: Render dependencies checklist
+function renderDependencySelector(currentTask) {
+  const container = document.getElementById("edit-task-dependencies-container");
+  if (!container) return;
+
+  container.innerHTML = ""; // Clear existing
+
+  // Filter possible dependencies (exclude self)
+  const availableTasks = tasks.filter(t => t.id !== currentTask.id);
+
+  if (availableTasks.length === 0) {
+    container.innerHTML = `<p class="placeholder" style="font-size: 0.9em; opacity: 0.7;">${translate("no_other_tasks_available") || "No other tasks available"}</p>`;
+    return;
+  }
+
+  // Normalize current dependencies to a Set of IDs
+  const currentDepIds = new Set();
+  if (currentTask.dependencies) {
+    currentTask.dependencies.forEach(dep => {
+      const depId = typeof dep === 'object' && dep ? dep.taskId : dep;
+      currentDepIds.add(depId);
+    });
+  }
+
+  availableTasks.forEach(task => {
+    const div = document.createElement("div");
+    div.className = "dependency-item";
+
+    const checkbox = document.createElement("input");
+    checkbox.type = "checkbox";
+    checkbox.id = `dep-check-${task.id}`;
+    checkbox.value = task.id;
+    checkbox.checked = currentDepIds.has(task.id);
+
+    const label = document.createElement("label");
+    label.htmlFor = `dep-check-${task.id}`;
+    label.textContent = task.name;
+
+    div.appendChild(checkbox);
+    div.appendChild(label);
+    container.appendChild(div);
+  });
+}
 
 function showTaskEditForm(task) {
   if (!taskEditForm || !task) return;
@@ -164,12 +546,20 @@ function showTaskEditForm(task) {
 
   // Populate form fields
   if (editTaskName) editTaskName.value = task.name || "";
-  if (editTaskStatus) editTaskStatus.value = task.status || "pending";
+  if (editTaskStatus) editTaskStatus.value = toFormStatusValue(task.status);
   if (editTaskDescription) editTaskDescription.value = task.description || "";
   if (editTaskNotes) editTaskNotes.value = task.notes || "";
+  if (editTaskProblemStatement) editTaskProblemStatement.value = task.problemStatement || "";
+  if (editTaskTechnicalPlan) editTaskTechnicalPlan.value = task.technicalPlan || "";
+  if (editTaskFinalOutcome) editTaskFinalOutcome.value = task.finalOutcome || "";
+  if (editTaskLessonsLearned) editTaskLessonsLearned.value = task.lessonsLearned || "";
+
+  // Render dependencies selector
+  renderDependencySelector(task);
 
   // Show form, hide placeholder
   taskEditForm.style.display = "block";
+  if (taskDetailsContent) taskDetailsContent.style.display = "none";
   if (saveFeedback) saveFeedback.textContent = "";
 }
 
@@ -178,6 +568,7 @@ function hideTaskEditForm() {
 
   isEditingTask = false;
   taskEditForm.style.display = "none";
+  if (taskDetailsContent) taskDetailsContent.style.display = "block";
   if (saveFeedback) saveFeedback.textContent = "";
 }
 
@@ -191,9 +582,14 @@ async function handleSaveTask(e) {
 
   const updates = {
     name: editTaskName?.value || "",
-    status: editTaskStatus?.value || "pending",
+    status: toApiStatusValue(editTaskStatus?.value),
     description: editTaskDescription?.value || "",
-    notes: editTaskNotes?.value || ""
+    notes: editTaskNotes?.value || "",
+    problemStatement: editTaskProblemStatement?.value || "",
+    technicalPlan: editTaskTechnicalPlan?.value || "",
+    finalOutcome: editTaskFinalOutcome?.value || "",
+    lessonsLearned: editTaskLessonsLearned?.value || "",
+    dependencies: Array.from(document.querySelectorAll('#edit-task-dependencies-container input:checked')).map(cb => cb.value)
   };
 
   try {
@@ -208,22 +604,30 @@ async function handleSaveTask(e) {
     });
 
     if (!response.ok) {
-      throw new Error("Failed to save task");
+      const errorData = await response.json().catch(() => ({}));
+      throw new Error(errorData.error || "Failed to save task");
     }
 
     const result = await response.json();
 
     // Update local task data
     const taskIndex = tasks.findIndex(t => t.id === selectedTaskId);
-    if (taskIndex !== -1) {
-      tasks[taskIndex] = { ...tasks[taskIndex], ...updates };
-    }
+    if (taskIndex !== -1) tasks[taskIndex] = result.task || { ...tasks[taskIndex], ...updates };
 
     showFeedback("Saved successfully!", "success");
+
+    // Exit edit mode and refresh details.
+    // NOTE: selectTask() toggles off when called with the already-selected id.
+    // To re-render the same task after save, clear selectedTaskId first.
+    const refreshId = selectedTaskId;
+    hideTaskEditForm();
+    selectedTaskId = null;
+    await selectTask(refreshId);
 
     // Re-render to reflect changes
     renderTasks();
     updateProgressIndicator();
+    renderDependencyGraph();
 
   } catch (error) {
     console.error("Error saving task:", error);
@@ -234,12 +638,11 @@ async function handleSaveTask(e) {
 }
 
 function handleCancelEdit() {
-  // Reset form to current task values
+  hideTaskEditForm();
   if (selectedTaskId) {
-    const task = tasks.find(t => t.id === selectedTaskId);
-    if (task) {
-      showTaskEditForm(task);
-    }
+    const refreshId = selectedTaskId;
+    selectedTaskId = null;
+    selectTask(refreshId);
   }
   showFeedback("", "");
 }
@@ -398,9 +801,106 @@ function changeLanguage(lang) {
     })
     .catch((error) => {
       console.error("Error changing language:", error);
-      // Can add user feedback, e.g. show error message
-      showTemporaryError("Failed to change language. Please try again."); // Need translation key
     });
+}
+
+// ==================== THEME FUNCTIONS ====================
+
+function initTheme() {
+  const savedTheme = localStorage.getItem("theme") || "dark";
+  document.documentElement.setAttribute("data-theme", savedTheme);
+  updateThemeIcon(savedTheme);
+
+  const themeToggleBtn = document.getElementById("theme-toggle");
+  if (themeToggleBtn) {
+    themeToggleBtn.addEventListener("click", toggleTheme);
+  }
+}
+
+function toggleTheme() {
+  const currentTheme = document.documentElement.getAttribute("data-theme") || "dark";
+  const newTheme = currentTheme === "dark" ? "light" : "dark";
+
+  document.documentElement.setAttribute("data-theme", newTheme);
+  localStorage.setItem("theme", newTheme);
+  updateThemeIcon(newTheme);
+}
+
+function updateThemeIcon(theme) {
+  const themeToggleBtn = document.getElementById("theme-toggle");
+  if (themeToggleBtn) {
+    const iconSpan = themeToggleBtn.querySelector(".icon");
+    if (iconSpan) {
+      iconSpan.textContent = theme === "dark" ? "🌙" : "☀️";
+    }
+  }
+}
+
+
+
+// ==================== SETTINGS FUNCTIONS ====================
+
+function initSettings() {
+  const settingsBtn = document.getElementById("settings-btn");
+  const settingsDropdown = document.getElementById("settings-dropdown");
+  const btnRestart = document.getElementById("btn-restart-server");
+  const btnStop = document.getElementById("btn-stop-server");
+
+  if (settingsBtn && settingsDropdown) {
+    // Toggle dropdown
+    settingsBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      settingsDropdown.classList.toggle("hidden");
+      settingsDropdown.classList.toggle("show");
+    });
+
+    // Close when clicking outside
+    document.addEventListener("click", (e) => {
+      if (!settingsBtn.contains(e.target) && !settingsDropdown.contains(e.target)) {
+        settingsDropdown.classList.add("hidden");
+        settingsDropdown.classList.remove("show");
+      }
+    });
+  }
+
+  if (btnRestart) {
+    btnRestart.addEventListener("click", async () => {
+      if (confirm("Are you sure you want to RESTART the server? This will disconnect all clients briefly.")) {
+        try {
+          const res = await fetch("/api/server/restart", { method: "POST" });
+          const data = await res.json();
+          if (data.success) {
+            alert("Server restarting... The page may need to be reloaded.");
+            // Optional: reload page after a delay
+            setTimeout(() => window.location.reload(), 3000);
+          } else {
+            alert("Failed to restart: " + (data.error || "Unknown error"));
+          }
+        } catch (e) {
+          alert("Error requesting restart: " + e.message);
+        }
+      }
+    });
+  }
+
+  if (btnStop) {
+    btnStop.addEventListener("click", async () => {
+      if (confirm("Are you sure you want to STOP the server? You will need to start it manually again.")) {
+        try {
+          const res = await fetch("/api/server/stop", { method: "POST" });
+          const data = await res.json();
+          if (data.success) {
+            alert("Server stopping... Goodbye!");
+            document.body.innerHTML = "<h1 style='color:white;text-align:center;padding-top:20%;'>Server Stopped</h1>";
+          } else {
+            alert("Failed to stop: " + (data.error || "Unknown error"));
+          }
+        } catch (e) {
+          alert("Error requesting stop: " + e.message);
+        }
+      }
+    });
+  }
 }
 // --- i18n core functions end ---
 
@@ -414,10 +914,14 @@ async function fetchTasks() {
       )}</div>`;
     }
 
-    // Build URL (always fetch all tasks)
-    let url = "/api/tasks";
+    // Build URL (optionally filter by selected project)
+    const url = new URL("/api/tasks", window.location.origin);
 
-    const response = await fetch(url);
+    if (selectedProjectId && selectedProjectId !== "all") {
+      url.searchParams.set("project_id", selectedProjectId);
+    }
+
+    const response = await fetch(url.toString(), { cache: "no-store" });
 
     if (!response.ok) {
       throw new Error(`HTTP error! Status: ${response.status}`);
@@ -427,18 +931,7 @@ async function fetchTasks() {
     const newTasks = data.tasks || [];
 
     // Extract global analysis result (find first non-empty)
-    let foundAnalysisResult = null;
-    for (const task of newTasks) {
-      if (task.analysisResult) {
-        foundAnalysisResult = task.analysisResult;
-        break; // Found one is enough
-      }
-    }
-    // Only update if found result is different from current stored
-    if (foundAnalysisResult !== globalAnalysisResult) {
-      globalAnalysisResult = foundAnalysisResult;
-      renderGlobalAnalysisResult(); // Update display
-    }
+    // Global analysis result logic removed (moved to task details)
 
     // --- Smart update logic (initial - still needs improvement to avoid flickering) ---
     // Simply compare task count or identifier to decide whether to re-render
@@ -455,10 +948,23 @@ async function fetchTasks() {
       console.log(
         "No significant task changes detected, skipping full re-render."
       );
+      // Fix: If we showed "Loading..." prompt (tasks.length === 0), we MUST render even if result is still empty
+      // to clear the "Loading..." text and show "Empty" placeholder.
+      if (taskListElement.innerHTML.includes("loading")) {
+        console.log("Clearing loading state...");
+        renderTasks();
+        renderDependencyGraph();
+      } else {
+        // Fix: If graph is empty but we have tasks (e.g. D3 loaded late), force render
+        const graphHasContent = dependencyGraphElement && dependencyGraphElement.querySelector("svg");
+        if (!graphHasContent && tasks.length > 0) {
+          console.log("Graph empty but tasks exist, forcing render...");
+          renderDependencyGraph();
+        }
+      }
+
       // If no need to re-render list, possibly just update progress bar
       updateProgressIndicator();
-      // Consider whether to update graph (if status might change)
-      // renderDependencyGraph(); // Temporarily commented out unless status change is critical
     }
 
     // *** Remove setTimeout polling ***
@@ -500,8 +1006,24 @@ function setupSSE() {
     fetchTasks();
   });
 
+  // Listen for client count updates
+  evtSource.addEventListener("client-update", function (event) {
+    console.log("SSE 'client-update' event received:", event.data);
+    try {
+      const data = JSON.parse(event.data);
+      if (typeof data.count === "number") {
+        updateClientCount(data.count);
+      }
+    } catch (e) {
+      console.error("Failed to parse client-update event:", e);
+      fetchClientCount(); // Fallback to polling
+    }
+  });
+
   evtSource.onerror = function (err) {
     console.error("EventSource failed:", err);
+    // Update connection status to offline
+    updateConnectionStatus(false);
     // Can implement re-connect logic
     evtSource.close(); // Close error connection
     // Delay a bit later to try re-connect
@@ -510,6 +1032,10 @@ function setupSSE() {
 
   evtSource.onopen = function () {
     console.log("SSE connection opened.");
+    // Update connection status to online
+    updateConnectionStatus(true);
+    // Refresh client count on reconnect
+    fetchClientCount();
   };
 }
 
@@ -550,6 +1076,10 @@ function didTasksChange(oldTasks, newTasks) {
       "implementationGuide",
       "verificationCriteria",
       "summary",
+      "problemStatement",
+      "technicalPlan",
+      "finalOutcome",
+      "lessonsLearned",
     ];
 
     for (const field of fieldsToCompare) {
@@ -651,7 +1181,11 @@ function renderTasks() {
 
   let filteredTasks = tasks;
   if (filterValue !== "all") {
-    filteredTasks = filteredTasks.filter((task) => task.status === filterValue);
+    filteredTasks = filteredTasks.filter((task) => {
+      if (!task.status) return false;
+      const taskStatus = task.status.toLowerCase().replace(/ /g, "_");
+      return taskStatus === filterValue;
+    });
   }
 
   if (searchTerm) {
@@ -664,8 +1198,16 @@ function renderTasks() {
     );
   }
 
+  // Sort tasks
   filteredTasks.sort((a, b) => {
     switch (sortOption) {
+      case "execution-order":
+        // Fix: Use camelCase 'executionOrder' to match API response
+        const orderA = (typeof a.executionOrder === 'number') ? a.executionOrder : Number.MAX_SAFE_INTEGER;
+        const orderB = (typeof b.executionOrder === 'number') ? b.executionOrder : Number.MAX_SAFE_INTEGER;
+        if (orderA !== orderB) return orderA - orderB;
+        return new Date(a.createdAt || 0) - new Date(b.createdAt || 0);
+
       case "name-asc":
         return (a.name || "").localeCompare(b.name || "");
       case "name-desc":
@@ -688,6 +1230,9 @@ function renderTasks() {
       "task_list_empty"
     )}</div>`;
   } else {
+    // Only enable D&D if sorting by execution-order
+    const isDraggable = sortOption === "execution-order";
+
     taskListElement.innerHTML = filteredTasks
       .map(
         (task) => {
@@ -697,32 +1242,45 @@ function renderTasks() {
           const tId = task.id || "";
           const tClientId = task.client_id;
 
-          // Client info
           const client = clients.find(c => c.id === tClientId);
           const clientName = client ? client.name : (tClientId ? 'Unknown' : 'Local Host');
           const clientIcon = client ? getClientIcon(client.type) : '💻';
 
+          const rowDragAttr = isDraggable ? 'draggable="true"' : '';
+          // Drag handle HTML
+          const dragHandleHtml = isDraggable ? '<div class="drag-handle" title="Drag to reorder">⋮⋮</div>' : '';
+
+          // Normalize status for CSS class (lowercase, replace space/underscore with dash)
+          const normalizeStatus = (s) => (s || 'pending').toLowerCase().replace(/[ _]/g, '-');
+          const statusClass = normalizeStatus(tStatus);
+
           return `
-            <div class="task-item status-${tStatus.replace(
-            "_",
-            "-"
-          )}" data-id="${tId}" onclick="selectTask('${tId}')">
-            <div class="task-header">
-                <h3>${tName}</h3>
-                <!-- Client Badge -->
-                <span class="client-badge" title="${clientName} (${tClientId})">${clientIcon}</span>
+            <div class="task-item status-${statusClass}" data-id="${tId}" onclick="selectTask('${tId}')" ${rowDragAttr}>
+            <div class="task-item-content">
+                ${dragHandleHtml}
+                <div class="task-header">
+                    <h3>${tName}</h3>
+                </div>
             </div>
             <div class="task-meta">
-                <span class="task-status status-${tStatus.replace(
-            "_",
-            "-"
-          )}">${getStatusText(tStatus)}</span>
+                <span class="task-status status-${statusClass}">${tStatus}</span>
             </div>
             </div>
         `;
         }
       )
       .join("");
+
+    // Attach drag events after render
+    if (isDraggable) {
+      const taskItems = taskListElement.querySelectorAll('.task-item');
+      taskItems.forEach(item => {
+        item.addEventListener('dragstart', handleDragStart);
+        item.addEventListener('dragover', handleDragOver);
+        item.addEventListener('drop', handleDrop);
+        item.addEventListener('dragend', handleDragEnd);
+      });
+    }
   }
   // --- End simple brute force replacement ---
 
@@ -806,10 +1364,20 @@ async function selectTask(taskId) {
       </div>
     </div>
     
-    <!-- Added: Condition display Summary -->
+    <!-- Added: Problem Statement -->
+    <div class="task-details-section" id="detail-problem-statement-section" style="display: none;">
+      <h4>Problem Statement</h4>
+      <p id="detail-problem-statement"></p>
+    </div>
+
+    <!-- Added: Condition display Summary / Final Outcome -->
     <div class="task-details-section" id="detail-summary-section" style="display: none;">
       <h4>Completion Summary</h4>
       <p id="detail-summary"></p>
+      <div id="detail-final-outcome-container" style="margin-top: 10px; padding-top: 10px; border-top: 1px dashed #eee; display: none;">
+        <strong>Final Outcome Content:</strong>
+        <p id="detail-final-outcome"></p>
+      </div>
     </div>
     
     <div class="task-details-section">
@@ -817,6 +1385,12 @@ async function selectTask(taskId) {
       <p id="detail-description"></p>
     </div>
     
+    <!-- Added: Technical Plan -->
+    <div class="task-details-section" id="detail-technical-plan-section" style="display: none;">
+      <h4>Technical Plan</h4>
+      <p id="detail-technical-plan"></p>
+    </div>
+
     <div class="task-details-section">
       <h4>Implementation Guide</h4>
       <pre id="detail-implementation-guide"></pre>
@@ -825,6 +1399,18 @@ async function selectTask(taskId) {
     <div class="task-details-section">
       <h4>Verification Criteria</h4>
       <p id="detail-verification-criteria"></p>
+    </div>
+
+    <!-- Added: Analysis Result -->
+    <div class="task-details-section" id="detail-analysis-section" style="display: none;">
+      <h4 data-i18n-key="task_detail_analysis_title">Analysis Result</h4>
+      <pre id="detail-analysis" style="white-space: pre-wrap;"></pre>
+    </div>
+
+    <!-- Added: Lessons Learned -->
+    <div class="task-details-section" id="detail-lessons-learned-section" style="display: none;">
+      <h4>Lessons Learned</h4>
+      <p id="detail-lessons-learned"></p>
     </div>
     
     <div class="task-details-section">
@@ -860,15 +1446,27 @@ async function selectTask(taskId) {
   const detailVerificationCriteria = document.getElementById(
     "detail-verification-criteria"
   );
-  // Added: Get Summary related elements
-  const detailSummarySection = document.getElementById(
-    "detail-summary-section"
-  );
+  // Added: Get Context Elements
+  const detailProblemStatementSection = document.getElementById("detail-problem-statement-section");
+  const detailProblemStatement = document.getElementById("detail-problem-statement");
+  const detailTechnicalPlanSection = document.getElementById("detail-technical-plan-section");
+  const detailTechnicalPlan = document.getElementById("detail-technical-plan");
+  // Summary/Final Outcome
+  const detailSummarySection = document.getElementById("detail-summary-section");
   const detailSummary = document.getElementById("detail-summary");
+  const detailFinalOutcomeContainer = document.getElementById("detail-final-outcome-container");
+  const detailFinalOutcome = document.getElementById("detail-final-outcome");
+  // Lessons Learned
+  const detailLessonsLearnedSection = document.getElementById("detail-lessons-learned-section");
+  const detailLessonsLearned = document.getElementById("detail-lessons-learned");
+
   const detailNotes = document.getElementById("detail-notes");
   const detailDependencies = document.getElementById("detail-dependencies");
   const detailRelatedFiles = document.getElementById("detail-related-files");
   const conversationHistoryContainer = document.getElementById("conversation-history-container");
+
+  const detailAnalysisSection = document.getElementById("detail-analysis-section");
+  const detailAnalysis = document.getElementById("detail-analysis");
 
   if (detailName) detailName.textContent = task.name;
   if (detailStatus) {
@@ -878,9 +1476,50 @@ async function selectTask(taskId) {
       "-"
     )}`;
   }
+
+  // Problem Statement
+  if (task.problemStatement && detailProblemStatementSection) {
+    detailProblemStatement.textContent = task.problemStatement;
+    detailProblemStatementSection.style.display = "block";
+  } else if (detailProblemStatementSection) {
+    detailProblemStatementSection.style.display = "none";
+  }
+
+  // Summary & Final Outcome
+  if (detailSummarySection) {
+    let showSummary = false;
+    if (task.summary && detailSummary) {
+      detailSummary.textContent = task.summary;
+      showSummary = true;
+    }
+
+    if (task.finalOutcome && detailFinalOutcome && task.finalOutcome !== task.summary) {
+      detailFinalOutcome.textContent = task.finalOutcome;
+      detailFinalOutcomeContainer.style.display = "block";
+      showSummary = true;
+    } else if (detailFinalOutcomeContainer) {
+      detailFinalOutcomeContainer.style.display = "none";
+    }
+
+    if (showSummary) {
+      detailSummarySection.style.display = "block";
+    } else {
+      detailSummarySection.style.display = "none";
+    }
+  }
+
   if (detailDescription)
     detailDescription.textContent =
       task.description || translate("task_detail_no_description");
+
+  // Technical Plan
+  if (task.technicalPlan && detailTechnicalPlanSection) {
+    detailTechnicalPlan.textContent = task.technicalPlan;
+    detailTechnicalPlanSection.style.display = "block";
+  } else if (detailTechnicalPlanSection) {
+    detailTechnicalPlanSection.style.display = "none";
+  }
+
   if (detailImplementationGuide)
     detailImplementationGuide.textContent =
       task.implementationGuide ||
@@ -890,12 +1529,20 @@ async function selectTask(taskId) {
       task.verificationCriteria ||
       translate("task_detail_no_verification_criteria");
 
-  // Added: Fill Summary (if exists and completed)
-  if (task.summary && detailSummarySection && detailSummary) {
-    detailSummary.textContent = task.summary;
-    detailSummarySection.style.display = "block"; // Show block
-  } else if (detailSummarySection) {
-    detailSummarySection.style.display = "none"; // Hide block
+  // Analysis Result
+  if (task.analysisResult && detailAnalysisSection) {
+    detailAnalysis.textContent = task.analysisResult;
+    detailAnalysisSection.style.display = "block";
+  } else if (detailAnalysisSection) {
+    detailAnalysisSection.style.display = "none";
+  }
+
+  // Lessons Learned
+  if (task.lessonsLearned && detailLessonsLearnedSection) {
+    detailLessonsLearned.textContent = task.lessonsLearned;
+    detailLessonsLearnedSection.style.display = "block";
+  } else if (detailLessonsLearnedSection) {
+    detailLessonsLearnedSection.style.display = "none";
   }
 
   if (detailNotes)
@@ -1007,6 +1654,7 @@ function renderDependencyGraph() {
     id: task.id,
     name: task.name,
     status: task.status,
+    executionOrder: task.executionOrder,
     // Keep existing position for smooth transition
     x: simulation?.nodes().find((n) => n.id === task.id)?.x,
     y: simulation?.nodes().find((n) => n.id === task.id)?.y,
@@ -1168,16 +1816,29 @@ function renderDependencyGraph() {
   // Add circle to Enter selection
   nodeEnter
     .append("circle")
-    .attr("r", 10)
+    .attr("r", 14)
     .attr("stroke", "#fff")
-    .attr("stroke-width", 1.5);
+    .attr("stroke-width", 2);
   // Color will be set through merge and update transition
 
-  // Add text to Enter selection
+  // Add execution order number inside the circle
   nodeEnter
     .append("text")
-    .attr("x", 15)
-    .attr("y", 3)
+    .attr("class", "node-order")
+    .attr("x", 0)
+    .attr("y", 4)
+    .attr("text-anchor", "middle")
+    .attr("font-size", "11px")
+    .attr("font-weight", "bold")
+    .attr("fill", "#fff")
+    .text((d) => typeof d.executionOrder === 'number' ? d.executionOrder : '?');
+
+  // Add task name label to the side
+  nodeEnter
+    .append("text")
+    .attr("class", "node-name")
+    .attr("x", 20)
+    .attr("y", 4)
     .text((d) => d.name)
     .attr("font-size", "10px")
     .attr("fill", "#ccc");
@@ -1274,13 +1935,13 @@ function ticked() {
 function getNodeColor(nodeData) {
   switch (nodeData.status) {
     case "Completed":
-      return "var(--secondary-color)";
+      return "var(--success)"; // Green
     case "In Progress":
-      return "var(--primary-color)";
+      return "var(--warning)"; // Yellow
     case "Pending":
-      return "#f1c40f"; // Consistent with progress bar and status label
+      return "var(--danger)"; // Red
     default:
-      return "#7f8c8d"; // Unknown status
+      return "var(--text-tertiary)"; // Unknown status
   }
 }
 
@@ -1357,40 +2018,7 @@ function updateProgressIndicator() {
 }
 
 // Added: Render global analysis result
-function renderGlobalAnalysisResult() {
-  let targetElement = document.getElementById("global-analysis-result");
-
-  // If element does not exist, try to create and add to suitable location (e.g. header or main content before)
-  if (!targetElement) {
-    targetElement = document.createElement("div");
-    targetElement.id = "global-analysis-result";
-    targetElement.className = "global-analysis-section"; // Add style class
-    // Try to insert before header or main before
-    const header = document.querySelector("header");
-    const mainContent = document.querySelector("main");
-    if (header && header.parentNode) {
-      header.parentNode.insertBefore(targetElement, header.nextSibling);
-    } else if (mainContent && mainContent.parentNode) {
-      mainContent.parentNode.insertBefore(targetElement, mainContent);
-    } else {
-      // As last resort, add to body start
-      document.body.insertBefore(targetElement, document.body.firstChild);
-    }
-  }
-
-  if (globalAnalysisResult) {
-    targetElement.innerHTML = `
-            <h4 data-i18n-key="global_analysis_title">${translate(
-      "global_analysis_title"
-    )}</h4> 
-            <pre>${globalAnalysisResult}</pre> 
-        `;
-    targetElement.style.display = "block";
-  } else {
-    targetElement.style.display = "none"; // If no result, hide
-    targetElement.innerHTML = ""; // Clear content
-  }
-}
+// function renderGlobalAnalysisResult removed
 
 // Added: Highlight dependency graph node
 function highlightNode(taskId, status = null) {
@@ -1425,7 +2053,7 @@ function getStatusClass(status) {
 // Function to fetch conversation history for a task
 async function fetchConversationHistory(taskId) {
   try {
-    const response = await fetch(`/api/tasks/${taskId}/conversation`);
+    const response = await fetch(`/api/tasks/${taskId}/conversation`, { cache: "no-store" });
     if (!response.ok) {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }

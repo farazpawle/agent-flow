@@ -22,6 +22,10 @@ export declare function updateTaskContent(taskId: string, updates: {
     dependencies?: string[];
     implementationGuide?: string;
     verificationCriteria?: string;
+    problemStatement?: string;
+    technicalPlan?: string;
+    finalOutcome?: string;
+    lessonsLearned?: string;
 }): Promise<{
     success: boolean;
     message: string;
@@ -40,7 +44,17 @@ export declare function batchCreateOrUpdateTasks(taskDataList: Array<{
     relatedFiles?: RelatedFile[];
     implementationGuide?: string;
     verificationCriteria?: string;
-}>, updateMode: "append" | "overwrite" | "selective" | "clearAllTasks", globalAnalysisResult?: string, projectId?: string): Promise<Task[]>;
+    problemStatement?: string;
+    technicalPlan?: string;
+}>, updateMode: "append" | "overwrite" | "selective" | "clearAllTasks", globalAnalysisResult?: string, projectId?: string, sourceStepId?: string): Promise<Task[]>;
+/**
+ * Recalculate execution order for a project
+ */
+export declare function recalculateTaskOrder(projectId: string): Promise<void>;
+/**
+ * Reorder tasks based on user input, while respecting dependencies.
+ */
+export declare function reorderTasks(projectId: string, taskIds: string[]): Promise<Task[]>;
 export declare function canExecuteTask(taskId: string): Promise<{
     canExecute: boolean;
     blockedBy?: string[];

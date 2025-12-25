@@ -3,17 +3,18 @@
  * Handles CRUD operations for IDE clients
  */
 
-import { db as database } from "./db.js";
-import { v4 as uuidv4 } from "uuid";
+import { db } from "./db.js";
 import { createHash } from "crypto";
 
 /**
- * Generate a stable client ID based on type and workspace
- * This ensures the same logical client always gets the same ID
+ * Generate a unique client ID based on type, workspace, and process PID
+ * This ensures each MCP server instance gets a unique ID even if running from the same workspace
  */
 function generateStableClientId(type: string, workspace: string): string {
     const normalizedWorkspace = workspace.toLowerCase().replace(/\\/g, '/').replace(/\/$/, '');
-    const hash = createHash('md5').update(`${type}:${normalizedWorkspace}`).digest('hex').substring(0, 12);
+    // Include process.pid to ensure each instance is unique
+    const uniqueData = `${type}:${normalizedWorkspace}:${process.pid}`;
+    const hash = createHash('md5').update(uniqueData).digest('hex').substring(0, 12);
     return `client-${type}-${hash}`;
 }
 
@@ -32,29 +33,11 @@ export interface Client {
 let currentClientId: string | null = null;
 
 /**
- * Initialize clients table
+ * Initialize clients table - DEPRECATED
  */
 export async function initClientsTable(): Promise<void> {
-    return new Promise((resolve, reject) => {
-        database.getDb().run(`
-      CREATE TABLE IF NOT EXISTS clients (
-        id TEXT PRIMARY KEY,
-        name TEXT NOT NULL,
-        type TEXT NOT NULL,
-        workspace TEXT,
-        connected_at INTEGER NOT NULL,
-        last_activity_at INTEGER NOT NULL,
-        is_active INTEGER DEFAULT 1
-      )
-    `, (err) => {
-            if (err) {
-                console.error("[CoT] Failed to create clients table:", err);
-                reject(err);
-            } else {
-                resolve();
-            }
-        });
-    });
+    // No-op, handled by db.init()
+    return Promise.resolve();
 }
 
 /**
@@ -106,30 +89,11 @@ export async function registerClient(clientInfo?: Partial<Client>): Promise<Clie
         isActive: true
     };
 
-    return new Promise((resolve, reject) => {
-        database.getDb().run(`
-      INSERT OR REPLACE INTO clients (
-        id, name, type, workspace, connected_at, last_activity_at, is_active
-      ) VALUES (?, ?, ?, ?, ?, ?, ?)
-    `, [
-            client.id,
-            client.name,
-            client.type,
-            client.workspace,
-            client.connectedAt.getTime(),
-            client.lastActivityAt.getTime(),
-            client.isActive ? 1 : 0
-        ], function (err) {
-            if (err) {
-                console.error("[CoT] Failed to register client:", err);
-                reject(err);
-            } else {
-                currentClientId = client.id;
-                console.error(`[CoT] Client registered: ${client.name} (${client.id})`);
-                resolve(client);
-            }
-        });
-    });
+    await db.registerClient(client);
+    currentClientId = client.id;
+    console.error(`(AgentFlow) Client registered: ${client.name} (${client.id})`);
+
+    return client;
 }
 
 /**
@@ -151,107 +115,44 @@ export function setCurrentClientId(id: string): void {
  * @param activeOnly - If true (default), only return active clients. If false, return all.
  */
 export async function getAllClients(activeOnly: boolean = true): Promise<Client[]> {
-    return new Promise((resolve, reject) => {
-        const whereClause = activeOnly ? 'WHERE is_active = 1' : '';
-        database.getDb().all(`
-      SELECT * FROM clients
-      ${whereClause}
-      ORDER BY last_activity_at DESC
-    `, (err, rows: any[]) => {
-            if (err) {
-                // If clients table doesn't exist, return empty array
-                if (err.message?.includes('no such table')) {
-                    resolve([]);
-                    return;
-                }
-                reject(err);
-            } else {
-                const clients = rows?.map(row => ({
-                    id: row.id,
-                    name: row.name,
-                    type: row.type as Client["type"],
-                    workspace: row.workspace,
-                    connectedAt: new Date(row.connected_at),
-                    lastActivityAt: new Date(row.last_activity_at),
-                    isActive: row.is_active === 1,
-                    taskCount: 0 // Will be computed later if needed
-                })) || [];
-                resolve(clients);
-            }
-        });
-    });
+    return await db.getAllClients(activeOnly);
 }
 
 /**
  * Get client by ID
  */
 export async function getClientById(id: string): Promise<Client | null> {
-    return new Promise((resolve, reject) => {
-        database.getDb().get(`
-      SELECT * FROM clients WHERE id = ?
-    `, [id], (err, row: any) => {
-            if (err) {
-                if (err.message?.includes('no such table')) {
-                    resolve(null);
-                    return;
-                }
-                reject(err);
-            } else if (!row) {
-                resolve(null);
-            } else {
-                resolve({
-                    id: row.id,
-                    name: row.name,
-                    type: row.type as Client["type"],
-                    workspace: row.workspace,
-                    connectedAt: new Date(row.connected_at),
-                    lastActivityAt: new Date(row.last_activity_at),
-                    isActive: row.is_active === 1,
-                    taskCount: 0
-                });
-            }
-        });
-    });
+    return await db.getClient(id);
 }
 
 /**
  * Update client heartbeat (last activity)
  */
 export async function updateClientHeartbeat(id: string): Promise<void> {
-    return new Promise((resolve, reject) => {
-        database.getDb().run(`
-      UPDATE clients SET last_activity_at = ?, is_active = 1 WHERE id = ?
-    `, [Date.now(), id], (err) => {
-            if (err) reject(err);
-            else resolve();
-        });
-    });
+    return await db.updateClientHeartbeat(id);
 }
 
 /**
  * Mark client as inactive
  */
 export async function markClientInactive(id: string): Promise<void> {
-    return new Promise((resolve, reject) => {
-        database.getDb().run(`
-      UPDATE clients SET is_active = 0 WHERE id = ?
-    `, [id], (err) => {
-            if (err) reject(err);
-            else resolve();
-        });
-    });
+    // This method is not explicitly in interface, but registerClient or update logic can handle it
+    // Wait, I should use registerClient with isActive=false? 
+    // Or I can add `markClientInactive` to interface. 
+    // Check interfaces.ts... it has `cleanupStaleClients` and `markAllClientsInactive` but not single `markClientInactive`.
+    // BUT `registerClient` is an UPSERT. So I can just get the client, set inactive, and save.
+    const client = await getClientById(id);
+    if (client) {
+        client.isActive = false;
+        await db.registerClient(client);
+    }
 }
 
 /**
  * Delete client
  */
 export async function deleteClient(id: string): Promise<void> {
-    return new Promise((resolve, reject) => {
-        database.getDb().run(`DELETE FROM clients WHERE id = ?`, [id], (err) => {
-            if (err) reject(err);
-            else resolve();
-        });
-    });
+    return await db.deleteClient(id);
 }
 
 /**
@@ -259,41 +160,14 @@ export async function deleteClient(id: string): Promise<void> {
  * in the specified timeout period (default: 2 minutes)
  */
 export async function cleanupStaleClients(timeoutMs: number = 120000): Promise<number> {
-    const cutoffTime = Date.now() - timeoutMs;
-    return new Promise((resolve, reject) => {
-        database.getDb().run(`
-            UPDATE clients SET is_active = 0 
-            WHERE is_active = 1 AND last_activity_at < ?
-        `, [cutoffTime], function (err) {
-            if (err) {
-                console.error("[CoT] Failed to cleanup stale clients:", err);
-                reject(err);
-            } else {
-                const markedInactive = this.changes || 0;
-                if (markedInactive > 0) {
-                    console.error(`[CoT] Marked ${markedInactive} stale client(s) as inactive`);
-                }
-                resolve(markedInactive);
-            }
-        });
-    });
+    return await db.cleanupStaleClients(timeoutMs);
 }
 
 /**
  * Mark all clients as inactive - used on server startup to reset state
  */
 export async function markAllClientsInactive(): Promise<void> {
-    return new Promise((resolve, reject) => {
-        database.getDb().run(`UPDATE clients SET is_active = 0`, (err) => {
-            if (err) {
-                console.error("[CoT] Failed to mark all clients inactive:", err);
-                reject(err);
-            } else {
-                console.error("[CoT] All existing clients marked as inactive");
-                resolve();
-            }
-        });
-    });
+    return await db.markAllClientsInactive();
 }
 
 /**
@@ -301,18 +175,5 @@ export async function markAllClientsInactive(): Promise<void> {
  * Use this for periodic cleanup to remove stale entries
  */
 export async function deleteInactiveClients(): Promise<number> {
-    return new Promise((resolve, reject) => {
-        database.getDb().run(`DELETE FROM clients WHERE is_active = 0`, function (err) {
-            if (err) {
-                console.error("[CoT] Failed to delete inactive clients:", err);
-                reject(err);
-            } else {
-                const deleted = this.changes || 0;
-                if (deleted > 0) {
-                    console.error(`[CoT] Deleted ${deleted} inactive client(s)`);
-                }
-                resolve(deleted);
-            }
-        });
-    });
+    return await db.deleteInactiveClients();
 }

@@ -2,7 +2,7 @@
 FROM node:lts-alpine
 
 # Set working directory
-WORKDIR /mcp-chain-of-thought
+WORKDIR /agent-flow
 
 # Install app dependencies
 COPY package*.json ./

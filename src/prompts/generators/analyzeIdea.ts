@@ -1,5 +1,5 @@
 /**
- * analyzeTask prompt generator
+ * analyzeIdea prompt generator
  * Responsible for combining templates and parameters into the final prompt
  */
 
@@ -10,23 +10,24 @@ import {
 } from "../loader.js";
 
 /**
- * analyzeTask prompt parameter interface
+ * analyzeIdea prompt parameter interface
  */
-export interface AnalyzeTaskPromptParams {
+export interface AnalyzeIdeaPromptParams {
   summary: string;
   initialConcept: string;
   previousAnalysis?: string;
 }
 
 /**
- * Get the complete analyzeTask prompt
+ * Get the complete analyzeIdea prompt
  * @param params prompt parameters
  * @returns generated prompt
  */
-export function getAnalyzeTaskPrompt(params: AnalyzeTaskPromptParams): string {
-  const indexTemplate = loadPromptFromTemplate("analyzeTask/index.md");
+export function getAnalyzeTaskPrompt(params: AnalyzeIdeaPromptParams): string {
+  // NOTE: Export name kept as getAnalyzeTaskPrompt temporarily for compatibility
+  const indexTemplate = loadPromptFromTemplate("analyzeIdea/index.md");
 
-  const iterationTemplate = loadPromptFromTemplate("analyzeTask/iteration.md");
+  const iterationTemplate = loadPromptFromTemplate("analyzeIdea/iteration.md");
 
   let iterationPrompt = "";
   if (params.previousAnalysis) {
@@ -41,6 +42,5 @@ export function getAnalyzeTaskPrompt(params: AnalyzeTaskPromptParams): string {
     iterationPrompt: iterationPrompt,
   });
 
-  // Load possible custom prompt
-  return loadPrompt(prompt, "ANALYZE_TASK");
+  return loadPrompt(prompt, "ANALYZE_IDEA");
 }

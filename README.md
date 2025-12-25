@@ -1,13 +1,6 @@
-# MCP Chain of Thought
+# AgentFlow
 
-[![Chain of Thought Demo](/docs/youtube.png)](https://youtu.be/hzOCwwGSQhs)
-[![smithery badge](https://smithery.ai/badge/@liorfranko/mcp-chain-of-thought)](https://smithery.ai/server/@liorfranko/mcp-chain-of-thought)
-
-> 🚀 An intelligent task management system based on Model Context Protocol (MCP), providing an efficient programming workflow framework for AI Agents.
-
-<a href="https://glama.ai/mcp/servers/@liorfranko/mcp-chain-of-thought">
-  <img width="380" height="200" src="https://glama.ai/mcp/servers/@liorfranko/mcp-chain-of-thought/badge" />
-</a>
+> 🚀 **AgentFlow** is an intelligent agentic workflow system based on Model Context Protocol (MCP). It bridges the gap between reasoning and execution (Task Management), providing a visual control center for AI Agents.
 
 ## 📑 Table of Contents
 
@@ -22,21 +15,20 @@
 
 ## ✨ Features
 
-- **🧠 Task Planning & Analysis**: Deep understanding of complex task requirements
-- **🧩 Intelligent Task Decomposition**: Break down large tasks into manageable smaller tasks
-- **🔄 Dependency Management & Status Tracking**: Handle dependencies and monitor progress
-- **✅ Task Verification**: Ensure results meet requirements
-- **💾 Task Memory**: Store task history for reference and learning
-- **⛓️ Thought Chain Process**: Step-by-step reasoning for complex problems
+- **🧠 Intelligent Reasoning**: Advanced reasoning processing for complex problem solving
+- **📋 Visual Task Management**: Drag-and-drop hierarchy, status tracking, and dependency graph
+- **🎨 Appearance**: Light and Dark theme support with modern UI
+- **🌐 Real-Time Dashboard**: Monitor connected clients and agent status live
+- **🧩 Task Decomposition**: Break down large tasks into manageable steps automatically
+- **✅ Verification & Memory**: Built-in verification steps and history persistence
 - **📋 Project Rules**: Define standards to maintain consistency
-- **🌐 Web GUI**: Optional web interface (enable with `ENABLE_GUI=true`)
 - **📝 Detailed Mode**: View conversation history (enable with `ENABLE_DETAILED_MODE=true`)
 
 ## 🧭 Usage Guide
 
 ### 🚀 Quick Start
 
-1. **🔽 Installation**: [Install MCP Chain of Thought](#installation) via Smithery or manually
+1. **🔽 Installation**: [Install AgentFlow](#installation) via Smithery or manually
 2. **🏁 Initial Setup**: Tell the Agent "init project rules" to establish project-specific guidelines
 3. **📝 Plan Tasks**: Use "plan task [description]" to create a development plan
 4. **👀 Review & Feedback**: Provide feedback during the planning process
@@ -53,7 +45,7 @@
 
 ### 🔽 Via Smithery
 ```bash
-npx -y @smithery/cli install @liorfranko/mcp-chain-of-thought --client claude
+npx -y @smithery/cli install agent-flow --client claude
 ```
 
 ### 🔽 Manual Installation
@@ -71,9 +63,9 @@ Add to your Cursor configuration file (`~/.cursor/mcp.json` or project-specific 
 ```json
 {
   "mcpServers": {
-    "chain-of-thought": {
+    "agent-flow": {
       "command": "npx",
-      "args": ["-y", "mcp-chain-of-thought"],
+      "args": ["-y", "agent-flow"],
       "env": {
         "DATA_DIR": "/path/to/project/data", // Must use absolute path
         "ENABLE_THOUGHT_CHAIN": "true",
@@ -129,6 +121,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - [🔧 Prompt Customization Guide](docs/en/prompt-customization.md)
 - [📝 Changelog](CHANGELOG.md)
 
-## ⭐ Star History
 
-[![Star History Chart](https://api.star-history.com/svg?repos=liorfranko/mcp-chain-of-thought&type=Timeline)](https://www.star-history.com/#liorfranko/mcp-chain-of-thought&Timeline)

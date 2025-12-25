@@ -5,180 +5,36 @@ import {
     batchCreateOrUpdateTasks,
     clearAllTasks as modelClearAllTasks,
     searchTasksWithCommand,
+    reorderTasks as modelReorderTasks,
 } from "../../models/taskModel.js";
 import { TaskStatus, Task, RelatedFileType } from "../../types/index.js";
 import {
-    getSplitTasksPrompt,
     getListTasksPrompt,
     getQueryTaskPrompt,
     getTaskDetailPrompt,
 } from "../../prompts/index.js";
 import {
-    splitTasksSchema,
     listTasksSchema,
     queryTaskSchema,
     getTaskDetailSchema,
+    reorderTasksSchema,
 } from "./schemas.js";
-
-// Task splitting tool
-export async function splitTasks({
-    updateMode,
-    tasks,
-    globalAnalysisResult,
-}: z.infer<typeof splitTasksSchema>) {
-    try {
-        // Check if there are duplicate names in the tasks
-        const nameSet = new Set();
-        for (const task of tasks) {
-            if (nameSet.has(task.name)) {
-                return {
-                    content: [
-                        {
-                            type: "text" as const,
-                            text: "Duplicate task names exist in the tasks parameter, please ensure that each task name is unique",
-                        },
-                    ],
-                };
-            }
-            nameSet.add(task.name);
-        }
-
-        // Process tasks based on different update modes
-        let message = "";
-        let actionSuccess = true;
-        let backupFile = null;
-        let createdTasks: Task[] = [];
-        let allTasks: Task[] = [];
-
-        // Helper function to map schema strings to RelatedFileType
-        const mapFileType = (type: string): RelatedFileType => {
-            switch (type) {
-                case "create": return RelatedFileType.CREATE;
-                case "modify": return RelatedFileType.TO_MODIFY;
-                case "reference": return RelatedFileType.REFERENCE;
-                case "dependency": return RelatedFileType.DEPENDENCY;
-                case "test": return RelatedFileType.TEST;
-                case "document": return RelatedFileType.DOCUMENT;
-                default: return RelatedFileType.OTHER;
-            }
-        };
-
-        // Convert task data to the format required for batchCreateOrUpdateTasks
-        const convertedTasks = tasks.map((task) => ({
-            name: task.name,
-            description: task.description,
-            notes: task.notes,
-            dependencies: task.dependencies,
-            implementationGuide: task.implementationGuide,
-            verificationCriteria: task.verificationCriteria,
-            relatedFiles: task.relatedFiles?.map((file) => ({
-                path: file.path,
-                type: mapFileType(file.type),
-                description: file.description,
-                lineStart: file.lineStart,
-                lineEnd: file.lineEnd,
-            })),
-        }));
-
-        // Process clearAllTasks mode
-        if (updateMode === "clearAllTasks") {
-            const clearResult = await modelClearAllTasks();
-
-            if (clearResult.success) {
-                message = clearResult.message;
-                backupFile = clearResult.backupFile;
-
-                try {
-                    // Clear tasks and then create new tasks
-                    createdTasks = await batchCreateOrUpdateTasks(
-                        convertedTasks,
-                        "append",
-                        globalAnalysisResult
-                    );
-                    message += `\nSuccessfully created ${createdTasks.length} new tasks.`;
-                } catch (error) {
-                    actionSuccess = false;
-                    message += `\nError occurred when creating new tasks: ${error instanceof Error ? error.message : String(error)
-                        }`;
-                }
-            } else {
-                actionSuccess = false;
-                message = clearResult.message;
-            }
-        } else {
-            // For other modes, directly use batchCreateOrUpdateTasks
-            try {
-                createdTasks = await batchCreateOrUpdateTasks(
-                    convertedTasks,
-                    updateMode,
-                    globalAnalysisResult
-                );
-
-                // Generate messages based on different update modes
-                switch (updateMode) {
-                    case "append":
-                        message = `Successfully appended ${createdTasks.length} new tasks.`;
-                        break;
-                    case "overwrite":
-                        message = `Successfully cleared unfinished tasks and created ${createdTasks.length} new tasks.`;
-                        break;
-                    case "selective":
-                        message = `Successfully selectively updated/created ${createdTasks.length} tasks.`;
-                        break;
-                }
-            } catch (error) {
-                actionSuccess = false;
-                message = `Task creation failed: ${error instanceof Error ? error.message : String(error)
-                    }`;
-            }
-        }
-
-        // Get all tasks for displaying dependency relationships
-        try {
-            allTasks = await getAllTasks();
-        } catch (error) {
-            allTasks = [...createdTasks]; // If retrieval fails, use just created tasks
-        }
-
-        // Use prompt generator to get the final prompt
-        const prompt = getSplitTasksPrompt({
-            updateMode,
-            createdTasks,
-            allTasks,
-        });
-
-        return {
-            content: [
-                {
-                    type: "text" as const,
-                    text: prompt,
-                },
-            ],
-            ephemeral: {
-                taskCreationResult: {
-                    success: actionSuccess,
-                    message,
-                    backupFilePath: backupFile || undefined,
-                },
-            },
-        };
-    } catch (error) {
-        return {
-            content: [
-                {
-                    type: "text" as const,
-                    text:
-                        "Error occurred when executing task splitting: " +
-                        (error instanceof Error ? error.message : String(error)),
-                },
-            ],
-        };
-    }
-}
+import { validateProjectContext } from "../../utils/projectValidation.js";
 
 // List tasks tool
-export async function listTasks({ status }: z.infer<typeof listTasksSchema>) {
-    const tasks = await getAllTasks();
+// List tasks tool
+export async function listTasks({ status, projectId }: z.infer<typeof listTasksSchema>) {
+    // Validate Project Context (Strict Mode)
+    const projectValidation = await validateProjectContext(projectId);
+    if (!projectValidation.isValid) {
+        return {
+            content: [{ type: "text" as const, text: projectValidation.error! }],
+            isError: true,
+        };
+    }
+
+    // Filter by Project ID
+    const tasks = await getAllTasks(projectValidation.projectId);
     let filteredTasks = tasks;
     switch (status) {
         case "all":
@@ -332,6 +188,41 @@ export async function getTaskDetail({
                 {
                     type: "text" as const,
                     text: errorPrompt,
+                },
+            ],
+            isError: true,
+        };
+    }
+}
+
+// Reorder tasks tool
+export async function reorderTasksTool({ projectId, taskIds }: z.infer<typeof reorderTasksSchema>) {
+    // Validate project context
+    const projectValidation = await validateProjectContext(projectId);
+    if (!projectValidation.isValid) {
+        return {
+            content: [{ type: "text" as const, text: projectValidation.error! }],
+            isError: true,
+        };
+    }
+
+    try {
+        const updatedTasks = await modelReorderTasks(projectValidation.projectId!, taskIds);
+
+        return {
+            content: [
+                {
+                    type: "text" as const,
+                    text: `## Task Reorder Successful\n\nSuccessfully reordered ${updatedTasks.length} tasks. The system has adjusted the order to respect dependencies where necessary.`,
+                },
+            ],
+        };
+    } catch (error) {
+        return {
+            content: [
+                {
+                    type: "text" as const,
+                    text: `## Reorder Failed\n\nError reordering tasks: ${error instanceof Error ? error.message : String(error)}`,
                 },
             ],
             isError: true,

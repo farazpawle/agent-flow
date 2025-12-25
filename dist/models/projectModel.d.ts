@@ -8,6 +8,7 @@ export interface Project {
     name: string;
     description?: string;
     path?: string;
+    gitRemoteUrl?: string;
     techStack?: string[];
     taskCount?: number;
     createdAt: Date;
@@ -17,6 +18,7 @@ export interface ProjectInput {
     name: string;
     description?: string;
     path?: string;
+    gitRemoteUrl?: string;
     techStack?: string[];
 }
 /**
@@ -28,7 +30,8 @@ export declare function generateProjectId(workspacePath: string): string;
  */
 export declare function extractProjectName(workspacePath: string): string;
 /**
- * Initialize projects table
+ * Initialize projects table - DEPRECATED/REMOVED
+ * Tables are now initialized centrally by the adapter
  */
 export declare function initProjectsTable(): Promise<void>;
 /**
@@ -49,7 +52,11 @@ export declare function getAllProjects(includeTaskCount?: boolean): Promise<Proj
  */
 export declare function getProjectById(id: string): Promise<Project | null>;
 /**
- * Get project by workspace path
+ * Get project by Git URL (Helper using in-memory filter for now)
+ */
+export declare function getProjectByGitUrl(gitRemoteUrl: string): Promise<Project | null>;
+/**
+ * Get project by workspace path (Helper using in-memory filter for now)
  */
 export declare function getProjectByPath(workspacePath: string): Promise<Project | null>;
 /**
@@ -67,7 +74,7 @@ export declare function getCurrentProjectId(): string | null;
 /**
  * Set current project ID
  */
-export declare function setCurrentProjectId(id: string): void;
+export declare function setCurrentProjectId(id: string | null): void;
 /**
  * Get current project based on workspace environment
  */

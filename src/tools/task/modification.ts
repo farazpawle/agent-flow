@@ -3,23 +3,83 @@ import { z } from "zod";
 import {
     getTaskById,
     deleteTask as modelDeleteTask,
-    clearAllTasks as modelClearAllTasks,
     getAllTasks,
     updateTaskContent as modelUpdateTaskContent,
 } from "../../models/taskModel.js";
 import { TaskStatus, RelatedFileType } from "../../types/index.js";
 import {
     getDeleteTaskPrompt,
-    getClearAllTasksPrompt,
     getUpdateTaskContentPrompt,
 } from "../../prompts/index.js";
 import {
     deleteTaskSchema,
-    clearAllTasksSchema,
     updateTaskContentSchema,
 } from "./schemas.js";
 
-export async function deleteTask({ taskId }: z.infer<typeof deleteTaskSchema>) {
+import { validateProjectContext } from "../../utils/projectValidation.js";
+import { getStepById } from "../../models/workflowModel.js";
+import { splitTasksSchema } from "./schemas.js";
+import { getSplitTasksPrompt } from "../../prompts/index.js";
+import { batchCreateOrUpdateTasks } from "../../models/taskModel.js";
+
+export async function deleteTask({ taskId, projectId, deleteAll, confirm }: z.infer<typeof deleteTaskSchema>) {
+    // Validate Project Context (Strict Mode)
+    const projectValidation = await validateProjectContext(projectId);
+    if (!projectValidation.isValid) {
+        return {
+            content: [{ type: "text" as const, text: projectValidation.error! }],
+            isError: true,
+        };
+    }
+
+    // 1. Bulk Deletion Mode
+    if (deleteAll) {
+        if (!confirm) {
+            return {
+                content: [
+                    {
+                        type: "text" as const,
+                        text: "To delete all tasks, you must set 'confirm' to true.",
+                    },
+                ],
+                isError: true,
+            };
+        }
+
+        const allTasks = await getAllTasks(projectValidation.projectId);
+        let deleteCount = 0;
+
+        for (const t of allTasks) {
+            // In project context, allTasks should be filtered by project, but strict check again just in case
+            if (t.projectId === projectValidation.projectId) {
+                await modelDeleteTask(t.id);
+                deleteCount++;
+            }
+        }
+
+        return {
+            content: [
+                {
+                    type: "text" as const,
+                    text: `Successfully deleted ${deleteCount} tasks from project "${projectValidation.projectId}".`,
+                },
+            ],
+        };
+    }
+
+    // 2. Single Task Deletion Mode
+    if (!taskId) {
+        return {
+            content: [
+                {
+                    type: "text" as const,
+                    text: "TaskId is required unless deleteAll is set to true.",
+                },
+            ],
+            isError: true,
+        };
+    }
+
     const task = await getTaskById(taskId);
 
     if (!task) {
@@ -28,6 +88,18 @@ export async function deleteTask({ taskId }: z.infer<typeof deleteTaskSchema>) {
                 {
                     type: "text" as const,
                     text: getDeleteTaskPrompt({ taskId }),
+                },
+            ],
+            isError: true,
+        };
+    }
+
+    if (task.projectId !== projectValidation.projectId) {
+        return {
+            content: [
+                {
+                    type: "text" as const,
+                    text: `Task "${task.name}" (ID: ${taskId}) belongs to project "${task.projectId}", but you are operating in project "${projectValidation.projectId}". Please switch projects or check the task ID.`,
                 },
             ],
             isError: true,
@@ -64,51 +136,6 @@ export async function deleteTask({ taskId }: z.infer<typeof deleteTaskSchema>) {
     };
 }
 
-export async function clearAllTasks({
-    confirm,
-}: z.infer<typeof clearAllTasksSchema>) {
-    // Security check: If not confirmed, refuse operation
-    if (!confirm) {
-        return {
-            content: [
-                {
-                    type: "text" as const,
-                    text: getClearAllTasksPrompt({ confirm: false }),
-                },
-            ],
-        };
-    }
-
-    // Check if there are really tasks to clear
-    const allTasks = await getAllTasks();
-    if (allTasks.length === 0) {
-        return {
-            content: [
-                {
-                    type: "text" as const,
-                    text: getClearAllTasksPrompt({ isEmpty: true }),
-                },
-            ],
-        };
-    }
-
-    // Execute clear operation
-    const result = await modelClearAllTasks();
-
-    return {
-        content: [
-            {
-                type: "text" as const,
-                text: getClearAllTasksPrompt({
-                    success: result.success,
-                    message: result.message,
-                    backupFile: result.backupFile,
-                }),
-            },
-        ],
-        isError: !result.success,
-    };
-}
 
 export async function updateTaskContent({
     taskId,
@@ -119,7 +146,17 @@ export async function updateTaskContent({
     dependencies,
     implementationGuide,
     verificationCriteria,
+    projectId,
 }: z.infer<typeof updateTaskContentSchema>) {
+    // Validate Project Context (Strict Mode)
+    const projectValidation = await validateProjectContext(projectId);
+    if (!projectValidation.isValid) {
+        return {
+            content: [{ type: "text" as const, text: projectValidation.error! }],
+            isError: true,
+        };
+    }
+
     if (relatedFiles) {
         for (const file of relatedFiles) {
             if (
@@ -184,6 +221,18 @@ export async function updateTaskContent({
         };
     }
 
+    if (task.projectId !== projectValidation.projectId) {
+        return {
+            content: [
+                {
+                    type: "text" as const,
+                    text: `Task "${task.name}" (ID: ${taskId}) belongs to project "${task.projectId}", but you are operating in project "${projectValidation.projectId}". Please switch projects or check the task ID.`,
+                },
+            ],
+            isError: true,
+        };
+    }
+
     // Record the task and content to be updated
     let updateSummary = `Preparing to update task: ${task.name} (ID: ${task.id})`;
     if (name) updateSummary += `, new name: ${name}`;
@@ -237,5 +286,76 @@ export async function updateTaskContent({
             },
         ],
         isError: !result.success,
+    };
+}
+
+
+export async function splitTasks({
+    projectId,
+    tasks,
+    updateMode,
+    inputStepId
+}: z.infer<typeof splitTasksSchema>) {
+    // Validate Project Context (Strict Mode)
+    const projectValidation = await validateProjectContext(projectId);
+    if (!projectValidation.isValid) {
+        return {
+            content: [{ type: "text" as const, text: projectValidation.error! }],
+            isError: true,
+        };
+    }
+
+    let contextGlobalAnalysis = "";
+
+    // IF inputStepId is provided, we fetch the REFLECT step content to use as "Global Analysis"
+    if (inputStepId) {
+        const step = await getStepById(inputStepId);
+        if (step && step.projectId === projectValidation.projectId) {
+            // content is { analysis: "..." }
+            try {
+                const parsed = JSON.parse(step.content);
+                if (parsed.analysis) {
+                    contextGlobalAnalysis = parsed.analysis;
+                }
+            } catch (e) {
+                contextGlobalAnalysis = step.content; // Fallback if regular string
+            }
+        }
+    }
+
+    // Execute batch create/update
+    const processedTasks = await batchCreateOrUpdateTasks(
+        tasks.map(t => ({
+            ...t,
+            relatedFiles: t.relatedFiles?.map(f => ({
+                ...f,
+                type: (f.type === "create" ? RelatedFileType.CREATE :
+                    f.type === "modify" ? RelatedFileType.TO_MODIFY :
+                        f.type === "reference" ? RelatedFileType.REFERENCE :
+                            f.type === "dependency" ? RelatedFileType.DEPENDENCY :
+                                f.type === "test" ? RelatedFileType.TEST :
+                                    f.type === "document" ? RelatedFileType.DOCUMENT :
+                                        RelatedFileType.OTHER)
+            }))
+        })),
+        updateMode,
+        contextGlobalAnalysis, // Pass the analysis result to be stored in tasks
+        projectValidation.projectId,
+        inputStepId // Pass the Idea Phase Step ID to link tasks back to the plan
+    );
+
+    // Use prompt generator to get the final prompt
+    const prompt = getSplitTasksPrompt({
+        tasks: processedTasks,
+        updateMode,
+    });
+
+    return {
+        content: [
+            {
+                type: "text" as const,
+                text: prompt,
+            },
+        ],
     };
 }

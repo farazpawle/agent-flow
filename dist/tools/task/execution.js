@@ -1,10 +1,19 @@
-import { getTaskById, updateTaskStatus, canExecuteTask, assessTaskComplexity, updateTaskSummary, } from "../../models/taskModel.js";
+import { getTaskById, updateTaskStatus, canExecuteTask, assessTaskComplexity, updateTask, } from "../../models/taskModel.js";
 import { TaskStatus } from "../../types/index.js";
 import { generateTaskSummary } from "../../utils/summaryExtractor.js";
 import { loadTaskRelatedFiles } from "../../utils/fileLoader.js";
 import { getExecuteTaskPrompt, getVerifyTaskPrompt, getCompleteTaskPrompt, } from "../../prompts/index.js";
+import { validateProjectContext } from "../../utils/projectValidation.js";
 // Execute task tool
-export async function executeTask({ taskId, }) {
+export async function executeTask({ taskId, projectId, focus, }) {
+    // Validate Project Context (Strict Mode)
+    const projectValidation = await validateProjectContext(projectId);
+    if (!projectValidation.isValid) {
+        return {
+            content: [{ type: "text", text: projectValidation.error }],
+            isError: true,
+        };
+    }
     try {
         // Check if the task exists
         const task = await getTaskById(taskId);
@@ -16,6 +25,18 @@ export async function executeTask({ taskId, }) {
                         text: `Task with ID \`${taskId}\` not found. Please confirm if the ID is correct.`,
                     },
                 ],
+            };
+        }
+        // Verify Task belongs to the verified project context
+        if (task.projectId !== projectValidation.projectId) {
+            return {
+                content: [
+                    {
+                        type: "text",
+                        text: `Task "${task.name}" (ID: ${taskId}) belongs to project "${task.projectId}", but you are operating in project "${projectValidation.projectId}". Please switch projects or check the task ID.`,
+                    },
+                ],
+                isError: true,
             };
         }
         // Check if the task can be executed (all dependencies are completed)
@@ -124,7 +145,15 @@ export async function executeTask({ taskId, }) {
     }
 }
 // Verify task tool
-export async function verifyTask({ taskId }) {
+export async function verifyTask({ taskId, projectId, focus }) {
+    // Validate Project Context (Strict Mode)
+    const projectValidation = await validateProjectContext(projectId);
+    if (!projectValidation.isValid) {
+        return {
+            content: [{ type: "text", text: projectValidation.error }],
+            isError: true,
+        };
+    }
     const task = await getTaskById(taskId);
     if (!task) {
         return {
@@ -132,6 +161,17 @@ export async function verifyTask({ taskId }) {
                 {
                     type: "text",
                     text: `## System Error\n\nTask with ID \`${taskId}\` not found. Please use the "list_tasks" tool to confirm a valid task ID before trying again.`,
+                },
+            ],
+            isError: true,
+        };
+    }
+    if (task.projectId !== projectValidation.projectId) {
+        return {
+            content: [
+                {
+                    type: "text",
+                    text: `Task "${task.name}" (ID: ${taskId}) belongs to project "${task.projectId}", but you are operating in project "${projectValidation.projectId}". Please switch projects or check the task ID.`,
                 },
             ],
             isError: true,
@@ -150,6 +190,11 @@ export async function verifyTask({ taskId }) {
     }
     // Use prompt generator to get the final prompt
     const prompt = getVerifyTaskPrompt({ task });
+    // Update the task status to indicate verification has passed/is being tracked
+    // Per TASK_WORKFLOW_EXPLAINED.md, the action is "UPDATE tasks... verification_status='passed'"
+    // We assume calling this tool implies the agent is marking it as verified (or starting the process).
+    // To support the strict workflow, we update the status field.
+    await updateTask(taskId, { verificationStatus: "passed" });
     return {
         content: [
             {
@@ -160,7 +205,15 @@ export async function verifyTask({ taskId }) {
     };
 }
 // Complete task tool
-export async function completeTask({ taskId, summary, }) {
+export async function completeTask({ taskId, summary, lessonsLearned, projectId, }) {
+    // Validate Project Context (Strict Mode)
+    const projectValidation = await validateProjectContext(projectId);
+    if (!projectValidation.isValid) {
+        return {
+            content: [{ type: "text", text: projectValidation.error }],
+            isError: true,
+        };
+    }
     const task = await getTaskById(taskId);
     if (!task) {
         return {
@@ -168,6 +221,17 @@ export async function completeTask({ taskId, summary, }) {
                 {
                     type: "text",
                     text: `## System Error\n\nTask with ID \`${taskId}\` not found. Please use the "list_tasks" tool to confirm a valid task ID before trying again.`,
+                },
+            ],
+            isError: true,
+        };
+    }
+    if (task.projectId !== projectValidation.projectId) {
+        return {
+            content: [
+                {
+                    type: "text",
+                    text: `Task "${task.name}" (ID: ${taskId}) belongs to project "${task.projectId}", but you are operating in project "${projectValidation.projectId}". Please switch projects or check the task ID.`,
                 },
             ],
             isError: true,
@@ -190,9 +254,14 @@ export async function completeTask({ taskId, summary, }) {
         // Automatically generate summary
         taskSummary = generateTaskSummary(task.name, task.description);
     }
-    // Update task status to completed and add summary
-    await updateTaskStatus(taskId, TaskStatus.COMPLETED);
-    await updateTaskSummary(taskId, taskSummary);
+    // Update task status, summary, finalOutcome, and lessonsLearned
+    await updateTask(taskId, {
+        status: TaskStatus.COMPLETED,
+        completedAt: new Date(),
+        summary: taskSummary,
+        finalOutcome: taskSummary, // Map summary to finalOutcome for context consistency
+        lessonsLearned: lessonsLearned // Save lessons learned
+    });
     // Use prompt generator to get the final prompt
     const prompt = getCompleteTaskPrompt({
         task,

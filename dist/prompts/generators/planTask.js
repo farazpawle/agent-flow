@@ -85,7 +85,13 @@ export function getPlanTaskPrompt(params) {
         rulesPath: rulesPath,
         memoryDir: params.memoryDir,
         thoughtTemplate: thoughtTemplate,
+        projectId: params.projectId || "Current Project",
     });
+    // Inject Dependency Analysis Instruction if requested
+    if (params.checkDependencies !== false) { // Default to true if undefined
+        prompt += "\n\n## Dependency Analysis\n" +
+            "CRITICAL: You MUST analyze dependencies between tasks. For every task you propose, explicitly check if it depends on any other task (existing or new). If so, you MUST list those dependencies clearly.";
+    }
     // Load possible custom prompt
     return loadPrompt(prompt, "PLAN_TASK");
 }

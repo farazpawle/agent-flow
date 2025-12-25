@@ -7,8 +7,11 @@ import {
   updateProject,
   getCurrentProject,
   setCurrentProjectId,
+  deleteProject as deleteProjectModel,
   Project,
 } from "../models/projectModel.js";
+import { getAllTasks, deleteTask as deleteTaskModel } from "../models/taskModel.js";
+
 
 // ==================== CREATE PROJECT TOOL ====================
 
@@ -124,6 +127,7 @@ export async function listProjects(params: z.infer<typeof listProjectsSchema>) {
       name: p.name,
       description: p.description || "No description",
       path: p.path,
+      gitRemoteUrl: p.gitRemoteUrl,
       techStack: p.techStack || [],
       taskCount: p.taskCount || 0,
       lastActivity: p.updatedAt.toISOString(),
@@ -150,6 +154,7 @@ export async function listProjects(params: z.infer<typeof listProjectsSchema>) {
           text: `Error listing projects: ${errorMessage}`,
         },
       ],
+      isError: true,
     };
   }
 }
@@ -240,7 +245,104 @@ export async function getProjectContext(params: z.infer<typeof getProjectContext
           text: `Error getting project context: ${errorMessage}`,
         },
       ],
+      isError: true,
     };
   }
 }
 
+// ==================== DELETE PROJECT TOOL ====================
+
+export const deleteProjectSchema = z.object({
+  projectId: z
+    .string()
+    .describe("ID of the project to delete"),
+  confirm: z
+    .boolean()
+    .describe("Confirm deletion (irreversible). Must be set to true."),
+});
+
+/**
+ * Delete a project and all its associated tasks
+ * This tool allows agents to clean up projects from the database
+ */
+export async function deleteProject(params: z.infer<typeof deleteProjectSchema>) {
+  try {
+    const { projectId, confirm } = params;
+
+    // 1. Validation
+    if (!confirm) {
+      return {
+        content: [
+          {
+            type: "text" as const,
+            text: JSON.stringify({
+              success: false,
+              error: "Operation cancelled. You must set 'confirm' to true to delete a project."
+            }, null, 2),
+          },
+        ],
+        isError: true,
+      };
+    }
+
+    const project = await getProjectById(projectId);
+    if (!project) {
+      return {
+        content: [
+          {
+            type: "text" as const,
+            text: JSON.stringify({
+              success: false,
+              error: `Project with ID '${projectId}' not found.`
+            }, null, 2),
+          },
+        ],
+        isError: true,
+      };
+    }
+
+    // 2. Delete associated tasks (Manual Cascade)
+    const allTasks = await getAllTasks(projectId);
+    let deletedTaskCount = 0;
+
+    // Iterate and delete tasks belonging to this project
+    for (const task of allTasks) {
+      await deleteTaskModel(task.id);
+      deletedTaskCount++;
+    }
+
+    // 3. Delete Project
+    await deleteProjectModel(projectId);
+
+    // 4. Reset Session context if active project was deleted
+    const currentProject = await getCurrentProject();
+    if (currentProject && currentProject.id === projectId) {
+      setCurrentProjectId(null);
+    }
+
+    return {
+      content: [
+        {
+          type: "text" as const,
+          text: JSON.stringify({
+            success: true,
+            projectId: projectId,
+            message: `Project '${project.name}' and ${deletedTaskCount} associated tasks deleted successfully.`,
+          }, null, 2),
+        },
+      ],
+    };
+
+  } catch (error) {
+    const errorMessage = error instanceof Error ? error.message : "Unknown error";
+    return {
+      content: [
+        {
+          type: "text" as const,
+          text: `Error deleting project: ${errorMessage}`,
+        },
+      ],
+      isError: true,
+    };
+  }
+}

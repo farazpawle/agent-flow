@@ -1,231 +1,35 @@
-[CoT Debug] 2025-12-20T07:54:27.794Z - Server starting. CWD: C:\Users\Faraz
-[CoT Debug] 2025-12-20T07:54:27.795Z - ENABLE_GUI: true
-[CoT Debug] 2025-12-20T07:54:27.795Z - DATA_DIR: .vscode/CoT
-[CoT Debug] 2025-12-20T08:17:27.492Z - Server starting. CWD: D:\D Drive\Projects\MCP Servers\mcp-chain-of-thought
-[CoT Debug] 2025-12-20T08:17:27.493Z - ENABLE_GUI: true
-[CoT Debug] 2025-12-20T08:17:27.493Z - DATA_DIR: d:\D Drive\Projects\MCP Servers\mcp-chain-of-thought\data
-[CoT Debug] 2025-12-20T08:42:39.307Z - Server starting. CWD: D:\D Drive\Projects\MCP Servers\mcp-chain-of-thought
-[CoT Debug] 2025-12-20T08:42:39.307Z - ENABLE_GUI: true
-[CoT Debug] 2025-12-20T08:42:39.308Z - DATA_DIR: d:\D Drive\Projects\MCP Servers\mcp-chain-of-thought\data
-[CoT Debug] 2025-12-20T08:43:59.753Z - Server starting. CWD: D:\D Drive\Projects\MCP Servers\mcp-chain-of-thought
-[CoT Debug] 2025-12-20T08:43:59.753Z - ENABLE_GUI: true
-[CoT Debug] 2025-12-20T08:43:59.753Z - DATA_DIR: d:\D Drive\Projects\MCP Servers\mcp-chain-of-thought\data
-[CoT Debug] 2025-12-20T08:44:06.435Z - Server starting. CWD: C:\Users\Faraz
-[CoT Debug] 2025-12-20T08:44:06.436Z - ENABLE_GUI: true
-[CoT Debug] 2025-12-20T08:44:06.436Z - DATA_DIR: .vscode/CoT
-[CoT Debug] 2025-12-20T09:52:55.072Z - Server starting. CWD: D:\D Drive\Projects\MCP Servers\mcp-chain-of-thought
-[CoT Debug] 2025-12-20T09:52:55.073Z - ENABLE_GUI: true
-[CoT Debug] 2025-12-20T09:52:55.073Z - DATA_DIR: d:\D Drive\Projects\MCP Servers\mcp-chain-of-thought\data
-[CoT Debug] 2025-12-20T09:53:44.374Z - Server starting. CWD: D:\D Drive\Projects\MCP Servers\mcp-chain-of-thought
-[CoT Debug] 2025-12-20T09:53:44.374Z - ENABLE_GUI: true
-[CoT Debug] 2025-12-20T09:53:44.374Z - DATA_DIR: d:\D Drive\Projects\MCP Servers\mcp-chain-of-thought\data
-[CoT Debug] 2025-12-20T09:58:26.065Z - Server starting. CWD: D:\D Drive\Projects\MCP Servers\mcp-chain-of-thought
-[CoT Debug] 2025-12-20T09:58:26.066Z - ENABLE_GUI: true
-[CoT Debug] 2025-12-20T09:58:26.066Z - DATA_DIR: d:\D Drive\Projects\MCP Servers\mcp-chain-of-thought\data
-[CoT Debug] 2025-12-20T10:10:36.556Z - Server starting. CWD: C:\Users\Faraz
-[CoT Debug] 2025-12-20T10:10:36.557Z - ENABLE_GUI: true
-[CoT Debug] 2025-12-20T10:10:36.557Z - DATA_DIR: .vscode/CoT
-[CoT Debug] 2025-12-20T10:10:37.191Z - Server starting. CWD: C:\Users\Faraz
-[CoT Debug] 2025-12-20T10:10:37.192Z - ENABLE_GUI: true
-[CoT Debug] 2025-12-20T10:10:37.192Z - DATA_DIR: .vscode/CoT
-[CoT Debug] 2025-12-20T10:10:38.436Z - Server starting. CWD: C:\Users\Faraz
-[CoT Debug] 2025-12-20T10:10:38.436Z - ENABLE_GUI: true
-[CoT Debug] 2025-12-20T10:10:38.437Z - DATA_DIR: .vscode/CoT
-[CoT Debug] 2025-12-20T10:10:41.271Z - Server starting. CWD: C:\Users\Faraz
-[CoT Debug] 2025-12-20T10:10:41.271Z - ENABLE_GUI: true
-[CoT Debug] 2025-12-20T10:10:41.271Z - DATA_DIR: .vscode/CoT
-[CoT Debug] 2025-12-20T10:10:54.783Z - Server starting. CWD: C:\Users\Faraz
-[CoT Debug] 2025-12-20T10:10:54.783Z - ENABLE_GUI: true
-[CoT Debug] 2025-12-20T10:10:54.784Z - DATA_DIR: .vscode/CoT
-[CoT Debug] 2025-12-20T10:12:57.647Z - Server starting. CWD: C:\Users\Faraz
-[CoT Debug] 2025-12-20T10:12:57.647Z - ENABLE_GUI: true
-[CoT Debug] 2025-12-20T10:12:57.647Z - DATA_DIR: .vscode/CoT
-[CoT Debug] 2025-12-20T10:13:03.933Z - Server starting. CWD: C:\Users\Faraz
-[CoT Debug] 2025-12-20T10:13:03.933Z - ENABLE_GUI: true
-[CoT Debug] 2025-12-20T10:13:03.933Z - DATA_DIR: .vscode/CoT
-[CoT Debug] 2025-12-20T10:13:10.508Z - Server starting. CWD: D:\D Drive\Projects\MCP Servers\mcp-chain-of-thought
-[CoT Debug] 2025-12-20T10:13:10.509Z - ENABLE_GUI: true
-[CoT Debug] 2025-12-20T10:13:10.509Z - DATA_DIR: d:\D Drive\Projects\MCP Servers\mcp-chain-of-thought\data
-[CoT Debug] 2025-12-20T10:13:32.388Z - Server starting. CWD: D:\D Drive\Projects\MCP Servers\mcp-chain-of-thought
-[CoT Debug] 2025-12-20T10:13:32.389Z - ENABLE_GUI: true
-[CoT Debug] 2025-12-20T10:13:32.389Z - DATA_DIR: d:\D Drive\Projects\MCP Servers\mcp-chain-of-thought\data
-[CoT Debug] 2025-12-20T10:13:37.629Z - Server starting. CWD: C:\Users\Faraz
-[CoT Debug] 2025-12-20T10:13:37.630Z - ENABLE_GUI: true
-[CoT Debug] 2025-12-20T10:13:37.630Z - DATA_DIR: .vscode/CoT
-[CoT Debug] 2025-12-20T10:15:37.744Z - Server starting. CWD: C:\Users\Faraz
-[CoT Debug] 2025-12-20T10:15:37.745Z - ENABLE_GUI: true
-[CoT Debug] 2025-12-20T10:15:37.745Z - DATA_DIR: .vscode/CoT
-[CoT Debug] 2025-12-20T10:15:50.585Z - Server starting. CWD: D:\D Drive\Projects\MCP Servers\mcp-chain-of-thought
-[CoT Debug] 2025-12-20T10:15:50.587Z - ENABLE_GUI: true
-[CoT Debug] 2025-12-20T10:15:50.587Z - DATA_DIR: d:\D Drive\Projects\MCP Servers\mcp-chain-of-thought\data
-[CoT Debug] 2025-12-20T10:16:36.618Z - Server starting. CWD: C:\Users\Faraz
-[CoT Debug] 2025-12-20T10:16:36.618Z - ENABLE_GUI: true
-[CoT Debug] 2025-12-20T10:16:36.618Z - DATA_DIR: .vscode/CoT
-[CoT Debug] 2025-12-20T10:29:41.298Z - Server starting. CWD: D:\D Drive\Projects\MCP Servers\mcp-chain-of-thought
-[CoT Debug] 2025-12-20T10:29:41.299Z - ENABLE_GUI: true
-[CoT Debug] 2025-12-20T10:29:41.300Z - DATA_DIR: d:\D Drive\Projects\MCP Servers\mcp-chain-of-thought\data
-[CoT Debug] 2025-12-20T10:38:11.829Z - Server starting. CWD: D:\D Drive\Projects\MCP Servers\mcp-chain-of-thought
-[CoT Debug] 2025-12-20T10:38:11.830Z - ENABLE_GUI: true
-[CoT Debug] 2025-12-20T10:38:11.830Z - DATA_DIR: d:\D Drive\Projects\MCP Servers\mcp-chain-of-thought\data
-[CoT Debug] 2025-12-20T10:38:57.785Z - Server starting. CWD: D:\D Drive\Projects\MCP Servers\mcp-chain-of-thought
-[CoT Debug] 2025-12-20T10:38:57.786Z - ENABLE_GUI: true
-[CoT Debug] 2025-12-20T10:38:57.786Z - DATA_DIR: d:\D Drive\Projects\MCP Servers\mcp-chain-of-thought\data
-[CoT Debug] 2025-12-20T10:39:53.348Z - Server starting. CWD: D:\D Drive\Projects\MCP Servers\mcp-chain-of-thought
-[CoT Debug] 2025-12-20T10:39:53.349Z - ENABLE_GUI: true
-[CoT Debug] 2025-12-20T10:39:53.349Z - DATA_DIR: d:\D Drive\Projects\MCP Servers\mcp-chain-of-thought\data
-[CoT Debug] 2025-12-20T10:40:07.953Z - Server starting. CWD: C:\Users\Faraz
-[CoT Debug] 2025-12-20T10:40:07.954Z - ENABLE_GUI: true
-[CoT Debug] 2025-12-20T10:40:07.954Z - DATA_DIR: .vscode/CoT
-[CoT Debug] 2025-12-20T10:40:28.194Z - Server starting. CWD: D:\D Drive\Projects\MCP Servers\mcp-chain-of-thought
-[CoT Debug] 2025-12-20T10:40:28.195Z - ENABLE_GUI: true
-[CoT Debug] 2025-12-20T10:40:28.195Z - DATA_DIR: d:\D Drive\Projects\MCP Servers\mcp-chain-of-thought\data
-[CoT Debug] 2025-12-20T10:46:31.126Z - Server starting. CWD: C:\Users\Faraz
-[CoT Debug] 2025-12-20T10:46:31.127Z - ENABLE_GUI: true
-[CoT Debug] 2025-12-20T10:46:31.128Z - DATA_DIR: .vscode/CoT
-[CoT Debug] 2025-12-20T11:10:01.264Z - Server starting. CWD: C:\Users\Faraz
-[CoT Debug] 2025-12-20T11:10:01.265Z - ENABLE_GUI: true
-[CoT Debug] 2025-12-20T11:10:01.265Z - DATA_DIR: .vscode/CoT
-[CoT Debug] 2025-12-20T11:10:27.493Z - Server starting. CWD: C:\Users\Faraz\AppData\Local\Programs\Antigravity
-[CoT Debug] 2025-12-20T11:10:27.493Z - ENABLE_GUI: true
-[CoT Debug] 2025-12-20T11:10:27.493Z - DATA_DIR: .vscode/CoT
-[CoT Debug] 2025-12-20T11:10:43.141Z - Server starting. CWD: C:\Users\Faraz
-[CoT Debug] 2025-12-20T11:10:43.141Z - ENABLE_GUI: true
-[CoT Debug] 2025-12-20T11:10:43.142Z - DATA_DIR: .vscode/CoT
-[CoT Debug] 2025-12-20T11:17:47.278Z - Server starting. CWD: C:\Users\Faraz\AppData\Local\Programs\Antigravity
-[CoT Debug] 2025-12-20T11:17:47.279Z - ENABLE_GUI: true
-[CoT Debug] 2025-12-20T11:17:47.279Z - DATA_DIR: .vscode/CoT
-[CoT Debug] 2025-12-20T11:22:51.993Z - Server starting. CWD: C:\Users\Faraz\AppData\Local\Programs\Antigravity
-[CoT Debug] 2025-12-20T11:22:51.994Z - ENABLE_GUI: true
-[CoT Debug] 2025-12-20T11:22:51.994Z - DATA_DIR: .vscode/CoT
-[CoT Debug] 2025-12-20T11:23:47.899Z - Server starting. CWD: C:\Users\Faraz
-[CoT Debug] 2025-12-20T11:23:47.900Z - ENABLE_GUI: true
-[CoT Debug] 2025-12-20T11:23:47.901Z - DATA_DIR: .vscode/CoT
-[CoT Debug] 2025-12-20T11:23:56.686Z - Server starting. CWD: C:\Users\Faraz
-[CoT Debug] 2025-12-20T11:23:56.686Z - ENABLE_GUI: true
-[CoT Debug] 2025-12-20T11:23:56.687Z - DATA_DIR: .vscode/CoT
-[CoT Debug] 2025-12-20T11:24:27.831Z - Server starting. CWD: C:\Users\Faraz
-[CoT Debug] 2025-12-20T11:24:27.831Z - ENABLE_GUI: true
-[CoT Debug] 2025-12-20T11:24:27.831Z - DATA_DIR: .vscode/CoT
-[CoT Debug] 2025-12-20T11:24:48.671Z - Server starting. CWD: C:\Users\Faraz
-[CoT Debug] 2025-12-20T11:24:48.671Z - ENABLE_GUI: true
-[CoT Debug] 2025-12-20T11:24:48.671Z - DATA_DIR: .vscode/CoT
-[CoT Debug] 2025-12-20T11:31:02.049Z - Server starting. CWD: C:\Users\Faraz
-[CoT Debug] 2025-12-20T11:31:02.049Z - ENABLE_GUI: true
-[CoT Debug] 2025-12-20T11:31:02.050Z - DATA_DIR: .vscode/CoT
-[CoT Debug] 2025-12-20T11:31:27.319Z - Server starting. CWD: C:\Users\Faraz
-[CoT Debug] 2025-12-20T11:31:27.319Z - ENABLE_GUI: true
-[CoT Debug] 2025-12-20T11:31:27.319Z - DATA_DIR: .vscode/CoT
-[CoT Debug] 2025-12-20T11:58:11.766Z - Server starting. CWD: C:\Users\Faraz
-[CoT Debug] 2025-12-20T11:58:11.767Z - ENABLE_GUI: true
-[CoT Debug] 2025-12-20T11:58:11.767Z - DATA_DIR: .vscode/CoT
-[CoT Debug] 2025-12-20T11:59:56.695Z - Server starting. CWD: C:\Users\Faraz
-[CoT Debug] 2025-12-20T11:59:56.696Z - ENABLE_GUI: true
-[CoT Debug] 2025-12-20T11:59:56.696Z - DATA_DIR: .vscode/CoT
-[CoT Debug] 2025-12-20T12:00:28.485Z - Server starting. CWD: C:\Users\Faraz
-[CoT Debug] 2025-12-20T12:00:28.485Z - ENABLE_GUI: true
-[CoT Debug] 2025-12-20T12:00:28.486Z - DATA_DIR: .vscode/CoT
-[CoT Debug] 2025-12-20T12:09:19.129Z - Server starting. CWD: C:\Users\Faraz
-[CoT Debug] 2025-12-20T12:09:19.130Z - ENABLE_GUI: true
-[CoT Debug] 2025-12-20T12:09:19.130Z - DATA_DIR: .vscode/CoT
-[CoT Debug] 2025-12-20T12:11:57.646Z - Server starting. CWD: C:\Users\Faraz
-[CoT Debug] 2025-12-20T12:11:57.646Z - ENABLE_GUI: true
-[CoT Debug] 2025-12-20T12:11:57.647Z - DATA_DIR: .vscode/CoT
-[CoT Debug] 2025-12-20T12:12:06.034Z - Server starting. CWD: C:\Users\Faraz
-[CoT Debug] 2025-12-20T12:12:06.034Z - ENABLE_GUI: true
-[CoT Debug] 2025-12-20T12:12:06.034Z - DATA_DIR: .vscode/CoT
-[CoT Debug] 2025-12-20T12:12:22.562Z - Server starting. CWD: C:\Users\Faraz
-[CoT Debug] 2025-12-20T12:12:22.563Z - ENABLE_GUI: true
-[CoT Debug] 2025-12-20T12:12:22.563Z - DATA_DIR: .vscode/CoT
-[CoT Debug] 2025-12-20T12:14:05.268Z - Server starting. CWD: C:\Users\Faraz
-[CoT Debug] 2025-12-20T12:14:05.269Z - ENABLE_GUI: true
-[CoT Debug] 2025-12-20T12:14:05.269Z - DATA_DIR: .vscode/CoT
-[CoT Debug] 2025-12-20T12:14:49.182Z - Server starting. CWD: C:\Users\Faraz
-[CoT Debug] 2025-12-20T12:14:49.183Z - ENABLE_GUI: true
-[CoT Debug] 2025-12-20T12:14:49.183Z - DATA_DIR: .vscode/CoT
-[CoT Debug] 2025-12-20T12:17:52.968Z - Server starting. CWD: C:\Users\Faraz
-[CoT Debug] 2025-12-20T12:17:52.969Z - ENABLE_GUI: true
-[CoT Debug] 2025-12-20T12:17:52.969Z - DATA_DIR: .vscode/CoT
-[CoT Debug] 2025-12-20T12:18:32.922Z - Server starting. CWD: C:\Users\Faraz
-[CoT Debug] 2025-12-20T12:18:32.922Z - ENABLE_GUI: true
-[CoT Debug] 2025-12-20T12:18:32.922Z - DATA_DIR: .vscode/CoT
-[CoT Debug] 2025-12-20T12:18:51.640Z - Server starting. CWD: C:\Users\Faraz
-[CoT Debug] 2025-12-20T12:18:51.640Z - ENABLE_GUI: true
-[CoT Debug] 2025-12-20T12:18:51.640Z - DATA_DIR: .vscode/CoT
-[CoT Debug] 2025-12-20T12:20:00.946Z - Server starting. CWD: C:\Users\Faraz
-[CoT Debug] 2025-12-20T12:20:00.946Z - ENABLE_GUI: true
-[CoT Debug] 2025-12-20T12:20:00.947Z - DATA_DIR: .vscode/CoT
-[CoT Debug] 2025-12-20T12:20:47.315Z - Server starting. CWD: C:\Users\Faraz
-[CoT Debug] 2025-12-20T12:20:47.316Z - ENABLE_GUI: true
-[CoT Debug] 2025-12-20T12:20:47.316Z - DATA_DIR: .vscode/CoT
-[CoT Debug] 2025-12-20T12:22:39.055Z - Server starting. CWD: C:\Users\Faraz
-[CoT Debug] 2025-12-20T12:22:39.055Z - ENABLE_GUI: true
-[CoT Debug] 2025-12-20T12:22:39.056Z - DATA_DIR: .vscode/CoT
-[CoT Debug] 2025-12-20T12:22:48.133Z - Server starting. CWD: C:\Users\Faraz
-[CoT Debug] 2025-12-20T12:22:48.134Z - ENABLE_GUI: true
-[CoT Debug] 2025-12-20T12:22:48.134Z - DATA_DIR: .vscode/CoT
-[CoT Debug] 2025-12-20T12:23:16.699Z - Server starting. CWD: C:\Users\Faraz
-[CoT Debug] 2025-12-20T12:23:16.700Z - ENABLE_GUI: true
-[CoT Debug] 2025-12-20T12:23:16.700Z - DATA_DIR: .vscode/CoT
-[CoT Debug] 2025-12-20T12:24:14.312Z - Server starting. CWD: C:\Users\Faraz
-[CoT Debug] 2025-12-20T12:24:14.313Z - ENABLE_GUI: true
-[CoT Debug] 2025-12-20T12:24:14.313Z - DATA_DIR: .vscode/CoT
-[CoT Debug] 2025-12-20T12:26:35.978Z - Server starting. CWD: C:\Users\Faraz\AppData\Local\Programs\Antigravity
-[CoT Debug] 2025-12-20T12:26:35.979Z - ENABLE_GUI: true
-[CoT Debug] 2025-12-20T12:26:35.979Z - DATA_DIR: .vscode/CoT
-[CoT Debug] 2025-12-20T12:27:53.836Z - Server starting. CWD: C:\Users\Faraz\AppData\Local\Programs\Antigravity
-[CoT Debug] 2025-12-20T12:27:53.836Z - ENABLE_GUI: true
-[CoT Debug] 2025-12-20T12:27:53.836Z - DATA_DIR: .vscode/CoT
-[CoT Debug] 2025-12-20T12:28:20.305Z - Server starting. CWD: C:\Users\Faraz\AppData\Local\Programs\Antigravity
-[CoT Debug] 2025-12-20T12:28:20.306Z - ENABLE_GUI: true
-[CoT Debug] 2025-12-20T12:28:20.306Z - DATA_DIR: .vscode/CoT
-[CoT Debug] 2025-12-20T12:29:01.052Z - Server starting. CWD: C:\Users\Faraz
-[CoT Debug] 2025-12-20T12:29:01.053Z - ENABLE_GUI: true
-[CoT Debug] 2025-12-20T12:29:01.053Z - DATA_DIR: .vscode/CoT
-[CoT Debug] 2025-12-20T12:29:32.845Z - Server starting. CWD: C:\Users\Faraz
-[CoT Debug] 2025-12-20T12:29:32.846Z - ENABLE_GUI: true
-[CoT Debug] 2025-12-20T12:29:32.846Z - DATA_DIR: .vscode/CoT
-[CoT Debug] 2025-12-20T12:29:43.704Z - Server starting. CWD: C:\Users\Faraz
-[CoT Debug] 2025-12-20T12:29:43.705Z - ENABLE_GUI: true
-[CoT Debug] 2025-12-20T12:29:43.705Z - DATA_DIR: .vscode/CoT
-[CoT Debug] 2025-12-20T12:33:13.982Z - Server starting. CWD: C:\Users\Faraz\AppData\Local\Programs\Antigravity
-[CoT Debug] 2025-12-20T12:33:13.982Z - ENABLE_GUI: true
-[CoT Debug] 2025-12-20T12:33:13.982Z - DATA_DIR: .vscode/CoT
-[CoT Debug] 2025-12-20T12:40:48.423Z - Server starting. CWD: C:\Users\Faraz\AppData\Local\Programs\Antigravity
-[CoT Debug] 2025-12-20T12:40:48.424Z - ENABLE_GUI: true
-[CoT Debug] 2025-12-20T12:40:48.425Z - DATA_DIR: .vscode/CoT
-[CoT Debug] 2025-12-20T12:52:53.107Z - Server starting. CWD: C:\Users\Faraz
-[CoT Debug] 2025-12-20T12:52:53.108Z - ENABLE_GUI: true
-[CoT Debug] 2025-12-20T12:52:53.108Z - DATA_DIR: .vscode/CoT
-[CoT Debug] 2025-12-20T12:53:24.073Z - Server starting. CWD: C:\Users\Faraz
-[CoT Debug] 2025-12-20T12:53:24.074Z - ENABLE_GUI: true
-[CoT Debug] 2025-12-20T12:53:24.074Z - DATA_DIR: .vscode/CoT
-[CoT Debug] 2025-12-20T12:53:39.854Z - Server starting. CWD: C:\Users\Faraz
-[CoT Debug] 2025-12-20T12:53:39.854Z - ENABLE_GUI: true
-[CoT Debug] 2025-12-20T12:53:39.854Z - DATA_DIR: .vscode/CoT
-[CoT Debug] 2025-12-20T12:53:53.429Z - Server starting. CWD: D:\D Drive\Projects\MCP Servers\mcp-chain-of-thought
-[CoT Debug] 2025-12-20T12:53:53.430Z - ENABLE_GUI: true
-[CoT Debug] 2025-12-20T12:53:53.430Z - DATA_DIR: d:\D Drive\Projects\MCP Servers\mcp-chain-of-thought\data
-[CoT Debug] 2025-12-20T12:54:33.884Z - Server starting. CWD: D:\D Drive\Projects\MCP Servers\mcp-chain-of-thought
-[CoT Debug] 2025-12-20T12:54:33.884Z - ENABLE_GUI: true
-[CoT Debug] 2025-12-20T12:54:33.884Z - DATA_DIR: d:\D Drive\Projects\MCP Servers\mcp-chain-of-thought\data
-[CoT Debug] 2025-12-20T13:19:02.552Z - Server starting. CWD: C:\Users\Faraz
-[CoT Debug] 2025-12-20T13:19:02.552Z - ENABLE_GUI: true
-[CoT Debug] 2025-12-20T13:19:02.553Z - DATA_DIR: .vscode/CoT
-[CoT Debug] 2025-12-20T13:19:11.095Z - Server starting. CWD: C:\Users\Faraz
-[CoT Debug] 2025-12-20T13:19:11.096Z - ENABLE_GUI: true
-[CoT Debug] 2025-12-20T13:19:11.096Z - DATA_DIR: .vscode/CoT
-[CoT Debug] 2025-12-20T13:21:04.902Z - Server starting. CWD: C:\Users\Faraz
-[CoT Debug] 2025-12-20T13:21:04.903Z - ENABLE_GUI: true
-[CoT Debug] 2025-12-20T13:21:04.903Z - DATA_DIR: .vscode/CoT
-[CoT Debug] 2025-12-20T13:24:54.948Z - Server starting. CWD: C:\Users\Faraz
-[CoT Debug] 2025-12-20T13:24:54.948Z - ENABLE_GUI: true
-[CoT Debug] 2025-12-20T13:24:54.948Z - DATA_DIR: .vscode/CoT
-[CoT Debug] 2025-12-20T13:25:02.388Z - Server starting. CWD: C:\Users\Faraz
-[CoT Debug] 2025-12-20T13:25:02.389Z - ENABLE_GUI: true
-[CoT Debug] 2025-12-20T13:25:02.389Z - DATA_DIR: .vscode/CoT
-[CoT Debug] 2025-12-20T13:27:29.100Z - Server starting. CWD: C:\Users\Faraz
-[CoT Debug] 2025-12-20T13:27:29.101Z - ENABLE_GUI: true
-[CoT Debug] 2025-12-20T13:27:29.101Z - DATA_DIR: .vscode/CoT
-[CoT Debug] 2025-12-20T13:31:02.133Z - Server starting. CWD: C:\Users\Faraz\AppData\Local\Programs\Antigravity
-[CoT Debug] 2025-12-20T13:31:02.134Z - ENABLE_GUI: true
-[CoT Debug] 2025-12-20T13:31:02.134Z - DATA_DIR: d:\D Drive\Projects\MCP Servers\mcp-chain-of-thought\data
+[CoT Debug] 2025-12-25T09:36:22.015Z - File change detected: tasks.db. Sending SSE update.
+[CoT Debug] 2025-12-25T09:53:11.228Z - Server starting. CWD: D:\D Drive\Projects\MCP Servers\mcp-chain-of-thought
+[CoT Debug] 2025-12-25T09:53:11.229Z - ENABLE_GUI: true
+[CoT Debug] 2025-12-25T09:53:11.229Z - DATA_DIR: d:\D Drive\Projects\MCP Servers\mcp-chain-of-thought\data
+[CoT Debug] 2025-12-25T10:05:23.563Z - Server starting. CWD: c:\Users\Faraz\OneDrive - Ormesby Primary\Desktop\GPT Instructions
+[CoT Debug] 2025-12-25T10:05:23.564Z - ENABLE_GUI: true
+[CoT Debug] 2025-12-25T10:05:23.564Z - DATA_DIR: d:\D Drive\Projects\MCP Servers\mcp-chain-of-thought\data
+[CoT Debug] 2025-12-25T10:20:47.423Z - Server starting. CWD: C:\Users\Faraz
+[CoT Debug] 2025-12-25T10:20:47.427Z - ENABLE_GUI: true
+[CoT Debug] 2025-12-25T10:20:47.427Z - DATA_DIR: d:\D Drive\Projects\MCP Servers\mcp-chain-of-thought\data
+[CoT Debug] 2025-12-25T10:20:48.367Z - Server starting. CWD: D:\D Drive\Projects\MCP Servers\mcp-chain-of-thought
+[CoT Debug] 2025-12-25T10:20:48.368Z - ENABLE_GUI: true
+[CoT Debug] 2025-12-25T10:20:48.368Z - DATA_DIR: d:\D Drive\Projects\MCP Servers\mcp-chain-of-thought\data
+[CoT Debug] 2025-12-25T10:24:38.751Z - Server starting. CWD: C:\Users\Faraz
+[CoT Debug] 2025-12-25T10:24:38.752Z - ENABLE_GUI: true
+[CoT Debug] 2025-12-25T10:24:38.752Z - DATA_DIR: d:\D Drive\Projects\MCP Servers\mcp-chain-of-thought\data
+[CoT Debug] 2025-12-25T10:24:44.660Z - Server starting. CWD: c:\Users\Faraz\OneDrive - Ormesby Primary\Desktop\GPT Instructions
+[CoT Debug] 2025-12-25T10:24:44.660Z - ENABLE_GUI: true
+[CoT Debug] 2025-12-25T10:24:44.661Z - DATA_DIR: d:\D Drive\Projects\MCP Servers\mcp-chain-of-thought\data
+[CoT Debug] 2025-12-25T10:36:22.304Z - File change detected: tasks.db. Sending SSE update.
+[CoT Debug] 2025-12-25T10:36:22.304Z - File change detected: tasks.db. Sending SSE update.
+[CoT Debug] 2025-12-25T11:08:44.951Z - File change detected: tasks.json. Sending SSE update.
+[CoT Debug] 2025-12-25T11:08:44.950Z - File change detected: tasks.json. Sending SSE update.
+[CoT Debug] 2025-12-25T11:11:32.792Z - Server starting. CWD: D:\D Drive\Projects\MCP Servers\mcp-chain-of-thought
+[CoT Debug] 2025-12-25T11:11:32.793Z - ENABLE_GUI: true
+[CoT Debug] 2025-12-25T11:11:32.793Z - DATA_DIR: d:\D Drive\Projects\MCP Servers\mcp-chain-of-thought\data
+[CoT Debug] 2025-12-25T11:14:22.023Z - Server starting. CWD: D:\D Drive\Projects\MCP Servers\mcp-chain-of-thought
+[CoT Debug] 2025-12-25T11:14:22.024Z - ENABLE_GUI: true
+[CoT Debug] 2025-12-25T11:14:22.024Z - DATA_DIR: d:\D Drive\Projects\MCP Servers\mcp-chain-of-thought\data
+[CoT Debug] 2025-12-25T11:14:46.641Z - Server starting. CWD: c:\Users\Faraz\OneDrive - Ormesby Primary\Desktop\GPT Instructions
+[CoT Debug] 2025-12-25T11:14:46.642Z - ENABLE_GUI: true
+[CoT Debug] 2025-12-25T11:14:46.642Z - DATA_DIR: d:\D Drive\Projects\MCP Servers\mcp-chain-of-thought\data
+[CoT Debug] 2025-12-25T11:14:47.697Z - Server starting. CWD: D:\D Drive\Projects\MCP Servers\mcp-chain-of-thought
+[CoT Debug] 2025-12-25T11:14:47.698Z - ENABLE_GUI: true
+[CoT Debug] 2025-12-25T11:14:47.698Z - DATA_DIR: d:\D Drive\Projects\MCP Servers\mcp-chain-of-thought\data

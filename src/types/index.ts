@@ -59,6 +59,13 @@ export interface Task {
   notes?: string; // Supplementary notes, special processing requirements, or implementation suggestions (optional)
   status: TaskStatus; // Current execution status of the task
   dependencies: TaskDependency[]; // List of prerequisite dependencies for the task
+
+  // Context Fields
+  problemStatement?: string; // The "Why": Problem context
+  technicalPlan?: string;    // The "How": Technical approach (from analyze_task)
+  finalOutcome?: string;     // The "What": Final result
+  lessonsLearned?: string;   // The "Advice": Key learnings for future reference
+
   createdAt: Date; // Timestamp when the task was created
   updatedAt: Date; // Timestamp when the task was last updated
   completedAt?: Date; // Timestamp when the task was completed (only applicable to completed tasks)
@@ -73,12 +80,19 @@ export interface Task {
 
   // Additional field: save verification standards and testing methods
   verificationCriteria?: string; // Clear verification standards, test points, and acceptance conditions
+  verificationStatus?: string; // Verification status (e.g. 'passed') per workflow spec
+
+  // Bridge field: Link to the Idea Phase step that generated this task
+  sourceStepId?: string; // ID of the workflow_steps row (Idea Phase)
 
   // Additional field: save conversation history for detailed mode
   conversationHistory?: ConversationMessage[]; // History of conversations related to this task (only used when detailed mode is enabled)
 
   // Project association: links task to a specific project
   projectId?: string; // ID of the project this task belongs to
+
+  // Task execution order: defines the sequence in which tasks should be executed
+  executionOrder?: number; // 0-indexed integer, used to sort tasks in UI and agent execution
 }
 
 // Parameters for planning a task: used to initialize the task planning phase

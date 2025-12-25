@@ -13,7 +13,7 @@ export interface Client {
     taskCount?: number;
 }
 /**
- * Initialize clients table
+ * Initialize clients table - DEPRECATED
  */
 export declare function initClientsTable(): Promise<void>;
 /**
