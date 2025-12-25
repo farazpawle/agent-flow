@@ -22,3 +22,6 @@ server:
     - name: ENABLE_GUI
       description: "Whether to enable the web-based GUI"
       default: "true"
+    - name: ENABLE_DETAILED_MODE
+      description: "Whether to record per-task conversation history"
+      default: "false"

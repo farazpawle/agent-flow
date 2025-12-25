@@ -79,24 +79,37 @@ npm run build
 
 ## 🔌 Configuration
 
-Update your MCP client config (e.g., Cursor, Claude Desktop):
+AgentFlow is optimized for **Zero-Config** starts, but uses a `.env` file for advanced customization.
 
+### 1. Setup Environment
+In your project root (where you run the agent), create a `.env` file:
+```bash
+# Example .env configuration
+DATA_DIR="C:/MyProject/agent-flow-data" # REQUIRED: Absolute path
+DB_TYPE="sqlite"                        # Options: sqlite, supabase
+ENABLE_GUI="true"                      # Enable the visual dashboard
+ENABLE_DETAILED_MODE="true"             # Record conversation history
+```
+
+### 2. MCP Client Registration
+Register the server in your MCP client (Cursor, Claude Desktop, etc.). Since AgentFlow auto-loads your `.env`, the configuration is minimal:
+
+**Cursor (`~/.cursor/mcp.json`):**
 ```json
 {
   "mcpServers": {
     "agent-flow": {
       "command": "npx",
-      "args": ["-y", "agent-flow"],
-      "env": {
-        "DATA_DIR": "C:/Path/To/Your/Data", // REQUIRED: Absolute path
-        "DB_TYPE": "sqlite",              // 'sqlite' or 'supabase'
-        "ENABLE_GUI": "true",             // Enable the dashboard (default: true)
-        "ENABLE_DETAILED_MODE": "true"    // Record per-task conversation history
-      }
+      "args": ["-y", "agent-flow"]
     }
   }
 }
 ```
+
+> 💡 **Pro Tip**: You can still override any `.env` setting by passing it directly in the `env` block of your client JSON if needed.
+
+---
+
 
 ---
 
