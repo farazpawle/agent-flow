@@ -4,18 +4,19 @@
 name: "agent-flow"
 version: "2.0.0"
 
-# Using the node runtime is standard for TypeScript projects on Smithery Cloud
-# It automatically handles dependency installation if package.json is present
+# Using the node runtime
 runtime: node
 
 # The command to build the project
 buildCommand: npm run build
 
-# The command to start the server in MCP mode (stdio)
-startCommand: npm run mcp
+# The command to start the server - using structured format for validation
+startCommand:
+  type: stdio
+  command: node
+  args: ["dist/index.js"]
 
 # Configuration schema for environment variables
-# This allows the user to configure these values in the Smithery dashboard
 configSchema:
   type: object
   properties:
