@@ -551,3 +551,24 @@
 .rt-badge.rt-default { background: rgba(94, 106, 210, 0.10); color: var(--text-secondary); border-color: rgba(94, 106, 210, 0.20); text-transform: none; letter-spacing: 0; font-weight: 500; }
 
 .runtime-footer { margin-top: var(--space-3); }
+
+/* ---------- Runtime Config inline-edit row ---------- */
+.rt-edit-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+}
+.rt-input {
+  flex: 1;
+  min-width: 200px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  padding: 4px 8px;
+}
+.btn-sm {
+  padding: 4px 10px;
+  font-size: 12px;
+  line-height: 1.2;
+}
+.rt-inline-hint { flex-basis: 100%; }

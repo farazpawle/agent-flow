@@ -13,6 +13,7 @@
  */
 
 import { applyEnvironmentAliases } from "../utils/envConfig.js";
+import { isEditable } from "./envWriter.js";
 
 export interface RuntimeConfigField {
   /** Env var name (canonical, preferred-key form). */
@@ -36,6 +37,12 @@ export interface RuntimeConfigField {
    * never re-reads these mid-process.
    */
   restartRequired?: boolean;
+  /**
+   * True when this var may be written via PATCH /api/settings/runtime
+   * from the GUI. Mirrors `EDITABLE_ENV_FIELDS` in `envWriter.ts` —
+   * keeps the GUI in lock-step with the server-side allow-list.
+   */
+  editable?: boolean;
 }
 
 export interface RuntimeConfigSection {
@@ -74,6 +81,10 @@ function field(
   if (opts.default !== undefined) out.default = opts.default;
   if (opts.secret) out.secret = true;
   if (opts.restartRequired) out.restartRequired = true;
+  // `editable` is derived from the writer's allow-list (envWriter.ts)
+  // — secrets and DB-defining vars are intentionally NOT editable from
+  // the GUI no matter what flags the row carries.
+  if (!opts.secret && isEditable(name)) out.editable = true;
   return out;
 }
 
@@ -167,12 +178,6 @@ export function buildRuntimeConfig(env: NodeJS.ProcessEnv = process.env): Runtim
         field(env, "LLM_MODEL_REFRESH_TTL_HOURS", "Cache TTL for per-provider model lists.", {
           default: "24",
         }),
-        field(
-          env,
-          "OPENROUTER_BASE_URL",
-          "Override the OpenRouter API base URL (self-hosted gateways)."
-        ),
-        field(env, "DEEPSEEK_BASE_URL", "Override the DeepSeek API base URL."),
         field(env, "OPENAI_API_KEY", "OpenAI API key (env-only — never persisted).", {
           secret: true,
           restartRequired: true,

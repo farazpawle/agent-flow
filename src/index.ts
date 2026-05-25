@@ -129,6 +129,7 @@ import {
 
 // Runtime configuration snapshot for the GUI Settings page.
 import { buildRuntimeConfig } from "./http/runtimeConfig.js";
+import { updateEnvVar, EDITABLE_FIELD_NAMES } from "./http/envWriter.js";
 import { listPrompts, getPrompt, PROMPT_NAMES as MCP_PROMPT_NAMES } from "./mcp/prompts.js";
 
 import type { ZodTypeAny } from "zod";
@@ -748,6 +749,45 @@ async function main() {
         } catch (err) {
           const { status, body } = toHttpErrorBody(err);
           res.status(status).json(body);
+        }
+      });
+
+      // Inline-edit endpoint for the Runtime Configuration card. Writes
+      // the single named field to `.env` atomically; some fields are
+      // also applied to the live `process.env` so the next call picks
+      // them up without restart (see EDITABLE_ENV_FIELDS allow-list in
+      // src/http/envWriter.ts). Secrets and DB-defining vars are
+      // explicitly NOT on the allow-list — the route returns 400
+      // ENV_NOT_EDITABLE if a caller tries to write one. LLM_CONFIG_LOCK
+      // also blocks all writes (returns 403 RUNTIME_CONFIG_LOCKED).
+      app.patch("/api/settings/runtime", async (req: Request, res: Response) => {
+        const body = req.body as { name?: unknown; value?: unknown };
+        if (typeof body?.name !== "string" || body.name.length === 0) {
+          res.status(400).json({
+            error: "PATCH /api/settings/runtime requires a `name` string in the body.",
+            code: "VALIDATION",
+            hint: `Editable fields: ${EDITABLE_FIELD_NAMES.join(", ")}.`,
+          });
+          return;
+        }
+        if (body.value !== null && typeof body.value !== "string") {
+          res.status(400).json({
+            error:
+              "PATCH /api/settings/runtime body `value` must be a string or null (null clears).",
+            code: "VALIDATION",
+          });
+          return;
+        }
+        try {
+          const out = await updateEnvVar({
+            name: body.name,
+            value: body.value as string | null,
+            env: process.env,
+          });
+          res.json(out);
+        } catch (err) {
+          const { status, body: errBody } = toHttpErrorBody(err);
+          res.status(status).json(errBody);
         }
       });
 

@@ -33,10 +33,10 @@ const ENV_ALIAS_SPECS: AliasSpec[] = [
   { preferredKey: "ANTHROPIC_API_KEY", legacyKeys: [] },
   { preferredKey: "OPENROUTER_API_KEY", legacyKeys: [] },
   { preferredKey: "DEEPSEEK_API_KEY", legacyKeys: [] },
-  // Optional base-URL overrides for self-hosted or alt gateways
-  // (Group 13.6). Trimmed/normalised so blank values disappear.
-  { preferredKey: "OPENROUTER_BASE_URL", legacyKeys: [] },
-  { preferredKey: "DEEPSEEK_BASE_URL", legacyKeys: [] },
+  // OPENROUTER_BASE_URL / DEEPSEEK_BASE_URL removed (2026-05-25) —
+  // both providers have stable, hardcoded base URLs and no self-hosted
+  // gateway story. Hardcoding them in the provider modules removes a
+  // pair of env knobs that were noise.
   // Phase 3 Group 19 — when "true" (the default once Phase 3 ships),
   // view tools (project_view / task_view / context_get) move behind
   // MCP Resources and `workflow_run(plan|analyze|review)` moves behind

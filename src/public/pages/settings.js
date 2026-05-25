@@ -190,6 +190,64 @@ async function mountRuntimeConfigCard() {
       Reload the page to refresh.
     </div>
   `;
+
+  // Wire inline-edit handlers. Save sends a PATCH with the input's
+  // current value; Clear sends a PATCH with value=null which writes
+  // a commented placeholder back to .env.
+  body.querySelectorAll(".rt-save-btn").forEach((btn) => {
+    btn.addEventListener("click", () => onRuntimeSave(btn.getAttribute("data-rt-name")));
+  });
+  body.querySelectorAll(".rt-clear-btn").forEach((btn) => {
+    btn.addEventListener("click", () => onRuntimeClear(btn.getAttribute("data-rt-name")));
+  });
+  body.querySelectorAll(".rt-input").forEach((input) => {
+    input.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") {
+        e.preventDefault();
+        onRuntimeSave(input.getAttribute("data-rt-name"));
+      }
+    });
+  });
+}
+
+async function onRuntimeSave(name) {
+  if (!name) return;
+  const input = document.querySelector(`.rt-input[data-rt-name="${cssEscape(name)}"]`);
+  if (!input) return;
+  const value = input.value.trim();
+  await patchRuntimeField(name, value === "" ? null : value);
+}
+
+async function onRuntimeClear(name) {
+  if (!name) return;
+  if (!confirm(`Clear ${name}? This rewrites the line in .env as a commented placeholder.`)) return;
+  await patchRuntimeField(name, null);
+}
+
+async function patchRuntimeField(name, value) {
+  try {
+    const out = await api.patch("/api/settings/runtime", { name, value });
+    const liveNote = out.liveApplied
+      ? "applied to the running process."
+      : "saved to .env; takes effect after restart.";
+    toast.success(`${name} ${value === null ? "cleared" : "saved"} — ${liveNote}`);
+    // Re-fetch the snapshot so badges + values reflect the new state.
+    await mountRuntimeConfigCard();
+  } catch (err) {
+    if (err instanceof ApiError && err.status === 403) {
+      toast.error(`${name}: settings are locked (LLM_CONFIG_LOCK=true).`);
+    } else if (err instanceof ApiError && err.body && typeof err.body.hint === "string") {
+      toast.error(`${name}: ${err.message}\n→ ${err.body.hint}`, { ttl: 10000 });
+    } else {
+      toast.error(`${name}: ${err.message}`);
+    }
+  }
+}
+
+function cssEscape(s) {
+  // CSS.escape isn't on older browsers; a small subset is enough for
+  // attribute-selector use since env var names are [A-Z_][A-Z0-9_]*.
+  return String(s).replace(/[^A-Za-z0-9_]/g, "\\$&");
 }
 
 function renderRuntimeField(f) {
@@ -206,6 +264,27 @@ function renderRuntimeField(f) {
     valueCell = f.set
       ? `<span class="rt-badge rt-set" title="Value is redacted — never returned by this endpoint">set (redacted)</span>`
       : `<span class="rt-badge rt-unset">unset</span>`;
+  } else if (f.editable) {
+    // Inline-editable: text input + Save/Clear buttons. The Save button
+    // sends a PATCH; success replaces the row with the new state.
+    const current = f.set ? String(f.value ?? "") : "";
+    const restartHint = f.restartRequired
+      ? `<span class="muted tiny rt-inline-hint">— takes effect after restart</span>`
+      : `<span class="muted tiny rt-inline-hint">— applied live on save</span>`;
+    valueCell = `
+      <div class="rt-edit-row">
+        <input
+          class="input rt-input"
+          type="text"
+          data-rt-name="${escapeAttr(f.name)}"
+          value="${escapeAttr(current)}"
+          placeholder="${escapeAttr(f.default ? `default: ${f.default}` : "(unset)")}"
+        />
+        <button class="btn btn-secondary btn-sm rt-save-btn" data-rt-name="${escapeAttr(f.name)}" type="button">💾</button>
+        <button class="btn btn-ghost btn-sm rt-clear-btn" data-rt-name="${escapeAttr(f.name)}" type="button" title="Clear (writes a commented placeholder to .env)">✖</button>
+        ${restartHint}
+      </div>
+    `;
   } else if (f.set) {
     valueCell = `<code class="rt-value" title="${escapeAttr(String(f.value ?? ""))}">${escapeHtml(truncateForDisplay(String(f.value ?? "")))}</code>`;
   } else {
