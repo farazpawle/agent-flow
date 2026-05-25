@@ -191,6 +191,41 @@ cheapest | fastest`.
   because `createLlmProvider` re-resolves on every call (Group 13.4
   deliberately does not memoise).
 
+### Added — Phase 2 Group 18 wrap-up (2026-05-25)
+
+Phase 2 of the v2 redesign is complete. The §10 acceptance audit table
+in `Plan/Upgrade-Task.md` walks all 10 Phase-2 bullets and maps each
+to a backing test or code path.
+
+- **README + `.env.example`** — README "Workflows" section rewritten
+  to drop the "Phase 2 lands later" wording; new "LLM provider layer
+  (Phase 2)" section documents the four providers, the five selection
+  strategies, the security invariants, and the HTTP route surface.
+  `.env.example` was already exhaustive for Phase 2 envs.
+- **End-to-end provider smoke tests** — `tests/unit/providerSmoke.test.ts`
+  parameterises a full workflow run across all 4 networked providers
+  (mock-injected to avoid live HTTP) and asserts the `workflow_steps`
+  row records the right `provider` value every time. Includes a
+  provider-switch test (GUI persists `provider=anthropic`, next call's
+  audit row reflects it) and an `LLM_CONFIG_LOCK=true` test asserting
+  env wins even when a stale DB row exists.
+
+### Fixed — Phase 2 Group 18 (2026-05-25)
+
+- **`workflow_run(mode=agent)` now actually reads GUI-persisted
+  settings.** The Group 15 runner was constructed with `opts.db`
+  marked optional and threaded through unchanged, but the production
+  handler (`workflowRun.ts`) never passed it — so the factory's
+  `llm_settings` lookup got `opts.db === undefined` on every call and
+  the persisted row was silently ignored. The runner now defaults
+  `db` to `dbFactory.getDatabase()` so the GUI Save → next-call path
+  works without restart, exactly as Group 17 advertised.
+- **`resolveLlmConfig` now tolerates uninitialised DB adapters** —
+  `db.getLlmSettings()` failures fall through to env-only resolution
+  instead of crashing the call. This matters for early-boot or
+  isolated-test contexts that exercise the LLM layer before
+  `db.init()` runs.
+
 #### Migration guide (legacy tool → v2 equivalent)
 
 | Removed tool                              | Replacement                                                                                                                         |

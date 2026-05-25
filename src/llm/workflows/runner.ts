@@ -29,6 +29,7 @@ import { applyEnvironmentAliases } from "../../utils/envConfig.js";
 import { ExternalServiceError, ValidationError, toAppError } from "../../utils/errors.js";
 import { estimateTokens } from "../../utils/tokenBudget.js";
 import { childLogger } from "../../utils/logger.js";
+import { dbFactory } from "../../models/dbFactory.js";
 import { createLlmProvider, resolveLlmConfig } from "../factory.js";
 import { PROVIDER_NOT_CONFIGURED_CODE } from "../providers/none.js";
 import { resolveModelForCall } from "../models/registry.js";
@@ -216,7 +217,12 @@ export async function runAgentWorkflow(
 
   // Build the provider. Reuses Group 13's factory so DB-backed
   // settings (llm_settings) override env unless LLM_CONFIG_LOCK=true.
-  const config = await resolveLlmConfig({ db: opts.db, env });
+  // Default to the singleton DB adapter so GUI saves via Group 16's
+  // POST /api/llm/settings take effect on the next call without
+  // requiring every caller to thread `db` explicitly. Tests can still
+  // inject a stub via `opts.db`.
+  const db = opts.db ?? dbFactory.getDatabase();
+  const config = await resolveLlmConfig({ db, env });
   if (config.provider === "none") {
     // Surface as PROVIDER_NOT_CONFIGURED so the handler can fall
     // back to manual mode just like a quota error.
@@ -226,7 +232,7 @@ export async function runAgentWorkflow(
     });
   }
 
-  const provider = opts.provider ?? (await createLlmProvider({ db: opts.db, env }));
+  const provider = opts.provider ?? (await createLlmProvider({ db, env }));
 
   // Resolve {provider, model, selectionStrategy} for the telemetry
   // row + the per-call `model` argument.

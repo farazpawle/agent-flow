@@ -2,72 +2,37 @@
 
 [![smithery badge](https://smithery.ai/badge/@farazpawle/agent-flow)](https://smithery.ai/server/@farazpawle/agent-flow)
 
-**AgentFlow** is a next-generation, premium agentic workflow system built on the **Model Context Protocol (MCP)**. It transforms the way AI agents handle complex development tasks by bridging the gap between raw LLM reasoning and structured execution.
+AgentFlow is an MCP server for structured AI task execution with a built-in real-time web dashboard.
+
+It combines:
+
+- MCP tools for staged planning, task splitting, execution, and verification
+- Local/remote persistence (SQLite or Supabase)
+- A web UI with SSE live updates
 
 ---
 
-## ✨ The Vision: "Vibe Coding" Refined
+## Features
 
-AgentFlow is designed for the modern "Vibe Coder"—developers who prioritize high-level intent, rapid iteration, and stunning visual feedback.
-
--   **🧠 Integrated Thought Chain**: Native Support for complex multi-step reasoning (`plan` → `analyze` → `reflect`).
--   **🎨 State-of-the-Art Dashboard**: A premium **Glassmorphism** interface with **Dynamic Background Gradients**, fluid animations (15s ease infinite shift), and meticulous **Light/Dark** themes.
--   **🎮 Real-Time Pulse**: Live updates via **SSE (Server-Sent Events)**. Watch your agent create, update, and reorder tasks in real-time.
--   **⚛️ Dual Persistence**: Robust storage support via **SQLite** for local portability or **Supabase** for enterprise-scale persistence.
--   **📁 Intelligent Project Context**: Auto-detects projects based on workspace paths or Git remote URLs, mapping local work to stable project identities.
-
----
-
-## 🧭 The Core Workflow
-
-AgentFlow promotes a high-integrity "Think-Then-Do" pipeline:
-
-1.  **💡 Plan Idea**: Draft initial concepts and design tokens.
-2.  **🔍 Analyze**: Deep dive into technical requirements and blockers.
-3.  **🤔 Reflect**: Self-critique the plan to catch edge cases before a single line of code is written.
-4.  **🧩 Split**: Automatically decompose the refined plan into a **Topological DAG** of tasks.
-5.  **▶️ Execute**: Move through tasks with built-in **Verification Loops** ensuring criteria are met.
+- 🧠 Unified staged reasoning pipeline (`plan_idea` with `stage=plan|analyze|review`)
+- 🧩 DAG-based task breakdown and dependency-aware execution
+- ✅ Verification and completion workflow for reliable task closure
+- 📁 Workspace-aware project context and project lifecycle tools
+- 🎮 Real-time dashboard updates over Server-Sent Events (SSE)
+- ⚛️ Pluggable persistence via SQLite or Supabase
 
 ---
 
-## ⚙️ Technical Stack
+## Installation
 
--   **Backend**: Node.js + TypeScript (High-performance ESM).
--   **MCP Implementation**: `@modelcontextprotocol/sdk` for seamless tool-calling integration.
--   **Persistence**: SQLite (Local) / Supabase (Remote) via shared `DatabaseAdapter`.
--   **Dashboard**: Vanilla JS + CSS (Custom Tokens) + **D3.js** for real-time dependency graph visualization.
--   **Communication**: HTTP REST API + **Server-Sent Events (SSE)** for zero-latency UI updates.
+### Option 1: Smithery
 
----
-
-## 🛠️ Advanced Toolset
-
-### 🏗️ Reasoning Engine
-| Tool | Description |
-| :--- | :--- |
-| `plan_idea` | Draft architectural concepts with optional **Focus Modes** (logic, vibe, security, etc.). |
-| `analyze_idea` | Context-aware analysis of a planned idea. |
-| `reflect_idea` | Critical self-reflection to harden specifications. |
-| `process_thought` | High-fidelity thinking tool with support for **Design Tokens**, axioms, and focus shifts. |
-
-### 📋 Task Orchestration
-| Tool | Description |
-| :--- | :--- |
-| `split_tasks` | Converts specification into a task graph with **Dependencies**, **Priority**, and **Category**. |
-| `reorder_tasks` | Legalizes manual reordering while strictly enforcing topological constraints. |
-| `verify_task` | A mandatory validation step before task completion. |
-| `get_project_context` | Workspace-aware project identification and switching. |
-
----
-
-## � Quick Start
-
-### 🔽 Via Smithery (Recommended)
 ```bash
 npx -y @smithery/cli install agent-flow --client claude
 ```
 
-### 🔽 Manual Setup
+### Option 2: Local development
+
 ```bash
 git clone https://github.com/farazpawle/agent-flow.git
 cd agent-flow
@@ -77,24 +42,149 @@ npm run build
 
 ---
 
-## 🔌 Configuration
+## Run modes
 
-AgentFlow is optimized for **Zero-Config** starts, but uses a `.env` file for advanced customization.
+### 1) GUI mode (web dashboard)
 
-### 1. Setup Environment
-In your project root (where you run the agent), create a `.env` file:
+Starts the dashboard server.
+
+> ✅ `npm run start` / `npm run gui` always starts the web UI server.
+
+Recommended local startup sequence:
+
+1. Build once: `npm run build`
+2. Start GUI: `npm run start` (or `npm run gui`)
+
 ```bash
-# Example .env configuration
-DATA_DIR="C:/MyProject/agent-flow-data" # REQUIRED: Absolute path
-DB_TYPE="sqlite"                        # Options: sqlite, supabase
-ENABLE_GUI="true"                      # Enable the visual dashboard
-ENABLE_DETAILED_MODE="true"             # Record conversation history
+npm run start
 ```
 
-### 2. MCP Client Registration
-Register the server in your MCP client (Cursor, Claude Desktop, etc.). Since AgentFlow auto-loads your `.env`, the configuration is minimal:
+or
 
-**Cursor (`~/.cursor/mcp.json`):**
+```bash
+npm run gui
+```
+
+### 2) MCP mode (tool server over stdio)
+
+Starts AgentFlow for MCP clients. If GUI is enabled, it can also spawn/connect to the shared dashboard server.
+
+If you want MCP + dashboard together, set `WEB_UI_ENABLED=true` in `.env` before running:
+
+```bash
+npm run mcp
+```
+
+### 3) Development mode
+
+```bash
+npm run dev
+```
+
+---
+
+## Web UI access
+
+By default, AgentFlow serves the dashboard on:
+
+- **http://localhost:<WEB_UI_PORT>**
+
+Port can be overridden with:
+
+- set `WEB_UI_PORT` in `.env` (default: `54544`)
+
+If `WEB_UI_ENABLED=true`, AgentFlow writes a file named `WebGUI.md` in `DATA_DIRECTORY` with the dashboard link.
+
+---
+
+## UI not opening? (Troubleshooting)
+
+If you can't access the dashboard, check these in order:
+
+1. **GUI is enabled**
+   - For `npm run start` / `npm run gui`, this is **not required**.
+   - For `npm run mcp`, set `.env` to `WEB_UI_ENABLED=true` if you want dashboard + MCP together.
+
+2. **You built the project**
+   - `npm run start` runs `dist/index.js`
+   - Run `npm run build` first (especially in local dev)
+
+3. **Correct port**
+   - Default is `54544`, override via `WEB_UI_PORT`
+   - Open `http://localhost:<WEB_UI_PORT>`
+
+4. **Check generated UI link**
+   - Open `WebGUI.md` inside your `DATA_DIRECTORY`
+   - It contains the exact dashboard URL being served
+
+5. **Port conflict / firewall checks (Windows)**
+   - Check listener: `netstat -ano | findstr :54544`
+   - If occupied, change `WEB_UI_PORT` in `.env` and restart
+   - Allow Node.js through Windows Firewall for local network access
+
+6. **Inspect logs**
+   - `logs/spawn-server.log`
+   - `server_stdio.log`
+
+### Quick one-liner (Windows CMD)
+
+```cmd
+npm run build && npm run start
+```
+
+### Access from another device on same LAN
+
+Use your machine IPv4 + port, e.g.:
+
+- `http://192.168.1.178:54544`
+
+---
+
+## Configuration
+
+Copy `.env.example` to `.env` and set values.
+
+```env
+DATA_DIRECTORY="C:/MyProject/agent-flow-data"
+THOUGHT_CHAIN_ENABLED=true
+PROMPT_TEMPLATE_SET=en
+WEB_UI_ENABLED=true
+DETAILED_MODE_ENABLED=false
+
+DATABASE_PROVIDER=sqlite
+# DATABASE_PROVIDER=supabase
+# SUPABASE_PROJECT_URL="https://your-project.supabase.co"
+# SUPABASE_SERVICE_ROLE_KEY="your-service-role-key"
+
+# Optional (default is 54544)
+# WEB_UI_PORT=54544
+
+# Browser auto-open behavior:
+# Auto-open is enabled by default when the primary GUI server starts.
+# Set to false to disable automatic browser launch.
+AUTO_OPEN_WEB_UI=true
+```
+
+Legacy names are still accepted for backward compatibility.
+
+### Important environment variables
+
+- `DATA_DIRECTORY` (recommended): absolute path for persistent data
+- `WEB_UI_ENABLED`: enable dashboard server
+- `DETAILED_MODE_ENABLED`: per-task conversation history in UI
+- `AUTO_OPEN_WEB_UI`: set `false` to prevent browser auto-open on first GUI server start
+- `DATABASE_PROVIDER`: `sqlite` or `supabase`
+- `SUPABASE_PROJECT_URL`, `SUPABASE_SERVICE_ROLE_KEY`: required when `DATABASE_PROVIDER=supabase`
+- `WEB_UI_PORT`: web UI port (defaults to `54544`)
+
+Legacy names still supported: `DATA_DIR`, `ENABLE_THOUGHT_CHAIN`, `TEMPLATES_USE`, `ENABLE_GUI`, `ENABLE_DETAILED_MODE`, `SERVER_PORT`, `ENABLE_AUTO_OPEN`, `DISABLE_AUTO_OPEN`, `DB_TYPE`, `SUPABASE_URL`, `SUPABASE_SERVICE_KEY`.
+
+---
+
+## MCP client registration example
+
+Example (Cursor MCP config):
+
 ```json
 {
   "mcpServers": {
@@ -106,24 +196,149 @@ Register the server in your MCP client (Cursor, Claude Desktop, etc.). Since Age
 }
 ```
 
-> 💡 **Pro Tip**: You can still override any `.env` setting by passing it directly in the `env` block of your client JSON if needed.
+You can also pass environment variables in your MCP client config if needed.
 
 ---
 
-## ☁️ Supabase Cloud Setup
+## Available MCP tools
 
-If you want to use Supabase instead of SQLite:
+Phase 1 reshaped the surface from 15 legacy tools to **12** (10 primary + 2
+deprecation shims). Every primary tool uses a discriminated-union schema, so
+the action you want to take is encoded in a single `action` / `mode` / `kind`
+/ `workflow` discriminator value the client must supply.
 
-1.  **Initialize Tables**: Copy the content of `scripts/supabase-schema.sql` and run it in your Supabase SQL Editor.
-2.  **Verify Setup**: Run `npm run supabase:check` to ensure all tables are correctly created and accessible.
-3.  **Migrate local data**: If you have local SQLite data, run `npm run supabase:migrate` to push it to the cloud.
-4.  **Update .env**:
-    ```bash
-    DB_TYPE="supabase"
-    SUPABASE_URL="https://your-project.supabase.co"
-    SUPABASE_SERVICE_KEY="your-service-role-key"
-    ```
+### Read-only
+
+- `project_view` — discriminated on `action`: `list` / `get` / `summary` / `active` (active is per-client via `client_active_project`).
+- `task_view` — discriminated on `action`: `list` / `get` / `search` / `next_ready` / `by_status`. Every returned task includes `version` for use as `expectedVersion`.
+- `context_get` — token-budgeted, LLM-free context bundles discriminated on `type`: `project_summary` / `implementation_context` / `verification_context` / `lessons` / `similar_tasks` / `decisions` / `findings`.
+
+### Edits (non-destructive)
+
+- `project_edit` — discriminated on `action`: `create` / `update` / `set_active` (client-scoped).
+- `task_edit` — discriminated on `action`: `create` / `update` / `reorder` / `set_priority` / `set_dependency` / `clear_dependency` / `split` / `merge`. Single-task actions require `expectedVersion`; `reorder` + `merge` require an `expectedVersions` map.
+
+### Destructive (dry-run / execute split)
+
+- `project_delete` — `mode='dry_run'` shows affected counts; `mode='execute'` requires `reason ≥ 10` and `confirm: true`.
+- `task_delete` — compound `op = <action>.<mode>`. `clear_all_for_project.execute` requires `reason ≥ 20`. Every execute writes an entry to the `destructive_audits` table.
+
+### Lifecycle
+
+- `task_lifecycle` — discriminated on `action`: `claim` / `start` / `block` / `unblock` / `request_review` / `finalize` / `reopen` / `archive`. Only `finalize` requires `expectedVersion`. `finalize.result` is itself a discriminated union on `verdict`: `pass` / `fail` / `partial` / `needs_review`, each branch with its own required fields enforced at the JSON Schema layer.
+
+### Append-only history
+
+- `artifact_record` — discriminated on `kind`: `finding` / `test_log` / `build_log` / `reference` / `commit` / `pull_request` / `evidence`. Returns `findingId` for use as evidence references downstream. No UPDATE/DELETE handler is exposed.
+
+### Workflows
+
+- `workflow_run` — discriminated on `workflow`. Eleven workflows available: `plan`, `analyze`, `review`, `split_plan`, `process_thought`, `record_decision`, `review_task_quality`, `build_context_pack`, `summarize_lessons`, `detect_duplicates`, `generate_release_summary`.
+  - **Modes (`WORKFLOW_MODE` env, default `manual`):**
+    - `manual` — returns the structured §4.4 contract (`purpose`, `inputRequired`, `steps`, `outputSchema`, `qualityChecklist`, `nextRecommendedCalls`) for the calling agent to execute. **No LLM key required.**
+    - `agent` — calls the configured LLM provider (Phase 2 Group 15). When the provider is unset (`LLM_PROVIDER=none`), quota-exceeded, or the input is over the per-workflow token budget, the call falls back to the manual contract + an `agentFallback` envelope. Other provider errors (auth, network, content-filter, schema-failure-after-retry) propagate as tool errors — see `CHANGELOG.md` "Phase 2 Group 15" for the full contract.
+    - `disabled` — returns a typed `WORKFLOW_DISABLED` payload without invoking any workflow.
+  - Per-call `mode` field overrides the env default.
+  - Same Zod schema validates both manual-mode `outputSchema` (via `zodToJsonSchema`) and agent-mode provider responses. The two surfaces cannot drift.
+
+### LLM provider layer (Phase 2)
+
+Four providers are wired through the [Vercel AI SDK](https://sdk.vercel.ai/):
+**OpenAI**, **Anthropic**, **OpenRouter**, **DeepSeek**. Swap providers by
+setting `LLM_PROVIDER` in env or via the GUI Settings panel — no code change
+required. Model selection supports five strategies (`manual` / `latest_code` /
+`latest_reasoning` / `cheapest` / `fastest`) over a live per-provider model
+catalogue cached for `LLM_MODEL_REFRESH_TTL_HOURS` (default 24h, refreshable
+via `POST /api/llm/model/refresh`).
+
+**Security invariants:**
+
+- **API keys are env-only.** They are never persisted to `llm_settings` (the column doesn't exist), never returned by `GET /api/llm/settings`, and never accepted by `POST /api/llm/settings` (the body schema is `.strict()`).
+- `LLM_CONFIG_LOCK=true` makes the DB-backed settings effectively read-only — `POST /api/llm/settings` returns HTTP 403, and the GUI panel disables the Save button.
+- Destructive workflows (`split_plan`, `detect_duplicates`) return proposals only. The agent must call `task_edit(action='split'|'merge')` to apply.
+
+**HTTP surface (GUI mode):**
+
+| Method + Path                     | Purpose                                                                        |
+| --------------------------------- | ------------------------------------------------------------------------------ |
+| `GET  /api/llm/providers`         | Boolean `keyConfigured` per provider + env var name. Never returns key values. |
+| `GET  /api/llm/models?provider=…` | Cached model catalogue (capabilities + pricing).                               |
+| `POST /api/llm/model/refresh`     | Bypass TTL and refetch the catalogue.                                          |
+| `GET  /api/llm/settings`          | Effective config + per-field source (`env` / `db` / `default`).                |
+| `POST /api/llm/settings`          | Persist provider / model / strategy / mode. 403 when `LLM_CONFIG_LOCK=true`.   |
+
+**Audit trail:** every LLM call writes a `workflow_steps` row with
+`stepType='LLM_CALL'`, `toolName='workflow_run'`, `durationMs`, `inputTokens` /
+`outputTokens`, `correlationId`, and a structured `content` JSON payload
+containing `provider`, `model`, `selectionStrategy`, and `workflow`.
+
+See `.env.example` for the full list of LLM env vars and their defaults.
+
+### Deprecation shims (slated for removal in `1.2.0`)
+
+- `verify_task` — routes to `task_lifecycle(action='request_review')` and writes a `kind='evidence'` finding. **Never advances a task to COMPLETED** — closes the legacy silent auto-pass bug by construction.
+- `complete_task` — routes to `task_lifecycle(action='finalize', verdict='pass')`. Now requires `summary` (≥10 chars), `lessonsLearned` (≥10 chars), and `expectedVersion`.
+
+Every shim call emits a `DEPRECATED` warning block on the response and a
+`deprecation` SSE event for the GUI activity log. See `CHANGELOG.md`
+"Migration guide (legacy tool → v2 equivalent)" for the full mapping.
 
 ---
-## 📄 License
-MIT License. Created with ❤️ for the Vibe Coding community.
+
+## Supabase setup
+
+If using Supabase:
+
+1. Run SQL from `scripts/supabase-schema.sql` in Supabase SQL Editor.
+2. Set `DATABASE_PROVIDER=supabase` and credentials in `.env`.
+3. Validate setup:
+
+```bash
+npm run supabase:check
+```
+
+4. (Optional) migrate local SQLite data:
+
+```bash
+npm run supabase:migrate
+```
+
+---
+
+## Development scripts
+
+- `npm run build` – compile TypeScript and copy runtime assets
+- `npm run dev` – run from source with tsx
+- `npm run dev:watch` – run with nodemon watch
+- `npm run start` / `npm run gui` – GUI mode
+- `npm run mcp` – MCP stdio mode
+- `npm run test` – run the Vitest suite (unit + integration)
+- `npm run test:watch` – Vitest in watch mode
+- `npm run test:coverage` – Vitest with coverage report (v8)
+- `npm run test:legacy` – run the legacy `tsx tests/unit/test-rigorous.ts` harness
+- `npm run lint` / `npm run lint:fix` – ESLint (typescript-eslint, flat config)
+- `npm run format` / `npm run format:check` – Prettier
+- `npm run typecheck` – `tsc --noEmit`
+
+Git hooks: `npm install` invokes Husky's `prepare` script which installs the
+`.husky/pre-commit` hook. The hook runs `lint-staged`, so staged TypeScript /
+JavaScript files are lint-fixed and Prettier-formatted before each commit.
+
+## Observability
+
+All runtime logs go through a centralized [pino](https://github.com/pinojs/pino)
+logger (`src/utils/logger.ts`). Output is always written to **stderr** so it
+never collides with the MCP stdio protocol on stdout.
+
+- `LOG_LEVEL` – `trace | debug | info | warn | error | fatal | silent`
+- `AGENTFLOW_LOG_JSON=1` – force JSON output in development (pino-pretty is the default)
+
+Each `/api/*` request is correlated with a short ID echoed back as
+`X-Correlation-Id`; tool invocations emit a `tool_invocation` telemetry
+event (see `src/utils/telemetry.ts`).
+
+---
+
+## License
+
+MIT
