@@ -154,6 +154,43 @@ LLM call: `stepType='LLM_CALL'`, `toolName='workflow_run'`,
 structured `content` JSON payload with `{provider, model,
 selectionStrategy, workflow}`.
 
+### Added — Phase 2 Group 17 GUI LLM Settings panel (2026-05-25)
+
+A new "LLM provider" card in the Settings page (`src/public/pages/
+settings.js`) consumes the Group 16 routes and lets the user manage the
+provider/model/strategy/workflow-mode without a restart.
+
+- **Provider selector** — radio list of every supported provider with
+  per-provider `keyConfigured` / `key missing` badge plus the env var
+  name (in monospace) the key is read from. There is intentionally **no
+  input field for an API key** — keys are env-only by design, and the
+  strict POST body schema rejects any `apiKey`-shaped field at parse
+  time even if a future change tried to send one.
+- **Model selector** — populated from `GET /api/llm/models?provider=…`;
+  each option shows `<id> · <ctx>k ctx · $<x>/M in` when the provider
+  reports it. A `Refresh` button calls `POST /api/llm/model/refresh` to
+  bypass the TTL cache and re-fetch. If the persisted model is not in
+  the list (e.g. env-fallback path), the panel still surfaces it tagged
+  `(custom — not in list)` rather than silently dropping the value.
+- **Source badges** — `env` / `db` / `default` chip rendered next to
+  the Provider and Model labels using the `providerSource` and
+  `modelSource` fields returned by `GET /api/llm/settings`. The GUI
+  no longer guesses where a value came from.
+- **Selection strategy** — `manual | latest_code | latest_reasoning |
+cheapest | fastest`.
+- **Workflow mode** — `manual | agent | disabled` (the same enum
+  `workflow_run` accepts).
+- **`LLM_CONFIG_LOCK=true` handling** — when locked, every field is
+  disabled (with explanatory banner + tooltip) and the Save button is
+  inert. The server-side guard (Group 16.5, HTTP 403) is still the
+  load-bearing check; the client disable just removes the click
+  affordance.
+- **No-restart save flow** — Save posts to `POST /api/llm/settings`;
+  on success the panel re-renders with the new `updatedAt` and the
+  next `workflow_run(mode=agent)` reads the freshly persisted row
+  because `createLlmProvider` re-resolves on every call (Group 13.4
+  deliberately does not memoise).
+
 #### Migration guide (legacy tool → v2 equivalent)
 
 | Removed tool                              | Replacement                                                                                                                         |
