@@ -493,3 +493,61 @@
 
 .llm-models-meta { margin-top: 2px; }
 .llm-actions { margin-top: var(--space-2); align-items: center; }
+
+/* ---------- Runtime Configuration card (Phase 2 follow-up) ---------- */
+.runtime-config-card .runtime-config-header { margin-bottom: var(--space-3); }
+.runtime-config-card .runtime-config-header h3 { margin-bottom: var(--space-1); }
+
+.runtime-section { margin-bottom: var(--space-5); }
+.runtime-section:last-child { margin-bottom: 0; }
+.runtime-section-header { margin-bottom: var(--space-2); }
+.runtime-section-header h4 {
+  font-size: var(--fs-md);
+  font-weight: 600;
+  margin-bottom: var(--space-1);
+}
+
+.runtime-table { table-layout: fixed; }
+.runtime-table th:nth-child(1) { width: 28%; }
+.runtime-table th:nth-child(2) { width: 52%; }
+.runtime-table th:nth-child(3) { width: 20%; }
+
+.runtime-table td { vertical-align: top; padding: var(--space-2) var(--space-3); }
+.runtime-table tr.rt-desc td { padding-top: 0; padding-bottom: var(--space-2); border-top: none; }
+
+.rt-name code {
+  background: var(--bg-card-solid);
+  padding: 1px 6px;
+  border-radius: var(--radius-xs);
+  font-size: 12px;
+  font-family: var(--font-mono);
+}
+.rt-value {
+  background: var(--bg-card-solid);
+  padding: 1px 6px;
+  border-radius: var(--radius-xs);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  word-break: break-all;
+}
+.rt-value-cell { font-family: var(--font-mono); }
+.rt-badges { display: flex; flex-wrap: wrap; gap: 4px; justify-content: flex-end; }
+
+.rt-badge {
+  padding: 1px 6px;
+  border-radius: var(--radius-xs);
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  border: 1px solid var(--border);
+  background: var(--bg-card-solid);
+  color: var(--text-secondary);
+  white-space: nowrap;
+}
+.rt-badge.rt-set { background: rgba(16, 185, 129, 0.15); color: var(--success); border-color: rgba(16, 185, 129, 0.30); }
+.rt-badge.rt-unset { background: var(--bg-card-solid); color: var(--text-tertiary); }
+.rt-badge.rt-restart { background: rgba(245, 158, 11, 0.15); color: var(--warning); border-color: rgba(245, 158, 11, 0.30); }
+.rt-badge.rt-default { background: rgba(94, 106, 210, 0.10); color: var(--text-secondary); border-color: rgba(94, 106, 210, 0.20); text-transform: none; letter-spacing: 0; font-weight: 500; }
+
+.runtime-footer { margin-top: var(--space-3); }

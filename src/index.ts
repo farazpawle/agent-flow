@@ -126,6 +126,9 @@ import {
   readResource,
   VIEW_TOOL_NAMES,
 } from "./mcp/resources.js";
+
+// Runtime configuration snapshot for the GUI Settings page.
+import { buildRuntimeConfig } from "./http/runtimeConfig.js";
 import { listPrompts, getPrompt, PROMPT_NAMES as MCP_PROMPT_NAMES } from "./mcp/prompts.js";
 
 import type { ZodTypeAny } from "zod";
@@ -729,6 +732,19 @@ async function main() {
         try {
           const out = await setLlmSettingsApi({ db, body: parsed.data, env: process.env });
           res.json(out);
+        } catch (err) {
+          const { status, body } = toHttpErrorBody(err);
+          res.status(status).json(body);
+        }
+      });
+
+      // Runtime configuration snapshot — backs the GUI Settings page's
+      // "Runtime Configuration" card. Returns every relevant env var
+      // grouped by section, with secret values redacted to a boolean
+      // `set` flag.
+      app.get("/api/settings/runtime", async (_req: Request, res: Response) => {
+        try {
+          res.json(buildRuntimeConfig(process.env));
         } catch (err) {
           const { status, body } = toHttpErrorBody(err);
           res.status(status).json(body);

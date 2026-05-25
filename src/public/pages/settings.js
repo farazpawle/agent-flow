@@ -63,6 +63,20 @@ export async function mount(container) {
       </div>
     </div>
 
+    <div class="card runtime-config-card" id="runtime-config-card" style="margin-bottom: var(--space-4);">
+      <div class="runtime-config-header">
+        <h3>Runtime configuration</h3>
+        <div class="muted tiny">
+          Every env var the server actually reads. Secret values (API keys, service-role keys) are redacted —
+          the column shows only whether they're set. Edit <code>.env</code> at the project root and restart to change anything marked
+          <span class="rt-badge rt-restart">restart</span>.
+        </div>
+      </div>
+      <div id="runtime-config-body" class="runtime-config-body">
+        <div class="placeholder muted">Loading runtime configuration…</div>
+      </div>
+    </div>
+
     <div class="card">
       <h3>Runtime info</h3>
       <table class="table">
@@ -120,6 +134,103 @@ export async function mount(container) {
   // LLM panel (Group 17)
   // ────────────────────────────────────────────────────────────────────
   await mountLlmPanel();
+
+  // ────────────────────────────────────────────────────────────────────
+  // Runtime configuration card
+  // ────────────────────────────────────────────────────────────────────
+  await mountRuntimeConfigCard();
+}
+
+/**
+ * Pull `GET /api/settings/runtime` and render every env var grouped by
+ * section. Secret fields show a "set"/"unset" pill; non-secret fields
+ * show the actual value. `restartRequired` fields get a small badge so
+ * the operator knows the GUI can't change them live.
+ */
+async function mountRuntimeConfigCard() {
+  const body = document.getElementById("runtime-config-body");
+  if (!body) return;
+
+  let snapshot;
+  try {
+    snapshot = await api.get("/api/settings/runtime");
+  } catch (err) {
+    body.innerHTML = `<div class="placeholder error">Failed to load runtime configuration: ${escapeHtml(err.message)}</div>`;
+    return;
+  }
+
+  const sectionsHtml = snapshot.sections
+    .map((section) => {
+      const rowsHtml = section.fields.map(renderRuntimeField).join("");
+      return `
+        <div class="runtime-section">
+          <div class="runtime-section-header">
+            <h4>${escapeHtml(section.title)}</h4>
+            <div class="muted tiny">${escapeHtml(section.description)}</div>
+          </div>
+          <table class="table runtime-table">
+            <thead>
+              <tr>
+                <th>Variable</th>
+                <th>Value</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>${rowsHtml}</tbody>
+          </table>
+        </div>
+      `;
+    })
+    .join("");
+
+  body.innerHTML = `
+    ${sectionsHtml}
+    <div class="muted tiny runtime-footer">
+      Snapshot taken at ${escapeHtml(new Date(snapshot.fetchedAt).toLocaleString())}.
+      Reload the page to refresh.
+    </div>
+  `;
+}
+
+function renderRuntimeField(f) {
+  const restartBadge = f.restartRequired
+    ? `<span class="rt-badge rt-restart" title="Requires a server restart to take effect">restart</span>`
+    : "";
+  const defaultBadge =
+    f.default !== undefined
+      ? `<span class="rt-badge rt-default" title="Default applied when unset">default: ${escapeHtml(String(f.default))}</span>`
+      : "";
+
+  let valueCell;
+  if (f.secret) {
+    valueCell = f.set
+      ? `<span class="rt-badge rt-set" title="Value is redacted — never returned by this endpoint">set (redacted)</span>`
+      : `<span class="rt-badge rt-unset">unset</span>`;
+  } else if (f.set) {
+    valueCell = `<code class="rt-value" title="${escapeAttr(String(f.value ?? ""))}">${escapeHtml(truncateForDisplay(String(f.value ?? "")))}</code>`;
+  } else {
+    valueCell = `<span class="rt-badge rt-unset">unset</span>`;
+  }
+
+  return `
+    <tr>
+      <td class="rt-name"><code>${escapeHtml(f.name)}</code></td>
+      <td class="rt-value-cell">${valueCell}</td>
+      <td class="rt-badges">${restartBadge}${defaultBadge}</td>
+    </tr>
+    <tr class="rt-desc">
+      <td colspan="3" class="muted tiny">${escapeHtml(f.description)}</td>
+    </tr>
+  `;
+}
+
+function escapeAttr(s) {
+  return escapeHtml(s).replace(/`/g, "&#96;");
+}
+
+function truncateForDisplay(s, max = 64) {
+  if (s.length <= max) return s;
+  return s.slice(0, max - 1) + "…";
 }
 
 /**
