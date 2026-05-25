@@ -6,6 +6,7 @@
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
+import { applyEnvironmentAliases } from "../utils/envConfig.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -13,10 +14,7 @@ const __dirname = path.dirname(__filename);
 function processEnvString(input: string | undefined): string {
   if (!input) return "";
 
-  return input
-    .replace(/\\n/g, "\n")
-    .replace(/\\t/g, "\t")
-    .replace(/\\r/g, "\r");
+  return input.replace(/\\n/g, "\n").replace(/\\t/g, "\t").replace(/\\r/g, "\r");
 }
 
 /**
@@ -53,22 +51,26 @@ export function loadPrompt(basePrompt: string, promptKey: string): string {
  * @param params Dynamic parameters
  * @returns Prompt with parameters filled in
  */
-export function generatePrompt(
-  promptTemplate: string,
-  params: Record<string, any> = {}
-): string {
+export function generatePrompt(promptTemplate: string, params: Record<string, any> = {}): string {
   // Use simple template replacement method, replace {paramName} with corresponding parameter value
   let result = promptTemplate;
 
   Object.entries(params).forEach(([key, value]) => {
     // If value is undefined or null, replace with empty string
-    const replacementValue =
-      value !== undefined && value !== null ? String(value) : "";
+    const replacementValue = value !== undefined && value !== null ? String(value) : "";
 
     // Use regular expression to replace all matching placeholders
     const placeholder = new RegExp(`\\{${key}\\}`, "g");
     result = result.replace(placeholder, replacementValue);
   });
+
+  // Strip any placeholders the caller didn't supply. Scoped to the
+  // `{identifier}` shape — `{` followed by an identifier-start char
+  // (letter or underscore) then identifier chars then `}`. This
+  // deliberately won't touch literal JSON snippets like `{"key": "val"}`
+  // or shell brace expansion `{a,b}`, both of which fail the identifier
+  // grammar at the first char after `{`.
+  result = result.replace(/\{[A-Za-z_][A-Za-z0-9_]*\}/g, "");
 
   return result;
 }
@@ -87,11 +89,13 @@ const templateCache = new Map<string, string>();
  * @throws Error if template file not found
  */
 export function loadPromptFromTemplate(templatePath: string): string {
+  applyEnvironmentAliases(process.env);
+
   const templateSetName = process.env.TEMPLATES_USE || "en";
 
-  // Check cache first
+  // Check cache first — skip cache in development mode to enable hot-reload of templates
   const cacheKey = `${templateSetName}:${templatePath}`;
-  if (templateCache.has(cacheKey)) {
+  if (templateCache.has(cacheKey) && process.env.NODE_ENV !== "development") {
     return templateCache.get(cacheKey)!;
   }
 
@@ -127,11 +131,7 @@ export function loadPromptFromTemplate(templatePath: string): string {
 
   // 3. If specific built-in template also not found, and it's not 'en' (avoid duplicate check)
   if (!finalPath && templateSetName !== "en") {
-    const defaultBuiltInFilePath = path.join(
-      builtInTemplatesBaseDir,
-      "templates_en",
-      templatePath
-    );
+    const defaultBuiltInFilePath = path.join(builtInTemplatesBaseDir, "templates_en", templatePath);
     checkedPaths.push(`Default Built-in ('en'): ${defaultBuiltInFilePath}`);
     if (fs.existsSync(defaultBuiltInFilePath)) {
       finalPath = defaultBuiltInFilePath;
