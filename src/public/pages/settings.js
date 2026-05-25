@@ -390,32 +390,37 @@ async function mountLlmPanel() {
     return `<span class="llm-source-badge ${cls}" title="Setting source">${labels[source] ?? source}</span>`;
   }
 
+  /**
+   * Clickable provider card — replaces the radio-list row. The whole
+   * card is the click target (data-provider tells the handler which
+   * one was clicked), with a key-status chip in the top right and the
+   * env var name in monospace at the bottom.
+   */
   function providerCard(p) {
-    const checked = state.selectedProvider === p.provider ? "checked" : "";
-    const disabled = state.configLocked ? "disabled" : "";
-    const noneNote =
+    const isActive = state.selectedProvider === p.provider;
+    const locked = state.configLocked;
+    const keyChip =
       p.provider === "none"
-        ? `<div class="muted tiny">Manual-only — no LLM calls; <code>workflow_run(mode=agent)</code> degrades to manual.</div>`
-        : "";
-    const keyBadge =
-      p.provider === "none"
-        ? ""
+        ? `<span class="llm-pcard-chip llm-pcard-chip-none">no key needed</span>`
         : p.keyConfigured
-          ? `<span class="badge badge-completed" title="API key detected via env var ${escapeHtml(p.keyEnv)}">key configured</span>`
-          : `<span class="badge badge-pending" title="No API key found in ${escapeHtml(p.keyEnv)}">key missing</span>`;
+          ? `<span class="llm-pcard-chip llm-pcard-chip-ok" title="API key detected via env var ${escapeHtml(p.keyEnv)}">key set</span>`
+          : `<span class="llm-pcard-chip llm-pcard-chip-missing" title="No API key found in ${escapeHtml(p.keyEnv)}">key missing</span>`;
     const keyHint =
       p.provider === "none" || p.keyEnv == null
-        ? ""
-        : `<code class="muted tiny" title="API keys are env-only by design — never persisted in the database, never returned by the GET /api/llm/settings response.">${escapeHtml(p.keyEnv)} (env-only)</code>`;
+        ? `<span class="llm-pcard-hint muted">manual-only</span>`
+        : `<code class="llm-pcard-hint" title="API keys are env-only — never persisted to the DB.">${escapeHtml(p.keyEnv)}</code>`;
     return `
-      <label class="llm-provider-row" data-provider="${escapeHtml(p.provider)}">
-        <input type="radio" name="llm-provider" value="${escapeHtml(p.provider)}" ${checked} ${disabled}>
-        <div class="llm-provider-meta">
-          <div class="llm-provider-name">${escapeHtml(p.provider)} ${keyBadge}</div>
-          ${noneNote}
-          <div class="llm-provider-key">${keyHint}</div>
+      <button type="button"
+        class="llm-pcard ${isActive ? "is-active" : ""} ${locked ? "is-locked" : ""}"
+        data-provider="${escapeHtml(p.provider)}"
+        ${locked ? "disabled" : ""}
+        aria-pressed="${isActive ? "true" : "false"}">
+        <div class="llm-pcard-head">
+          <span class="llm-pcard-name">${escapeHtml(p.provider)}</span>
+          ${keyChip}
         </div>
-      </label>
+        ${keyHint}
+      </button>
     `;
   }
 
@@ -466,71 +471,96 @@ async function mountLlmPanel() {
       ? `<div class="llm-lock-banner" title="LLM_CONFIG_LOCK=true — settings are read-only">🔒 LLM_CONFIG_LOCK=true — settings are read-only. Persisted DB rows are ignored; env values win.</div>`
       : "";
 
+    // Active-state banner: one line summary so the user sees the
+    // current effective config without scanning the form.
+    const activeProvider = state.selectedProvider ?? "(unset)";
+    const activeModel = state.selectedModel ?? "(strategy-decides)";
+    const activeStrategy = state.selectedStrategy ?? "(unset)";
+    const activeMode = state.selectedMode ?? "manual";
+    const activeBanner = `
+      <div class="llm-active-banner">
+        <span class="llm-active-label">Active</span>
+        <code class="llm-active-pill llm-active-provider">${escapeHtml(activeProvider)}</code>
+        <span class="llm-active-sep">·</span>
+        <code class="llm-active-pill llm-active-model" title="${escapeAttr(activeModel)}">${escapeHtml(activeModel)}</code>
+        <span class="llm-active-sep">·</span>
+        <code class="llm-active-pill">strategy=${escapeHtml(activeStrategy)}</code>
+        <span class="llm-active-sep">·</span>
+        <code class="llm-active-pill">mode=${escapeHtml(activeMode)}</code>
+        ${state.settings?.updatedAt ? `<span class="llm-active-saved muted">· last saved ${escapeHtml(new Date(state.settings.updatedAt).toLocaleString())}</span>` : ""}
+      </div>
+    `;
+
     const providersHtml = state.providers.map(providerCard).join("");
 
     panel.innerHTML = `
       ${lockBanner}
+      ${activeBanner}
 
-      <div class="llm-grid">
-        <div class="llm-section">
-          <label class="label">Provider ${sourceBadge(state.settings?.providerSource)}</label>
-          <div class="llm-provider-list">${providersHtml}</div>
+      <div class="llm-section llm-section-providers">
+        <div class="llm-section-head">
+          <span class="llm-section-title">Provider</span>
+          ${sourceBadge(state.settings?.providerSource)}
         </div>
+        <div class="llm-pcard-grid">${providersHtml}</div>
+      </div>
 
+      <div class="llm-row-grid">
         <div class="llm-section">
-          <label class="label" for="llm-model-select">Model ${sourceBadge(state.settings?.modelSource)}</label>
+          <div class="llm-section-head">
+            <span class="llm-section-title">Model</span>
+            ${sourceBadge(state.settings?.modelSource)}
+          </div>
           <div class="llm-row">
             ${modelSection()}
-            <button class="btn btn-secondary llm-refresh-btn" id="btn-llm-refresh-models" ${state.selectedProvider === "none" || state.configLocked ? "disabled" : ""}>
-              ${state.loadingModels ? "Refreshing…" : "🔄 Refresh"}
+            <button class="btn btn-secondary btn-sm llm-refresh-btn" id="btn-llm-refresh-models" ${state.selectedProvider === "none" || state.configLocked ? "disabled" : ""}>
+              ${state.loadingModels ? "…" : "🔄"}
             </button>
           </div>
         </div>
 
         <div class="llm-section">
-          <label class="label" for="llm-strategy-select">Selection strategy</label>
-          <select class="select" id="llm-strategy-select" ${state.configLocked ? "disabled" : ""} style="max-width: 280px;">
+          <div class="llm-section-head"><span class="llm-section-title">Selection strategy</span></div>
+          <select class="select" id="llm-strategy-select" ${state.configLocked ? "disabled" : ""}>
             ${SELECTION_STRATEGIES.map(
-              (s) => `
-              <option value="${s}"${state.selectedStrategy === s ? " selected" : ""}>${s}</option>
-            `
+              (s) =>
+                `<option value="${s}"${state.selectedStrategy === s ? " selected" : ""}>${s}</option>`
             ).join("")}
           </select>
-          <div class="muted tiny">
-            <code>manual</code> uses the model you picked above; the other
-            strategies let AgentFlow pick from the cached model list when
-            the call fires.
-          </div>
         </div>
 
         <div class="llm-section">
-          <label class="label" for="llm-mode-select">Workflow mode</label>
-          <select class="select" id="llm-mode-select" ${state.configLocked ? "disabled" : ""} style="max-width: 280px;">
+          <div class="llm-section-head"><span class="llm-section-title">Workflow mode</span></div>
+          <select class="select" id="llm-mode-select" ${state.configLocked ? "disabled" : ""}>
             ${WORKFLOW_MODES.map(
-              (m) => `
-              <option value="${m}"${state.selectedMode === m ? " selected" : ""}>${m}</option>
-            `
+              (m) =>
+                `<option value="${m}"${state.selectedMode === m ? " selected" : ""}>${m}</option>`
             ).join("")}
           </select>
-          <div class="muted tiny">
-            <code>manual</code> returns the structured contract; <code>agent</code>
-            calls the provider; <code>disabled</code> short-circuits with a typed payload.
-          </div>
         </div>
       </div>
 
-      <div class="page-actions llm-actions">
-        <button class="btn" id="btn-llm-save" ${state.configLocked ? "disabled title='Disabled while LLM_CONFIG_LOCK=true'" : ""}>💾 Save</button>
-        <span class="muted tiny" id="llm-updated-at">
-          ${state.settings?.updatedAt ? `Last saved: ${escapeHtml(new Date(state.settings.updatedAt).toLocaleString())}` : ""}
+      <div class="llm-actions-sticky">
+        <button class="btn btn-primary" id="btn-llm-save" ${state.configLocked ? "disabled title='Disabled while LLM_CONFIG_LOCK=true'" : ""}>💾 Save settings</button>
+        <span class="muted tiny llm-actions-hint">
+          ${
+            state.configLocked
+              ? "🔒 Locked"
+              : "Saves to <code>llm_settings</code>; the next <code>workflow_run(agent)</code> picks it up without restart."
+          }
         </span>
       </div>
     `;
 
-    // Wire events
-    panel.querySelectorAll("input[name='llm-provider']").forEach((input) => {
-      input.addEventListener("change", async (e) => {
-        state.selectedProvider = e.target.value;
+    // Wire events. Provider selection is now a clickable card grid
+    // (.llm-pcard) instead of a radio list. Clicks bubble up to the
+    // <button> element which carries the data-provider attribute.
+    panel.querySelectorAll(".llm-pcard").forEach((card) => {
+      card.addEventListener("click", async () => {
+        if (card.hasAttribute("disabled")) return;
+        const provider = card.getAttribute("data-provider");
+        if (!provider || provider === state.selectedProvider) return;
+        state.selectedProvider = provider;
         // Reset the selected model when switching providers; the new
         // provider's list almost certainly doesn't share IDs with the
         // old one.

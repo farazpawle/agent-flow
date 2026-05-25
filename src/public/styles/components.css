@@ -572,3 +572,152 @@
   line-height: 1.2;
 }
 .rt-inline-hint { flex-basis: 100%; }
+
+/* ---------- LLM panel — compact redesign ---------- */
+.llm-active-banner {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 8px 12px;
+  background: var(--bg-card-solid);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  margin-bottom: var(--space-3);
+  font-size: 12px;
+}
+.llm-active-label {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--text-tertiary);
+  font-weight: 600;
+}
+.llm-active-pill {
+  background: var(--bg-card);
+  padding: 2px 8px;
+  border-radius: var(--radius-xs);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  max-width: 280px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.llm-active-pill.llm-active-provider {
+  color: var(--primary);
+  font-weight: 600;
+  text-transform: capitalize;
+}
+.llm-active-sep { color: var(--text-tertiary); }
+.llm-active-saved { font-size: 11px; margin-left: auto; }
+
+/* Section headers: tighter than the default field-block label */
+.llm-section-head {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-bottom: 6px;
+}
+.llm-section-title {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--text-secondary);
+  font-weight: 600;
+}
+
+/* Provider cards (replaces the radio list) */
+.llm-pcard-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: var(--space-2);
+}
+.llm-pcard {
+  appearance: none;
+  text-align: left;
+  cursor: pointer;
+  background: var(--bg-card-solid);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  transition: border-color var(--transition-fast), background var(--transition-fast);
+  font-family: inherit;
+}
+.llm-pcard:hover:not(:disabled) { border-color: var(--border-strong); }
+.llm-pcard.is-active {
+  border-color: var(--primary);
+  background: rgba(94, 106, 210, 0.08);
+}
+.llm-pcard.is-locked, .llm-pcard:disabled { opacity: 0.5; cursor: not-allowed; }
+.llm-pcard-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+}
+.llm-pcard-name {
+  font-weight: 600;
+  text-transform: capitalize;
+  font-size: 13px;
+}
+.llm-pcard-chip {
+  padding: 1px 6px;
+  border-radius: var(--radius-xs);
+  font-size: 9px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  white-space: nowrap;
+}
+.llm-pcard-chip-ok { background: rgba(16, 185, 129, 0.18); color: var(--success); }
+.llm-pcard-chip-missing { background: rgba(239, 68, 68, 0.15); color: var(--danger); }
+.llm-pcard-chip-none { background: var(--bg-card); color: var(--text-tertiary); }
+.llm-pcard-hint {
+  font-size: 10px;
+  font-family: var(--font-mono);
+  color: var(--text-tertiary);
+  background: transparent;
+  padding: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Compact row for Model / Strategy / Mode */
+.llm-row-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  gap: var(--space-3);
+  margin-top: var(--space-3);
+}
+@media (max-width: 900px) {
+  .llm-row-grid { grid-template-columns: 1fr; }
+}
+.llm-section-providers { margin-bottom: 0; }
+
+/* Sticky Save bar inside the LLM card */
+.llm-actions-sticky {
+  margin-top: var(--space-3);
+  padding: var(--space-2) var(--space-3);
+  background: var(--bg-card-solid);
+  border-top: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  position: sticky;
+  bottom: 0;
+  z-index: 1;
+}
+.llm-actions-hint { flex: 1; }
+
+/* Override: tighten the legacy llm-section spacing */
+.llm-section { display: flex; flex-direction: column; gap: 0; }
+.llm-section .label { margin-bottom: 4px; }
+
+/* Refresh button: just an icon now */
+.llm-refresh-btn { padding: 4px 10px; flex-shrink: 0; }
