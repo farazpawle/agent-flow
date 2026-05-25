@@ -18,7 +18,7 @@ const debugLog = (msg: string) => {
   const logMsg = `[AgentFlow Debug] ${new Date().toISOString()} - ${msg}\n`;
   try {
     fs.appendFileSync(path.join(PROJECT_ROOT, "debug_server.log"), logMsg);
-  } catch (e) { }
+  } catch (e) {}
 };
 
 debugLog(`Server starting. CWD: ${process.cwd()}`);
@@ -38,55 +38,102 @@ import express, { Request, Response, NextFunction } from "express";
 import { isPortInUse } from "./utils/portUtils.js";
 import open from "open";
 
-// Import tool functions
+// Import tool functions. Phase 1 cumulative removals from the MCP
+// surface: Group 6.6 (split_tasks + delete_task); Group 7.8
+// (execute_task / verify_task / complete_task — task_lifecycle covers
+// that flow, with verify/complete returning as Group 8 shims);
+// Group 10.8 (plan_idea + process_thought — workflow_run subsumes
+// them). The legacy reorder handler stays available only for the
+// /api/tasks/reorder Express route until the GUI migrates.
 import {
-  planIdea,
-  planIdeaSchema,
-  analyzeIdea,
-  analyzeIdeaSchema,
-  reflectIdea,
-  reflectIdeaSchema,
-  splitTasks,
-  splitTasksSchema,
-  listTasksSchema,
-  listTasks,
-  executeTask,
-  executeTaskSchema,
-  verifyTask,
-  verifyTaskSchema,
-  completeTask,
-  completeTaskSchema,
-  deleteTask,
-  deleteTaskSchema,
-  updateTaskContent,
-  updateTaskContentSchema,
-  queryTask,
-  queryTaskSchema,
-  getTaskDetail,
-  getTaskDetailSchema,
+  // Legacy reorder kept available for the GUI `/api/tasks/reorder`
+  // route until the front-end migrates to
+  // `task_edit(action='reorder')` which requires `expectedVersions`.
+  // Not exposed on the MCP surface.
   reorderTasksTool,
-  reorderTasksSchema,
 } from "./tools/taskTools.js";
 
+// Project tools (Group 4.6 removed list_projects/get_project_context;
+// Group 5.6 removed create_project; Group 6.6 removed delete_project in
+// favour of the project_delete dry_run/execute split). Nothing left to
+// import here at the MCP surface — Express routes use the model layer
+// directly.
 
-// Import thought chain tools
+// Phase 1 Group 4 — read-only view tools.
 import {
-  processThought,
-  processThoughtSchema,
-} from "./tools/thoughtChainTools.js";
+  projectView,
+  projectViewSchema,
+  taskView,
+  taskViewSchema,
+  contextGet,
+  contextGetSchema,
+} from "./tools/views/index.js";
 
-// Import project tools
+// Phase 1 Group 5 — non-destructive edit tools.
+import { projectEdit, projectEditSchema, taskEdit, taskEditSchema } from "./tools/edits/index.js";
+
+// Phase 1 Group 6 — destructive tools (dry_run/execute split).
 import {
-  createProject,
-  createProjectSchema,
-  listProjects,
-  listProjectsSchema,
-  getProjectContext,
-  getProjectContextSchema,
-  deleteProject,
-  deleteProjectSchema,
-} from "./tools/projectTools.js";
+  projectDelete,
+  projectDeleteSchema,
+  taskDelete,
+  taskDeleteSchema,
+  withDeriveOp,
+} from "./tools/deletes/index.js";
 
+// Phase 1 Group 7 — unified task lifecycle tool (replaces execute_task,
+// verify_task, complete_task on the MCP surface).
+import { taskLifecycle, taskLifecycleSchema } from "./tools/lifecycle/index.js";
+
+// Phase 1 Group 8 — verify_task / complete_task deprecation shims.
+// Slated for removal in DEPRECATION_REMOVAL_VERSION (see CHANGELOG).
+import {
+  verifyTaskShim,
+  verifyTaskShimSchema,
+  completeTaskShim,
+  completeTaskShimSchema,
+} from "./tools/shims/index.js";
+
+// Phase 1 Group 9 — append-only artifact ingestion.
+import { artifactRecord, artifactRecordSchema } from "./tools/artifacts/index.js";
+
+// Phase 1 Group 10 — workflow_run manual-mode scaffold.
+import { workflowRun, workflowRunSchema } from "./tools/workflows/index.js";
+
+// Phase 2 Group 16 — LLM HTTP layer (provider status, models cache,
+// effective settings + persistence).
+import {
+  assertConfigUnlocked,
+  getProvidersStatus,
+  getLlmSettings as getLlmSettingsApi,
+  setLlmSettings as setLlmSettingsApi,
+  getProviderModelsForApi,
+  refreshProviderModelsForApi,
+  llmSettingsBodySchema,
+  llmModelRefreshBodySchema,
+} from "./llm/http/index.js";
+import {
+  isSupportedProvider,
+  SUPPORTED_PROVIDERS,
+  type SupportedProvider,
+} from "./llm/provider.js";
+
+import type { ZodTypeAny } from "zod";
+import { safeParseTool } from "./utils/schemaParse.js";
+import { toToolErrorResponse } from "./utils/errors.js";
+
+// HTTP hardening: validation, rate limiting, structured logging
+import rateLimit from "express-rate-limit";
+import { logger, childLogger, newCorrelationId } from "./utils/logger.js";
+import {
+  patchTaskBodySchema,
+  reorderTasksBodySchema,
+  sseQuerySchema,
+  validateBody,
+  validateQuery,
+  normalizeStatus,
+} from "./utils/httpValidation.js";
+import { toHttpErrorBody } from "./utils/errors.js";
 
 // Import task model functions
 import {
@@ -94,9 +141,9 @@ import {
   getTaskById,
   getAllTasks,
   ensureDataDir,
-  updateTask
+  updateTask,
 } from "./models/taskModel.js";
-import { taskEvents, TASK_EVENTS } from "./utils/events.js";
+import { taskEvents, TASK_EVENTS, type DeprecationEventPayload } from "./utils/events.js";
 
 // Import client model
 import {
@@ -108,18 +155,21 @@ import {
   markClientInactive,
   markAllClientsInactive,
   cleanupStaleClients,
-  deleteInactiveClients
+  deleteInactiveClients,
 } from "./models/clientModel.js";
 
 // Import database
 import { db } from "./models/db.js";
+import { startFindingsCleanup } from "./utils/findingsCleanup.js";
 
 async function main() {
   try {
-    const ENABLE_GUI = process.env.ENABLE_GUI === "true";
-    const ENABLE_DETAILED_MODE = process.env.ENABLE_DETAILED_MODE === "true";
     const GUI_ONLY = process.argv.includes("--gui") || process.env.GUI_ONLY === "true";
     const IS_SPAWNED_GUI = process.argv.includes("--spawn-gui");
+    // GUI server should start when explicitly invoked in GUI mode,
+    // even if ENABLE_GUI is not set in environment.
+    const ENABLE_GUI = process.env.ENABLE_GUI === "true" || GUI_ONLY || IS_SPAWNED_GUI;
+    const ENABLE_DETAILED_MODE = process.env.ENABLE_DETAILED_MODE === "true";
 
     // Initialize Database (SQLite/Supabase)
     try {
@@ -131,6 +181,10 @@ async function main() {
 
     // Initialize Data Directories (Search indices, etc.)
     await ensureDataDir();
+
+    // Phase 1 Group 1.9 — nightly cleanup of stale findings rows.
+    // No-op unless FINDINGS_RETENTION_DAYS is a positive integer.
+    startFindingsCleanup(db);
 
     if (ENABLE_GUI) {
       // Create Express application
@@ -155,6 +209,18 @@ async function main() {
           }
         });
         // Clean up disconnected clients (optional, but recommended)
+        sseClients = sseClients.filter((client) => !client.writableEnded);
+      }
+
+      // Phase 1 Group 8.3 — broadcast a deprecation entry to connected
+      // GUI clients so the activity log renders a warning row whenever
+      // an agent calls a shim tool. Subscribed via taskEvents below.
+      function sendDeprecationEvent(payload: DeprecationEventPayload) {
+        sseClients.forEach((client) => {
+          if (!client.writableEnded) {
+            client.write(`event: deprecation\ndata: ${JSON.stringify(payload)}\n\n`);
+          }
+        });
         sseClients = sseClients.filter((client) => !client.writableEnded);
       }
 
@@ -206,7 +272,42 @@ async function main() {
       }
 
       app.use(express.static(publicPath));
-      app.use(express.json()); // Enable JSON body parsing
+      app.use(express.json({ limit: "1mb" }));
+
+      // Per-request logger + correlation ID. Attached as req.log so
+      // handlers can emit context-bound entries without re-binding.
+      app.use("/api", (req: Request, res: Response, next: NextFunction) => {
+        const correlationId = (req.header("x-correlation-id") || newCorrelationId()).slice(0, 64);
+        const reqLog = childLogger({
+          correlationId,
+          method: req.method,
+          path: req.path,
+        });
+        (req as Request & { log?: typeof reqLog; correlationId?: string }).log = reqLog;
+        (req as Request & { correlationId?: string }).correlationId = correlationId;
+        res.setHeader("X-Correlation-Id", correlationId);
+
+        const startedAt = Date.now();
+        res.on("finish", () => {
+          reqLog.info(
+            { status: res.statusCode, durationMs: Date.now() - startedAt },
+            "request completed"
+          );
+        });
+        next();
+      });
+
+      // Rate limit mutating routes. The GUI is single-user so limits are
+      // generous; they exist to catch runaway loops and accidental DoS.
+      const mutationLimiter = rateLimit({
+        windowMs: 60_000,
+        limit: 300,
+        standardHeaders: "draft-7",
+        legacyHeaders: false,
+        skip: (req) => ["GET", "HEAD", "OPTIONS"].includes(req.method),
+        message: { error: "Too many requests, slow down.", code: "RATE_LIMITED" },
+      });
+      app.use("/api", mutationLimiter);
 
       // Disable caching for API responses to ensure UI always reflects latest DB state
       app.use("/api", (req: Request, res: Response, next: NextFunction) => {
@@ -266,7 +367,7 @@ async function main() {
             success: true,
             message: `Cleaned up ${beforeCount - afterCount} stale clients`,
             beforeCount,
-            afterCount
+            afterCount,
           });
         } catch (error) {
           console.error("Error cleaning up clients:", error);
@@ -340,7 +441,7 @@ async function main() {
               detached: true,
               stdio: "ignore",
               cwd: process.cwd(),
-              env: process.env
+              env: process.env,
             });
             newProcess.unref(); // Allow parent to exit independent of child
             process.exit(0);
@@ -395,6 +496,250 @@ async function main() {
         }
       });
 
+      // Delete project (and all tasks in that project)
+      app.delete("/api/projects/:id", async (req: Request, res: Response) => {
+        try {
+          const projectId = req.params.id;
+          if (!projectId) {
+            res.status(400).json({ success: false, error: "Project ID is required" });
+            return;
+          }
+
+          const { deleteProjectWithTasks } = await import("./models/projectModel.js");
+
+          const deletionResult = await deleteProjectWithTasks(projectId);
+
+          // Notify all connected UIs
+          sendSseUpdate();
+
+          res.json({
+            success: true,
+            projectId: deletionResult.projectId,
+            projectName: deletionResult.projectName,
+            deletedTaskCount: deletionResult.deletedTaskCount,
+          });
+        } catch (error) {
+          console.error("(AgentFlow) Failed to delete project:", error);
+          const message = error instanceof Error ? error.message : "Failed to delete project";
+          const status = message === "Project not found" ? 404 : 500;
+          res.status(status).json({ success: false, error: message });
+        }
+      });
+
+      // ==================== VIEW TOOLS (Phase 1 Group 4.5) ====================
+      // POST mirrors of the MCP view tools so the GUI can hit them with the
+      // same discriminated-union body the agent uses. Validation flows
+      // through safeParseTool → toHttpErrorBody so the wire shape is
+      // identical to the MCP error envelope.
+
+      const viewBodyRoute = async <T>(
+        toolName: string,
+        schema: ZodTypeAny,
+        handler: (input: T) => Promise<{ content: Array<{ type: "text"; text: string }> }>,
+        res: Response,
+        body: unknown
+      ) => {
+        const parsed = safeParseTool(toolName, schema, body);
+        if (!parsed.ok) {
+          const { status, body: errBody } = toHttpErrorBody(parsed.error);
+          res.status(status).json(errBody);
+          return;
+        }
+        try {
+          const result = await handler(parsed.data as T);
+          // The handler returns the MCP { content: [...] } envelope. The
+          // GUI consumes the inner JSON, so we unwrap and forward it.
+          const text = result.content?.[0]?.text ?? "{}";
+          try {
+            res.json(JSON.parse(text));
+          } catch {
+            res.type("text/plain").send(text);
+          }
+        } catch (err) {
+          const { status, body: errBody } = toHttpErrorBody(err);
+          res.status(status).json(errBody);
+        }
+      };
+
+      app.post("/api/projects/view", async (req: Request, res: Response) => {
+        await viewBodyRoute("project_view", projectViewSchema, projectView, res, req.body);
+      });
+      app.post("/api/tasks/view", async (req: Request, res: Response) => {
+        await viewBodyRoute("task_view", taskViewSchema, taskView, res, req.body);
+      });
+      app.post("/api/context", async (req: Request, res: Response) => {
+        await viewBodyRoute("context_get", contextGetSchema, contextGet, res, req.body);
+      });
+
+      // Phase 1 Group 5.5 — edit tool HTTP mirrors. Same dispatch shape;
+      // CONFLICT bodies arrive as the standard {status:409, body:{code, details}}.
+      app.post("/api/projects/edit", async (req: Request, res: Response) => {
+        await viewBodyRoute("project_edit", projectEditSchema, projectEdit, res, req.body);
+      });
+      app.post("/api/tasks/edit", async (req: Request, res: Response) => {
+        await viewBodyRoute("task_edit", taskEditSchema, taskEdit, res, req.body);
+      });
+
+      // Phase 1 Group 6.5 — destructive tool HTTP mirrors. Same `mode`
+      // discriminator on the body; FORBIDDEN (workflow_run-initiated)
+      // surfaces as HTTP 403 via toHttpErrorBody.
+      app.post("/api/projects/delete", async (req: Request, res: Response) => {
+        await viewBodyRoute("project_delete", projectDeleteSchema, projectDelete, res, req.body);
+      });
+      app.post("/api/tasks/delete", async (req: Request, res: Response) => {
+        const normalised = withDeriveOp(req.body);
+        await viewBodyRoute("task_delete", taskDeleteSchema, taskDelete, res, normalised);
+      });
+
+      // Phase 1 Group 7.7 — task_lifecycle HTTP mirror. Same discriminator
+      // contract; CONFLICT bodies (illegal transitions, stale finalize
+      // version) surface as HTTP 409 via toHttpErrorBody.
+      app.post("/api/tasks/lifecycle", async (req: Request, res: Response) => {
+        await viewBodyRoute("task_lifecycle", taskLifecycleSchema, taskLifecycle, res, req.body);
+      });
+
+      // Phase 1 Group 8 — deprecation shim mirrors. Same envelope; the
+      // response body carries a `warning.DEPRECATED:true` block.
+      app.post("/api/tasks/verify", async (req: Request, res: Response) => {
+        await viewBodyRoute("verify_task", verifyTaskShimSchema, verifyTaskShim, res, req.body);
+      });
+      app.post("/api/tasks/complete", async (req: Request, res: Response) => {
+        await viewBodyRoute(
+          "complete_task",
+          completeTaskShimSchema,
+          completeTaskShim,
+          res,
+          req.body
+        );
+      });
+
+      // Phase 1 Group 9.6 — artifact_record HTTP mirror. Append-only —
+      // there is intentionally no PUT/DELETE companion route. The
+      // returned body carries the `findingId` that downstream calls
+      // reference.
+      app.post("/api/artifacts", async (req: Request, res: Response) => {
+        await viewBodyRoute("artifact_record", artifactRecordSchema, artifactRecord, res, req.body);
+      });
+
+      // Phase 1 Group 10.7 — workflow_run HTTP mirror. Manual mode by
+      // default; per-call `mode` overrides `WORKFLOW_MODE` env.
+      app.post("/api/workflow/run", async (req: Request, res: Response) => {
+        await viewBodyRoute("workflow_run", workflowRunSchema, workflowRun, res, req.body);
+      });
+
+      // ==================== LLM HTTP ROUTES (Phase 2 Group 16) ====================
+      // GET = read-only (bypass mutationLimiter via the skip rule above);
+      // POST = mutating, rate-limited + Zod-validated through safeParseTool.
+      // Every route inherits the /api correlationId middleware so
+      // workflow_steps audit rows tie back to the originating request.
+
+      // 16.1 — GET /api/llm/providers: which providers have an API key
+      // configured. Returns booleans only; NEVER the keys themselves.
+      app.get("/api/llm/providers", async (_req: Request, res: Response) => {
+        try {
+          res.json(getProvidersStatus(process.env));
+        } catch (err) {
+          const { status, body } = toHttpErrorBody(err);
+          res.status(status).json(body);
+        }
+      });
+
+      // 16.1 — GET /api/llm/models?provider=<id>: cached model list +
+      // capabilities. Bypasses TTL only on POST /api/llm/model/refresh.
+      app.get("/api/llm/models", async (req: Request, res: Response) => {
+        const raw = String(req.query.provider ?? "").trim();
+        if (!raw) {
+          res.status(400).json({
+            error: "Missing required `provider` query parameter.",
+            code: "VALIDATION",
+            hint: `Allowed: ${SUPPORTED_PROVIDERS.filter((p) => p !== "none").join(", ")}`,
+          });
+          return;
+        }
+        if (!isSupportedProvider(raw)) {
+          res.status(400).json({
+            error: `Unknown provider '${raw}'.`,
+            code: "VALIDATION",
+            hint: `Allowed: ${SUPPORTED_PROVIDERS.join(", ")}`,
+          });
+          return;
+        }
+        try {
+          const out = await getProviderModelsForApi({
+            provider: raw as SupportedProvider,
+            env: process.env,
+          });
+          res.json(out);
+        } catch (err) {
+          const { status, body } = toHttpErrorBody(err);
+          res.status(status).json(body);
+        }
+      });
+
+      // 16.1 — POST /api/llm/model/refresh: force a refetch of the
+      // model list (bypasses cache TTL). Rate-limited by /api
+      // mutationLimiter; body validated via safeParseTool.
+      app.post("/api/llm/model/refresh", async (req: Request, res: Response) => {
+        const parsed = safeParseTool("llm_model_refresh", llmModelRefreshBodySchema, req.body);
+        if (!parsed.ok) {
+          const { status, body } = toHttpErrorBody(parsed.error);
+          res.status(status).json(body);
+          return;
+        }
+        try {
+          const out = await refreshProviderModelsForApi({
+            provider: parsed.data.provider as SupportedProvider,
+            env: process.env,
+          });
+          res.json(out);
+        } catch (err) {
+          const { status, body } = toHttpErrorBody(err);
+          res.status(status).json(body);
+        }
+      });
+
+      // 16.1 — GET /api/llm/settings: effective settings + source
+      // labels (env vs db vs default). NEVER contains API keys.
+      app.get("/api/llm/settings", async (_req: Request, res: Response) => {
+        try {
+          const out = await getLlmSettingsApi({ db, env: process.env });
+          res.json(out);
+        } catch (err) {
+          const { status, body } = toHttpErrorBody(err);
+          res.status(status).json(body);
+        }
+      });
+
+      // 16.1 + 16.5 — POST /api/llm/settings: persist provider / model
+      // / selectionStrategy / workflowMode. `LLM_CONFIG_LOCK=true`
+      // short-circuits to 403 before the DB write via
+      // `assertConfigUnlocked`. Body schema is `.strict()` so any
+      // API-key-shaped field is rejected at parse time.
+      app.post("/api/llm/settings", async (req: Request, res: Response) => {
+        try {
+          // 16.5 guard runs BEFORE schema parse so a locked instance
+          // can't be probed for valid body shapes via 400s.
+          assertConfigUnlocked(process.env);
+        } catch (err) {
+          const { status, body } = toHttpErrorBody(err);
+          res.status(status).json(body);
+          return;
+        }
+        const parsed = safeParseTool("llm_settings", llmSettingsBodySchema, req.body);
+        if (!parsed.ok) {
+          const { status, body } = toHttpErrorBody(parsed.error);
+          res.status(status).json(body);
+          return;
+        }
+        try {
+          const out = await setLlmSettingsApi({ db, body: parsed.data, env: process.env });
+          res.json(out);
+        } catch (err) {
+          const { status, body } = toHttpErrorBody(err);
+          res.status(status).json(body);
+        }
+      });
+
       // ==================== TASK API ENDPOINTS ====================
 
       // Get all tasks (with optional project or client filter)
@@ -405,13 +750,13 @@ async function main() {
           // Filter by project_id if provided
           const projectId = req.query.project_id as string;
           if (projectId && projectId !== "all") {
-            tasks = tasks.filter(t => (t as any).projectId === projectId);
+            tasks = tasks.filter((t) => (t as any).projectId === projectId);
           }
 
           // Filter by client_id if provided (backward compatibility)
           const clientId = req.query.client_id as string;
           if (clientId && clientId !== "all") {
-            tasks = tasks.filter(t => (t as any).clientId === clientId);
+            tasks = tasks.filter((t) => (t as any).clientId === clientId);
           }
 
           res.json({ tasks });
@@ -419,25 +764,47 @@ async function main() {
           res.status(500).json({ error: "Failed to read tasks data" });
         }
       });
-      // Add: SSE endpoint - MUST be defined before /api/tasks/:id to avoid route collision
-      app.get("/api/tasks/stream", (req: Request, res: Response) => {
-        res.writeHead(200, {
-          "Content-Type": "text/event-stream",
-          "Cache-Control": "no-cache",
-          Connection: "keep-alive",
-        });
+      // Add: SSE endpoint - MUST be defined before /api/tasks/:id to avoid route collision.
+      // If a clientId query param is supplied, validate it against the
+      // clients table. Anonymous subscriptions remain allowed (the SPA
+      // currently does not pass one) — this is progressive hardening.
+      app.get(
+        "/api/tasks/stream",
+        validateQuery(sseQuerySchema),
+        async (req: Request, res: Response) => {
+          const { clientId } =
+            (
+              req as Request & {
+                validatedQuery?: { clientId?: string };
+              }
+            ).validatedQuery ?? {};
 
-        // Send an initial event or keep the connection
-        res.write("data: connected\n\n");
+          if (clientId) {
+            const client = await getClientById(clientId);
+            if (!client) {
+              res.status(401).json({ error: "Unknown clientId", code: "AUTH" });
+              return;
+            }
+          }
 
-        // Add client to the list
-        sseClients.push(res);
+          res.writeHead(200, {
+            "Content-Type": "text/event-stream",
+            "Cache-Control": "no-cache",
+            Connection: "keep-alive",
+          });
 
-        // When client disconnects, remove it from the list
-        req.on("close", () => {
-          sseClients = sseClients.filter((client) => client !== res);
-        });
-      });
+          // Send an initial event or keep the connection
+          res.write("data: connected\n\n");
+
+          // Add client to the list
+          sseClients.push(res);
+
+          // When client disconnects, remove it from the list
+          req.on("close", () => {
+            sseClients = sseClients.filter((client) => client !== res);
+          });
+        }
+      );
 
       // Get single task
       app.get("/api/tasks/:id", async (req: Request, res: Response) => {
@@ -453,73 +820,65 @@ async function main() {
         }
       });
 
-      // Update task (PATCH)
-      app.patch("/api/tasks/:id", async (req: Request, res: Response) => {
-        try {
-          const taskId = req.params.id;
-          const updates = req.body;
+      // Update task (PATCH) — Zod-validated body, whitelist-only fields.
+      app.patch(
+        "/api/tasks/:id",
+        validateBody(patchTaskBodySchema),
+        async (req: Request, res: Response) => {
+          const reqLog = (req as Request & { log?: ReturnType<typeof childLogger> }).log ?? logger;
+          try {
+            const taskId = req.params.id;
+            const updates = { ...req.body };
 
+            // Canonicalize status (the body schema accepts UI-style values).
+            if (typeof updates.status === "string") {
+              updates.status = normalizeStatus(updates.status);
+            }
 
+            const existingTask = await getTaskById(taskId);
+            if (!existingTask) {
+              res.status(404).json({ error: "Task not found", code: "NOT_FOUND" });
+              return;
+            }
 
-          // Normalize status to the canonical TaskStatus strings
-          // (UI may send: pending/in_progress/completed)
-          if (updates && typeof updates.status === "string") {
-            const s = updates.status.trim();
-            const lower = s.toLowerCase();
-            if (lower === "pending") updates.status = "Pending";
-            else if (lower === "in_progress" || lower === "in progress") updates.status = "In Progress";
-            else if (lower === "completed") updates.status = "Completed";
-            else if (lower === "blocked") updates.status = "Blocked";
+            const updatedTask = await updateTask(taskId, updates);
+
+            if (!updatedTask) {
+              res.status(400).json({ error: "Failed to update task", code: "VALIDATION" });
+              return;
+            }
+
+            sendSseUpdate();
+            res.json({ success: true, task: updatedTask });
+          } catch (error) {
+            reqLog.error({ err: error }, "patch task failed");
+            const { status, body } = toHttpErrorBody(error);
+            res.status(status).json(body);
           }
-
-          // Validate task exists
-          const existingTask = await getTaskById(taskId);
-          if (!existingTask) {
-            res.status(404).json({ error: "Task not found" });
-            return;
-          }
-
-          // Apply updates
-          const updatedTask = await updateTask(taskId, updates);
-
-          if (!updatedTask) {
-            res.status(400).json({ error: "Failed to update task" });
-            return;
-          }
-
-          // Trigger SSE update
-          sendSseUpdate();
-
-          res.json({ success: true, task: updatedTask });
-        } catch (error) {
-          console.error("[AgentFlow] Error updating task:", error);
-          res.status(500).json({ error: "Failed to update task" });
         }
-      });
+      );
 
-      // Reorder tasks
-      app.post("/api/tasks/reorder", async (req: Request, res: Response) => {
-        try {
-          const { taskIds, projectId } = req.body;
-          if (!Array.isArray(taskIds)) {
-            res.status(400).json({ error: "Invalid input: taskIds must be an array" });
-            return;
+      // Reorder tasks — body validated up front.
+      app.post(
+        "/api/tasks/reorder",
+        validateBody(reorderTasksBodySchema),
+        async (req: Request, res: Response) => {
+          const reqLog = (req as Request & { log?: ReturnType<typeof childLogger> }).log ?? logger;
+          try {
+            const { taskIds, projectId } = req.body as {
+              taskIds: string[];
+              projectId?: string;
+            };
+            const result = await reorderTasksTool({ taskIds, projectId });
+            sendSseUpdate();
+            res.json({ success: true, message: result.content[0].text });
+          } catch (error) {
+            reqLog.error({ err: error }, "reorder tasks failed");
+            const { status, body } = toHttpErrorBody(error);
+            res.status(status).json(body);
           }
-
-          // Call the tool logic with projectId
-          const result = await reorderTasksTool({ taskIds, projectId });
-
-          // Trigger SSE update
-          sendSseUpdate();
-
-          res.json({ success: true, message: result.content[0].text });
-        } catch (error) {
-          console.error("Error reordering tasks:", error);
-          res.status(500).json({ error: "Failed to reorder tasks" });
         }
-      });
-
-
+      );
 
       // Conversation history API endpoint (only when detailed mode is enabled)
       if (ENABLE_DETAILED_MODE) {
@@ -586,7 +945,7 @@ async function main() {
             cwd: PROJECT_ROOT,
             detached: true,
             stdio: ["ignore", logStream, logStream], // Log stdout/stderr to file
-            env: { ...process.env, ENABLE_GUI: "true" }
+            env: { ...process.env, ENABLE_GUI: "true" },
           }
         );
 
@@ -601,7 +960,7 @@ async function main() {
         let waited = 0;
 
         while (!(await isPortInUse(SERVER_PORT)) && waited < maxWait) {
-          await new Promise(resolve => setTimeout(resolve, pollInterval));
+          await new Promise((resolve) => setTimeout(resolve, pollInterval));
           waited += pollInterval;
         }
 
@@ -631,7 +990,9 @@ async function main() {
         // We don't want the persistent server to count as a client in the dashboard
         if (!IS_SPAWNED_GUI) {
           currentClient = await registerClient();
-          console.error(`(AgentFlow) Registered as client: ${currentClient.name} (${currentClient.id})`);
+          console.error(
+            `(AgentFlow) Registered as client: ${currentClient.name} (${currentClient.id})`
+          );
         } else {
           console.error("(AgentFlow) Running as Spawned GUI Server (not registering as client)");
         }
@@ -651,7 +1012,9 @@ async function main() {
             for (let attempt = 0; attempt < 5; attempt++) {
               try {
                 if (attempt > 0) {
-                  await new Promise(resolve => setTimeout(resolve, 500 * Math.pow(2, attempt - 1)));
+                  await new Promise((resolve) =>
+                    setTimeout(resolve, 500 * Math.pow(2, attempt - 1))
+                  );
                 }
                 const response = await fetch(notifyUrl, { method: "POST" });
                 if (response.ok) {
@@ -731,10 +1094,11 @@ async function main() {
         process.on("exit", () => {
           // Synchronous cleanup on exit (as last resort)
           if (currentClient && !isShuttingDown) {
-            console.error(`(AgentFlow) Process exiting, client ${currentClient.id} will be cleaned up by timeout`);
+            console.error(
+              `(AgentFlow) Process exiting, client ${currentClient.id} will be cleaned up by timeout`
+            );
           }
         });
-
       } catch (err) {
         console.error("(AgentFlow) Failed to register client:", err);
       }
@@ -757,6 +1121,13 @@ async function main() {
             sendSseUpdate();
           });
 
+          // Phase 1 Group 8.3 — pipe deprecation events from the shim
+          // handlers (verifyTaskShim / completeTaskShim) into the GUI
+          // activity log over SSE.
+          taskEvents.on(TASK_EVENTS.DEPRECATION, (payload: DeprecationEventPayload) => {
+            sendDeprecationEvent(payload);
+          });
+
           console.error(`(AgentFlow) Web GUI available at: http://localhost:${SERVER_PORT}`);
 
           // Write the URL to WebGUI.md
@@ -775,10 +1146,13 @@ async function main() {
             console.error("(AgentFlow) Failed to write WebGUI.md:", error);
           }
 
-          // Auto-open browser if enabled
-          // Note: This is disabled by default because some Antivirus (like Avast) 
-          // flag the powershell command used by the 'open' package as a threat.
-          if (process.env.ENABLE_AUTO_OPEN === "true") {
+          // Auto-open browser by default on primary server startup.
+          // Opt-out with DISABLE_AUTO_OPEN=true.
+          // Backward compatibility: ENABLE_AUTO_OPEN=false also disables auto-open.
+          const shouldAutoOpen =
+            process.env.DISABLE_AUTO_OPEN !== "true" && process.env.ENABLE_AUTO_OPEN !== "false";
+
+          if (shouldAutoOpen) {
             try {
               await open(`http://localhost:${SERVER_PORT}`);
               console.error(`(AgentFlow) Opened GUI in browser`);
@@ -791,7 +1165,9 @@ async function main() {
         // Handle server errors
         httpServer.on("error", (err: NodeJS.ErrnoException) => {
           if (err.code === "EADDRINUSE") {
-            console.error(`(AgentFlow) Port ${SERVER_PORT} is already in use. Running in client-only mode.`);
+            console.error(
+              `(AgentFlow) Port ${SERVER_PORT} is already in use. Running in client-only mode.`
+            );
           } else {
             console.error(`(AgentFlow) Server error:`, err);
           }
@@ -861,420 +1237,352 @@ async function main() {
     server.setRequestHandler(ListToolsRequestSchema, async () => {
       return {
         tools: [
+          // Phase 1 Group 10 — workflow_run manual-mode scaffold.
+          // Replaces plan_idea + process_thought. The 11 workflows
+          // each return the §4.4 contract (purpose, inputRequired,
+          // steps, outputSchema, qualityChecklist,
+          // nextRecommendedCalls); agent mode (Group 15) will reuse
+          // the same outputSchema.
           {
-            name: "plan_idea",
-            description: loadPromptFromTemplate("toolsDescription/planIdea.md"),
-            inputSchema: zodToJsonSchema(planIdeaSchema),
+            name: "workflow_run",
+            description:
+              "Run a structured workflow. Discriminated on `workflow`: plan, analyze, review, split_plan, process_thought, record_decision, review_task_quality, build_context_pack, summarize_lessons, detect_duplicates, generate_release_summary. In `WORKFLOW_MODE=manual` (default), returns the structured contract (purpose, inputRequired, steps, outputSchema, qualityChecklist, nextRecommendedCalls) for the agent to execute. `WORKFLOW_MODE=disabled` returns a typed WORKFLOW_DISABLED payload. Per-call `mode` overrides env.",
+            inputSchema: zodToJsonSchema(workflowRunSchema),
+          },
+          // Phase 1 Group 4 — read-only view tools (replace list_tasks,
+          // find_task, list_projects, get_project_context).
+          {
+            name: "task_view",
+            description:
+              "Read-only task view. Discriminated on `action`: list (filter by projectId/status), get (taskId), search (query + projectId), next_ready (next PENDING task with all deps COMPLETED), by_status. Every returned task includes `version` for use as `expectedVersion` on subsequent edits.",
+            inputSchema: zodToJsonSchema(taskViewSchema),
           },
           {
-            name: "analyze_idea",
-            description: loadPromptFromTemplate(
-              "toolsDescription/analyzeIdea.md"
-            ),
-            inputSchema: zodToJsonSchema(analyzeIdeaSchema),
+            name: "project_view",
+            description:
+              "Read-only project view. Discriminated on `action`: list, get (projectId), summary (projectId — adds task-count breakdown), active (resolves the per-client active project from client_active_project).",
+            inputSchema: zodToJsonSchema(projectViewSchema),
           },
           {
-            name: "reflect_idea",
-            description: loadPromptFromTemplate(
-              "toolsDescription/reflectIdea.md"
-            ),
-            inputSchema: zodToJsonSchema(reflectIdeaSchema),
+            name: "context_get",
+            description:
+              "Token-budgeted, LLM-free context bundle assembler. Discriminated on `type`: project_summary, implementation_context, verification_context, lessons (deterministic fallback chain: lesson_summaries → recent lessonsLearned + findings → empty), similar_tasks, decisions, findings.",
+            inputSchema: zodToJsonSchema(contextGetSchema),
           },
+          // Phase 1 Group 7 — unified lifecycle tool. Replaces
+          // execute_task / verify_task / complete_task on the MCP
+          // surface; Group 8 reintroduces the old names as deprecation
+          // shims that route through this handler.
           {
-            name: "split_tasks",
-            description: loadPromptFromTemplate(
-              "toolsDescription/splitTasks.md"
-            ),
-            inputSchema: zodToJsonSchema(splitTasksSchema),
+            name: "task_lifecycle",
+            description:
+              "Drive a task through its lifecycle. Discriminated on `action`: claim, start, block, unblock, request_review, finalize, reopen, archive. Only `finalize` requires `expectedVersion` (from task_view); every other action transitions atomically server-side. `finalize.result` is itself a discriminated union on `verdict` (pass / fail / partial / needs_review), each branch with its own required fields. Illegal transitions return a typed CONFLICT.",
+            inputSchema: zodToJsonSchema(taskLifecycleSchema),
           },
-          {
-            name: "list_tasks",
-            description: loadPromptFromTemplate(
-              "toolsDescription/listTasks.md"
-            ),
-            inputSchema: zodToJsonSchema(listTasksSchema),
-          },
-          {
-            name: "execute_task",
-            description: loadPromptFromTemplate(
-              "toolsDescription/executeTask.md"
-            ),
-            inputSchema: zodToJsonSchema(executeTaskSchema),
-          },
+          // Phase 1 Group 8 — compatibility shims. Slated for removal
+          // in DEPRECATION_REMOVAL_VERSION (Group 20).
           {
             name: "verify_task",
-            description: loadPromptFromTemplate(
-              "toolsDescription/verifyTask.md"
-            ),
-            inputSchema: zodToJsonSchema(verifyTaskSchema),
+            description:
+              "(DEPRECATED — use task_lifecycle(action='request_review') and finalize explicitly.) Records the supplied `evidence` as a kind='evidence' finding and routes the task to request_review state. This shim NEVER advances a task to COMPLETED — the silent auto-pass bug of the legacy tool is closed by construction.",
+            inputSchema: zodToJsonSchema(verifyTaskShimSchema),
           },
           {
             name: "complete_task",
-            description: loadPromptFromTemplate(
-              "toolsDescription/completeTask.md"
-            ),
-            inputSchema: zodToJsonSchema(completeTaskSchema),
+            description:
+              "(DEPRECATED — use task_lifecycle(action='finalize', result.verdict='pass'|'fail'|'partial'|'needs_review').) Routes to task_lifecycle(finalize, verdict='pass'). Now requires `summary` (≥10 chars), `lessonsLearned` (≥10 chars), and `expectedVersion` — the legacy 'complete with nothing' path is gone.",
+            inputSchema: zodToJsonSchema(completeTaskShimSchema),
+          },
+          // Phase 1 Group 9 — append-only artifact ingestion. The
+          // returned `findingId` is the handle agents use as
+          // `evidenceRefs[]` on `task_lifecycle(finalize)` and to look
+          // the row back up via `context_get(type='findings')`.
+          {
+            name: "artifact_record",
+            description:
+              "Append-only artifact ingestion for a task. Discriminated on `kind`: finding (type+content), test_log (outcome+content), build_log (outcome+content), reference (url), commit (sha+message), pull_request (url+status), evidence (content). The server resolves `project_id` from `taskId`. Returns `findingId` for downstream reference. No UPDATE/DELETE — append-only by API contract.",
+            inputSchema: zodToJsonSchema(artifactRecordSchema),
+          },
+          // Phase 1 Group 5 — non-destructive edit tools (replace
+          // create_project, update_task, reorder_tasks).
+          {
+            name: "task_edit",
+            description:
+              "Non-destructive task edits. Discriminated on `action`: create, update, reorder, set_priority, set_dependency, clear_dependency, split, merge. Single-task actions require `expectedVersion` (from task_view); reorder + merge require `expectedVersions` covering every affected task — any stale version aborts the whole batch with a CONFLICT carrying the current bodies.",
+            inputSchema: zodToJsonSchema(taskEditSchema),
           },
           {
-            name: "delete_task",
-            description: loadPromptFromTemplate(
-              "toolsDescription/deleteTask.md"
-            ),
-            inputSchema: zodToJsonSchema(deleteTaskSchema),
+            name: "project_edit",
+            description:
+              "Non-destructive project edits. Discriminated on `action`: create, update, set_active. `set_active` is client-scoped — requires `clientId` and writes only the (client_id, project_id) row; never mutates global state.",
+            inputSchema: zodToJsonSchema(projectEditSchema),
           },
-
+          // Phase 1 Group 6 — destructive tools (replace delete_project,
+          // delete_task, split_tasks(clearAllTasks)). Two-mode contract:
+          // dry_run reports affected scope, execute requires reason +
+          // confirm:true + audit-log entry.
           {
-            name: "update_task",
-            description: loadPromptFromTemplate(
-              "toolsDescription/updateTask.md"
-            ),
-            inputSchema: zodToJsonSchema(updateTaskContentSchema),
-          },
-          {
-            name: "query_task",
-            description: loadPromptFromTemplate(
-              "toolsDescription/queryTask.md"
-            ),
-            inputSchema: zodToJsonSchema(queryTaskSchema),
+            name: "project_delete",
+            description:
+              "Project deletion with safety chain. Discriminated on `mode`: dry_run (projectId only) returns affected counts + sample; execute requires `projectId`, `reason ≥ 10`, `confirm: true`. Writes an audit row before deleting. Refused when invoked from inside workflow_run.",
+            inputSchema: zodToJsonSchema(projectDeleteSchema),
           },
           {
-            name: "get_task_detail",
-            description: loadPromptFromTemplate(
-              "toolsDescription/getTaskDetail.md"
-            ),
-            inputSchema: zodToJsonSchema(getTaskDetailSchema),
-          },
-          {
-            name: "reorder_tasks",
-            description: loadPromptFromTemplate(
-              "toolsDescription/reorderTasks.md"
-            ),
-            inputSchema: zodToJsonSchema(reorderTasksSchema),
-          },
-          {
-            name: "process_thought",
-            description: loadPromptFromTemplate(
-              "toolsDescription/processThought.md"
-            ),
-            inputSchema: zodToJsonSchema(processThoughtSchema),
-          },
-          {
-            name: "create_project",
-            description: "Create or update a project with a description and metadata. Use this tool to create projects that agents can identify across sessions. REQUIRED: project_name and project_description.",
-            inputSchema: zodToJsonSchema(createProjectSchema),
-          },
-          {
-            name: "list_projects",
-            description: "List all available projects with descriptions. Use this to identify which project to work on when resuming work across sessions. Returns project IDs, names, descriptions, tech stacks, and task counts.",
-            inputSchema: zodToJsonSchema(listProjectsSchema),
-          },
-          {
-            name: "get_project_context",
-            description: "Get the current project context for this workspace. Use this at the start of a session to understand which project you're working on. Can also be used to switch to a different project by providing project_id.",
-            inputSchema: zodToJsonSchema(getProjectContextSchema),
-          },
-          {
-            name: "delete_project",
-            description: "Delete a project and all its associated tasks. WARNING: This action is irreversible. Required: project_id and confirm=true.",
-            inputSchema: zodToJsonSchema(deleteProjectSchema),
+            name: "task_delete",
+            description:
+              "Task deletion with safety chain. Compound discriminator `op = <action>.<mode>` (action ∈ delete_one | delete_many | clear_all_for_project; mode ∈ dry_run | execute). Execute branches require `reason` (≥10 chars, or ≥20 for clear_all_for_project) and `confirm: true`. Writes an audit row before deleting. Refused when invoked from inside workflow_run.",
+            inputSchema: zodToJsonSchema(taskDeleteSchema),
           },
         ],
       };
     });
 
-    server.setRequestHandler(
-      CallToolRequestSchema,
-      async (request: CallToolRequest) => {
-        try {
-          if (!request.params.arguments) {
-            throw new Error("No arguments provided");
-          }
-
-          let parsedArgs;
-          let taskId: string | undefined;
-          let result;
-
-          // Save request to conversation history if detailed mode is enabled
-          // and this is a task-related tool request
-          const saveRequest = async () => {
-            if (ENABLE_DETAILED_MODE && taskId) {
-              try {
-                await updateTaskConversationHistory(
-                  taskId,
-                  'user',
-                  JSON.stringify(request.params),
-                  request.params.name
-                );
-              } catch (error) {
-                // Silently handle errors to avoid interrupting the main flow
-                console.error('Failed to save request to conversation history:', error);
-              }
-            }
-          };
-
-          // Save response to conversation history if detailed mode is enabled
-          const saveResponse = async (response: any) => {
-            if (ENABLE_DETAILED_MODE && taskId) {
-              try {
-                await updateTaskConversationHistory(
-                  taskId,
-                  'assistant',
-                  JSON.stringify(response),
-                  request.params.name
-                );
-              } catch (error) {
-                // Silently handle errors to avoid interrupting the main flow
-                console.error('Failed to save response to conversation history:', error);
-              }
-            }
-          };
-
-          switch (request.params.name) {
-            case "plan_idea":
-              parsedArgs = await planIdeaSchema.safeParseAsync(
-                request.params.arguments
-              );
-              if (!parsedArgs.success) {
-                throw new Error(
-                  `Invalid arguments for tool ${request.params.name}: ${parsedArgs.error.message}`
-                );
-              }
-              result = await planIdea(parsedArgs.data);
-              return result;
-
-            case "analyze_idea":
-              parsedArgs = await analyzeIdeaSchema.safeParseAsync(
-                request.params.arguments
-              );
-              if (!parsedArgs.success) {
-                throw new Error(
-                  `Invalid arguments for tool ${request.params.name}: ${parsedArgs.error.message}`
-                );
-              }
-              result = await analyzeIdea(parsedArgs.data);
-              return result;
-
-            case "reflect_idea":
-              parsedArgs = await reflectIdeaSchema.safeParseAsync(
-                request.params.arguments
-              );
-              if (!parsedArgs.success) {
-                throw new Error(
-                  `Invalid arguments for tool ${request.params.name}: ${parsedArgs.error.message}`
-                );
-              }
-              result = await reflectIdea(parsedArgs.data);
-              return result;
-
-            case "split_tasks":
-              parsedArgs = await splitTasksSchema.safeParseAsync(
-                request.params.arguments
-              );
-              if (!parsedArgs.success) {
-                throw new Error(
-                  `Invalid arguments for tool ${request.params.name}: ${parsedArgs.error.message}`
-                );
-              }
-              result = await splitTasks(parsedArgs.data);
-              return result;
-
-            case "list_tasks":
-              parsedArgs = await listTasksSchema.safeParseAsync(
-                request.params.arguments
-              );
-              if (!parsedArgs.success) {
-                throw new Error(
-                  `Invalid arguments for tool ${request.params.name}: ${parsedArgs.error.message}`
-                );
-              }
-              result = await listTasks(parsedArgs.data);
-              return result;
-
-            case "reorder_tasks":
-              parsedArgs = await reorderTasksSchema.safeParseAsync(
-                request.params.arguments
-              );
-              if (!parsedArgs.success) {
-                throw new Error(
-                  `Invalid arguments for tool ${request.params.name}: ${parsedArgs.error.message}`
-                );
-              }
-              result = await reorderTasksTool(parsedArgs.data);
-              return result;
-
-            case "execute_task":
-              parsedArgs = await executeTaskSchema.safeParseAsync(
-                request.params.arguments
-              );
-              if (!parsedArgs.success) {
-                throw new Error(
-                  `Invalid arguments for tool ${request.params.name}: ${parsedArgs.error.message}`
-                );
-              }
-              taskId = parsedArgs.data.taskId;
-              await saveRequest();
-              result = await executeTask(parsedArgs.data);
-              await saveResponse(result);
-              return result;
-
-            case "verify_task":
-              parsedArgs = await verifyTaskSchema.safeParseAsync(
-                request.params.arguments
-              );
-              if (!parsedArgs.success) {
-                throw new Error(
-                  `Invalid arguments for tool ${request.params.name}: ${parsedArgs.error.message}`
-                );
-              }
-              taskId = parsedArgs.data.taskId;
-              await saveRequest();
-              result = await verifyTask(parsedArgs.data);
-              await saveResponse(result);
-              return result;
-
-            case "complete_task":
-              parsedArgs = await completeTaskSchema.safeParseAsync(
-                request.params.arguments
-              );
-              if (!parsedArgs.success) {
-                throw new Error(
-                  `Invalid arguments for tool ${request.params.name}: ${parsedArgs.error.message}`
-                );
-              }
-              taskId = parsedArgs.data.taskId;
-              await saveRequest();
-              result = await completeTask(parsedArgs.data);
-              await saveResponse(result);
-              return result;
-
-            case "delete_task":
-              parsedArgs = await deleteTaskSchema.safeParseAsync(
-                request.params.arguments
-              );
-              if (!parsedArgs.success) {
-                throw new Error(
-                  `Invalid arguments for tool ${request.params.name}: ${parsedArgs.error.message}`
-                );
-              }
-              result = await deleteTask(parsedArgs.data);
-              return result;
-
-            case "update_task":
-              parsedArgs = await updateTaskContentSchema.safeParseAsync(
-                request.params.arguments
-              );
-              if (!parsedArgs.success) {
-                throw new Error(
-                  `Invalid arguments for tool ${request.params.name}: ${parsedArgs.error.message}`
-                );
-              }
-              taskId = parsedArgs.data.taskId;
-              await saveRequest();
-              result = await updateTaskContent(parsedArgs.data);
-              await saveResponse(result);
-              return result;
-
-            case "query_task":
-              parsedArgs = await queryTaskSchema.safeParseAsync(
-                request.params.arguments
-              );
-              if (!parsedArgs.success) {
-                throw new Error(
-                  `Invalid arguments for tool ${request.params.name}: ${parsedArgs.error.message}`
-                );
-              }
-              result = await queryTask(parsedArgs.data);
-              return result;
-
-            case "get_task_detail":
-              parsedArgs = await getTaskDetailSchema.safeParseAsync(
-                request.params.arguments
-              );
-              if (!parsedArgs.success) {
-                throw new Error(
-                  `Invalid arguments for tool ${request.params.name}: ${parsedArgs.error.message}`
-                );
-              }
-              result = await getTaskDetail(parsedArgs.data);
-              return result;
-
-            case "process_thought":
-              parsedArgs = await processThoughtSchema.safeParseAsync(
-                request.params.arguments
-              );
-              if (!parsedArgs.success) {
-                throw new Error(
-                  `Invalid arguments for tool ${request.params.name}: ${parsedArgs.error.message}`
-                );
-              }
-              result = await processThought(parsedArgs.data);
-              return result;
-
-            case "create_project":
-              parsedArgs = await createProjectSchema.safeParseAsync(
-                request.params.arguments
-              );
-              if (!parsedArgs.success) {
-                throw new Error(
-                  `Invalid arguments for tool ${request.params.name}: ${parsedArgs.error.message}`
-                );
-              }
-              result = await createProject(parsedArgs.data);
-              return result;
-
-            case "list_projects":
-              parsedArgs = await listProjectsSchema.safeParseAsync(
-                request.params.arguments
-              );
-              if (!parsedArgs.success) {
-                throw new Error(
-                  `Invalid arguments for tool ${request.params.name}: ${parsedArgs.error.message}`
-                );
-              }
-              result = await listProjects(parsedArgs.data);
-              return result;
-
-            case "get_project_context":
-              parsedArgs = await getProjectContextSchema.safeParseAsync(
-                request.params.arguments
-              );
-              if (!parsedArgs.success) {
-                throw new Error(
-                  `Invalid arguments for tool ${request.params.name}: ${parsedArgs.error.message}`
-                );
-              }
-              result = await getProjectContext(parsedArgs.data);
-              return result;
-
-            case "delete_project":
-              parsedArgs = await deleteProjectSchema.safeParseAsync(
-                request.params.arguments
-              );
-              if (!parsedArgs.success) {
-                throw new Error(
-                  `Invalid arguments for tool ${request.params.name}: ${parsedArgs.error.message}`
-                );
-              }
-              result = await deleteProject(parsedArgs.data);
-              return result;
-
-            default:
-              throw new Error(`Tool ${request.params.name} does not exist`);
-          }
-        } catch (error) {
-          const errorMsg =
-            error instanceof Error ? error.message : String(error);
-          return {
-            content: [
-              {
-                type: "text",
-                text: `Error occurred: ${errorMsg} \n Please try correcting the error and calling the tool again`,
-              },
-            ],
-          };
+    server.setRequestHandler(CallToolRequestSchema, async (request: CallToolRequest) => {
+      try {
+        if (!request.params.arguments) {
+          throw new Error("No arguments provided");
         }
+
+        let parsedArgs;
+        let taskId: string | undefined;
+        let result;
+
+        // Save request to conversation history if detailed mode is enabled
+        // and this is a task-related tool request
+        const saveRequest = async () => {
+          if (ENABLE_DETAILED_MODE && taskId) {
+            try {
+              await updateTaskConversationHistory(
+                taskId,
+                "user",
+                JSON.stringify(request.params),
+                request.params.name
+              );
+            } catch (error) {
+              // Silently handle errors to avoid interrupting the main flow
+              console.error("Failed to save request to conversation history:", error);
+            }
+          }
+        };
+
+        // Save response to conversation history if detailed mode is enabled
+        const saveResponse = async (response: any) => {
+          if (ENABLE_DETAILED_MODE && taskId) {
+            try {
+              await updateTaskConversationHistory(
+                taskId,
+                "assistant",
+                JSON.stringify(response),
+                request.params.name
+              );
+            } catch (error) {
+              // Silently handle errors to avoid interrupting the main flow
+              console.error("Failed to save response to conversation history:", error);
+            }
+          }
+        };
+
+        switch (request.params.name) {
+          // Phase 1 Group 10 — workflow_run replaces plan_idea +
+          // process_thought. Manual mode by default; per-call
+          // `mode` overrides env `WORKFLOW_MODE`.
+          case "workflow_run": {
+            const parsed = safeParseTool(
+              "workflow_run",
+              workflowRunSchema,
+              request.params.arguments
+            );
+            if (!parsed.ok) return toToolErrorResponse("workflow_run", parsed.error);
+            try {
+              return await workflowRun(parsed.data);
+            } catch (err) {
+              return toToolErrorResponse("workflow_run", err);
+            }
+          }
+
+          // Phase 1 Group 4 — view tools route through safeParseTool so
+          // discriminator errors carry hints, and through toToolError-
+          // Response so NotFound/Validation/Conflict get the uniform
+          // MCP envelope (including the §6.4 details block).
+          case "task_view": {
+            const parsed = safeParseTool("task_view", taskViewSchema, request.params.arguments);
+            if (!parsed.ok) return toToolErrorResponse("task_view", parsed.error);
+            try {
+              return await taskView(parsed.data);
+            } catch (err) {
+              return toToolErrorResponse("task_view", err);
+            }
+          }
+
+          case "project_view": {
+            const parsed = safeParseTool(
+              "project_view",
+              projectViewSchema,
+              request.params.arguments
+            );
+            if (!parsed.ok) return toToolErrorResponse("project_view", parsed.error);
+            try {
+              return await projectView(parsed.data);
+            } catch (err) {
+              return toToolErrorResponse("project_view", err);
+            }
+          }
+
+          case "context_get": {
+            const parsed = safeParseTool("context_get", contextGetSchema, request.params.arguments);
+            if (!parsed.ok) return toToolErrorResponse("context_get", parsed.error);
+            try {
+              return await contextGet(parsed.data);
+            } catch (err) {
+              return toToolErrorResponse("context_get", err);
+            }
+          }
+
+          // Phase 1 Group 7 — task_lifecycle replaces the legacy trio.
+          case "task_lifecycle": {
+            const parsed = safeParseTool(
+              "task_lifecycle",
+              taskLifecycleSchema,
+              request.params.arguments
+            );
+            if (!parsed.ok) return toToolErrorResponse("task_lifecycle", parsed.error);
+            taskId = parsed.data.taskId;
+            await saveRequest();
+            try {
+              result = await taskLifecycle(parsed.data);
+              await saveResponse(result);
+              return result;
+            } catch (err) {
+              return toToolErrorResponse("task_lifecycle", err);
+            }
+          }
+
+          // Phase 1 Group 8 — verify_task / complete_task deprecation
+          // shims. Both route through task_lifecycle internally.
+          case "verify_task": {
+            const parsed = safeParseTool(
+              "verify_task",
+              verifyTaskShimSchema,
+              request.params.arguments
+            );
+            if (!parsed.ok) return toToolErrorResponse("verify_task", parsed.error);
+            taskId = parsed.data.taskId;
+            await saveRequest();
+            try {
+              result = await verifyTaskShim(parsed.data);
+              await saveResponse(result);
+              return result;
+            } catch (err) {
+              return toToolErrorResponse("verify_task", err);
+            }
+          }
+
+          case "complete_task": {
+            const parsed = safeParseTool(
+              "complete_task",
+              completeTaskShimSchema,
+              request.params.arguments
+            );
+            if (!parsed.ok) return toToolErrorResponse("complete_task", parsed.error);
+            taskId = parsed.data.taskId;
+            await saveRequest();
+            try {
+              result = await completeTaskShim(parsed.data);
+              await saveResponse(result);
+              return result;
+            } catch (err) {
+              return toToolErrorResponse("complete_task", err);
+            }
+          }
+
+          // Phase 1 Group 9 — append-only artifact ingestion.
+          case "artifact_record": {
+            const parsed = safeParseTool(
+              "artifact_record",
+              artifactRecordSchema,
+              request.params.arguments
+            );
+            if (!parsed.ok) return toToolErrorResponse("artifact_record", parsed.error);
+            taskId = parsed.data.taskId;
+            await saveRequest();
+            try {
+              result = await artifactRecord(parsed.data);
+              await saveResponse(result);
+              return result;
+            } catch (err) {
+              return toToolErrorResponse("artifact_record", err);
+            }
+          }
+
+          // Phase 1 Group 6 — destructive tools. task_delete derives
+          // its `op` discriminator from `{action, mode}` so callers
+          // don't have to assemble it themselves.
+          case "task_delete": {
+            const normalised = withDeriveOp(request.params.arguments);
+            const parsed = safeParseTool("task_delete", taskDeleteSchema, normalised);
+            if (!parsed.ok) return toToolErrorResponse("task_delete", parsed.error);
+            try {
+              return await taskDelete(parsed.data);
+            } catch (err) {
+              return toToolErrorResponse("task_delete", err);
+            }
+          }
+
+          case "project_delete": {
+            const parsed = safeParseTool(
+              "project_delete",
+              projectDeleteSchema,
+              request.params.arguments
+            );
+            if (!parsed.ok) return toToolErrorResponse("project_delete", parsed.error);
+            try {
+              return await projectDelete(parsed.data);
+            } catch (err) {
+              return toToolErrorResponse("project_delete", err);
+            }
+          }
+
+          // Phase 1 Group 5 — edit tools route through safeParseTool +
+          // toToolErrorResponse so CONFLICT bodies surface inline.
+          case "task_edit": {
+            const parsed = safeParseTool("task_edit", taskEditSchema, request.params.arguments);
+            if (!parsed.ok) return toToolErrorResponse("task_edit", parsed.error);
+            try {
+              return await taskEdit(parsed.data);
+            } catch (err) {
+              return toToolErrorResponse("task_edit", err);
+            }
+          }
+
+          case "project_edit": {
+            const parsed = safeParseTool(
+              "project_edit",
+              projectEditSchema,
+              request.params.arguments
+            );
+            if (!parsed.ok) return toToolErrorResponse("project_edit", parsed.error);
+            try {
+              return await projectEdit(parsed.data);
+            } catch (err) {
+              return toToolErrorResponse("project_edit", err);
+            }
+          }
+
+          default:
+            throw new Error(`Tool ${request.params.name} does not exist`);
+        }
+      } catch (error) {
+        const errorMsg = error instanceof Error ? error.message : String(error);
+        return {
+          content: [
+            {
+              type: "text",
+              text: `Error occurred: ${errorMsg} \n Please try correcting the error and calling the tool again`,
+            },
+          ],
+        };
       }
-    );
+    });
 
     // Establish MCP stdio connection.
     // When the server is started from a normal terminal (GUI-only usage),
@@ -1285,7 +1593,7 @@ async function main() {
     if (IS_SPAWNED_GUI) {
       console.error("[AgentFlow] Running as spawned GUI server - skipping MCP transport");
       // Keep process alive for GUI server
-      setInterval(() => { }, 60000);
+      setInterval(() => {}, 60000);
     } else {
       try {
         const transport = new StdioServerTransport();
@@ -1305,14 +1613,16 @@ async function main() {
 
         await server.connect(transport);
       } catch (err) {
-        console.error("(AgentFlow) MCP stdio connect failed; continuing without MCP transport:", err);
+        console.error(
+          "(AgentFlow) MCP stdio connect failed; continuing without MCP transport:",
+          err
+        );
 
         if (!ENABLE_GUI) {
           throw err;
         }
       }
     }
-
   } catch (error) {
     // If GUI is enabled, prefer to keep the process alive for the web dashboard.
     if (process.env.ENABLE_GUI === "true") {

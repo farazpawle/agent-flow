@@ -114,6 +114,46 @@ TOKEN_BUDGET_EXCEEDED`.
 inputTokens, outputTokens, latencyMs, outcome}` in `workflow_steps`
   with `stepType='LLM_CALL'`.
 
+### Added — Phase 2 Group 16 LLM HTTP API + audit surface (2026-05-25)
+
+Five new Express routes under `/api/llm/*` expose the Group 13/14
+provider and model layers to the GUI. Handlers live in
+`src/llm/http/handlers.ts` so they can be unit-tested without spinning
+Express.
+
+- `GET /api/llm/providers` — boolean `keyConfigured` flag per provider
+  plus the env var name the key is read from. API key values themselves
+  are never returned.
+- `GET /api/llm/models?provider=<id>` — cached model list (capabilities
+  - pricing). Bypasses the cache only via the refresh route.
+- `POST /api/llm/model/refresh` — force a re-fetch. Body validated via
+  `safeParseTool(llmModelRefreshBodySchema)`. Subject to the existing
+  `/api` `mutationLimiter` (300 req/min).
+- `GET /api/llm/settings` — effective `provider` / `model` /
+  `selectionStrategy` / `workflowMode` plus `providerSource` and
+  `modelSource` labels (`env` | `db` | `default`) so the GUI can render
+  per-field origin badges. **Never** includes API keys.
+- `POST /api/llm/settings` — persist provider / model / strategy /
+  mode. Body schema is `.strict()`, rejecting `apiKey` /
+  `OPENAI_API_KEY` / any other unknown field at parse time. `null`
+  values clear a column; `undefined` leaves it alone.
+
+**Security invariants enforced in code, not in convention:**
+
+- `LLM_CONFIG_LOCK=true` → `POST /api/llm/settings` returns HTTP 403
+  with `details.code = 'LLM_CONFIG_LOCKED'`. The guard runs BEFORE the
+  body parse so a locked instance can't be probed for valid shapes
+  via 400s.
+- API key columns do not exist in the `llm_settings` table — keys are
+  env-only by construction.
+
+**Audit trail (`workflow_steps`)** — already wired by Group 14.5's
+`withLlmTelemetry`. Group 16 testing asserts row coverage on every
+LLM call: `stepType='LLM_CALL'`, `toolName='workflow_run'`,
+`durationMs`, `inputTokens` / `outputTokens`, `correlationId`, and a
+structured `content` JSON payload with `{provider, model,
+selectionStrategy, workflow}`.
+
 #### Migration guide (legacy tool → v2 equivalent)
 
 | Removed tool                              | Replacement                                                                                                                         |
