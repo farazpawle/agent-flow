@@ -721,3 +721,39 @@
 
 /* Refresh button: just an icon now */
 .llm-refresh-btn { padding: 4px 10px; flex-shrink: 0; }
+
+/* ---------- LLM panel select refinements ---------- */
+/* All three selects fill their column completely. Same height + radius
+ * so they line up cleanly when the row is left-edge-aligned. */
+.llm-select-full {
+  width: 100%;
+  max-width: none;
+}
+
+/* Section head: title on the left, source badge + refresh on the right. */
+.llm-section .llm-section-head {
+  justify-content: flex-start;
+}
+.llm-section-model .llm-section-head .llm-refresh-btn {
+  margin-left: auto;
+}
+
+/* Tighter hint text directly under each select. */
+.llm-select-hint {
+  margin-top: 4px;
+  line-height: 1.4;
+}
+
+/* The Refresh button in the section head is icon-only. */
+.llm-refresh-btn {
+  padding: 2px 8px;
+  font-size: 14px;
+  line-height: 1.2;
+  min-width: 32px;
+}
+
+/* Cached-models meta line sits directly under the select. */
+.llm-models-meta { margin-top: 4px; }
+
+/* Strategy + Mode columns can shrink without their selects clipping. */
+.llm-row-grid .llm-section { min-width: 0; }

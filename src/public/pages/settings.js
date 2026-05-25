@@ -457,7 +457,7 @@ async function mountLlmPanel() {
         : "";
     const disabled = state.configLocked ? "disabled" : "";
     return `
-      <select class="select" id="llm-model-select" ${disabled} style="max-width: 480px;">
+      <select class="select llm-select-full" id="llm-model-select" ${disabled}>
         <option value="">— inherit env / pick strategy —</option>
         ${customRow}
         ${state.models.map(modelOption).join("")}
@@ -506,37 +506,41 @@ async function mountLlmPanel() {
       </div>
 
       <div class="llm-row-grid">
-        <div class="llm-section">
+        <div class="llm-section llm-section-model">
           <div class="llm-section-head">
             <span class="llm-section-title">Model</span>
             ${sourceBadge(state.settings?.modelSource)}
-          </div>
-          <div class="llm-row">
-            ${modelSection()}
-            <button class="btn btn-secondary btn-sm llm-refresh-btn" id="btn-llm-refresh-models" ${state.selectedProvider === "none" || state.configLocked ? "disabled" : ""}>
+            <button class="btn btn-ghost btn-sm llm-refresh-btn" id="btn-llm-refresh-models" ${state.selectedProvider === "none" || state.configLocked ? "disabled" : ""} title="Refresh the model catalogue from the provider (bypasses TTL cache)">
               ${state.loadingModels ? "…" : "🔄"}
             </button>
           </div>
+          ${modelSection()}
         </div>
 
         <div class="llm-section">
           <div class="llm-section-head"><span class="llm-section-title">Selection strategy</span></div>
-          <select class="select" id="llm-strategy-select" ${state.configLocked ? "disabled" : ""}>
+          <select class="select llm-select-full" id="llm-strategy-select" ${state.configLocked ? "disabled" : ""}>
             ${SELECTION_STRATEGIES.map(
               (s) =>
                 `<option value="${s}"${state.selectedStrategy === s ? " selected" : ""}>${s}</option>`
             ).join("")}
           </select>
+          <div class="muted tiny llm-select-hint">
+            <code>manual</code> uses the Model above; the others pick from the catalogue at call time.
+          </div>
         </div>
 
         <div class="llm-section">
           <div class="llm-section-head"><span class="llm-section-title">Workflow mode</span></div>
-          <select class="select" id="llm-mode-select" ${state.configLocked ? "disabled" : ""}>
+          <select class="select llm-select-full" id="llm-mode-select" ${state.configLocked ? "disabled" : ""}>
             ${WORKFLOW_MODES.map(
               (m) =>
                 `<option value="${m}"${state.selectedMode === m ? " selected" : ""}>${m}</option>`
             ).join("")}
           </select>
+          <div class="muted tiny llm-select-hint">
+            <code>manual</code> = no LLM call. <code>agent</code> = call provider. <code>disabled</code> = short-circuit.
+          </div>
         </div>
       </div>
 
