@@ -221,8 +221,11 @@ export async function setLlmSettings(opts: SetLlmSettingsOptions): Promise<LlmSe
     // Phase-1 Group-1 schema applied yet (`llm_settings` table
     // missing). Surface that as a typed DatabaseError with a clear
     // hint pointing at the remediation script, instead of bubbling a
-    // raw 500.
-    const message = err instanceof Error ? err.message : String(err);
+    // raw 500. We also extract useful info from non-Error throwables
+    // (Supabase PostgREST throws plain `{message, details, hint, code}`
+    // objects, not Error instances — `String(plainObj)` would be
+    // `[object Object]` which is useless).
+    const message = describeError(err);
     throw new DatabaseError(`Failed to persist LLM settings: ${message}`, {
       cause: err,
       hint: "If using Supabase, apply scripts/supabase-remediation-3.sql in the SQL editor to create the llm_settings table (and the other Phase-1 tables). For SQLite, this row should be created automatically by SQLiteAdapter.init() — restart the server and try again.",
@@ -234,6 +237,32 @@ export async function setLlmSettings(opts: SetLlmSettingsOptions): Promise<LlmSe
     });
   }
   return getLlmSettings({ db: opts.db, env });
+}
+
+/**
+ * Best-effort stringify of an unknown error value. Real Error instances
+ * give us `.message`; PostgREST / fetch / driver-level errors are often
+ * plain objects with a `message` (and sometimes `details` / `hint` /
+ * `code`) field. Falling back to `String(obj)` is useless because it
+ * produces `[object Object]`, so we walk known shapes first.
+ */
+function describeError(err: unknown): string {
+  if (err instanceof Error) return err.message;
+  if (err && typeof err === "object") {
+    const e = err as Record<string, unknown>;
+    const parts: string[] = [];
+    if (typeof e.message === "string") parts.push(e.message);
+    if (typeof e.code === "string") parts.push(`(code=${e.code})`);
+    if (typeof e.details === "string") parts.push(`details=${e.details}`);
+    if (typeof e.hint === "string") parts.push(`hint=${e.hint}`);
+    if (parts.length > 0) return parts.join(" ");
+    try {
+      return JSON.stringify(err);
+    } catch {
+      return "(unrenderable error object)";
+    }
+  }
+  return String(err);
 }
 
 export interface GetProviderModelsOptions {

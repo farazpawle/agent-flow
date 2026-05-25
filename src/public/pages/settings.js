@@ -408,7 +408,24 @@ async function mountLlmPanel() {
           "Settings are locked (LLM_CONFIG_LOCK=true). Unset that env var to enable saves."
         );
       } else {
-        toast.error("Save failed: " + err.message);
+        // Surface server-side `hint` when present — that's where we
+        // tell the user how to fix the most common cause (missing
+        // Supabase tables → "apply scripts/supabase-remediation-3.sql").
+        const hint =
+          err instanceof ApiError && err.body && typeof err.body.hint === "string"
+            ? err.body.hint
+            : null;
+        const detailCode =
+          err instanceof ApiError &&
+          err.body &&
+          err.body.details &&
+          typeof err.body.details.code === "string"
+            ? err.body.details.code
+            : null;
+        const lines = ["Save failed: " + err.message];
+        if (detailCode) lines.push(`(${detailCode})`);
+        if (hint) lines.push("→ " + hint);
+        toast.error(lines.join("\n"), { ttl: 12000 });
       }
     }
   }
