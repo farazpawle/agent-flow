@@ -687,15 +687,14 @@
   white-space: nowrap;
 }
 
-/* Compact row for Model / Strategy / Mode */
+/* Single-column stack for Model / Strategy / Mode. Each section gets a
+ * full row, the select is capped to a sensible max-width so it doesn't
+ * stretch into empty space (which made the value look right-aligned). */
 .llm-row-grid {
-  display: grid;
-  grid-template-columns: 2fr 1fr 1fr;
+  display: flex;
+  flex-direction: column;
   gap: var(--space-3);
   margin-top: var(--space-3);
-}
-@media (max-width: 900px) {
-  .llm-row-grid { grid-template-columns: 1fr; }
 }
 .llm-section-providers { margin-bottom: 0; }
 
@@ -723,19 +722,23 @@
 .llm-refresh-btn { padding: 4px 10px; flex-shrink: 0; }
 
 /* ---------- LLM panel select refinements ---------- */
-/* All three selects fill their column completely. Same height + radius
- * so they line up cleanly when the row is left-edge-aligned. */
+/* Selects cap at 480px so they don't stretch into empty space when the
+ * card is wide. Left-aligned by default (not auto-centered). */
 .llm-select-full {
   width: 100%;
-  max-width: none;
+  max-width: 480px;
+  display: block;
 }
 
-/* Section head: title on the left, source badge + refresh on the right. */
+/* Section head: every item flush left, no margin-left:auto that
+ * floats the Refresh button far right of the section title. */
 .llm-section .llm-section-head {
   justify-content: flex-start;
+  align-items: center;
+  gap: var(--space-2);
 }
 .llm-section-model .llm-section-head .llm-refresh-btn {
-  margin-left: auto;
+  margin-left: 0;
 }
 
 /* Tighter hint text directly under each select. */
