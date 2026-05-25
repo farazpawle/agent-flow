@@ -16,7 +16,7 @@
  */
 
 import { applyEnvironmentAliases } from "../../utils/envConfig.js";
-import { ForbiddenError, ValidationError } from "../../utils/errors.js";
+import { DatabaseError, ForbiddenError, ValidationError } from "../../utils/errors.js";
 import type { DatabaseAdapter, LlmSettings } from "../../models/interfaces.js";
 import { resolveLlmConfig, type ResolvedLlmConfig } from "../factory.js";
 import { getProviderModels, refreshProviderModels } from "../models/registry.js";
@@ -188,7 +188,18 @@ export async function setLlmSettings(opts: SetLlmSettingsOptions): Promise<LlmSe
   // adapter currently treats `undefined` and `null` the same (writes
   // SQL NULL).  Preserve the GUI's distinction by reading current
   // settings first and merging.
-  const current = await opts.db.getLlmSettings();
+  //
+  // Tolerate a missing/uninitialised llm_settings table — that's a
+  // common bootstrap state when the user runs Supabase without
+  // applying scripts/supabase-remediation-3.sql yet. We treat the
+  // read failure as "no current row" and let the subsequent write
+  // attempt surface the real DB error with a hint.
+  let current: Awaited<ReturnType<DatabaseAdapter["getLlmSettings"]>> = null;
+  try {
+    current = await opts.db.getLlmSettings();
+  } catch {
+    current = null;
+  }
   const merged = {
     provider:
       opts.body.provider === undefined ? current?.provider : (opts.body.provider ?? undefined),
@@ -203,7 +214,25 @@ export async function setLlmSettings(opts: SetLlmSettingsOptions): Promise<LlmSe
         : (opts.body.workflowMode ?? undefined),
   };
 
-  await opts.db.setLlmSettings(merged);
+  try {
+    await opts.db.setLlmSettings(merged);
+  } catch (err) {
+    // Most likely cause in practice: Supabase project doesn't have the
+    // Phase-1 Group-1 schema applied yet (`llm_settings` table
+    // missing). Surface that as a typed DatabaseError with a clear
+    // hint pointing at the remediation script, instead of bubbling a
+    // raw 500.
+    const message = err instanceof Error ? err.message : String(err);
+    throw new DatabaseError(`Failed to persist LLM settings: ${message}`, {
+      cause: err,
+      hint: "If using Supabase, apply scripts/supabase-remediation-3.sql in the SQL editor to create the llm_settings table (and the other Phase-1 tables). For SQLite, this row should be created automatically by SQLiteAdapter.init() — restart the server and try again.",
+      details: {
+        code: "LLM_SETTINGS_WRITE_FAILED",
+        provider: opts.body.provider ?? null,
+        model: opts.body.model ?? null,
+      },
+    });
+  }
   return getLlmSettings({ db: opts.db, env });
 }
 
