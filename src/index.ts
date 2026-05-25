@@ -33,6 +33,12 @@ import {
   CallToolRequest,
   CallToolRequestSchema,
   ListToolsRequestSchema,
+  // Phase 3 Group 19 — Resources + Prompts capabilities.
+  ListResourcesRequestSchema,
+  ListResourceTemplatesRequestSchema,
+  ReadResourceRequestSchema,
+  ListPromptsRequestSchema,
+  GetPromptRequestSchema,
 } from "@modelcontextprotocol/sdk/types.js";
 import express, { Request, Response, NextFunction } from "express";
 import { isPortInUse } from "./utils/portUtils.js";
@@ -117,6 +123,15 @@ import {
   SUPPORTED_PROVIDERS,
   type SupportedProvider,
 } from "./llm/provider.js";
+
+// Phase 3 Group 19 — MCP Resources + Prompts surface.
+import {
+  listResources,
+  listResourceTemplates,
+  readResource,
+  VIEW_TOOL_NAMES,
+} from "./mcp/resources.js";
+import { listPrompts, getPrompt, PROMPT_NAMES as MCP_PROMPT_NAMES } from "./mcp/prompts.js";
 
 import type { ZodTypeAny } from "zod";
 import { safeParseTool } from "./utils/schemaParse.js";
@@ -1221,6 +1236,17 @@ async function main() {
       return;
     }
 
+    // Phase 3 Group 19 — `MCP_REDUCED_TOOL_SURFACE=true` (default true)
+    // moves project_view / task_view / context_get behind Resources and
+    // workflow_run(plan|analyze|review) behind Prompts. The tools list
+    // drops those entries to honour plan §10 ("startup tool list reduced
+    // to verb-only tools"). Set the env var to `false` to keep the
+    // legacy tools surface for clients that haven't migrated yet.
+    const REDUCED_TOOL_SURFACE =
+      process.env.MCP_REDUCED_TOOL_SURFACE === undefined
+        ? true
+        : process.env.MCP_REDUCED_TOOL_SURFACE === "true";
+
     // Create MCP server
     const server = new Server(
       {
@@ -1230,11 +1256,70 @@ async function main() {
       {
         capabilities: {
           tools: {},
+          // Phase 3 Group 19.1 — declare prompts + resources so clients
+          // know to call resources/list + prompts/list at handshake.
+          resources: {},
+          prompts: {},
         },
       }
     );
 
+    // Phase 3 Group 19.2 — Resources surface. Re-exposes
+    // project_view / task_view / context_get as readable resources.
+    server.setRequestHandler(ListResourcesRequestSchema, async () => ({
+      resources: listResources(),
+    }));
+    server.setRequestHandler(ListResourceTemplatesRequestSchema, async () => ({
+      resourceTemplates: listResourceTemplates(),
+    }));
+    server.setRequestHandler(ReadResourceRequestSchema, async (request) => {
+      // readResource throws AppError on validation/handler failure; the
+      // SDK turns the rejection into a JSON-RPC error response.
+      return readResource(request.params.uri);
+    });
+
+    // Phase 3 Group 19.3 — Prompts surface. Re-exposes plan / analyze
+    // / review as MCP prompts; other workflows stay on the tools list.
+    server.setRequestHandler(ListPromptsRequestSchema, async () => ({
+      prompts: listPrompts(),
+    }));
+    server.setRequestHandler(GetPromptRequestSchema, async (request) => {
+      // Cast to the SDK's result-union type; the response shape
+      // (description + messages) matches GetPromptResultSchema but TS
+      // can't narrow the broader server-result union for us.
+      return (await getPrompt(request.params.name, request.params.arguments)) as never;
+    });
+
     server.setRequestHandler(ListToolsRequestSchema, async () => {
+      // Phase 3 Group 19.4 — when REDUCED_TOOL_SURFACE is true, the
+      // four moved entries (workflow_run + the three view tools) come
+      // off the tools list. workflow_run is still accessible for
+      // non-plan/analyze/review workflows via the tools surface, so
+      // keep it registered; only the three view tools come off.
+      const viewTools = REDUCED_TOOL_SURFACE
+        ? []
+        : [
+            // Phase 1 Group 4 — read-only view tools (replace list_tasks,
+            // find_task, list_projects, get_project_context).
+            {
+              name: "task_view",
+              description:
+                "Read-only task view. Discriminated on `action`: list (filter by projectId/status), get (taskId), search (query + projectId), next_ready (next PENDING task with all deps COMPLETED), by_status. Every returned task includes `version` for use as `expectedVersion` on subsequent edits.",
+              inputSchema: zodToJsonSchema(taskViewSchema),
+            },
+            {
+              name: "project_view",
+              description:
+                "Read-only project view. Discriminated on `action`: list, get (projectId), summary (projectId — adds task-count breakdown), active (resolves the per-client active project from client_active_project).",
+              inputSchema: zodToJsonSchema(projectViewSchema),
+            },
+            {
+              name: "context_get",
+              description:
+                "Token-budgeted, LLM-free context bundle assembler. Discriminated on `type`: project_summary, implementation_context, verification_context, lessons (deterministic fallback chain: lesson_summaries → recent lessonsLearned + findings → empty), similar_tasks, decisions, findings.",
+              inputSchema: zodToJsonSchema(contextGetSchema),
+            },
+          ];
       return {
         tools: [
           // Phase 1 Group 10 — workflow_run manual-mode scaffold.
@@ -1243,32 +1328,20 @@ async function main() {
           // steps, outputSchema, qualityChecklist,
           // nextRecommendedCalls); agent mode (Group 15) will reuse
           // the same outputSchema.
+          //
+          // Stays on the tools list even with REDUCED_TOOL_SURFACE
+          // because only `plan`/`analyze`/`review` move to Prompts —
+          // the other 8 workflows are still callable here.
           {
             name: "workflow_run",
             description:
-              "Run a structured workflow. Discriminated on `workflow`: plan, analyze, review, split_plan, process_thought, record_decision, review_task_quality, build_context_pack, summarize_lessons, detect_duplicates, generate_release_summary. In `WORKFLOW_MODE=manual` (default), returns the structured contract (purpose, inputRequired, steps, outputSchema, qualityChecklist, nextRecommendedCalls) for the agent to execute. `WORKFLOW_MODE=disabled` returns a typed WORKFLOW_DISABLED payload. Per-call `mode` overrides env.",
+              "Run a structured workflow. Discriminated on `workflow`: plan, analyze, review, split_plan, process_thought, record_decision, review_task_quality, build_context_pack, summarize_lessons, detect_duplicates, generate_release_summary. In `WORKFLOW_MODE=manual` (default), returns the structured contract (purpose, inputRequired, steps, outputSchema, qualityChecklist, nextRecommendedCalls) for the agent to execute. `WORKFLOW_MODE=disabled` returns a typed WORKFLOW_DISABLED payload. Per-call `mode` overrides env. (Phase 3: plan/analyze/review are ALSO available via MCP Prompts — `prompts/list` + `prompts/get`.)",
             inputSchema: zodToJsonSchema(workflowRunSchema),
           },
-          // Phase 1 Group 4 — read-only view tools (replace list_tasks,
-          // find_task, list_projects, get_project_context).
-          {
-            name: "task_view",
-            description:
-              "Read-only task view. Discriminated on `action`: list (filter by projectId/status), get (taskId), search (query + projectId), next_ready (next PENDING task with all deps COMPLETED), by_status. Every returned task includes `version` for use as `expectedVersion` on subsequent edits.",
-            inputSchema: zodToJsonSchema(taskViewSchema),
-          },
-          {
-            name: "project_view",
-            description:
-              "Read-only project view. Discriminated on `action`: list, get (projectId), summary (projectId — adds task-count breakdown), active (resolves the per-client active project from client_active_project).",
-            inputSchema: zodToJsonSchema(projectViewSchema),
-          },
-          {
-            name: "context_get",
-            description:
-              "Token-budgeted, LLM-free context bundle assembler. Discriminated on `type`: project_summary, implementation_context, verification_context, lessons (deterministic fallback chain: lesson_summaries → recent lessonsLearned + findings → empty), similar_tasks, decisions, findings.",
-            inputSchema: zodToJsonSchema(contextGetSchema),
-          },
+          // Phase 3 Group 19.2: view tools moved behind Resources by
+          // default. Set MCP_REDUCED_TOOL_SURFACE=false to restore them
+          // on the tools list (the handlers themselves are unchanged).
+          ...viewTools,
           // Phase 1 Group 7 — unified lifecycle tool. Replaces
           // execute_task / verify_task / complete_task on the MCP
           // surface; Group 8 reintroduces the old names as deprecation

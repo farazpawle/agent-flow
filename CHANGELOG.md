@@ -226,6 +226,41 @@ to a backing test or code path.
   isolated-test contexts that exercise the LLM layer before
   `db.init()` runs.
 
+### Added — Phase 3 Group 19 MCP Resources + Prompts capability (2026-05-25)
+
+The MCP server now advertises three capabilities at handshake:
+`tools`, `resources`, and `prompts`. Read-only view tools move
+behind Resources; the three "structure" workflows (plan / analyze /
+review) move behind Prompts. **Tool list reduced from 12 to 9 by
+default.**
+
+- **`src/mcp/resources.ts`** — re-exposes `project_view`,
+  `task_view`, `context_get` under `agentflow://views/<tool>?<query>`
+  URIs. `resources/list` returns starter URIs; `resources/templates/
+list` returns RFC 6570 templates with `{?query*}` expansion; `resources/
+read` parses the query string into the tool's discriminated-union
+  input via `safeParseTool` and routes to the existing handler. The
+  underlying handlers are unchanged — only the transport differs, so
+  `readResource(URI) === viewTool(args)` byte-for-byte.
+- **`src/mcp/prompts.ts`** — registers `plan` / `analyze` / `review`
+  as MCP Prompts. `prompts/list` returns each with its arguments
+  schema; `prompts/get` routes to `workflowRun(workflow, mode='manual',
+inputs=args)` and packages the manual contract as a single
+  user-role text message. The other 8 workflows (split_plan,
+  process_thought, etc.) stay on the tools surface because they are
+  programmatic actions rather than "prompts" a user picks from a
+  drop-down.
+- **`MCP_REDUCED_TOOL_SURFACE` env (default `true`)** — when on, the
+  three view tools come off the `tools/list` response. Set to `false`
+  to restore the legacy 12-tool surface for clients that haven't
+  migrated to Resources/Prompts yet. The `CallToolRequestSchema`
+  switch still dispatches view-tool names regardless, so pre-cached
+  tool references continue to work.
+
+The new transports are additive — clients that already used the
+tools surface keep working without changes. Migration is opt-in:
+`resources/list` + `prompts/list` are the discovery entry points.
+
 #### Migration guide (legacy tool → v2 equivalent)
 
 | Removed tool                              | Replacement                                                                                                                         |
