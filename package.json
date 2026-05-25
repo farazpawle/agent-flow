@@ -1,6 +1,6 @@
 {
   "name": "agent-flow",
-  "version": "1.0.1",
+  "version": "1.2.0",
   "description": "AgentFlow is an intelligent agentic workflow system that manages tasks, dependencies, and reasoning for AI Agents.",
   "main": "dist/index.js",
   "type": "module",
@@ -16,17 +16,41 @@
     "agent-flow": "./dist/index.js"
   },
   "scripts": {
+    "audit:hardcoded-prompts": "node scripts/audit-hardcoded-prompts.mjs",
+    "audit:prompt-tools": "node scripts/audit-prompt-tool-references.mjs",
+    "audit:superrefine": "node scripts/audit-superrefine.mjs",
+    "audit:hardcoded-models": "node scripts/audit-hardcoded-models.mjs",
+    "schemas:export": "node scripts/export-tool-schemas.mjs",
+    "schemas:check": "node scripts/export-tool-schemas.mjs --check",
     "build": "tsc && copyfiles -E -u 1 \"src/**/*.md\" dist && copyfiles -E -u 1 \"src/public/**/*\" dist && node scripts/add-shebang.js",
     "dev": "tsx src/index.ts",
     "dev:watch": "nodemon --exec tsx src/index.ts",
-    "start": "node dist/index.js --gui",
-    "gui": "node dist/index.js --gui",
-    "mcp": "node dist/index.js",
+    "start": "node --use-system-ca dist/index.js --gui",
+    "gui": "node --use-system-ca dist/index.js --gui",
+    "mcp": "node --use-system-ca dist/index.js",
     "build:start": "npm run build && npm run start",
     "build:mcp": "npm run build && npm run mcp",
-    "test": "tsx src/tests/test-rigorous.ts",
-    "supabase:check": "node scripts/supabase-check.mjs",
-    "supabase:migrate": "node scripts/supabase-migrate.mjs"
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "test:legacy": "tsx tests/unit/test-rigorous.ts",
+    "lint": "eslint src tests --max-warnings=0",
+    "lint:fix": "eslint src tests --fix",
+    "format": "prettier --write \"src/**/*.{ts,tsx,js,mjs,json,md}\" \"tests/**/*.{ts,js}\"",
+    "format:check": "prettier --check \"src/**/*.{ts,tsx,js,mjs,json,md}\" \"tests/**/*.{ts,js}\"",
+    "typecheck": "tsc --noEmit",
+    "prepare": "husky || true",
+    "supabase:check": "node --use-system-ca scripts/supabase-check.mjs",
+    "supabase:migrate": "node --use-system-ca scripts/supabase-migrate.mjs"
+  },
+  "lint-staged": {
+    "*.{ts,tsx,js,mjs}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{json,md}": [
+      "prettier --write"
+    ]
   },
   "keywords": [
     "mcp",
@@ -38,28 +62,43 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
+    "@ai-sdk/anthropic": "^3.0.79",
+    "@ai-sdk/openai": "^3.0.65",
+    "@ai-sdk/openai-compatible": "^2.0.48",
     "@modelcontextprotocol/sdk": "^1.11.0",
     "@supabase/supabase-js": "^2.89.0",
+    "ai": "^6.0.191",
     "dotenv": "^16.5.0",
     "express": "^5.1.0",
+    "express-rate-limit": "^7.4.0",
     "get-port": "^7.1.0",
     "minisearch": "^7.2.0",
     "open": "^11.0.0",
-    "sqlite3": "^5.1.7",
+    "pino": "^9.5.0",
+    "sqlite3": "^6.0.1",
     "uuid": "^9.0.1",
     "zod": "^3.22.4",
     "zod-to-json-schema": "^3.24.5"
   },
   "devDependencies": {
-    "@smithery/cli": "^2.0.0",
+    "@eslint/js": "^9.16.0",
+    "@smithery/cli": "^4.11.1",
     "@types/express": "^5.0.1",
     "@types/node": "^20.8.2",
     "@types/sqlite3": "^3.1.11",
     "@types/uuid": "^9.0.6",
+    "@vitest/coverage-v8": "^2.1.8",
     "copyfiles": "^2.4.1",
+    "eslint": "^9.16.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^15.2.10",
     "nodemon": "^3.1.10",
+    "pino-pretty": "^11.3.0",
+    "prettier": "^3.4.2",
     "ts-node": "^10.9.2",
     "tsx": "^4.21.0",
-    "typescript": "^5.2.2"
+    "typescript": "^5.2.2",
+    "typescript-eslint": "^8.18.0",
+    "vitest": "^2.1.8"
   }
 }

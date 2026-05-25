@@ -202,10 +202,18 @@ You can also pass environment variables in your MCP client config if needed.
 
 ## Available MCP tools
 
-Phase 1 reshaped the surface from 15 legacy tools to **12** (10 primary + 2
-deprecation shims). Every primary tool uses a discriminated-union schema, so
-the action you want to take is encoded in a single `action` / `mode` / `kind`
-/ `workflow` discriminator value the client must supply.
+The v2 redesign reshaped the surface from 15 legacy tools to **10
+primary tools** (the Phase 1 Group 8 `verify_task` / `complete_task`
+shims were removed in v1.2.0 — see CHANGELOG `[1.2.0]`). Every primary
+tool uses a discriminated-union schema, so the action you want to take
+is encoded in a single `action` / `mode` / `kind` / `workflow`
+discriminator value the client must supply.
+
+When `MCP_REDUCED_TOOL_SURFACE=true` (the default since Phase 3 Group
+19), the three read-only views move behind **MCP Resources** and
+`workflow_run(plan|analyze|review)` is also available via **MCP
+Prompts** — so the advertised tools list is **7** by default; set the
+env var to `false` to restore all 10 on the tools surface.
 
 ### Read-only
 
@@ -274,14 +282,24 @@ containing `provider`, `model`, `selectionStrategy`, and `workflow`.
 
 See `.env.example` for the full list of LLM env vars and their defaults.
 
-### Deprecation shims (slated for removal in `1.2.0`)
+### Removed in v1.2.0
 
-- `verify_task` — routes to `task_lifecycle(action='request_review')` and writes a `kind='evidence'` finding. **Never advances a task to COMPLETED** — closes the legacy silent auto-pass bug by construction.
-- `complete_task` — routes to `task_lifecycle(action='finalize', verdict='pass')`. Now requires `summary` (≥10 chars), `lessonsLearned` (≥10 chars), and `expectedVersion`.
+The `verify_task` and `complete_task` deprecation shims (introduced in
+Phase 1 Group 8) were removed in **v1.2.0** as advertised by
+`DEPRECATION_REMOVAL_VERSION`. Calling either tool now returns the
+standard "Unknown tool" error which MCP clients map to
+`MethodNotFound`.
 
-Every shim call emits a `DEPRECATED` warning block on the response and a
-`deprecation` SSE event for the GUI activity log. See `CHANGELOG.md`
-"Migration guide (legacy tool → v2 equivalent)" for the full mapping.
+- `verify_task` → use `task_lifecycle(action='request_review')` plus
+  `artifact_record(kind='evidence', ...)` for the evidence payload.
+- `complete_task` → use `task_lifecycle(action='finalize',
+result.verdict='pass'|'fail'|'partial'|'needs_review')` with
+  `summary` and `lessonsLearned` (≥10 chars each) and
+  `expectedVersion`.
+
+See `CHANGELOG.md` `[1.2.0]` for the breaking-change details and the
+"Migration guide (legacy tool → v2 equivalent)" table for every
+pre-Phase-1 tool mapping.
 
 ---
 

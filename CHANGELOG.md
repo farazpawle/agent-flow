@@ -6,6 +6,41 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+_(Empty — the next release will land here.)_
+
+## [1.2.0] - 2026-05-25
+
+This is the v2-redesign cut. It ships Phases 1 through 4 of
+`Plan/2026-05-24-mcp-tool-surface-redesign-v2.md`. **Breaking change at
+the very end**: the Phase 1 Group 8 compatibility shims
+(`verify_task`, `complete_task`) are removed in this release exactly
+as advertised by `DEPRECATION_REMOVAL_VERSION = "1.2.0"`.
+
+### BREAKING CHANGE — Removed (Phase 4 Group 20)
+
+- **`verify_task` (shim)** — removed from the MCP surface, the
+  registry, the `CallToolRequestSchema` switch, the
+  `POST /api/tasks/verify` Express route, and the golden fixture set.
+  Calling the tool by name now falls through to the default "Unknown
+  tool" branch which MCP clients map to `MethodNotFound`.
+  - **Migration**: use `task_lifecycle(action='request_review')`
+    together with `artifact_record(kind='evidence', ...)` to record
+    the evidence payload that the legacy shim accepted. The CHANGELOG
+    "Migration guide" table below already lists this mapping.
+- **`complete_task` (shim)** — removed under the same conditions.
+  - **Migration**: use `task_lifecycle(action='finalize', result.verdict=…)`
+    with `summary` (≥10 chars) and `lessonsLearned` (≥10 chars).
+    `expectedVersion` is required (the shim already required it as of
+    Group 8).
+- **Tool surface**: now **10** in legacy mode (with
+  `MCP_REDUCED_TOOL_SURFACE=false`) and **7** in the default reduced
+  mode (Phase 3 also moves the three view tools to Resources).
+- Source files deleted: `src/tools/shims/` (all 5 files), the two
+  fixture JSONs under `tests/fixtures/schemas/`, the shim unit-test
+  file. The `DEPRECATION_REMOVAL_VERSION` constant goes away with
+  them — its role was structural, marking the version this commit
+  represents.
+
 ### Added — Phase 1 MCP tool surface redesign (2026-05-24)
 
 The MCP tool surface has been reshaped from 15 legacy tools to **12** —

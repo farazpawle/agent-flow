@@ -91,14 +91,9 @@ import {
 // verify_task, complete_task on the MCP surface).
 import { taskLifecycle, taskLifecycleSchema } from "./tools/lifecycle/index.js";
 
-// Phase 1 Group 8 — verify_task / complete_task deprecation shims.
-// Slated for removal in DEPRECATION_REMOVAL_VERSION (see CHANGELOG).
-import {
-  verifyTaskShim,
-  verifyTaskShimSchema,
-  completeTaskShim,
-  completeTaskShimSchema,
-} from "./tools/shims/index.js";
+// Phase 4 Group 20 — verify_task / complete_task deprecation shims
+// removed in v1.2.0. Callers must use task_lifecycle directly. See
+// CHANGELOG.md "[1.2.0]" for the migration pointer.
 
 // Phase 1 Group 9 — append-only artifact ingestion.
 import { artifactRecord, artifactRecordSchema } from "./tools/artifacts/index.js";
@@ -158,7 +153,7 @@ import {
   ensureDataDir,
   updateTask,
 } from "./models/taskModel.js";
-import { taskEvents, TASK_EVENTS, type DeprecationEventPayload } from "./utils/events.js";
+import { taskEvents, TASK_EVENTS } from "./utils/events.js";
 
 // Import client model
 import {
@@ -227,17 +222,12 @@ async function main() {
         sseClients = sseClients.filter((client) => !client.writableEnded);
       }
 
-      // Phase 1 Group 8.3 — broadcast a deprecation entry to connected
-      // GUI clients so the activity log renders a warning row whenever
-      // an agent calls a shim tool. Subscribed via taskEvents below.
-      function sendDeprecationEvent(payload: DeprecationEventPayload) {
-        sseClients.forEach((client) => {
-          if (!client.writableEnded) {
-            client.write(`event: deprecation\ndata: ${JSON.stringify(payload)}\n\n`);
-          }
-        });
-        sseClients = sseClients.filter((client) => !client.writableEnded);
-      }
+      // Phase 4 Group 20 — `sendDeprecationEvent` removed alongside
+      // the verify_task / complete_task shims. The SSE channel that
+      // fed the GUI activity log's "DEPRECATED" rows no longer has any
+      // emitter; the channel itself stays declared in
+      // `src/utils/events.ts` in case future tools want to re-use it,
+      // but nothing pipes to it from the runtime today.
 
       // Helper function to send client count updates via SSE
       async function sendClientUpdate() {
@@ -613,20 +603,10 @@ async function main() {
         await viewBodyRoute("task_lifecycle", taskLifecycleSchema, taskLifecycle, res, req.body);
       });
 
-      // Phase 1 Group 8 — deprecation shim mirrors. Same envelope; the
-      // response body carries a `warning.DEPRECATED:true` block.
-      app.post("/api/tasks/verify", async (req: Request, res: Response) => {
-        await viewBodyRoute("verify_task", verifyTaskShimSchema, verifyTaskShim, res, req.body);
-      });
-      app.post("/api/tasks/complete", async (req: Request, res: Response) => {
-        await viewBodyRoute(
-          "complete_task",
-          completeTaskShimSchema,
-          completeTaskShim,
-          res,
-          req.body
-        );
-      });
+      // Phase 4 Group 20 — /api/tasks/verify + /api/tasks/complete
+      // routes removed alongside the underlying shim handlers. Use
+      // POST /api/tasks/lifecycle with action='request_review' or
+      // action='finalize' instead.
 
       // Phase 1 Group 9.6 — artifact_record HTTP mirror. Append-only —
       // there is intentionally no PUT/DELETE companion route. The
@@ -1136,12 +1116,10 @@ async function main() {
             sendSseUpdate();
           });
 
-          // Phase 1 Group 8.3 — pipe deprecation events from the shim
-          // handlers (verifyTaskShim / completeTaskShim) into the GUI
-          // activity log over SSE.
-          taskEvents.on(TASK_EVENTS.DEPRECATION, (payload: DeprecationEventPayload) => {
-            sendDeprecationEvent(payload);
-          });
+          // Phase 4 Group 20 — DEPRECATION listener removed alongside
+          // the shims. The `TASK_EVENTS.DEPRECATION` enum value stays
+          // in `src/utils/events.ts` for future tools but nothing
+          // currently emits to it.
 
           console.error(`(AgentFlow) Web GUI available at: http://localhost:${SERVER_PORT}`);
 
@@ -1251,7 +1229,7 @@ async function main() {
     const server = new Server(
       {
         name: "AgentFlow",
-        version: "1.0.1",
+        version: "1.2.0",
       },
       {
         capabilities: {
@@ -1352,20 +1330,11 @@ async function main() {
               "Drive a task through its lifecycle. Discriminated on `action`: claim, start, block, unblock, request_review, finalize, reopen, archive. Only `finalize` requires `expectedVersion` (from task_view); every other action transitions atomically server-side. `finalize.result` is itself a discriminated union on `verdict` (pass / fail / partial / needs_review), each branch with its own required fields. Illegal transitions return a typed CONFLICT.",
             inputSchema: zodToJsonSchema(taskLifecycleSchema),
           },
-          // Phase 1 Group 8 — compatibility shims. Slated for removal
-          // in DEPRECATION_REMOVAL_VERSION (Group 20).
-          {
-            name: "verify_task",
-            description:
-              "(DEPRECATED — use task_lifecycle(action='request_review') and finalize explicitly.) Records the supplied `evidence` as a kind='evidence' finding and routes the task to request_review state. This shim NEVER advances a task to COMPLETED — the silent auto-pass bug of the legacy tool is closed by construction.",
-            inputSchema: zodToJsonSchema(verifyTaskShimSchema),
-          },
-          {
-            name: "complete_task",
-            description:
-              "(DEPRECATED — use task_lifecycle(action='finalize', result.verdict='pass'|'fail'|'partial'|'needs_review').) Routes to task_lifecycle(finalize, verdict='pass'). Now requires `summary` (≥10 chars), `lessonsLearned` (≥10 chars), and `expectedVersion` — the legacy 'complete with nothing' path is gone.",
-            inputSchema: zodToJsonSchema(completeTaskShimSchema),
-          },
+          // Phase 4 Group 20 — verify_task / complete_task deprecation
+          // shims removed in v1.2.0 as advertised by
+          // DEPRECATION_REMOVAL_VERSION. Use task_lifecycle directly
+          // (action='request_review' or action='finalize').
+
           // Phase 1 Group 9 — append-only artifact ingestion. The
           // returned `findingId` is the handle agents use as
           // `evidenceRefs[]` on `task_lifecycle(finalize)` and to look
@@ -1530,43 +1499,10 @@ async function main() {
             }
           }
 
-          // Phase 1 Group 8 — verify_task / complete_task deprecation
-          // shims. Both route through task_lifecycle internally.
-          case "verify_task": {
-            const parsed = safeParseTool(
-              "verify_task",
-              verifyTaskShimSchema,
-              request.params.arguments
-            );
-            if (!parsed.ok) return toToolErrorResponse("verify_task", parsed.error);
-            taskId = parsed.data.taskId;
-            await saveRequest();
-            try {
-              result = await verifyTaskShim(parsed.data);
-              await saveResponse(result);
-              return result;
-            } catch (err) {
-              return toToolErrorResponse("verify_task", err);
-            }
-          }
-
-          case "complete_task": {
-            const parsed = safeParseTool(
-              "complete_task",
-              completeTaskShimSchema,
-              request.params.arguments
-            );
-            if (!parsed.ok) return toToolErrorResponse("complete_task", parsed.error);
-            taskId = parsed.data.taskId;
-            await saveRequest();
-            try {
-              result = await completeTaskShim(parsed.data);
-              await saveResponse(result);
-              return result;
-            } catch (err) {
-              return toToolErrorResponse("complete_task", err);
-            }
-          }
+          // Phase 4 Group 20 — verify_task / complete_task switch
+          // cases removed in v1.2.0. Calls now fall through to the
+          // default branch which returns the "Unknown tool" error;
+          // MCP clients should map this to MethodNotFound.
 
           // Phase 1 Group 9 — append-only artifact ingestion.
           case "artifact_record": {
