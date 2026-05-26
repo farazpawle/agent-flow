@@ -1,0 +1,257 @@
+{
+  "nodes": [
+    {
+      "id": "d_d_drive_projects_mcp_servers_agent_flow_tests_integration_test_strict_mode_ts",
+      "label": "test-strict-mode.ts",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\tests\\integration\\test-strict-mode.ts",
+      "source_location": "L1"
+    },
+    {
+      "id": "test_strict_mode_setup",
+      "label": "setup()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\tests\\integration\\test-strict-mode.ts",
+      "source_location": "L15"
+    },
+    {
+      "id": "test_strict_mode_run",
+      "label": "run()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\tests\\integration\\test-strict-mode.ts",
+      "source_location": "L25"
+    }
+  ],
+  "edges": [
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_tests_integration_test_strict_mode_ts",
+      "target": "path",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\tests\\integration\\test-strict-mode.ts",
+      "source_location": "L2",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_tests_integration_test_strict_mode_ts",
+      "target": "fs",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\tests\\integration\\test-strict-mode.ts",
+      "source_location": "L3",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_tests_integration_test_strict_mode_ts",
+      "target": "url",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\tests\\integration\\test-strict-mode.ts",
+      "source_location": "L4",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_tests_integration_test_strict_mode_ts",
+      "target": "test_strict_mode_setup",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\tests\\integration\\test-strict-mode.ts",
+      "source_location": "L15",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_tests_integration_test_strict_mode_ts",
+      "target": "test_strict_mode_run",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\tests\\integration\\test-strict-mode.ts",
+      "source_location": "L25",
+      "weight": 1.0
+    },
+    {
+      "source": "test_strict_mode_run",
+      "target": "test_strict_mode_setup",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\tests\\integration\\test-strict-mode.ts",
+      "source_location": "L26",
+      "weight": 1.0
+    }
+  ],
+  "raw_calls": [
+    {
+      "caller_nid": "test_strict_mode_setup",
+      "callee": "log",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\tests\\integration\\test-strict-mode.ts",
+      "source_location": "L16"
+    },
+    {
+      "caller_nid": "test_strict_mode_setup",
+      "callee": "log",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\tests\\integration\\test-strict-mode.ts",
+      "source_location": "L17"
+    },
+    {
+      "caller_nid": "test_strict_mode_setup",
+      "callee": "existsSync",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\tests\\integration\\test-strict-mode.ts",
+      "source_location": "L19"
+    },
+    {
+      "caller_nid": "test_strict_mode_setup",
+      "callee": "rmSync",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\tests\\integration\\test-strict-mode.ts",
+      "source_location": "L20"
+    },
+    {
+      "caller_nid": "test_strict_mode_setup",
+      "callee": "mkdirSync",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\tests\\integration\\test-strict-mode.ts",
+      "source_location": "L22"
+    },
+    {
+      "caller_nid": "test_strict_mode_setup",
+      "callee": "join",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\tests\\integration\\test-strict-mode.ts",
+      "source_location": "L22"
+    },
+    {
+      "caller_nid": "test_strict_mode_run",
+      "callee": "import",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\tests\\integration\\test-strict-mode.ts",
+      "source_location": "L30"
+    },
+    {
+      "caller_nid": "test_strict_mode_run",
+      "callee": "import",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\tests\\integration\\test-strict-mode.ts",
+      "source_location": "L31"
+    },
+    {
+      "caller_nid": "test_strict_mode_run",
+      "callee": "import",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\tests\\integration\\test-strict-mode.ts",
+      "source_location": "L32"
+    },
+    {
+      "caller_nid": "test_strict_mode_run",
+      "callee": "import",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\tests\\integration\\test-strict-mode.ts",
+      "source_location": "L33"
+    },
+    {
+      "caller_nid": "test_strict_mode_run",
+      "callee": "init",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\tests\\integration\\test-strict-mode.ts",
+      "source_location": "L36"
+    },
+    {
+      "caller_nid": "test_strict_mode_run",
+      "callee": "log",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\tests\\integration\\test-strict-mode.ts",
+      "source_location": "L38"
+    },
+    {
+      "caller_nid": "test_strict_mode_run",
+      "callee": "validateProjectContext",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\tests\\integration\\test-strict-mode.ts",
+      "source_location": "L43"
+    },
+    {
+      "caller_nid": "test_strict_mode_run",
+      "callee": "includes",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\tests\\integration\\test-strict-mode.ts",
+      "source_location": "L45"
+    },
+    {
+      "caller_nid": "test_strict_mode_run",
+      "callee": "includes",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\tests\\integration\\test-strict-mode.ts",
+      "source_location": "L49"
+    },
+    {
+      "caller_nid": "test_strict_mode_run",
+      "callee": "log",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\tests\\integration\\test-strict-mode.ts",
+      "source_location": "L51"
+    },
+    {
+      "caller_nid": "test_strict_mode_run",
+      "callee": "cwd",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\tests\\integration\\test-strict-mode.ts",
+      "source_location": "L54"
+    },
+    {
+      "caller_nid": "test_strict_mode_run",
+      "callee": "getGitRemoteUrl",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\tests\\integration\\test-strict-mode.ts",
+      "source_location": "L55"
+    },
+    {
+      "caller_nid": "test_strict_mode_run",
+      "callee": "createProject",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\tests\\integration\\test-strict-mode.ts",
+      "source_location": "L58"
+    },
+    {
+      "caller_nid": "test_strict_mode_run",
+      "callee": "basename",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\tests\\integration\\test-strict-mode.ts",
+      "source_location": "L59"
+    },
+    {
+      "caller_nid": "test_strict_mode_run",
+      "callee": "log",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\tests\\integration\\test-strict-mode.ts",
+      "source_location": "L63"
+    },
+    {
+      "caller_nid": "test_strict_mode_run",
+      "callee": "validateProjectContext",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\tests\\integration\\test-strict-mode.ts",
+      "source_location": "L66"
+    },
+    {
+      "caller_nid": "test_strict_mode_run",
+      "callee": "log",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\tests\\integration\\test-strict-mode.ts",
+      "source_location": "L68"
+    },
+    {
+      "caller_nid": "test_strict_mode_run",
+      "callee": "includes",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\tests\\integration\\test-strict-mode.ts",
+      "source_location": "L68"
+    },
+    {
+      "caller_nid": "test_strict_mode_run",
+      "callee": "validateProjectContext",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\tests\\integration\\test-strict-mode.ts",
+      "source_location": "L71"
+    },
+    {
+      "caller_nid": "test_strict_mode_run",
+      "callee": "log",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\tests\\integration\\test-strict-mode.ts",
+      "source_location": "L72"
+    },
+    {
+      "caller_nid": "test_strict_mode_run",
+      "callee": "validateProjectContext",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\tests\\integration\\test-strict-mode.ts",
+      "source_location": "L75"
+    },
+    {
+      "caller_nid": "test_strict_mode_run",
+      "callee": "log",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\tests\\integration\\test-strict-mode.ts",
+      "source_location": "L76"
+    },
+    {
+      "caller_nid": "test_strict_mode_run",
+      "callee": "includes",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\tests\\integration\\test-strict-mode.ts",
+      "source_location": "L76"
+    }
+  ]
+}

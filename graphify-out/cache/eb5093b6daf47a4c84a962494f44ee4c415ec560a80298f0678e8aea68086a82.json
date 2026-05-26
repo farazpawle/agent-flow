@@ -1,0 +1,67 @@
+{
+  "nodes": [
+    {
+      "id": "d_d_drive_projects_mcp_servers_agent_flow_src_services_embeddings_providers_index_ts",
+      "label": "index.ts",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\services\\embeddings\\providers\\index.ts",
+      "source_location": "L1"
+    },
+    {
+      "id": "index_getembeddingprovider",
+      "label": "getEmbeddingProvider()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\services\\embeddings\\providers\\index.ts",
+      "source_location": "L8"
+    }
+  ],
+  "edges": [
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_services_embeddings_providers_index_ts",
+      "target": "d_d_drive_projects_mcp_servers_agent_flow_src_services_embeddings_providers_types_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\services\\embeddings\\providers\\index.ts",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_services_embeddings_providers_index_ts",
+      "target": "d_d_drive_projects_mcp_servers_agent_flow_src_services_embeddings_providers_openaiprovider_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\services\\embeddings\\providers\\index.ts",
+      "source_location": "L2",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_services_embeddings_providers_index_ts",
+      "target": "index_getembeddingprovider",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\services\\embeddings\\providers\\index.ts",
+      "source_location": "L8",
+      "weight": 1.0
+    }
+  ],
+  "raw_calls": [
+    {
+      "caller_nid": "index_getembeddingprovider",
+      "callee": "toLowerCase",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\services\\embeddings\\providers\\index.ts",
+      "source_location": "L9"
+    },
+    {
+      "caller_nid": "index_getembeddingprovider",
+      "callee": "join",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\services\\embeddings\\providers\\index.ts",
+      "source_location": "L12"
+    },
+    {
+      "caller_nid": "index_getembeddingprovider",
+      "callee": "keys",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\services\\embeddings\\providers\\index.ts",
+      "source_location": "L12"
+    }
+  ]
+}

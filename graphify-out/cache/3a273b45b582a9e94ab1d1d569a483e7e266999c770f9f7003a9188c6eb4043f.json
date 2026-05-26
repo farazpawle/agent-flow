@@ -1,0 +1,1388 @@
+{
+  "nodes": [
+    {
+      "id": "d_d_drive_projects_mcp_servers_agent_flow_docs_js_main_js",
+      "label": "main.js",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L1"
+    },
+    {
+      "id": "main_initaos",
+      "label": "initAOS()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L50"
+    },
+    {
+      "id": "main_initmobilemenu",
+      "label": "initMobileMenu()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L71"
+    },
+    {
+      "id": "main_initheroeffects",
+      "label": "initHeroEffects()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L131"
+    },
+    {
+      "id": "main_initpainpointseffects",
+      "label": "initPainPointsEffects()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L225"
+    },
+    {
+      "id": "main_initcodeblocks",
+      "label": "initCodeBlocks()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L320"
+    },
+    {
+      "id": "main_initcodetabswitcher",
+      "label": "initCodeTabSwitcher()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L337"
+    },
+    {
+      "id": "main_inittypingeffect",
+      "label": "initTypingEffect()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L382"
+    },
+    {
+      "id": "main_initsmoothscroll",
+      "label": "initSmoothScroll()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L441"
+    },
+    {
+      "id": "main_initfeatureseffects",
+      "label": "initFeaturesEffects()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L474"
+    },
+    {
+      "id": "main_initworkfloweffects",
+      "label": "initWorkflowEffects()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L551"
+    },
+    {
+      "id": "main_initworkflowmodal",
+      "label": "initWorkflowModal()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L565"
+    },
+    {
+      "id": "main_animateworkflowconnections",
+      "label": "animateWorkflowConnections()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L771"
+    },
+    {
+      "id": "main_addworkflowiconinteractions",
+      "label": "addWorkflowIconInteractions()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L803"
+    },
+    {
+      "id": "main_initinstallationsection",
+      "label": "initInstallationSection()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L840"
+    },
+    {
+      "id": "main_initinstalltabs",
+      "label": "initInstallTabs()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L857"
+    },
+    {
+      "id": "main_initcursortabs",
+      "label": "initCursorTabs()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L883"
+    },
+    {
+      "id": "main_initcommandcopybuttons",
+      "label": "initCommandCopyButtons()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L909"
+    },
+    {
+      "id": "main_initinstallcardsanimation",
+      "label": "initInstallCardsAnimation()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L960"
+    },
+    {
+      "id": "main_initscrolltotopbutton",
+      "label": "initScrollToTopButton()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L993"
+    },
+    {
+      "id": "main_initlazyloading",
+      "label": "initLazyLoading()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L1027"
+    },
+    {
+      "id": "main_initpageentranceanimation",
+      "label": "initPageEntranceAnimation()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L1057"
+    },
+    {
+      "id": "main_addanimation",
+      "label": "addAnimation()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L1085"
+    },
+    {
+      "id": "main_isinviewport",
+      "label": "isInViewport()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L1107"
+    },
+    {
+      "id": "main_initmultilanguage",
+      "label": "initMultiLanguage()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L1120"
+    },
+    {
+      "id": "main_updateworkflowmodalcontent",
+      "label": "updateWorkflowModalContent()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L1309"
+    },
+    {
+      "id": "main_getworkflowdetails",
+      "label": "getWorkflowDetails()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L1346"
+    }
+  ],
+  "edges": [
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_docs_js_main_js",
+      "target": "main_initaos",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L50",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_docs_js_main_js",
+      "target": "main_initmobilemenu",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L71",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_docs_js_main_js",
+      "target": "main_initheroeffects",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L131",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_docs_js_main_js",
+      "target": "main_initpainpointseffects",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L225",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_docs_js_main_js",
+      "target": "main_initcodeblocks",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L320",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_docs_js_main_js",
+      "target": "main_initcodetabswitcher",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L337",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_docs_js_main_js",
+      "target": "main_inittypingeffect",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L382",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_docs_js_main_js",
+      "target": "main_initsmoothscroll",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L441",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_docs_js_main_js",
+      "target": "main_initfeatureseffects",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L474",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_docs_js_main_js",
+      "target": "main_initworkfloweffects",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L551",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_docs_js_main_js",
+      "target": "main_initworkflowmodal",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L565",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_docs_js_main_js",
+      "target": "main_animateworkflowconnections",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L771",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_docs_js_main_js",
+      "target": "main_addworkflowiconinteractions",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L803",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_docs_js_main_js",
+      "target": "main_initinstallationsection",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L840",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_docs_js_main_js",
+      "target": "main_initinstalltabs",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L857",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_docs_js_main_js",
+      "target": "main_initcursortabs",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L883",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_docs_js_main_js",
+      "target": "main_initcommandcopybuttons",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L909",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_docs_js_main_js",
+      "target": "main_initinstallcardsanimation",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L960",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_docs_js_main_js",
+      "target": "main_initscrolltotopbutton",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L993",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_docs_js_main_js",
+      "target": "main_initlazyloading",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L1027",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_docs_js_main_js",
+      "target": "main_initpageentranceanimation",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L1057",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_docs_js_main_js",
+      "target": "main_addanimation",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L1085",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_docs_js_main_js",
+      "target": "main_isinviewport",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L1107",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_docs_js_main_js",
+      "target": "main_initmultilanguage",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L1120",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_docs_js_main_js",
+      "target": "main_updateworkflowmodalcontent",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L1309",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_docs_js_main_js",
+      "target": "main_getworkflowdetails",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L1346",
+      "weight": 1.0
+    },
+    {
+      "source": "main_initcodeblocks",
+      "target": "main_initcodetabswitcher",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L328",
+      "weight": 1.0
+    },
+    {
+      "source": "main_initcodeblocks",
+      "target": "main_inittypingeffect",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L331",
+      "weight": 1.0
+    },
+    {
+      "source": "main_initworkfloweffects",
+      "target": "main_initworkflowmodal",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L553",
+      "weight": 1.0
+    },
+    {
+      "source": "main_initworkfloweffects",
+      "target": "main_animateworkflowconnections",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L556",
+      "weight": 1.0
+    },
+    {
+      "source": "main_initworkfloweffects",
+      "target": "main_addworkflowiconinteractions",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L559",
+      "weight": 1.0
+    },
+    {
+      "source": "main_initinstallationsection",
+      "target": "main_initinstalltabs",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L842",
+      "weight": 1.0
+    },
+    {
+      "source": "main_initinstallationsection",
+      "target": "main_initcursortabs",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L845",
+      "weight": 1.0
+    },
+    {
+      "source": "main_initinstallationsection",
+      "target": "main_initcommandcopybuttons",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L848",
+      "weight": 1.0
+    },
+    {
+      "source": "main_initinstallationsection",
+      "target": "main_initinstallcardsanimation",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L851",
+      "weight": 1.0
+    },
+    {
+      "source": "main_initmultilanguage",
+      "target": "main_updateworkflowmodalcontent",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L1295",
+      "weight": 1.0
+    },
+    {
+      "source": "main_updateworkflowmodalcontent",
+      "target": "main_getworkflowdetails",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L1320",
+      "weight": 1.0
+    }
+  ],
+  "raw_calls": [
+    {
+      "caller_nid": "main_initaos",
+      "callee": "init",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L51"
+    },
+    {
+      "caller_nid": "main_initaos",
+      "callee": "matchMedia",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L58"
+    },
+    {
+      "caller_nid": "main_initaos",
+      "callee": "addEventListener",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L63"
+    },
+    {
+      "caller_nid": "main_initaos",
+      "callee": "refresh",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L64"
+    },
+    {
+      "caller_nid": "main_initmobilemenu",
+      "callee": "getElementById",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L72"
+    },
+    {
+      "caller_nid": "main_initmobilemenu",
+      "callee": "getElementById",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L73"
+    },
+    {
+      "caller_nid": "main_initmobilemenu",
+      "callee": "addEventListener",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L76"
+    },
+    {
+      "caller_nid": "main_initmobilemenu",
+      "callee": "preventDefault",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L77"
+    },
+    {
+      "caller_nid": "main_initmobilemenu",
+      "callee": "contains",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L80"
+    },
+    {
+      "caller_nid": "main_initmobilemenu",
+      "callee": "remove",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L81"
+    },
+    {
+      "caller_nid": "main_initmobilemenu",
+      "callee": "setTimeout",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L84"
+    },
+    {
+      "caller_nid": "main_initmobilemenu",
+      "callee": "remove",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L89"
+    },
+    {
+      "caller_nid": "main_initmobilemenu",
+      "callee": "setTimeout",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L92"
+    },
+    {
+      "caller_nid": "main_initmobilemenu",
+      "callee": "querySelectorAll",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L99"
+    },
+    {
+      "caller_nid": "main_initmobilemenu",
+      "callee": "forEach",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L100"
+    },
+    {
+      "caller_nid": "main_initmobilemenu",
+      "callee": "addEventListener",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L112"
+    },
+    {
+      "caller_nid": "main_initmobilemenu",
+      "callee": "contains",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L114"
+    },
+    {
+      "caller_nid": "main_initmobilemenu",
+      "callee": "contains",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L115"
+    },
+    {
+      "caller_nid": "main_initmobilemenu",
+      "callee": "contains",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L116"
+    },
+    {
+      "caller_nid": "main_initmobilemenu",
+      "callee": "remove",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L118"
+    },
+    {
+      "caller_nid": "main_initmobilemenu",
+      "callee": "setTimeout",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L120"
+    },
+    {
+      "caller_nid": "main_initheroeffects",
+      "callee": "getElementById",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L133"
+    },
+    {
+      "caller_nid": "main_initheroeffects",
+      "callee": "querySelectorAll",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L137"
+    },
+    {
+      "caller_nid": "main_initheroeffects",
+      "callee": "forEach",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L138"
+    },
+    {
+      "caller_nid": "main_initheroeffects",
+      "callee": "addEventListener",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L148"
+    },
+    {
+      "caller_nid": "main_initheroeffects",
+      "callee": "querySelector",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L160"
+    },
+    {
+      "caller_nid": "main_initheroeffects",
+      "callee": "addEventListener",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L168"
+    },
+    {
+      "caller_nid": "main_initheroeffects",
+      "callee": "querySelector",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L175"
+    },
+    {
+      "caller_nid": "main_initheroeffects",
+      "callee": "forEach",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L183"
+    },
+    {
+      "caller_nid": "main_initheroeffects",
+      "callee": "addEventListener",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L195"
+    },
+    {
+      "caller_nid": "main_initheroeffects",
+      "callee": "querySelector",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L196"
+    },
+    {
+      "caller_nid": "main_initheroeffects",
+      "callee": "forEach",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L201"
+    },
+    {
+      "caller_nid": "main_initheroeffects",
+      "callee": "querySelector",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L207"
+    },
+    {
+      "caller_nid": "main_initheroeffects",
+      "callee": "setTimeout",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L213"
+    },
+    {
+      "caller_nid": "main_initpainpointseffects",
+      "callee": "getElementById",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L226"
+    },
+    {
+      "caller_nid": "main_initpainpointseffects",
+      "callee": "querySelectorAll",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L230"
+    },
+    {
+      "caller_nid": "main_initpainpointseffects",
+      "callee": "forEach",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L235"
+    },
+    {
+      "caller_nid": "main_initpainpointseffects",
+      "callee": "forEach",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L241"
+    },
+    {
+      "caller_nid": "main_initpainpointseffects",
+      "callee": "addEventListener",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L285"
+    },
+    {
+      "caller_nid": "main_initpainpointseffects",
+      "callee": "forEach",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L297"
+    },
+    {
+      "caller_nid": "main_initcodeblocks",
+      "callee": "highlightAll",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L324"
+    },
+    {
+      "caller_nid": "main_initcodetabswitcher",
+      "callee": "querySelectorAll",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L338"
+    },
+    {
+      "caller_nid": "main_initcodetabswitcher",
+      "callee": "querySelectorAll",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L339"
+    },
+    {
+      "caller_nid": "main_initcodetabswitcher",
+      "callee": "forEach",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L343"
+    },
+    {
+      "caller_nid": "main_inittypingeffect",
+      "callee": "get",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L385"
+    },
+    {
+      "caller_nid": "main_inittypingeffect",
+      "callee": "querySelectorAll",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L389"
+    },
+    {
+      "caller_nid": "main_inittypingeffect",
+      "callee": "forEach",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L392"
+    },
+    {
+      "caller_nid": "main_initsmoothscroll",
+      "callee": "querySelectorAll",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L442"
+    },
+    {
+      "caller_nid": "main_initsmoothscroll",
+      "callee": "forEach",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L444"
+    },
+    {
+      "caller_nid": "main_initfeatureseffects",
+      "callee": "getElementById",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L475"
+    },
+    {
+      "caller_nid": "main_initfeatureseffects",
+      "callee": "querySelectorAll",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L479"
+    },
+    {
+      "caller_nid": "main_initfeatureseffects",
+      "callee": "forEach",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L482"
+    },
+    {
+      "caller_nid": "main_initfeatureseffects",
+      "callee": "addEventListener",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L521"
+    },
+    {
+      "caller_nid": "main_initfeatureseffects",
+      "callee": "forEach",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L537"
+    },
+    {
+      "caller_nid": "main_initworkflowmodal",
+      "callee": "getElementById",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L566"
+    },
+    {
+      "caller_nid": "main_initworkflowmodal",
+      "callee": "getElementById",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L567"
+    },
+    {
+      "caller_nid": "main_initworkflowmodal",
+      "callee": "getElementById",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L568"
+    },
+    {
+      "caller_nid": "main_initworkflowmodal",
+      "callee": "querySelectorAll",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L569"
+    },
+    {
+      "caller_nid": "main_initworkflowmodal",
+      "callee": "getElementById",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L572"
+    },
+    {
+      "caller_nid": "main_initworkflowmodal",
+      "callee": "getElementById",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L573"
+    },
+    {
+      "caller_nid": "main_initworkflowmodal",
+      "callee": "forEach",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L737"
+    },
+    {
+      "caller_nid": "main_initworkflowmodal",
+      "callee": "addEventListener",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L757"
+    },
+    {
+      "caller_nid": "main_initworkflowmodal",
+      "callee": "addEventListener",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L758"
+    },
+    {
+      "caller_nid": "main_initworkflowmodal",
+      "callee": "addEventListener",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L761"
+    },
+    {
+      "caller_nid": "main_initworkflowmodal",
+      "callee": "closeModal",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L763"
+    },
+    {
+      "caller_nid": "main_animateworkflowconnections",
+      "callee": "querySelector",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L772"
+    },
+    {
+      "caller_nid": "main_animateworkflowconnections",
+      "callee": "observe",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L797"
+    },
+    {
+      "caller_nid": "main_addworkflowiconinteractions",
+      "callee": "querySelectorAll",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L804"
+    },
+    {
+      "caller_nid": "main_addworkflowiconinteractions",
+      "callee": "forEach",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L808"
+    },
+    {
+      "caller_nid": "main_initinstalltabs",
+      "callee": "querySelectorAll",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L858"
+    },
+    {
+      "caller_nid": "main_initinstalltabs",
+      "callee": "querySelectorAll",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L859"
+    },
+    {
+      "caller_nid": "main_initinstalltabs",
+      "callee": "forEach",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L863"
+    },
+    {
+      "caller_nid": "main_initcursortabs",
+      "callee": "querySelectorAll",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L884"
+    },
+    {
+      "caller_nid": "main_initcursortabs",
+      "callee": "querySelectorAll",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L885"
+    },
+    {
+      "caller_nid": "main_initcursortabs",
+      "callee": "forEach",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L889"
+    },
+    {
+      "caller_nid": "main_initcommandcopybuttons",
+      "callee": "querySelectorAll",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L910"
+    },
+    {
+      "caller_nid": "main_initcommandcopybuttons",
+      "callee": "forEach",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L912"
+    },
+    {
+      "caller_nid": "main_initinstallcardsanimation",
+      "callee": "querySelectorAll",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L961"
+    },
+    {
+      "caller_nid": "main_initinstallcardsanimation",
+      "callee": "forEach",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L963"
+    },
+    {
+      "caller_nid": "main_initscrolltotopbutton",
+      "callee": "createElement",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L995"
+    },
+    {
+      "caller_nid": "main_initscrolltotopbutton",
+      "callee": "setAttribute",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L1001"
+    },
+    {
+      "caller_nid": "main_initscrolltotopbutton",
+      "callee": "appendChild",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L1004"
+    },
+    {
+      "caller_nid": "main_initscrolltotopbutton",
+      "callee": "addEventListener",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L1007"
+    },
+    {
+      "caller_nid": "main_initscrolltotopbutton",
+      "callee": "scrollTo",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L1008"
+    },
+    {
+      "caller_nid": "main_initscrolltotopbutton",
+      "callee": "addEventListener",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L1015"
+    },
+    {
+      "caller_nid": "main_initlazyloading",
+      "callee": "querySelectorAll",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L1030"
+    },
+    {
+      "caller_nid": "main_initlazyloading",
+      "callee": "forEach",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L1031"
+    },
+    {
+      "caller_nid": "main_initlazyloading",
+      "callee": "querySelectorAll",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L1047"
+    },
+    {
+      "caller_nid": "main_initlazyloading",
+      "callee": "forEach",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L1048"
+    },
+    {
+      "caller_nid": "main_initpageentranceanimation",
+      "callee": "add",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L1059"
+    },
+    {
+      "caller_nid": "main_initpageentranceanimation",
+      "callee": "setTimeout",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L1062"
+    },
+    {
+      "caller_nid": "main_addanimation",
+      "callee": "setTimeout",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L1088"
+    },
+    {
+      "caller_nid": "main_isinviewport",
+      "callee": "getBoundingClientRect",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L1108"
+    },
+    {
+      "caller_nid": "main_initmultilanguage",
+      "callee": "enhancedInitializeLanguage",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L1125"
+    },
+    {
+      "caller_nid": "main_initmultilanguage",
+      "callee": "initializeLanguage",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L1128"
+    },
+    {
+      "caller_nid": "main_initmultilanguage",
+      "callee": "warn",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L1130"
+    },
+    {
+      "caller_nid": "main_initmultilanguage",
+      "callee": "getItem",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L1134"
+    },
+    {
+      "caller_nid": "main_initmultilanguage",
+      "callee": "startsWith",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L1135"
+    },
+    {
+      "caller_nid": "main_initmultilanguage",
+      "callee": "setAttribute",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L1138"
+    },
+    {
+      "caller_nid": "main_initmultilanguage",
+      "callee": "error",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L1140"
+    },
+    {
+      "caller_nid": "main_initmultilanguage",
+      "callee": "forEach",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L1146"
+    },
+    {
+      "caller_nid": "main_initmultilanguage",
+      "callee": "querySelectorAll",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L1146"
+    },
+    {
+      "caller_nid": "main_initmultilanguage",
+      "callee": "addEventListener",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L1147"
+    },
+    {
+      "caller_nid": "main_initmultilanguage",
+      "callee": "getAttribute",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L1148"
+    },
+    {
+      "caller_nid": "main_initmultilanguage",
+      "callee": "enhancedSetLanguage",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L1152"
+    },
+    {
+      "caller_nid": "main_initmultilanguage",
+      "callee": "setLanguageWithAnimation",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L1155"
+    },
+    {
+      "caller_nid": "main_initmultilanguage",
+      "callee": "setLanguage",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L1158"
+    },
+    {
+      "caller_nid": "main_initmultilanguage",
+      "callee": "warn",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L1160"
+    },
+    {
+      "caller_nid": "main_initmultilanguage",
+      "callee": "setItem",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L1163"
+    },
+    {
+      "caller_nid": "main_initmultilanguage",
+      "callee": "setAttribute",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L1164"
+    },
+    {
+      "caller_nid": "main_initmultilanguage",
+      "callee": "error",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L1166"
+    },
+    {
+      "caller_nid": "main_initmultilanguage",
+      "callee": "error",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L1172"
+    },
+    {
+      "caller_nid": "main_initmultilanguage",
+      "callee": "batchApplyTranslations",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L1177"
+    },
+    {
+      "caller_nid": "main_initmultilanguage",
+      "callee": "warn",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L1180"
+    },
+    {
+      "caller_nid": "main_initmultilanguage",
+      "callee": "querySelectorAll",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L1184"
+    },
+    {
+      "caller_nid": "main_initmultilanguage",
+      "callee": "forEach",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L1187"
+    },
+    {
+      "caller_nid": "main_initmultilanguage",
+      "callee": "getItem",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L1211"
+    },
+    {
+      "caller_nid": "main_initmultilanguage",
+      "callee": "startsWith",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L1212"
+    },
+    {
+      "caller_nid": "main_initmultilanguage",
+      "callee": "forEach",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L1216"
+    },
+    {
+      "caller_nid": "main_initmultilanguage",
+      "callee": "setAttribute",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L1224"
+    },
+    {
+      "caller_nid": "main_initmultilanguage",
+      "callee": "error",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L1226"
+    },
+    {
+      "caller_nid": "main_initmultilanguage",
+      "callee": "basicLanguageSupport",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L1230"
+    },
+    {
+      "caller_nid": "main_initmultilanguage",
+      "callee": "error",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L1232"
+    },
+    {
+      "caller_nid": "main_initmultilanguage",
+      "callee": "addEventListener",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L1238"
+    },
+    {
+      "caller_nid": "main_initmultilanguage",
+      "callee": "log",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L1240"
+    },
+    {
+      "caller_nid": "main_initmultilanguage",
+      "callee": "querySelectorAll",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L1257"
+    },
+    {
+      "caller_nid": "main_initmultilanguage",
+      "callee": "getTranslation",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L1258"
+    },
+    {
+      "caller_nid": "main_initmultilanguage",
+      "callee": "forEach",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L1263"
+    },
+    {
+      "caller_nid": "main_initmultilanguage",
+      "callee": "warn",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L1273"
+    },
+    {
+      "caller_nid": "main_initmultilanguage",
+      "callee": "getElementById",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L1278"
+    },
+    {
+      "caller_nid": "main_initmultilanguage",
+      "callee": "getTranslation",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L1280"
+    },
+    {
+      "caller_nid": "main_initmultilanguage",
+      "callee": "warn",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L1286"
+    },
+    {
+      "caller_nid": "main_initmultilanguage",
+      "callee": "setTimeout",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L1291"
+    },
+    {
+      "caller_nid": "main_initmultilanguage",
+      "callee": "warn",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L1297"
+    },
+    {
+      "caller_nid": "main_initmultilanguage",
+      "callee": "error",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L1301"
+    },
+    {
+      "caller_nid": "main_updateworkflowmodalcontent",
+      "callee": "getElementById",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L1310"
+    },
+    {
+      "caller_nid": "main_updateworkflowmodalcontent",
+      "callee": "getElementById",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L1314"
+    },
+    {
+      "caller_nid": "main_updateworkflowmodalcontent",
+      "callee": "getElementById",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L1315"
+    },
+    {
+      "caller_nid": "main_updateworkflowmodalcontent",
+      "callee": "getAttribute",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L1316"
+    },
+    {
+      "caller_nid": "main_updateworkflowmodalcontent",
+      "callee": "requestAnimationFrame",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L1327"
+    },
+    {
+      "caller_nid": "main_updateworkflowmodalcontent",
+      "callee": "querySelectorAll",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L1332"
+    },
+    {
+      "caller_nid": "main_updateworkflowmodalcontent",
+      "callee": "forEach",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L1333"
+    },
+    {
+      "caller_nid": "main_updateworkflowmodalcontent",
+      "callee": "setAttribute",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\main.js",
+      "source_location": "L1335"
+    }
+  ]
+}

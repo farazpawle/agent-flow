@@ -1,0 +1,111 @@
+{
+  "nodes": [
+    {
+      "id": "d_d_drive_projects_mcp_servers_agent_flow_src_tools_artifacts_artifactrecord_ts",
+      "label": "artifactRecord.ts",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\artifacts\\artifactRecord.ts",
+      "source_location": "L1"
+    },
+    {
+      "id": "artifactrecord_astooltext",
+      "label": "asToolText()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\artifacts\\artifactRecord.ts",
+      "source_location": "L21"
+    },
+    {
+      "id": "artifactrecord_buildfindingpayload",
+      "label": "buildFindingPayload()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\artifacts\\artifactRecord.ts",
+      "source_location": "L33"
+    },
+    {
+      "id": "artifactrecord_artifactrecord",
+      "label": "artifactRecord()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\artifacts\\artifactRecord.ts",
+      "source_location": "L94"
+    }
+  ],
+  "edges": [
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_tools_artifacts_artifactrecord_ts",
+      "target": "d_d_drive_projects_mcp_servers_agent_flow_src_models_db_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\artifacts\\artifactRecord.ts",
+      "source_location": "L16",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_tools_artifacts_artifactrecord_ts",
+      "target": "d_d_drive_projects_mcp_servers_agent_flow_src_utils_errors_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\artifacts\\artifactRecord.ts",
+      "source_location": "L17",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_tools_artifacts_artifactrecord_ts",
+      "target": "d_d_drive_projects_mcp_servers_agent_flow_src_utils_telemetry_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\artifacts\\artifactRecord.ts",
+      "source_location": "L18",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_tools_artifacts_artifactrecord_ts",
+      "target": "d_d_drive_projects_mcp_servers_agent_flow_src_tools_artifacts_schemas_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\artifacts\\artifactRecord.ts",
+      "source_location": "L19",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_tools_artifacts_artifactrecord_ts",
+      "target": "artifactrecord_astooltext",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\artifacts\\artifactRecord.ts",
+      "source_location": "L21",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_tools_artifacts_artifactrecord_ts",
+      "target": "artifactrecord_buildfindingpayload",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\artifacts\\artifactRecord.ts",
+      "source_location": "L33",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_tools_artifacts_artifactrecord_ts",
+      "target": "artifactrecord_artifactrecord",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\artifacts\\artifactRecord.ts",
+      "source_location": "L94",
+      "weight": 1.0
+    }
+  ],
+  "raw_calls": [
+    {
+      "caller_nid": "artifactrecord_astooltext",
+      "callee": "stringify",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\artifacts\\artifactRecord.ts",
+      "source_location": "L23"
+    },
+    {
+      "caller_nid": "artifactrecord_artifactrecord",
+      "callee": "withToolTelemetry",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\artifacts\\artifactRecord.ts",
+      "source_location": "L95"
+    }
+  ]
+}

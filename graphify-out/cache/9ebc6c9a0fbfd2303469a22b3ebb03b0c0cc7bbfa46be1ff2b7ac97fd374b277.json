@@ -1,0 +1,52 @@
+{
+  "nodes": [
+    {
+      "id": "d_d_drive_projects_mcp_servers_agent_flow_src_tools_task_messagetemplates_ts",
+      "label": "messageTemplates.ts",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\task\\messageTemplates.ts",
+      "source_location": "L1"
+    },
+    {
+      "id": "messagetemplates_rendertasktoolmessage",
+      "label": "renderTaskToolMessage()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\task\\messageTemplates.ts",
+      "source_location": "L3"
+    }
+  ],
+  "edges": [
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_tools_task_messagetemplates_ts",
+      "target": "d_d_drive_projects_mcp_servers_agent_flow_src_prompts_index_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\task\\messageTemplates.ts",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_tools_task_messagetemplates_ts",
+      "target": "messagetemplates_rendertasktoolmessage",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\task\\messageTemplates.ts",
+      "source_location": "L3",
+      "weight": 1.0
+    }
+  ],
+  "raw_calls": [
+    {
+      "caller_nid": "messagetemplates_rendertasktoolmessage",
+      "callee": "generatePrompt",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\task\\messageTemplates.ts",
+      "source_location": "L7"
+    },
+    {
+      "caller_nid": "messagetemplates_rendertasktoolmessage",
+      "callee": "loadPromptFromTemplate",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\task\\messageTemplates.ts",
+      "source_location": "L7"
+    }
+  ]
+}

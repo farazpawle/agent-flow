@@ -1,0 +1,244 @@
+{
+  "nodes": [
+    {
+      "id": "d_d_drive_projects_mcp_servers_agent_flow_src_tools_views_taskview_ts",
+      "label": "taskView.ts",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\views\\taskView.ts",
+      "source_location": "L1"
+    },
+    {
+      "id": "taskview_ensureversionpresent",
+      "label": "ensureVersionPresent()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\views\\taskView.ts",
+      "source_location": "L30"
+    },
+    {
+      "id": "taskview_matchesstatus",
+      "label": "matchesStatus()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\views\\taskView.ts",
+      "source_location": "L50"
+    },
+    {
+      "id": "taskview_astooltext",
+      "label": "asToolText()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\views\\taskView.ts",
+      "source_location": "L57"
+    },
+    {
+      "id": "taskview_taskview",
+      "label": "taskView()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\views\\taskView.ts",
+      "source_location": "L63"
+    }
+  ],
+  "edges": [
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_tools_views_taskview_ts",
+      "target": "d_d_drive_projects_mcp_servers_agent_flow_src_models_db_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\views\\taskView.ts",
+      "source_location": "L16",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_tools_views_taskview_ts",
+      "target": "d_d_drive_projects_mcp_servers_agent_flow_src_models_taskmodel_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\views\\taskView.ts",
+      "source_location": "L17",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_tools_views_taskview_ts",
+      "target": "d_d_drive_projects_mcp_servers_agent_flow_src_utils_taskgraph_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\views\\taskView.ts",
+      "source_location": "L18",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_tools_views_taskview_ts",
+      "target": "d_d_drive_projects_mcp_servers_agent_flow_src_utils_errors_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\views\\taskView.ts",
+      "source_location": "L19",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_tools_views_taskview_ts",
+      "target": "d_d_drive_projects_mcp_servers_agent_flow_src_types_index_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\views\\taskView.ts",
+      "source_location": "L20",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_tools_views_taskview_ts",
+      "target": "d_d_drive_projects_mcp_servers_agent_flow_src_types_index_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\views\\taskView.ts",
+      "source_location": "L21",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_tools_views_taskview_ts",
+      "target": "d_d_drive_projects_mcp_servers_agent_flow_src_tools_views_schemas_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\views\\taskView.ts",
+      "source_location": "L22",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_tools_views_taskview_ts",
+      "target": "taskview_ensureversionpresent",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\views\\taskView.ts",
+      "source_location": "L30",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_tools_views_taskview_ts",
+      "target": "taskview_matchesstatus",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\views\\taskView.ts",
+      "source_location": "L50",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_tools_views_taskview_ts",
+      "target": "taskview_astooltext",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\views\\taskView.ts",
+      "source_location": "L57",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_tools_views_taskview_ts",
+      "target": "taskview_taskview",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\views\\taskView.ts",
+      "source_location": "L63",
+      "weight": 1.0
+    },
+    {
+      "source": "taskview_taskview",
+      "target": "taskview_astooltext",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\views\\taskView.ts",
+      "source_location": "L68",
+      "weight": 1.0
+    },
+    {
+      "source": "taskview_taskview",
+      "target": "taskview_ensureversionpresent",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\views\\taskView.ts",
+      "source_location": "L84",
+      "weight": 1.0
+    }
+  ],
+  "raw_calls": [
+    {
+      "caller_nid": "taskview_matchesstatus",
+      "callee": "String",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\views\\taskView.ts",
+      "source_location": "L54"
+    },
+    {
+      "caller_nid": "taskview_matchesstatus",
+      "callee": "String",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\views\\taskView.ts",
+      "source_location": "L54"
+    },
+    {
+      "caller_nid": "taskview_astooltext",
+      "callee": "stringify",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\views\\taskView.ts",
+      "source_location": "L59"
+    },
+    {
+      "caller_nid": "taskview_taskview",
+      "callee": "getAllTasks",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\views\\taskView.ts",
+      "source_location": "L66"
+    },
+    {
+      "caller_nid": "taskview_taskview",
+      "callee": "filter",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\views\\taskView.ts",
+      "source_location": "L67"
+    },
+    {
+      "caller_nid": "taskview_taskview",
+      "callee": "map",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\views\\taskView.ts",
+      "source_location": "L73"
+    },
+    {
+      "caller_nid": "taskview_taskview",
+      "callee": "getTask",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\views\\taskView.ts",
+      "source_location": "L78"
+    },
+    {
+      "caller_nid": "taskview_taskview",
+      "callee": "searchTasksWithCommand",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\views\\taskView.ts",
+      "source_location": "L88"
+    },
+    {
+      "caller_nid": "taskview_taskview",
+      "callee": "map",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\views\\taskView.ts",
+      "source_location": "L104"
+    },
+    {
+      "caller_nid": "taskview_taskview",
+      "callee": "getAllTasks",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\views\\taskView.ts",
+      "source_location": "L109"
+    },
+    {
+      "caller_nid": "taskview_taskview",
+      "callee": "nextReady",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\views\\taskView.ts",
+      "source_location": "L119"
+    },
+    {
+      "caller_nid": "taskview_taskview",
+      "callee": "getAllTasks",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\views\\taskView.ts",
+      "source_location": "L129"
+    },
+    {
+      "caller_nid": "taskview_taskview",
+      "callee": "filter",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\views\\taskView.ts",
+      "source_location": "L130"
+    },
+    {
+      "caller_nid": "taskview_taskview",
+      "callee": "map",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\views\\taskView.ts",
+      "source_location": "L136"
+    }
+  ]
+}

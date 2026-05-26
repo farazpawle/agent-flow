@@ -1,0 +1,103 @@
+{
+  "nodes": [
+    {
+      "id": "d_d_drive_projects_mcp_servers_agent_flow_src_prompts_generators_querytask_ts",
+      "label": "queryTask.ts",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\prompts\\generators\\queryTask.ts",
+      "source_location": "L1"
+    },
+    {
+      "id": "querytask_getquerytaskprompt",
+      "label": "getQueryTaskPrompt()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\prompts\\generators\\queryTask.ts",
+      "source_location": "L31"
+    }
+  ],
+  "edges": [
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_prompts_generators_querytask_ts",
+      "target": "d_d_drive_projects_mcp_servers_agent_flow_src_prompts_loader_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\prompts\\generators\\queryTask.ts",
+      "source_location": "L6",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_prompts_generators_querytask_ts",
+      "target": "d_d_drive_projects_mcp_servers_agent_flow_src_types_index_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\prompts\\generators\\queryTask.ts",
+      "source_location": "L11",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_prompts_generators_querytask_ts",
+      "target": "querytask_getquerytaskprompt",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\prompts\\generators\\queryTask.ts",
+      "source_location": "L31",
+      "weight": 1.0
+    }
+  ],
+  "raw_calls": [
+    {
+      "caller_nid": "querytask_getquerytaskprompt",
+      "callee": "loadPromptFromTemplate",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\prompts\\generators\\queryTask.ts",
+      "source_location": "L35"
+    },
+    {
+      "caller_nid": "querytask_getquerytaskprompt",
+      "callee": "generatePrompt",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\prompts\\generators\\queryTask.ts",
+      "source_location": "L36"
+    },
+    {
+      "caller_nid": "querytask_getquerytaskprompt",
+      "callee": "loadPromptFromTemplate",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\prompts\\generators\\queryTask.ts",
+      "source_location": "L41"
+    },
+    {
+      "caller_nid": "querytask_getquerytaskprompt",
+      "callee": "generatePrompt",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\prompts\\generators\\queryTask.ts",
+      "source_location": "L46"
+    },
+    {
+      "caller_nid": "querytask_getquerytaskprompt",
+      "callee": "substring",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\prompts\\generators\\queryTask.ts",
+      "source_location": "L52"
+    },
+    {
+      "caller_nid": "querytask_getquerytaskprompt",
+      "callee": "toLocaleString",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\prompts\\generators\\queryTask.ts",
+      "source_location": "L54"
+    },
+    {
+      "caller_nid": "querytask_getquerytaskprompt",
+      "callee": "loadPromptFromTemplate",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\prompts\\generators\\queryTask.ts",
+      "source_location": "L58"
+    },
+    {
+      "caller_nid": "querytask_getquerytaskprompt",
+      "callee": "generatePrompt",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\prompts\\generators\\queryTask.ts",
+      "source_location": "L59"
+    },
+    {
+      "caller_nid": "querytask_getquerytaskprompt",
+      "callee": "loadPrompt",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\prompts\\generators\\queryTask.ts",
+      "source_location": "L69"
+    }
+  ]
+}

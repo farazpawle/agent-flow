@@ -1,0 +1,152 @@
+{
+  "nodes": [
+    {
+      "id": "d_d_drive_projects_mcp_servers_agent_flow_src_utils_envconfig_ts",
+      "label": "envConfig.ts",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\utils\\envConfig.ts",
+      "source_location": "L1"
+    },
+    {
+      "id": "envconfig_normalizeenvvalue",
+      "label": "normalizeEnvValue()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\utils\\envConfig.ts",
+      "source_location": "L22"
+    },
+    {
+      "id": "envconfig_resolvealiasvalue",
+      "label": "resolveAliasValue()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\utils\\envConfig.ts",
+      "source_location": "L42"
+    },
+    {
+      "id": "envconfig_synchronizealiasgroup",
+      "label": "synchronizeAliasGroup()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\utils\\envConfig.ts",
+      "source_location": "L55"
+    },
+    {
+      "id": "envconfig_synchronizeautoopenaliases",
+      "label": "synchronizeAutoOpenAliases()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\utils\\envConfig.ts",
+      "source_location": "L63"
+    },
+    {
+      "id": "envconfig_applyenvironmentaliases",
+      "label": "applyEnvironmentAliases()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\utils\\envConfig.ts",
+      "source_location": "L86"
+    }
+  ],
+  "edges": [
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_utils_envconfig_ts",
+      "target": "envconfig_normalizeenvvalue",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\utils\\envConfig.ts",
+      "source_location": "L22",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_utils_envconfig_ts",
+      "target": "envconfig_resolvealiasvalue",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\utils\\envConfig.ts",
+      "source_location": "L42",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_utils_envconfig_ts",
+      "target": "envconfig_synchronizealiasgroup",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\utils\\envConfig.ts",
+      "source_location": "L55",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_utils_envconfig_ts",
+      "target": "envconfig_synchronizeautoopenaliases",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\utils\\envConfig.ts",
+      "source_location": "L63",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_utils_envconfig_ts",
+      "target": "envconfig_applyenvironmentaliases",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\utils\\envConfig.ts",
+      "source_location": "L86",
+      "weight": 1.0
+    },
+    {
+      "source": "envconfig_resolvealiasvalue",
+      "target": "envconfig_normalizeenvvalue",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\utils\\envConfig.ts",
+      "source_location": "L46",
+      "weight": 1.0
+    },
+    {
+      "source": "envconfig_synchronizeautoopenaliases",
+      "target": "envconfig_normalizeenvvalue",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\utils\\envConfig.ts",
+      "source_location": "L64",
+      "weight": 1.0
+    },
+    {
+      "source": "envconfig_applyenvironmentaliases",
+      "target": "envconfig_resolvealiasvalue",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\utils\\envConfig.ts",
+      "source_location": "L88",
+      "weight": 1.0
+    },
+    {
+      "source": "envconfig_applyenvironmentaliases",
+      "target": "envconfig_synchronizealiasgroup",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\utils\\envConfig.ts",
+      "source_location": "L90",
+      "weight": 1.0
+    },
+    {
+      "source": "envconfig_applyenvironmentaliases",
+      "target": "envconfig_synchronizeautoopenaliases",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\utils\\envConfig.ts",
+      "source_location": "L94",
+      "weight": 1.0
+    }
+  ],
+  "raw_calls": [
+    {
+      "caller_nid": "envconfig_normalizeenvvalue",
+      "callee": "trim",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\utils\\envConfig.ts",
+      "source_location": "L27"
+    },
+    {
+      "caller_nid": "envconfig_normalizeenvvalue",
+      "callee": "toLowerCase",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\utils\\envConfig.ts",
+      "source_location": "L33"
+    }
+  ]
+}

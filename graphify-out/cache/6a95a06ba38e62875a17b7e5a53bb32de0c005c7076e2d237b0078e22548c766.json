@@ -1,0 +1,592 @@
+{
+  "nodes": [
+    {
+      "id": "d_d_drive_projects_mcp_servers_agent_flow_src_tools_edits_taskedit_ts",
+      "label": "taskEdit.ts",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\edits\\taskEdit.ts",
+      "source_location": "L1"
+    },
+    {
+      "id": "taskedit_astooltext",
+      "label": "asToolText()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\edits\\taskEdit.ts",
+      "source_location": "L33"
+    },
+    {
+      "id": "taskedit_loadorthrow",
+      "label": "loadOrThrow()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\edits\\taskEdit.ts",
+      "source_location": "L39"
+    },
+    {
+      "id": "taskedit_persisttask",
+      "label": "persistTask()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\edits\\taskEdit.ts",
+      "source_location": "L54"
+    },
+    {
+      "id": "taskedit_taskedit",
+      "label": "taskEdit()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\edits\\taskEdit.ts",
+      "source_location": "L68"
+    },
+    {
+      "id": "taskedit_dispatch",
+      "label": "dispatch()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\edits\\taskEdit.ts",
+      "source_location": "L72"
+    },
+    {
+      "id": "taskedit_create",
+      "label": "create()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\edits\\taskEdit.ts",
+      "source_location": "L89"
+    },
+    {
+      "id": "taskedit_update",
+      "label": "update()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\edits\\taskEdit.ts",
+      "source_location": "L121"
+    },
+    {
+      "id": "taskedit_setpriority",
+      "label": "setPriority()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\edits\\taskEdit.ts",
+      "source_location": "L146"
+    },
+    {
+      "id": "taskedit_setdependency",
+      "label": "setDependency()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\edits\\taskEdit.ts",
+      "source_location": "L156"
+    },
+    {
+      "id": "taskedit_cleardependency",
+      "label": "clearDependency()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\edits\\taskEdit.ts",
+      "source_location": "L177"
+    },
+    {
+      "id": "taskedit_reorder",
+      "label": "reorder()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\edits\\taskEdit.ts",
+      "source_location": "L192"
+    },
+    {
+      "id": "taskedit_split",
+      "label": "split()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\edits\\taskEdit.ts",
+      "source_location": "L233"
+    },
+    {
+      "id": "taskedit_merge",
+      "label": "merge()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\edits\\taskEdit.ts",
+      "source_location": "L333"
+    }
+  ],
+  "edges": [
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_tools_edits_taskedit_ts",
+      "target": "uuid",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\edits\\taskEdit.ts",
+      "source_location": "L19",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_tools_edits_taskedit_ts",
+      "target": "d_d_drive_projects_mcp_servers_agent_flow_src_models_db_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\edits\\taskEdit.ts",
+      "source_location": "L20",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_tools_edits_taskedit_ts",
+      "target": "d_d_drive_projects_mcp_servers_agent_flow_src_utils_errors_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\edits\\taskEdit.ts",
+      "source_location": "L21",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_tools_edits_taskedit_ts",
+      "target": "d_d_drive_projects_mcp_servers_agent_flow_src_utils_telemetry_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\edits\\taskEdit.ts",
+      "source_location": "L22",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_tools_edits_taskedit_ts",
+      "target": "d_d_drive_projects_mcp_servers_agent_flow_src_models_concurrency_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\edits\\taskEdit.ts",
+      "source_location": "L23",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_tools_edits_taskedit_ts",
+      "target": "d_d_drive_projects_mcp_servers_agent_flow_src_types_index_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\edits\\taskEdit.ts",
+      "source_location": "L27",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_tools_edits_taskedit_ts",
+      "target": "d_d_drive_projects_mcp_servers_agent_flow_src_types_index_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\edits\\taskEdit.ts",
+      "source_location": "L28",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_tools_edits_taskedit_ts",
+      "target": "d_d_drive_projects_mcp_servers_agent_flow_src_tools_edits_schemas_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\edits\\taskEdit.ts",
+      "source_location": "L29",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_tools_edits_taskedit_ts",
+      "target": "taskedit_astooltext",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\edits\\taskEdit.ts",
+      "source_location": "L33",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_tools_edits_taskedit_ts",
+      "target": "taskedit_loadorthrow",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\edits\\taskEdit.ts",
+      "source_location": "L39",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_tools_edits_taskedit_ts",
+      "target": "taskedit_persisttask",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\edits\\taskEdit.ts",
+      "source_location": "L54",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_tools_edits_taskedit_ts",
+      "target": "taskedit_taskedit",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\edits\\taskEdit.ts",
+      "source_location": "L68",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_tools_edits_taskedit_ts",
+      "target": "taskedit_dispatch",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\edits\\taskEdit.ts",
+      "source_location": "L72",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_tools_edits_taskedit_ts",
+      "target": "taskedit_create",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\edits\\taskEdit.ts",
+      "source_location": "L89",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_tools_edits_taskedit_ts",
+      "target": "taskedit_update",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\edits\\taskEdit.ts",
+      "source_location": "L121",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_tools_edits_taskedit_ts",
+      "target": "taskedit_setpriority",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\edits\\taskEdit.ts",
+      "source_location": "L146",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_tools_edits_taskedit_ts",
+      "target": "taskedit_setdependency",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\edits\\taskEdit.ts",
+      "source_location": "L156",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_tools_edits_taskedit_ts",
+      "target": "taskedit_cleardependency",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\edits\\taskEdit.ts",
+      "source_location": "L177",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_tools_edits_taskedit_ts",
+      "target": "taskedit_reorder",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\edits\\taskEdit.ts",
+      "source_location": "L192",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_tools_edits_taskedit_ts",
+      "target": "taskedit_split",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\edits\\taskEdit.ts",
+      "source_location": "L233",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_tools_edits_taskedit_ts",
+      "target": "taskedit_merge",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\edits\\taskEdit.ts",
+      "source_location": "L333",
+      "weight": 1.0
+    },
+    {
+      "source": "taskedit_dispatch",
+      "target": "taskedit_create",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\edits\\taskEdit.ts",
+      "source_location": "L74",
+      "weight": 1.0
+    },
+    {
+      "source": "taskedit_dispatch",
+      "target": "taskedit_update",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\edits\\taskEdit.ts",
+      "source_location": "L75",
+      "weight": 1.0
+    },
+    {
+      "source": "taskedit_dispatch",
+      "target": "taskedit_reorder",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\edits\\taskEdit.ts",
+      "source_location": "L76",
+      "weight": 1.0
+    },
+    {
+      "source": "taskedit_dispatch",
+      "target": "taskedit_setpriority",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\edits\\taskEdit.ts",
+      "source_location": "L77",
+      "weight": 1.0
+    },
+    {
+      "source": "taskedit_dispatch",
+      "target": "taskedit_setdependency",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\edits\\taskEdit.ts",
+      "source_location": "L78",
+      "weight": 1.0
+    },
+    {
+      "source": "taskedit_dispatch",
+      "target": "taskedit_cleardependency",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\edits\\taskEdit.ts",
+      "source_location": "L79",
+      "weight": 1.0
+    },
+    {
+      "source": "taskedit_dispatch",
+      "target": "taskedit_split",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\edits\\taskEdit.ts",
+      "source_location": "L80",
+      "weight": 1.0
+    },
+    {
+      "source": "taskedit_dispatch",
+      "target": "taskedit_merge",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\edits\\taskEdit.ts",
+      "source_location": "L81",
+      "weight": 1.0
+    },
+    {
+      "source": "taskedit_create",
+      "target": "taskedit_astooltext",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\edits\\taskEdit.ts",
+      "source_location": "L114",
+      "weight": 1.0
+    },
+    {
+      "source": "taskedit_update",
+      "target": "taskedit_loadorthrow",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\edits\\taskEdit.ts",
+      "source_location": "L122",
+      "weight": 1.0
+    },
+    {
+      "source": "taskedit_update",
+      "target": "taskedit_astooltext",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\edits\\taskEdit.ts",
+      "source_location": "L139",
+      "weight": 1.0
+    },
+    {
+      "source": "taskedit_setpriority",
+      "target": "taskedit_loadorthrow",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\edits\\taskEdit.ts",
+      "source_location": "L147",
+      "weight": 1.0
+    },
+    {
+      "source": "taskedit_setpriority",
+      "target": "taskedit_astooltext",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\edits\\taskEdit.ts",
+      "source_location": "L153",
+      "weight": 1.0
+    },
+    {
+      "source": "taskedit_setdependency",
+      "target": "taskedit_loadorthrow",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\edits\\taskEdit.ts",
+      "source_location": "L162",
+      "weight": 1.0
+    },
+    {
+      "source": "taskedit_setdependency",
+      "target": "taskedit_astooltext",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\edits\\taskEdit.ts",
+      "source_location": "L174",
+      "weight": 1.0
+    },
+    {
+      "source": "taskedit_cleardependency",
+      "target": "taskedit_loadorthrow",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\edits\\taskEdit.ts",
+      "source_location": "L178",
+      "weight": 1.0
+    },
+    {
+      "source": "taskedit_cleardependency",
+      "target": "taskedit_astooltext",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\edits\\taskEdit.ts",
+      "source_location": "L185",
+      "weight": 1.0
+    },
+    {
+      "source": "taskedit_reorder",
+      "target": "taskedit_astooltext",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\edits\\taskEdit.ts",
+      "source_location": "L221",
+      "weight": 1.0
+    },
+    {
+      "source": "taskedit_split",
+      "target": "taskedit_loadorthrow",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\edits\\taskEdit.ts",
+      "source_location": "L234",
+      "weight": 1.0
+    },
+    {
+      "source": "taskedit_split",
+      "target": "taskedit_astooltext",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\edits\\taskEdit.ts",
+      "source_location": "L317",
+      "weight": 1.0
+    },
+    {
+      "source": "taskedit_merge",
+      "target": "taskedit_astooltext",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\edits\\taskEdit.ts",
+      "source_location": "L410",
+      "weight": 1.0
+    }
+  ],
+  "raw_calls": [
+    {
+      "caller_nid": "taskedit_astooltext",
+      "callee": "stringify",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\edits\\taskEdit.ts",
+      "source_location": "L35"
+    },
+    {
+      "caller_nid": "taskedit_loadorthrow",
+      "callee": "getTask",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\edits\\taskEdit.ts",
+      "source_location": "L40"
+    },
+    {
+      "caller_nid": "taskedit_persisttask",
+      "callee": "saveTask",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\edits\\taskEdit.ts",
+      "source_location": "L60"
+    },
+    {
+      "caller_nid": "taskedit_taskedit",
+      "callee": "withToolTelemetry",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\edits\\taskEdit.ts",
+      "source_location": "L69"
+    },
+    {
+      "caller_nid": "taskedit_create",
+      "callee": "map",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\edits\\taskEdit.ts",
+      "source_location": "L91"
+    },
+    {
+      "caller_nid": "taskedit_create",
+      "callee": "uuidv4",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\edits\\taskEdit.ts",
+      "source_location": "L93"
+    },
+    {
+      "caller_nid": "taskedit_create",
+      "callee": "saveTask",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\edits\\taskEdit.ts",
+      "source_location": "L110"
+    },
+    {
+      "caller_nid": "taskedit_create",
+      "callee": "getTask",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\edits\\taskEdit.ts",
+      "source_location": "L113"
+    },
+    {
+      "caller_nid": "taskedit_update",
+      "callee": "withVersionCheck",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\edits\\taskEdit.ts",
+      "source_location": "L123"
+    },
+    {
+      "caller_nid": "taskedit_setpriority",
+      "callee": "withVersionCheck",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\edits\\taskEdit.ts",
+      "source_location": "L148"
+    },
+    {
+      "caller_nid": "taskedit_setdependency",
+      "callee": "some",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\edits\\taskEdit.ts",
+      "source_location": "L166"
+    },
+    {
+      "caller_nid": "taskedit_setdependency",
+      "callee": "withVersionCheck",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\edits\\taskEdit.ts",
+      "source_location": "L169"
+    },
+    {
+      "caller_nid": "taskedit_cleardependency",
+      "callee": "filter",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\edits\\taskEdit.ts",
+      "source_location": "L179"
+    },
+    {
+      "caller_nid": "taskedit_cleardependency",
+      "callee": "withVersionCheck",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\edits\\taskEdit.ts",
+      "source_location": "L180"
+    },
+    {
+      "caller_nid": "taskedit_reorder",
+      "callee": "withMultiVersionCheck",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\edits\\taskEdit.ts",
+      "source_location": "L205"
+    },
+    {
+      "caller_nid": "taskedit_reorder",
+      "callee": "map",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\edits\\taskEdit.ts",
+      "source_location": "L224"
+    },
+    {
+      "caller_nid": "taskedit_split",
+      "callee": "withVersionCheck",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\edits\\taskEdit.ts",
+      "source_location": "L242"
+    },
+    {
+      "caller_nid": "taskedit_merge",
+      "callee": "withMultiVersionCheck",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\edits\\taskEdit.ts",
+      "source_location": "L344"
+    }
+  ]
+}

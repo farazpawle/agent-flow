@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git -C \"D:/D Drive/Projects/MCP Servers/Agent Flow\" check-ignore -v tests/ src/tests/ test_data_workflow/ test_e2e_env/ test_full_coverage_env/ test_strict_mode_env/ test_delete_project_env/ test_data_vibe/ test_data_roadmap_alias_flow/ test_data_clarify_smoke/ test_data_generate_roadmap_options/ test_data_all_tools_runtime/ test_data_scope_check/)"
+    ]
+  },
+  "skillOverrides": {
+    "codeql": "on"
+  }
+}

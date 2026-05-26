@@ -1,0 +1,91 @@
+{
+  "nodes": [
+    {
+      "id": "d_d_drive_projects_mcp_servers_agent_flow_src_utils_projectvalidation_ts",
+      "label": "projectValidation.ts",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\utils\\projectValidation.ts",
+      "source_location": "L1"
+    },
+    {
+      "id": "projectvalidation_validateprojectcontext",
+      "label": "validateProjectContext()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\utils\\projectValidation.ts",
+      "source_location": "L17"
+    }
+  ],
+  "edges": [
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_utils_projectvalidation_ts",
+      "target": "d_d_drive_projects_mcp_servers_agent_flow_src_models_projectmodel_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\utils\\projectValidation.ts",
+      "source_location": "L2",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_utils_projectvalidation_ts",
+      "target": "d_d_drive_projects_mcp_servers_agent_flow_src_utils_gitutils_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\utils\\projectValidation.ts",
+      "source_location": "L3",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_utils_projectvalidation_ts",
+      "target": "projectvalidation_validateprojectcontext",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\utils\\projectValidation.ts",
+      "source_location": "L17",
+      "weight": 1.0
+    }
+  ],
+  "raw_calls": [
+    {
+      "caller_nid": "projectvalidation_validateprojectcontext",
+      "callee": "test",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\utils\\projectValidation.ts",
+      "source_location": "L22"
+    },
+    {
+      "caller_nid": "projectvalidation_validateprojectcontext",
+      "callee": "startsWith",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\utils\\projectValidation.ts",
+      "source_location": "L23"
+    },
+    {
+      "caller_nid": "projectvalidation_validateprojectcontext",
+      "callee": "getProjectById",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\utils\\projectValidation.ts",
+      "source_location": "L32"
+    },
+    {
+      "caller_nid": "projectvalidation_validateprojectcontext",
+      "callee": "cwd",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\utils\\projectValidation.ts",
+      "source_location": "L43"
+    },
+    {
+      "caller_nid": "projectvalidation_validateprojectcontext",
+      "callee": "getGitRemoteUrl",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\utils\\projectValidation.ts",
+      "source_location": "L46"
+    },
+    {
+      "caller_nid": "projectvalidation_validateprojectcontext",
+      "callee": "getProjectByGitUrl",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\utils\\projectValidation.ts",
+      "source_location": "L51"
+    },
+    {
+      "caller_nid": "projectvalidation_validateprojectcontext",
+      "callee": "getProjectByPath",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\utils\\projectValidation.ts",
+      "source_location": "L57"
+    }
+  ]
+}

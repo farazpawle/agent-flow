@@ -1,0 +1,118 @@
+{
+  "nodes": [
+    {
+      "id": "d_d_drive_projects_mcp_servers_agent_flow_src_services_crawl_crawlprogress_ts",
+      "label": "crawlProgress.ts",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\services\\crawl\\crawlProgress.ts",
+      "source_location": "L1"
+    },
+    {
+      "id": "crawlprogress_crawlprogresstracker",
+      "label": "CrawlProgressTracker",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\services\\crawl\\crawlProgress.ts",
+      "source_location": "L18"
+    },
+    {
+      "id": "crawlprogress_crawlprogresstracker_publish",
+      "label": ".publish()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\services\\crawl\\crawlProgress.ts",
+      "source_location": "L21"
+    },
+    {
+      "id": "crawlprogress_crawlprogresstracker_getlatest",
+      "label": ".getLatest()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\services\\crawl\\crawlProgress.ts",
+      "source_location": "L27"
+    },
+    {
+      "id": "crawlprogress_crawlprogresstracker_purge",
+      "label": ".purge()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\services\\crawl\\crawlProgress.ts",
+      "source_location": "L31"
+    }
+  ],
+  "edges": [
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_services_crawl_crawlprogress_ts",
+      "target": "events",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\services\\crawl\\crawlProgress.ts",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_services_crawl_crawlprogress_ts",
+      "target": "crawlprogress_crawlprogresstracker",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\services\\crawl\\crawlProgress.ts",
+      "source_location": "L18",
+      "weight": 1.0
+    },
+    {
+      "source": "crawlprogress_crawlprogresstracker",
+      "target": "crawlprogress_crawlprogresstracker_publish",
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\services\\crawl\\crawlProgress.ts",
+      "source_location": "L21",
+      "weight": 1.0
+    },
+    {
+      "source": "crawlprogress_crawlprogresstracker",
+      "target": "crawlprogress_crawlprogresstracker_getlatest",
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\services\\crawl\\crawlProgress.ts",
+      "source_location": "L27",
+      "weight": 1.0
+    },
+    {
+      "source": "crawlprogress_crawlprogresstracker",
+      "target": "crawlprogress_crawlprogresstracker_purge",
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\services\\crawl\\crawlProgress.ts",
+      "source_location": "L31",
+      "weight": 1.0
+    }
+  ],
+  "raw_calls": [
+    {
+      "caller_nid": "crawlprogress_crawlprogresstracker_publish",
+      "callee": "now",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\services\\crawl\\crawlProgress.ts",
+      "source_location": "L22"
+    },
+    {
+      "caller_nid": "crawlprogress_crawlprogresstracker_publish",
+      "callee": "set",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\services\\crawl\\crawlProgress.ts",
+      "source_location": "L23"
+    },
+    {
+      "caller_nid": "crawlprogress_crawlprogresstracker_publish",
+      "callee": "emit",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\services\\crawl\\crawlProgress.ts",
+      "source_location": "L24"
+    },
+    {
+      "caller_nid": "crawlprogress_crawlprogresstracker_getlatest",
+      "callee": "get",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\services\\crawl\\crawlProgress.ts",
+      "source_location": "L28"
+    },
+    {
+      "caller_nid": "crawlprogress_crawlprogresstracker_purge",
+      "callee": "delete",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\services\\crawl\\crawlProgress.ts",
+      "source_location": "L32"
+    }
+  ]
+}

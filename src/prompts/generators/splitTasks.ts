@@ -3,11 +3,7 @@
  * Responsible for combining templates and parameters into the final prompt
  */
 
-import {
-  loadPrompt,
-  generatePrompt,
-  loadPromptFromTemplate,
-} from "../loader.js";
+import { loadPrompt, generatePrompt, loadPromptFromTemplate } from "../loader.js";
 import { Task } from "../../types/index.js";
 
 /**
@@ -20,6 +16,58 @@ export interface SplitTasksPromptParams {
   tasks?: Task[];
   allTasks?: Task[];
   createdTasks?: Task[];
+  syncStats?: { created: number; updated: number; deleted: number };
+}
+
+function buildSplitPrompt(params: SplitTasksPromptParams, promptKey: string): string {
+  const indexTemplate = loadPromptFromTemplate("splitTasks/index.md");
+
+  let tasksContext = "";
+  if (params.tasks && params.tasks.length > 0) {
+    const taskDetailsTemplate = loadPromptFromTemplate("splitTasks/taskDetails.md");
+
+    // Render each task using the template (one call per task)
+    params.tasks.forEach((task, index) => {
+      const dependenciesContent =
+        task.dependencies && task.dependencies.length > 0
+          ? task.dependencies
+              .map((dep) => {
+                const depTaskName =
+                  params.tasks?.find((t) => t.id === dep.taskId)?.name || dep.taskId;
+                return `\`${depTaskName}\``;
+              })
+              .join(", ")
+          : "none";
+
+      tasksContext += generatePrompt(taskDetailsTemplate, {
+        index: (index + 1).toString(),
+        name: task.name,
+        id: task.id,
+        description: task.description,
+        notes: task.notes || "",
+        implementationGuide: task.implementationGuide || "",
+        verificationCriteria: task.verificationCriteria || "",
+        dependencies: dependenciesContent,
+      });
+      tasksContext += "\n";
+    });
+  }
+
+  const stats = params.syncStats;
+  const syncSummary = stats
+    ? `✅ **${stats.created}** created | 🔄 **${stats.updated}** updated | 🗑️ **${stats.deleted}** deleted`
+    : "";
+
+  const prompt = generatePrompt(indexTemplate, {
+    globalAnalysisResult: params.globalAnalysisResult,
+    tasksContext,
+    updateMode: params.updateMode,
+    memoryDir: params.memoryDir,
+    syncSummary,
+  });
+
+  // Load possible custom prompt
+  return loadPrompt(prompt, promptKey);
 }
 
 /**
@@ -28,53 +76,5 @@ export interface SplitTasksPromptParams {
  * @returns generated prompt
  */
 export function getSplitTasksPrompt(params: SplitTasksPromptParams): string {
-  const indexTemplate = loadPromptFromTemplate("splitTasks/index.md");
-
-  let tasksContext = "";
-  if (params.tasks && params.tasks.length > 0) {
-    const taskDetailsTemplate = loadPromptFromTemplate("splitTasks/taskDetails.md");
-
-    // Convert task list to formatted task details
-    let taskDetailsContent = "";
-    params.tasks.forEach((task, index) => {
-      // Format dependencies if they exist
-      let dependenciesContent = "";
-      if (task.dependencies && task.dependencies.length > 0) {
-        dependenciesContent = 
-          task.dependencies
-            .map(dep => {
-              // Find dependency task name for more friendly display
-              const depTaskName = params.tasks?.find(t => t.id === dep.taskId)?.name || dep.taskId;
-              return `\`${depTaskName}\``;
-            })
-            .join(", ");
-      }
-
-      taskDetailsContent += `Task ${index + 1}:\n`;
-      taskDetailsContent += `- ID: ${task.id}\n`;
-      taskDetailsContent += `- Name: ${task.name}\n`;
-      taskDetailsContent += `- Description: ${task.description}\n`;
-      
-      if (dependenciesContent) {
-        taskDetailsContent += `- Dependencies: ${dependenciesContent}\n`;
-      }
-      
-      taskDetailsContent += `- Status: ${task.status}\n\n`;
-    });
-
-    tasksContext = generatePrompt(taskDetailsTemplate, {
-      taskCount: params.tasks.length.toString(),
-      taskDetails: taskDetailsContent
-    });
-  }
-
-  let prompt = generatePrompt(indexTemplate, {
-    globalAnalysisResult: params.globalAnalysisResult,
-    tasksContext: tasksContext,
-    updateMode: params.updateMode,
-    memoryDir: params.memoryDir
-  });
-
-  // Load possible custom prompt
-  return loadPrompt(prompt, "SPLIT_TASKS");
+  return buildSplitPrompt(params, "SPLIT_TASKS");
 }

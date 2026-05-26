@@ -3,11 +3,7 @@
  * Responsible for combining templates and parameters into the final prompt
  */
 
-import {
-  loadPrompt,
-  generatePrompt,
-  loadPromptFromTemplate,
-} from "../loader.js";
+import { loadPrompt, generatePrompt, loadPromptFromTemplate } from "../loader.js";
 import { Task } from "../../types/index.js";
 
 /**
@@ -25,16 +21,22 @@ export interface CompleteTaskPromptParams {
  * @returns generated prompt
  */
 export function getCompleteTaskPrompt(params: CompleteTaskPromptParams): string {
-  const { task, summary } = params;
+  const { task, summary, completionTime } = params;
 
   const indexTemplate = loadPromptFromTemplate("completeTask/index.md");
 
-  // Start building the base prompt
-  let prompt = generatePrompt(indexTemplate, {
-    taskName: task.name,
-    taskId: task.id,
+  const noSummaryWarning =
+    !summary || summary.trim() === ""
+      ? "⚠️ **No completion summary provided.** It is recommended to include a brief summary of what was done for future reference and dependency tracking."
+      : "";
+
+  const prompt = generatePrompt(indexTemplate, {
+    name: task.name,
+    id: task.id,
     taskDescription: task.description,
     summary: summary || "",
+    completionTime: completionTime || new Date().toLocaleString(),
+    noSummaryWarning,
   });
 
   // Load possible custom prompt

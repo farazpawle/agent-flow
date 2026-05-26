@@ -1,0 +1,1052 @@
+{
+  "nodes": [
+    {
+      "id": "d_d_drive_projects_mcp_servers_agent_flow_src_models_sqliteadapter_ts",
+      "label": "sqliteAdapter.ts",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\sqliteAdapter.ts",
+      "source_location": "L1"
+    },
+    {
+      "id": "sqliteadapter_sqliteadapter",
+      "label": "SQLiteAdapter",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\sqliteAdapter.ts",
+      "source_location": "L29"
+    },
+    {
+      "id": "sqliteadapter_sqliteadapter_constructor",
+      "label": ".constructor()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\sqliteAdapter.ts",
+      "source_location": "L34"
+    },
+    {
+      "id": "sqliteadapter_sqliteadapter_init",
+      "label": ".init()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\sqliteAdapter.ts",
+      "source_location": "L38"
+    },
+    {
+      "id": "sqliteadapter_sqliteadapter_migrateprojectstable",
+      "label": ".migrateProjectsTable()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\sqliteAdapter.ts",
+      "source_location": "L245"
+    },
+    {
+      "id": "sqliteadapter_sqliteadapter_close",
+      "label": ".close()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\sqliteAdapter.ts",
+      "source_location": "L290"
+    },
+    {
+      "id": "sqliteadapter_sqliteadapter_getdb",
+      "label": ".getDb()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\sqliteAdapter.ts",
+      "source_location": "L307"
+    },
+    {
+      "id": "sqliteadapter_sqliteadapter_getalltasks",
+      "label": ".getAllTasks()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\sqliteAdapter.ts",
+      "source_location": "L314"
+    },
+    {
+      "id": "sqliteadapter_sqliteadapter_gettask",
+      "label": ".getTask()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\sqliteAdapter.ts",
+      "source_location": "L348"
+    },
+    {
+      "id": "sqliteadapter_sqliteadapter_savetask",
+      "label": ".saveTask()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\sqliteAdapter.ts",
+      "source_location": "L373"
+    },
+    {
+      "id": "sqliteadapter_sqliteadapter_deletetask",
+      "label": ".deleteTask()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\sqliteAdapter.ts",
+      "source_location": "L433"
+    },
+    {
+      "id": "sqliteadapter_sqliteadapter_savetasks",
+      "label": ".saveTasks()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\sqliteAdapter.ts",
+      "source_location": "L442"
+    },
+    {
+      "id": "sqliteadapter_sqliteadapter_createproject",
+      "label": ".createProject()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\sqliteAdapter.ts",
+      "source_location": "L485"
+    },
+    {
+      "id": "sqliteadapter_sqliteadapter_getproject",
+      "label": ".getProject()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\sqliteAdapter.ts",
+      "source_location": "L511"
+    },
+    {
+      "id": "sqliteadapter_sqliteadapter_getallprojects",
+      "label": ".getAllProjects()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\sqliteAdapter.ts",
+      "source_location": "L527"
+    },
+    {
+      "id": "sqliteadapter_sqliteadapter_deleteproject",
+      "label": ".deleteProject()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\sqliteAdapter.ts",
+      "source_location": "L547"
+    },
+    {
+      "id": "sqliteadapter_sqliteadapter_mapprojectrow",
+      "label": ".mapProjectRow()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\sqliteAdapter.ts",
+      "source_location": "L555"
+    },
+    {
+      "id": "sqliteadapter_sqliteadapter_createworkflowstep",
+      "label": ".createWorkflowStep()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\sqliteAdapter.ts",
+      "source_location": "L571"
+    },
+    {
+      "id": "sqliteadapter_sqliteadapter_getworkflowstep",
+      "label": ".getWorkflowStep()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\sqliteAdapter.ts",
+      "source_location": "L597"
+    },
+    {
+      "id": "sqliteadapter_sqliteadapter_getworkflowsteps",
+      "label": ".getWorkflowSteps()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\sqliteAdapter.ts",
+      "source_location": "L607"
+    },
+    {
+      "id": "sqliteadapter_sqliteadapter_mapworkflowsteprow",
+      "label": ".mapWorkflowStepRow()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\sqliteAdapter.ts",
+      "source_location": "L620"
+    },
+    {
+      "id": "sqliteadapter_sqliteadapter_deleteworkflowstepsbyproject",
+      "label": ".deleteWorkflowStepsByProject()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\sqliteAdapter.ts",
+      "source_location": "L639"
+    },
+    {
+      "id": "sqliteadapter_sqliteadapter_registerclient",
+      "label": ".registerClient()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\sqliteAdapter.ts",
+      "source_location": "L654"
+    },
+    {
+      "id": "sqliteadapter_sqliteadapter_getallclients",
+      "label": ".getAllClients()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\sqliteAdapter.ts",
+      "source_location": "L670"
+    },
+    {
+      "id": "sqliteadapter_sqliteadapter_getclient",
+      "label": ".getClient()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\sqliteAdapter.ts",
+      "source_location": "L695"
+    },
+    {
+      "id": "sqliteadapter_sqliteadapter_updateclientheartbeat",
+      "label": ".updateClientHeartbeat()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\sqliteAdapter.ts",
+      "source_location": "L711"
+    },
+    {
+      "id": "sqliteadapter_sqliteadapter_cleanupstaleclients",
+      "label": ".cleanupStaleClients()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\sqliteAdapter.ts",
+      "source_location": "L719"
+    },
+    {
+      "id": "sqliteadapter_sqliteadapter_markallclientsinactive",
+      "label": ".markAllClientsInactive()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\sqliteAdapter.ts",
+      "source_location": "L728"
+    },
+    {
+      "id": "sqliteadapter_sqliteadapter_deleteclient",
+      "label": ".deleteClient()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\sqliteAdapter.ts",
+      "source_location": "L735"
+    },
+    {
+      "id": "sqliteadapter_sqliteadapter_deleteinactiveclients",
+      "label": ".deleteInactiveClients()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\sqliteAdapter.ts",
+      "source_location": "L743"
+    },
+    {
+      "id": "sqliteadapter_sqliteadapter_runintransaction",
+      "label": ".runInTransaction()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\sqliteAdapter.ts",
+      "source_location": "L762"
+    },
+    {
+      "id": "sqliteadapter_sqliteadapter_incrementtaskversion",
+      "label": ".incrementTaskVersion()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\sqliteAdapter.ts",
+      "source_location": "L783"
+    },
+    {
+      "id": "sqliteadapter_sqliteadapter_resolveprojectidfortask",
+      "label": ".resolveProjectIdForTask()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\sqliteAdapter.ts",
+      "source_location": "L818"
+    },
+    {
+      "id": "sqliteadapter_sqliteadapter_createfinding",
+      "label": ".createFinding()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\sqliteAdapter.ts",
+      "source_location": "L831"
+    },
+    {
+      "id": "sqliteadapter_sqliteadapter_listfindings",
+      "label": ".listFindings()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\sqliteAdapter.ts",
+      "source_location": "L868"
+    },
+    {
+      "id": "sqliteadapter_sqliteadapter_deletefindingsolderthan",
+      "label": ".deleteFindingsOlderThan()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\sqliteAdapter.ts",
+      "source_location": "L889"
+    },
+    {
+      "id": "sqliteadapter_sqliteadapter_mapfindingrow",
+      "label": ".mapFindingRow()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\sqliteAdapter.ts",
+      "source_location": "L902"
+    },
+    {
+      "id": "sqliteadapter_sqliteadapter_createlessonsummary",
+      "label": ".createLessonSummary()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\sqliteAdapter.ts",
+      "source_location": "L926"
+    },
+    {
+      "id": "sqliteadapter_sqliteadapter_listlessonsummaries",
+      "label": ".listLessonSummaries()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\sqliteAdapter.ts",
+      "source_location": "L951"
+    },
+    {
+      "id": "sqliteadapter_sqliteadapter_getactiveprojectforclient",
+      "label": ".getActiveProjectForClient()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\sqliteAdapter.ts",
+      "source_location": "L976"
+    },
+    {
+      "id": "sqliteadapter_sqliteadapter_setactiveprojectforclient",
+      "label": ".setActiveProjectForClient()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\sqliteAdapter.ts",
+      "source_location": "L994"
+    },
+    {
+      "id": "sqliteadapter_sqliteadapter_getllmsettings",
+      "label": ".getLlmSettings()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\sqliteAdapter.ts",
+      "source_location": "L1010"
+    },
+    {
+      "id": "sqliteadapter_sqliteadapter_setllmsettings",
+      "label": ".setLlmSettings()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\sqliteAdapter.ts",
+      "source_location": "L1030"
+    },
+    {
+      "id": "sqliteadapter_sqliteadapter_appenddestructiveaudit",
+      "label": ".appendDestructiveAudit()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\sqliteAdapter.ts",
+      "source_location": "L1063"
+    },
+    {
+      "id": "sqliteadapter_sqliteadapter_listdestructiveaudits",
+      "label": ".listDestructiveAudits()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\sqliteAdapter.ts",
+      "source_location": "L1084"
+    }
+  ],
+  "edges": [
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_models_sqliteadapter_ts",
+      "target": "sqlite3",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\sqliteAdapter.ts",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_models_sqliteadapter_ts",
+      "target": "path",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\sqliteAdapter.ts",
+      "source_location": "L2",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_models_sqliteadapter_ts",
+      "target": "promises",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\sqliteAdapter.ts",
+      "source_location": "L3",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_models_sqliteadapter_ts",
+      "target": "crypto",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\sqliteAdapter.ts",
+      "source_location": "L4",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_models_sqliteadapter_ts",
+      "target": "d_d_drive_projects_mcp_servers_agent_flow_src_models_interfaces_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\sqliteAdapter.ts",
+      "source_location": "L5",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_models_sqliteadapter_ts",
+      "target": "d_d_drive_projects_mcp_servers_agent_flow_src_models_persistence_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\sqliteAdapter.ts",
+      "source_location": "L20",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_models_sqliteadapter_ts",
+      "target": "d_d_drive_projects_mcp_servers_agent_flow_src_types_index_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\sqliteAdapter.ts",
+      "source_location": "L21",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_models_sqliteadapter_ts",
+      "target": "d_d_drive_projects_mcp_servers_agent_flow_src_models_projectmodel_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\sqliteAdapter.ts",
+      "source_location": "L22",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_models_sqliteadapter_ts",
+      "target": "d_d_drive_projects_mcp_servers_agent_flow_src_models_clientmodel_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\sqliteAdapter.ts",
+      "source_location": "L23",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_models_sqliteadapter_ts",
+      "target": "d_d_drive_projects_mcp_servers_agent_flow_src_models_workflowmodel_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\sqliteAdapter.ts",
+      "source_location": "L24",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_models_sqliteadapter_ts",
+      "target": "sqliteadapter_sqliteadapter",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\sqliteAdapter.ts",
+      "source_location": "L29",
+      "weight": 1.0
+    },
+    {
+      "source": "sqliteadapter_sqliteadapter",
+      "target": "sqliteadapter_sqliteadapter_constructor",
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\sqliteAdapter.ts",
+      "source_location": "L34",
+      "weight": 1.0
+    },
+    {
+      "source": "sqliteadapter_sqliteadapter",
+      "target": "sqliteadapter_sqliteadapter_init",
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\sqliteAdapter.ts",
+      "source_location": "L38",
+      "weight": 1.0
+    },
+    {
+      "source": "sqliteadapter_sqliteadapter",
+      "target": "sqliteadapter_sqliteadapter_migrateprojectstable",
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\sqliteAdapter.ts",
+      "source_location": "L245",
+      "weight": 1.0
+    },
+    {
+      "source": "sqliteadapter_sqliteadapter",
+      "target": "sqliteadapter_sqliteadapter_close",
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\sqliteAdapter.ts",
+      "source_location": "L290",
+      "weight": 1.0
+    },
+    {
+      "source": "sqliteadapter_sqliteadapter",
+      "target": "sqliteadapter_sqliteadapter_getdb",
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\sqliteAdapter.ts",
+      "source_location": "L307",
+      "weight": 1.0
+    },
+    {
+      "source": "sqliteadapter_sqliteadapter",
+      "target": "sqliteadapter_sqliteadapter_getalltasks",
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\sqliteAdapter.ts",
+      "source_location": "L314",
+      "weight": 1.0
+    },
+    {
+      "source": "sqliteadapter_sqliteadapter",
+      "target": "sqliteadapter_sqliteadapter_gettask",
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\sqliteAdapter.ts",
+      "source_location": "L348",
+      "weight": 1.0
+    },
+    {
+      "source": "sqliteadapter_sqliteadapter",
+      "target": "sqliteadapter_sqliteadapter_savetask",
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\sqliteAdapter.ts",
+      "source_location": "L373",
+      "weight": 1.0
+    },
+    {
+      "source": "sqliteadapter_sqliteadapter",
+      "target": "sqliteadapter_sqliteadapter_deletetask",
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\sqliteAdapter.ts",
+      "source_location": "L433",
+      "weight": 1.0
+    },
+    {
+      "source": "sqliteadapter_sqliteadapter",
+      "target": "sqliteadapter_sqliteadapter_savetasks",
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\sqliteAdapter.ts",
+      "source_location": "L442",
+      "weight": 1.0
+    },
+    {
+      "source": "sqliteadapter_sqliteadapter",
+      "target": "sqliteadapter_sqliteadapter_createproject",
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\sqliteAdapter.ts",
+      "source_location": "L485",
+      "weight": 1.0
+    },
+    {
+      "source": "sqliteadapter_sqliteadapter",
+      "target": "sqliteadapter_sqliteadapter_getproject",
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\sqliteAdapter.ts",
+      "source_location": "L511",
+      "weight": 1.0
+    },
+    {
+      "source": "sqliteadapter_sqliteadapter",
+      "target": "sqliteadapter_sqliteadapter_getallprojects",
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\sqliteAdapter.ts",
+      "source_location": "L527",
+      "weight": 1.0
+    },
+    {
+      "source": "sqliteadapter_sqliteadapter",
+      "target": "sqliteadapter_sqliteadapter_deleteproject",
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\sqliteAdapter.ts",
+      "source_location": "L547",
+      "weight": 1.0
+    },
+    {
+      "source": "sqliteadapter_sqliteadapter",
+      "target": "sqliteadapter_sqliteadapter_mapprojectrow",
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\sqliteAdapter.ts",
+      "source_location": "L555",
+      "weight": 1.0
+    },
+    {
+      "source": "sqliteadapter_sqliteadapter",
+      "target": "sqliteadapter_sqliteadapter_createworkflowstep",
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\sqliteAdapter.ts",
+      "source_location": "L571",
+      "weight": 1.0
+    },
+    {
+      "source": "sqliteadapter_sqliteadapter",
+      "target": "sqliteadapter_sqliteadapter_getworkflowstep",
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\sqliteAdapter.ts",
+      "source_location": "L597",
+      "weight": 1.0
+    },
+    {
+      "source": "sqliteadapter_sqliteadapter",
+      "target": "sqliteadapter_sqliteadapter_getworkflowsteps",
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\sqliteAdapter.ts",
+      "source_location": "L607",
+      "weight": 1.0
+    },
+    {
+      "source": "sqliteadapter_sqliteadapter",
+      "target": "sqliteadapter_sqliteadapter_mapworkflowsteprow",
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\sqliteAdapter.ts",
+      "source_location": "L620",
+      "weight": 1.0
+    },
+    {
+      "source": "sqliteadapter_sqliteadapter",
+      "target": "sqliteadapter_sqliteadapter_deleteworkflowstepsbyproject",
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\sqliteAdapter.ts",
+      "source_location": "L639",
+      "weight": 1.0
+    },
+    {
+      "source": "sqliteadapter_sqliteadapter",
+      "target": "sqliteadapter_sqliteadapter_registerclient",
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\sqliteAdapter.ts",
+      "source_location": "L654",
+      "weight": 1.0
+    },
+    {
+      "source": "sqliteadapter_sqliteadapter",
+      "target": "sqliteadapter_sqliteadapter_getallclients",
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\sqliteAdapter.ts",
+      "source_location": "L670",
+      "weight": 1.0
+    },
+    {
+      "source": "sqliteadapter_sqliteadapter",
+      "target": "sqliteadapter_sqliteadapter_getclient",
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\sqliteAdapter.ts",
+      "source_location": "L695",
+      "weight": 1.0
+    },
+    {
+      "source": "sqliteadapter_sqliteadapter",
+      "target": "sqliteadapter_sqliteadapter_updateclientheartbeat",
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\sqliteAdapter.ts",
+      "source_location": "L711",
+      "weight": 1.0
+    },
+    {
+      "source": "sqliteadapter_sqliteadapter",
+      "target": "sqliteadapter_sqliteadapter_cleanupstaleclients",
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\sqliteAdapter.ts",
+      "source_location": "L719",
+      "weight": 1.0
+    },
+    {
+      "source": "sqliteadapter_sqliteadapter",
+      "target": "sqliteadapter_sqliteadapter_markallclientsinactive",
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\sqliteAdapter.ts",
+      "source_location": "L728",
+      "weight": 1.0
+    },
+    {
+      "source": "sqliteadapter_sqliteadapter",
+      "target": "sqliteadapter_sqliteadapter_deleteclient",
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\sqliteAdapter.ts",
+      "source_location": "L735",
+      "weight": 1.0
+    },
+    {
+      "source": "sqliteadapter_sqliteadapter",
+      "target": "sqliteadapter_sqliteadapter_deleteinactiveclients",
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\sqliteAdapter.ts",
+      "source_location": "L743",
+      "weight": 1.0
+    },
+    {
+      "source": "sqliteadapter_sqliteadapter",
+      "target": "sqliteadapter_sqliteadapter_runintransaction",
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\sqliteAdapter.ts",
+      "source_location": "L762",
+      "weight": 1.0
+    },
+    {
+      "source": "sqliteadapter_sqliteadapter",
+      "target": "sqliteadapter_sqliteadapter_incrementtaskversion",
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\sqliteAdapter.ts",
+      "source_location": "L783",
+      "weight": 1.0
+    },
+    {
+      "source": "sqliteadapter_sqliteadapter",
+      "target": "sqliteadapter_sqliteadapter_resolveprojectidfortask",
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\sqliteAdapter.ts",
+      "source_location": "L818",
+      "weight": 1.0
+    },
+    {
+      "source": "sqliteadapter_sqliteadapter",
+      "target": "sqliteadapter_sqliteadapter_createfinding",
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\sqliteAdapter.ts",
+      "source_location": "L831",
+      "weight": 1.0
+    },
+    {
+      "source": "sqliteadapter_sqliteadapter",
+      "target": "sqliteadapter_sqliteadapter_listfindings",
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\sqliteAdapter.ts",
+      "source_location": "L868",
+      "weight": 1.0
+    },
+    {
+      "source": "sqliteadapter_sqliteadapter",
+      "target": "sqliteadapter_sqliteadapter_deletefindingsolderthan",
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\sqliteAdapter.ts",
+      "source_location": "L889",
+      "weight": 1.0
+    },
+    {
+      "source": "sqliteadapter_sqliteadapter",
+      "target": "sqliteadapter_sqliteadapter_mapfindingrow",
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\sqliteAdapter.ts",
+      "source_location": "L902",
+      "weight": 1.0
+    },
+    {
+      "source": "sqliteadapter_sqliteadapter",
+      "target": "sqliteadapter_sqliteadapter_createlessonsummary",
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\sqliteAdapter.ts",
+      "source_location": "L926",
+      "weight": 1.0
+    },
+    {
+      "source": "sqliteadapter_sqliteadapter",
+      "target": "sqliteadapter_sqliteadapter_listlessonsummaries",
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\sqliteAdapter.ts",
+      "source_location": "L951",
+      "weight": 1.0
+    },
+    {
+      "source": "sqliteadapter_sqliteadapter",
+      "target": "sqliteadapter_sqliteadapter_getactiveprojectforclient",
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\sqliteAdapter.ts",
+      "source_location": "L976",
+      "weight": 1.0
+    },
+    {
+      "source": "sqliteadapter_sqliteadapter",
+      "target": "sqliteadapter_sqliteadapter_setactiveprojectforclient",
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\sqliteAdapter.ts",
+      "source_location": "L994",
+      "weight": 1.0
+    },
+    {
+      "source": "sqliteadapter_sqliteadapter",
+      "target": "sqliteadapter_sqliteadapter_getllmsettings",
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\sqliteAdapter.ts",
+      "source_location": "L1010",
+      "weight": 1.0
+    },
+    {
+      "source": "sqliteadapter_sqliteadapter",
+      "target": "sqliteadapter_sqliteadapter_setllmsettings",
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\sqliteAdapter.ts",
+      "source_location": "L1030",
+      "weight": 1.0
+    },
+    {
+      "source": "sqliteadapter_sqliteadapter",
+      "target": "sqliteadapter_sqliteadapter_appenddestructiveaudit",
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\sqliteAdapter.ts",
+      "source_location": "L1063",
+      "weight": 1.0
+    },
+    {
+      "source": "sqliteadapter_sqliteadapter",
+      "target": "sqliteadapter_sqliteadapter_listdestructiveaudits",
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\sqliteAdapter.ts",
+      "source_location": "L1084",
+      "weight": 1.0
+    },
+    {
+      "source": "sqliteadapter_sqliteadapter_runintransaction",
+      "target": "sqliteadapter_sqliteadapter_getdb",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\sqliteAdapter.ts",
+      "source_location": "L763",
+      "weight": 1.0
+    },
+    {
+      "source": "sqliteadapter_sqliteadapter_incrementtaskversion",
+      "target": "sqliteadapter_sqliteadapter_getdb",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\sqliteAdapter.ts",
+      "source_location": "L788",
+      "weight": 1.0
+    },
+    {
+      "source": "sqliteadapter_sqliteadapter_createfinding",
+      "target": "sqliteadapter_sqliteadapter_resolveprojectidfortask",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\sqliteAdapter.ts",
+      "source_location": "L834",
+      "weight": 1.0
+    }
+  ],
+  "raw_calls": [
+    {
+      "caller_nid": "sqliteadapter_sqliteadapter_constructor",
+      "callee": "join",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\sqliteAdapter.ts",
+      "source_location": "L35"
+    },
+    {
+      "caller_nid": "sqliteadapter_sqliteadapter_init",
+      "callee": "log",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\sqliteAdapter.ts",
+      "source_location": "L41"
+    },
+    {
+      "caller_nid": "sqliteadapter_sqliteadapter_init",
+      "callee": "mkdir",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\sqliteAdapter.ts",
+      "source_location": "L45"
+    },
+    {
+      "caller_nid": "sqliteadapter_sqliteadapter_init",
+      "callee": "dirname",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\sqliteAdapter.ts",
+      "source_location": "L45"
+    },
+    {
+      "caller_nid": "sqliteadapter_sqliteadapter_mapprojectrow",
+      "callee": "parse",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\sqliteAdapter.ts",
+      "source_location": "L562"
+    },
+    {
+      "caller_nid": "sqliteadapter_sqliteadapter_cleanupstaleclients",
+      "callee": "now",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\sqliteAdapter.ts",
+      "source_location": "L720"
+    },
+    {
+      "caller_nid": "sqliteadapter_sqliteadapter_runintransaction",
+      "callee": "fn",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\sqliteAdapter.ts",
+      "source_location": "L768"
+    },
+    {
+      "caller_nid": "sqliteadapter_sqliteadapter_createfinding",
+      "callee": "randomUUID",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\sqliteAdapter.ts",
+      "source_location": "L841"
+    },
+    {
+      "caller_nid": "sqliteadapter_sqliteadapter_createfinding",
+      "callee": "stringify",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\sqliteAdapter.ts",
+      "source_location": "L843"
+    },
+    {
+      "caller_nid": "sqliteadapter_sqliteadapter_createfinding",
+      "callee": "stringify",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\sqliteAdapter.ts",
+      "source_location": "L844"
+    },
+    {
+      "caller_nid": "sqliteadapter_sqliteadapter_listfindings",
+      "callee": "push",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\sqliteAdapter.ts",
+      "source_location": "L871"
+    },
+    {
+      "caller_nid": "sqliteadapter_sqliteadapter_listfindings",
+      "callee": "push",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\sqliteAdapter.ts",
+      "source_location": "L871"
+    },
+    {
+      "caller_nid": "sqliteadapter_sqliteadapter_listfindings",
+      "callee": "push",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\sqliteAdapter.ts",
+      "source_location": "L872"
+    },
+    {
+      "caller_nid": "sqliteadapter_sqliteadapter_listfindings",
+      "callee": "push",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\sqliteAdapter.ts",
+      "source_location": "L872"
+    },
+    {
+      "caller_nid": "sqliteadapter_sqliteadapter_listfindings",
+      "callee": "push",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\sqliteAdapter.ts",
+      "source_location": "L873"
+    },
+    {
+      "caller_nid": "sqliteadapter_sqliteadapter_listfindings",
+      "callee": "push",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\sqliteAdapter.ts",
+      "source_location": "L873"
+    },
+    {
+      "caller_nid": "sqliteadapter_sqliteadapter_listfindings",
+      "callee": "push",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\sqliteAdapter.ts",
+      "source_location": "L874"
+    },
+    {
+      "caller_nid": "sqliteadapter_sqliteadapter_listfindings",
+      "callee": "push",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\sqliteAdapter.ts",
+      "source_location": "L874"
+    },
+    {
+      "caller_nid": "sqliteadapter_sqliteadapter_listfindings",
+      "callee": "push",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\sqliteAdapter.ts",
+      "source_location": "L875"
+    },
+    {
+      "caller_nid": "sqliteadapter_sqliteadapter_listfindings",
+      "callee": "push",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\sqliteAdapter.ts",
+      "source_location": "L875"
+    },
+    {
+      "caller_nid": "sqliteadapter_sqliteadapter_listfindings",
+      "callee": "join",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\sqliteAdapter.ts",
+      "source_location": "L877"
+    },
+    {
+      "caller_nid": "sqliteadapter_sqliteadapter_listfindings",
+      "callee": "floor",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\sqliteAdapter.ts",
+      "source_location": "L878"
+    },
+    {
+      "caller_nid": "sqliteadapter_sqliteadapter_mapfindingrow",
+      "callee": "parse",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\sqliteAdapter.ts",
+      "source_location": "L905"
+    },
+    {
+      "caller_nid": "sqliteadapter_sqliteadapter_mapfindingrow",
+      "callee": "parse",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\sqliteAdapter.ts",
+      "source_location": "L909"
+    },
+    {
+      "caller_nid": "sqliteadapter_sqliteadapter_createlessonsummary",
+      "callee": "randomUUID",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\sqliteAdapter.ts",
+      "source_location": "L927"
+    },
+    {
+      "caller_nid": "sqliteadapter_sqliteadapter_createlessonsummary",
+      "callee": "stringify",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\sqliteAdapter.ts",
+      "source_location": "L929"
+    },
+    {
+      "caller_nid": "sqliteadapter_sqliteadapter_listlessonsummaries",
+      "callee": "push",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\sqliteAdapter.ts",
+      "source_location": "L954"
+    },
+    {
+      "caller_nid": "sqliteadapter_sqliteadapter_listlessonsummaries",
+      "callee": "push",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\sqliteAdapter.ts",
+      "source_location": "L954"
+    },
+    {
+      "caller_nid": "sqliteadapter_sqliteadapter_listlessonsummaries",
+      "callee": "floor",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\sqliteAdapter.ts",
+      "source_location": "L955"
+    },
+    {
+      "caller_nid": "sqliteadapter_sqliteadapter_listlessonsummaries",
+      "callee": "join",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\sqliteAdapter.ts",
+      "source_location": "L956"
+    },
+    {
+      "caller_nid": "sqliteadapter_sqliteadapter_listdestructiveaudits",
+      "callee": "push",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\sqliteAdapter.ts",
+      "source_location": "L1087"
+    },
+    {
+      "caller_nid": "sqliteadapter_sqliteadapter_listdestructiveaudits",
+      "callee": "push",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\sqliteAdapter.ts",
+      "source_location": "L1087"
+    },
+    {
+      "caller_nid": "sqliteadapter_sqliteadapter_listdestructiveaudits",
+      "callee": "push",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\sqliteAdapter.ts",
+      "source_location": "L1088"
+    },
+    {
+      "caller_nid": "sqliteadapter_sqliteadapter_listdestructiveaudits",
+      "callee": "push",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\sqliteAdapter.ts",
+      "source_location": "L1088"
+    },
+    {
+      "caller_nid": "sqliteadapter_sqliteadapter_listdestructiveaudits",
+      "callee": "join",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\sqliteAdapter.ts",
+      "source_location": "L1089"
+    },
+    {
+      "caller_nid": "sqliteadapter_sqliteadapter_listdestructiveaudits",
+      "callee": "floor",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\sqliteAdapter.ts",
+      "source_location": "L1090"
+    }
+  ]
+}

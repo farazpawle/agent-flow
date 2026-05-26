@@ -1,0 +1,359 @@
+{
+  "nodes": [
+    {
+      "id": "d_d_drive_projects_mcp_servers_agent_flow_src_models_clientmodel_ts",
+      "label": "clientModel.ts",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\clientModel.ts",
+      "source_location": "L1"
+    },
+    {
+      "id": "clientmodel_generatestableclientid",
+      "label": "generateStableClientId()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\clientModel.ts",
+      "source_location": "L13"
+    },
+    {
+      "id": "clientmodel_initclientstable",
+      "label": "initClientsTable()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\clientModel.ts",
+      "source_location": "L38"
+    },
+    {
+      "id": "clientmodel_detectclienttype",
+      "label": "detectClientType()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\clientModel.ts",
+      "source_location": "L46"
+    },
+    {
+      "id": "clientmodel_registerclient",
+      "label": "registerClient()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\clientModel.ts",
+      "source_location": "L75"
+    },
+    {
+      "id": "clientmodel_getcurrentclientid",
+      "label": "getCurrentClientId()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\clientModel.ts",
+      "source_location": "L102"
+    },
+    {
+      "id": "clientmodel_setcurrentclientid",
+      "label": "setCurrentClientId()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\clientModel.ts",
+      "source_location": "L109"
+    },
+    {
+      "id": "clientmodel_getallclients",
+      "label": "getAllClients()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\clientModel.ts",
+      "source_location": "L117"
+    },
+    {
+      "id": "clientmodel_getclientbyid",
+      "label": "getClientById()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\clientModel.ts",
+      "source_location": "L124"
+    },
+    {
+      "id": "clientmodel_updateclientheartbeat",
+      "label": "updateClientHeartbeat()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\clientModel.ts",
+      "source_location": "L131"
+    },
+    {
+      "id": "clientmodel_markclientinactive",
+      "label": "markClientInactive()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\clientModel.ts",
+      "source_location": "L138"
+    },
+    {
+      "id": "clientmodel_deleteclient",
+      "label": "deleteClient()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\clientModel.ts",
+      "source_location": "L154"
+    },
+    {
+      "id": "clientmodel_cleanupstaleclients",
+      "label": "cleanupStaleClients()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\clientModel.ts",
+      "source_location": "L162"
+    },
+    {
+      "id": "clientmodel_markallclientsinactive",
+      "label": "markAllClientsInactive()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\clientModel.ts",
+      "source_location": "L169"
+    },
+    {
+      "id": "clientmodel_deleteinactiveclients",
+      "label": "deleteInactiveClients()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\clientModel.ts",
+      "source_location": "L177"
+    }
+  ],
+  "edges": [
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_models_clientmodel_ts",
+      "target": "d_d_drive_projects_mcp_servers_agent_flow_src_models_db_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\clientModel.ts",
+      "source_location": "L6",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_models_clientmodel_ts",
+      "target": "crypto",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\clientModel.ts",
+      "source_location": "L7",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_models_clientmodel_ts",
+      "target": "clientmodel_generatestableclientid",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\clientModel.ts",
+      "source_location": "L13",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_models_clientmodel_ts",
+      "target": "clientmodel_initclientstable",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\clientModel.ts",
+      "source_location": "L38",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_models_clientmodel_ts",
+      "target": "clientmodel_detectclienttype",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\clientModel.ts",
+      "source_location": "L46",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_models_clientmodel_ts",
+      "target": "clientmodel_registerclient",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\clientModel.ts",
+      "source_location": "L75",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_models_clientmodel_ts",
+      "target": "clientmodel_getcurrentclientid",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\clientModel.ts",
+      "source_location": "L102",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_models_clientmodel_ts",
+      "target": "clientmodel_setcurrentclientid",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\clientModel.ts",
+      "source_location": "L109",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_models_clientmodel_ts",
+      "target": "clientmodel_getallclients",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\clientModel.ts",
+      "source_location": "L117",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_models_clientmodel_ts",
+      "target": "clientmodel_getclientbyid",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\clientModel.ts",
+      "source_location": "L124",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_models_clientmodel_ts",
+      "target": "clientmodel_updateclientheartbeat",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\clientModel.ts",
+      "source_location": "L131",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_models_clientmodel_ts",
+      "target": "clientmodel_markclientinactive",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\clientModel.ts",
+      "source_location": "L138",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_models_clientmodel_ts",
+      "target": "clientmodel_deleteclient",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\clientModel.ts",
+      "source_location": "L154",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_models_clientmodel_ts",
+      "target": "clientmodel_cleanupstaleclients",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\clientModel.ts",
+      "source_location": "L162",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_models_clientmodel_ts",
+      "target": "clientmodel_markallclientsinactive",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\clientModel.ts",
+      "source_location": "L169",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_models_clientmodel_ts",
+      "target": "clientmodel_deleteinactiveclients",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\clientModel.ts",
+      "source_location": "L177",
+      "weight": 1.0
+    },
+    {
+      "source": "clientmodel_registerclient",
+      "target": "clientmodel_detectclienttype",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\clientModel.ts",
+      "source_location": "L76",
+      "weight": 1.0
+    },
+    {
+      "source": "clientmodel_registerclient",
+      "target": "clientmodel_generatestableclientid",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\clientModel.ts",
+      "source_location": "L80",
+      "weight": 1.0
+    },
+    {
+      "source": "clientmodel_markclientinactive",
+      "target": "clientmodel_getclientbyid",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\clientModel.ts",
+      "source_location": "L144",
+      "weight": 1.0
+    },
+    {
+      "source": "clientmodel_markclientinactive",
+      "target": "clientmodel_registerclient",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\clientModel.ts",
+      "source_location": "L147",
+      "weight": 1.0
+    }
+  ],
+  "raw_calls": [
+    {
+      "caller_nid": "clientmodel_generatestableclientid",
+      "callee": "replace",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\clientModel.ts",
+      "source_location": "L14"
+    },
+    {
+      "caller_nid": "clientmodel_generatestableclientid",
+      "callee": "replace",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\clientModel.ts",
+      "source_location": "L14"
+    },
+    {
+      "caller_nid": "clientmodel_generatestableclientid",
+      "callee": "toLowerCase",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\clientModel.ts",
+      "source_location": "L14"
+    },
+    {
+      "caller_nid": "clientmodel_generatestableclientid",
+      "callee": "substring",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\clientModel.ts",
+      "source_location": "L17"
+    },
+    {
+      "caller_nid": "clientmodel_generatestableclientid",
+      "callee": "digest",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\clientModel.ts",
+      "source_location": "L17"
+    },
+    {
+      "caller_nid": "clientmodel_generatestableclientid",
+      "callee": "update",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\clientModel.ts",
+      "source_location": "L17"
+    },
+    {
+      "caller_nid": "clientmodel_generatestableclientid",
+      "callee": "createHash",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\clientModel.ts",
+      "source_location": "L17"
+    },
+    {
+      "caller_nid": "clientmodel_initclientstable",
+      "callee": "resolve",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\clientModel.ts",
+      "source_location": "L40"
+    },
+    {
+      "caller_nid": "clientmodel_registerclient",
+      "callee": "cwd",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\clientModel.ts",
+      "source_location": "L77"
+    },
+    {
+      "caller_nid": "clientmodel_registerclient",
+      "callee": "error",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\clientModel.ts",
+      "source_location": "L94"
+    },
+    {
+      "caller_nid": "clientmodel_getclientbyid",
+      "callee": "getClient",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\clientModel.ts",
+      "source_location": "L125"
+    }
+  ]
+}

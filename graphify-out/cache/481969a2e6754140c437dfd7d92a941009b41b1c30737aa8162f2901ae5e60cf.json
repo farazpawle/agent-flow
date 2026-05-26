@@ -1,0 +1,556 @@
+{
+  "nodes": [
+    {
+      "id": "d_d_drive_projects_mcp_servers_agent_flow_tests_unit_test_templates_ts",
+      "label": "test-templates.ts",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\tests\\unit\\test-templates.ts",
+      "source_location": "L1"
+    },
+    {
+      "id": "test_templates_log",
+      "label": "log()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\tests\\unit\\test-templates.ts",
+      "source_location": "L14"
+    },
+    {
+      "id": "test_templates_pass",
+      "label": "pass()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\tests\\unit\\test-templates.ts",
+      "source_location": "L18"
+    },
+    {
+      "id": "test_templates_fail",
+      "label": "fail()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\tests\\unit\\test-templates.ts",
+      "source_location": "L23"
+    },
+    {
+      "id": "test_templates_checkcontent",
+      "label": "checkContent()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\tests\\unit\\test-templates.ts",
+      "source_location": "L28"
+    },
+    {
+      "id": "test_templates_testreflecttask",
+      "label": "testReflectTask()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\tests\\unit\\test-templates.ts",
+      "source_location": "L38"
+    },
+    {
+      "id": "test_templates_testcompletetask",
+      "label": "testCompleteTask()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\tests\\unit\\test-templates.ts",
+      "source_location": "L58"
+    },
+    {
+      "id": "test_templates_testfindtask",
+      "label": "testFindTask()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\tests\\unit\\test-templates.ts",
+      "source_location": "L81"
+    },
+    {
+      "id": "test_templates_testclearalltasks",
+      "label": "testClearAllTasks()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\tests\\unit\\test-templates.ts",
+      "source_location": "L95"
+    },
+    {
+      "id": "test_templates_testsmartsuggestionsinothers",
+      "label": "testSmartSuggestionsInOthers()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\tests\\unit\\test-templates.ts",
+      "source_location": "L109"
+    },
+    {
+      "id": "test_templates_runtests",
+      "label": "runTests()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\tests\\unit\\test-templates.ts",
+      "source_location": "L136"
+    }
+  ],
+  "edges": [
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_tests_unit_test_templates_ts",
+      "target": "d_d_drive_projects_mcp_servers_agent_flow_tests_prompts_loader_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\tests\\unit\\test-templates.ts",
+      "source_location": "L7",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_tests_unit_test_templates_ts",
+      "target": "path",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\tests\\unit\\test-templates.ts",
+      "source_location": "L8",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_tests_unit_test_templates_ts",
+      "target": "test_templates_log",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\tests\\unit\\test-templates.ts",
+      "source_location": "L14",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_tests_unit_test_templates_ts",
+      "target": "test_templates_pass",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\tests\\unit\\test-templates.ts",
+      "source_location": "L18",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_tests_unit_test_templates_ts",
+      "target": "test_templates_fail",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\tests\\unit\\test-templates.ts",
+      "source_location": "L23",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_tests_unit_test_templates_ts",
+      "target": "test_templates_checkcontent",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\tests\\unit\\test-templates.ts",
+      "source_location": "L28",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_tests_unit_test_templates_ts",
+      "target": "test_templates_testreflecttask",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\tests\\unit\\test-templates.ts",
+      "source_location": "L38",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_tests_unit_test_templates_ts",
+      "target": "test_templates_testcompletetask",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\tests\\unit\\test-templates.ts",
+      "source_location": "L58",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_tests_unit_test_templates_ts",
+      "target": "test_templates_testfindtask",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\tests\\unit\\test-templates.ts",
+      "source_location": "L81",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_tests_unit_test_templates_ts",
+      "target": "test_templates_testclearalltasks",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\tests\\unit\\test-templates.ts",
+      "source_location": "L95",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_tests_unit_test_templates_ts",
+      "target": "test_templates_testsmartsuggestionsinothers",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\tests\\unit\\test-templates.ts",
+      "source_location": "L109",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_tests_unit_test_templates_ts",
+      "target": "test_templates_runtests",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\tests\\unit\\test-templates.ts",
+      "source_location": "L136",
+      "weight": 1.0
+    },
+    {
+      "source": "test_templates_pass",
+      "target": "test_templates_log",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\tests\\unit\\test-templates.ts",
+      "source_location": "L20",
+      "weight": 1.0
+    },
+    {
+      "source": "test_templates_fail",
+      "target": "test_templates_log",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\tests\\unit\\test-templates.ts",
+      "source_location": "L25",
+      "weight": 1.0
+    },
+    {
+      "source": "test_templates_checkcontent",
+      "target": "test_templates_pass",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\tests\\unit\\test-templates.ts",
+      "source_location": "L30",
+      "weight": 1.0
+    },
+    {
+      "source": "test_templates_checkcontent",
+      "target": "test_templates_fail",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\tests\\unit\\test-templates.ts",
+      "source_location": "L32",
+      "weight": 1.0
+    },
+    {
+      "source": "test_templates_testreflecttask",
+      "target": "test_templates_log",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\tests\\unit\\test-templates.ts",
+      "source_location": "L39",
+      "weight": 1.0
+    },
+    {
+      "source": "test_templates_testreflecttask",
+      "target": "test_templates_checkcontent",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\tests\\unit\\test-templates.ts",
+      "source_location": "L44",
+      "weight": 1.0
+    },
+    {
+      "source": "test_templates_testreflecttask",
+      "target": "test_templates_fail",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\tests\\unit\\test-templates.ts",
+      "source_location": "L54",
+      "weight": 1.0
+    },
+    {
+      "source": "test_templates_testcompletetask",
+      "target": "test_templates_log",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\tests\\unit\\test-templates.ts",
+      "source_location": "L59",
+      "weight": 1.0
+    },
+    {
+      "source": "test_templates_testcompletetask",
+      "target": "test_templates_checkcontent",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\tests\\unit\\test-templates.ts",
+      "source_location": "L64",
+      "weight": 1.0
+    },
+    {
+      "source": "test_templates_testcompletetask",
+      "target": "test_templates_fail",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\tests\\unit\\test-templates.ts",
+      "source_location": "L77",
+      "weight": 1.0
+    },
+    {
+      "source": "test_templates_testfindtask",
+      "target": "test_templates_log",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\tests\\unit\\test-templates.ts",
+      "source_location": "L82",
+      "weight": 1.0
+    },
+    {
+      "source": "test_templates_testfindtask",
+      "target": "test_templates_checkcontent",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\tests\\unit\\test-templates.ts",
+      "source_location": "L87",
+      "weight": 1.0
+    },
+    {
+      "source": "test_templates_testfindtask",
+      "target": "test_templates_fail",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\tests\\unit\\test-templates.ts",
+      "source_location": "L91",
+      "weight": 1.0
+    },
+    {
+      "source": "test_templates_testclearalltasks",
+      "target": "test_templates_log",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\tests\\unit\\test-templates.ts",
+      "source_location": "L96",
+      "weight": 1.0
+    },
+    {
+      "source": "test_templates_testclearalltasks",
+      "target": "test_templates_checkcontent",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\tests\\unit\\test-templates.ts",
+      "source_location": "L101",
+      "weight": 1.0
+    },
+    {
+      "source": "test_templates_testclearalltasks",
+      "target": "test_templates_fail",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\tests\\unit\\test-templates.ts",
+      "source_location": "L105",
+      "weight": 1.0
+    },
+    {
+      "source": "test_templates_testsmartsuggestionsinothers",
+      "target": "test_templates_log",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\tests\\unit\\test-templates.ts",
+      "source_location": "L110",
+      "weight": 1.0
+    },
+    {
+      "source": "test_templates_testsmartsuggestionsinothers",
+      "target": "test_templates_checkcontent",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\tests\\unit\\test-templates.ts",
+      "source_location": "L114",
+      "weight": 1.0
+    },
+    {
+      "source": "test_templates_testsmartsuggestionsinothers",
+      "target": "test_templates_fail",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\tests\\unit\\test-templates.ts",
+      "source_location": "L130",
+      "weight": 1.0
+    },
+    {
+      "source": "test_templates_runtests",
+      "target": "test_templates_log",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\tests\\unit\\test-templates.ts",
+      "source_location": "L137",
+      "weight": 1.0
+    },
+    {
+      "source": "test_templates_runtests",
+      "target": "test_templates_testreflecttask",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\tests\\unit\\test-templates.ts",
+      "source_location": "L141",
+      "weight": 1.0
+    },
+    {
+      "source": "test_templates_runtests",
+      "target": "test_templates_testcompletetask",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\tests\\unit\\test-templates.ts",
+      "source_location": "L144",
+      "weight": 1.0
+    },
+    {
+      "source": "test_templates_runtests",
+      "target": "test_templates_testfindtask",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\tests\\unit\\test-templates.ts",
+      "source_location": "L147",
+      "weight": 1.0
+    },
+    {
+      "source": "test_templates_runtests",
+      "target": "test_templates_testclearalltasks",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\tests\\unit\\test-templates.ts",
+      "source_location": "L150",
+      "weight": 1.0
+    },
+    {
+      "source": "test_templates_runtests",
+      "target": "test_templates_testsmartsuggestionsinothers",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\tests\\unit\\test-templates.ts",
+      "source_location": "L153",
+      "weight": 1.0
+    }
+  ],
+  "raw_calls": [
+    {
+      "caller_nid": "test_templates_pass",
+      "callee": "push",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\tests\\unit\\test-templates.ts",
+      "source_location": "L19"
+    },
+    {
+      "caller_nid": "test_templates_fail",
+      "callee": "push",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\tests\\unit\\test-templates.ts",
+      "source_location": "L24"
+    },
+    {
+      "caller_nid": "test_templates_checkcontent",
+      "callee": "includes",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\tests\\unit\\test-templates.ts",
+      "source_location": "L29"
+    },
+    {
+      "caller_nid": "test_templates_checkcontent",
+      "callee": "substring",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\tests\\unit\\test-templates.ts",
+      "source_location": "L32"
+    },
+    {
+      "caller_nid": "test_templates_testreflecttask",
+      "callee": "loadPromptFromTemplate",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\tests\\unit\\test-templates.ts",
+      "source_location": "L41"
+    },
+    {
+      "caller_nid": "test_templates_testreflecttask",
+      "callee": "String",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\tests\\unit\\test-templates.ts",
+      "source_location": "L54"
+    },
+    {
+      "caller_nid": "test_templates_testcompletetask",
+      "callee": "loadPromptFromTemplate",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\tests\\unit\\test-templates.ts",
+      "source_location": "L61"
+    },
+    {
+      "caller_nid": "test_templates_testcompletetask",
+      "callee": "String",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\tests\\unit\\test-templates.ts",
+      "source_location": "L77"
+    },
+    {
+      "caller_nid": "test_templates_testfindtask",
+      "callee": "loadPromptFromTemplate",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\tests\\unit\\test-templates.ts",
+      "source_location": "L84"
+    },
+    {
+      "caller_nid": "test_templates_testfindtask",
+      "callee": "String",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\tests\\unit\\test-templates.ts",
+      "source_location": "L91"
+    },
+    {
+      "caller_nid": "test_templates_testclearalltasks",
+      "callee": "loadPromptFromTemplate",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\tests\\unit\\test-templates.ts",
+      "source_location": "L98"
+    },
+    {
+      "caller_nid": "test_templates_testclearalltasks",
+      "callee": "String",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\tests\\unit\\test-templates.ts",
+      "source_location": "L105"
+    },
+    {
+      "caller_nid": "test_templates_testsmartsuggestionsinothers",
+      "callee": "loadPromptFromTemplate",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\tests\\unit\\test-templates.ts",
+      "source_location": "L113"
+    },
+    {
+      "caller_nid": "test_templates_testsmartsuggestionsinothers",
+      "callee": "loadPromptFromTemplate",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\tests\\unit\\test-templates.ts",
+      "source_location": "L119"
+    },
+    {
+      "caller_nid": "test_templates_testsmartsuggestionsinothers",
+      "callee": "loadPromptFromTemplate",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\tests\\unit\\test-templates.ts",
+      "source_location": "L124"
+    },
+    {
+      "caller_nid": "test_templates_testsmartsuggestionsinothers",
+      "callee": "String",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\tests\\unit\\test-templates.ts",
+      "source_location": "L130"
+    },
+    {
+      "caller_nid": "test_templates_runtests",
+      "callee": "repeat",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\tests\\unit\\test-templates.ts",
+      "source_location": "L137"
+    },
+    {
+      "caller_nid": "test_templates_runtests",
+      "callee": "repeat",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\tests\\unit\\test-templates.ts",
+      "source_location": "L139"
+    },
+    {
+      "caller_nid": "test_templates_runtests",
+      "callee": "repeat",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\tests\\unit\\test-templates.ts",
+      "source_location": "L157"
+    },
+    {
+      "caller_nid": "test_templates_runtests",
+      "callee": "repeat",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\tests\\unit\\test-templates.ts",
+      "source_location": "L159"
+    },
+    {
+      "caller_nid": "test_templates_runtests",
+      "callee": "filter",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\tests\\unit\\test-templates.ts",
+      "source_location": "L161"
+    },
+    {
+      "caller_nid": "test_templates_runtests",
+      "callee": "filter",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\tests\\unit\\test-templates.ts",
+      "source_location": "L162"
+    },
+    {
+      "caller_nid": "test_templates_runtests",
+      "callee": "exit",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\tests\\unit\\test-templates.ts",
+      "source_location": "L169"
+    }
+  ]
+}

@@ -1,0 +1,135 @@
+{
+  "nodes": [
+    {
+      "id": "d_d_drive_projects_mcp_servers_agent_flow_src_tools_deletes_projectdelete_ts",
+      "label": "projectDelete.ts",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\deletes\\projectDelete.ts",
+      "source_location": "L1"
+    },
+    {
+      "id": "projectdelete_astooltext",
+      "label": "asToolText()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\deletes\\projectDelete.ts",
+      "source_location": "L26"
+    },
+    {
+      "id": "projectdelete_rejectworkflowinitiated",
+      "label": "rejectWorkflowInitiated()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\deletes\\projectDelete.ts",
+      "source_location": "L32"
+    },
+    {
+      "id": "projectdelete_projectdelete",
+      "label": "projectDelete()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\deletes\\projectDelete.ts",
+      "source_location": "L41"
+    }
+  ],
+  "edges": [
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_tools_deletes_projectdelete_ts",
+      "target": "d_d_drive_projects_mcp_servers_agent_flow_src_models_db_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\deletes\\projectDelete.ts",
+      "source_location": "L13",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_tools_deletes_projectdelete_ts",
+      "target": "d_d_drive_projects_mcp_servers_agent_flow_src_utils_errors_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\deletes\\projectDelete.ts",
+      "source_location": "L14",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_tools_deletes_projectdelete_ts",
+      "target": "d_d_drive_projects_mcp_servers_agent_flow_src_utils_telemetry_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\deletes\\projectDelete.ts",
+      "source_location": "L19",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_tools_deletes_projectdelete_ts",
+      "target": "d_d_drive_projects_mcp_servers_agent_flow_src_utils_auditlog_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\deletes\\projectDelete.ts",
+      "source_location": "L20",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_tools_deletes_projectdelete_ts",
+      "target": "d_d_drive_projects_mcp_servers_agent_flow_src_utils_callercontext_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\deletes\\projectDelete.ts",
+      "source_location": "L21",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_tools_deletes_projectdelete_ts",
+      "target": "d_d_drive_projects_mcp_servers_agent_flow_src_tools_deletes_schemas_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\deletes\\projectDelete.ts",
+      "source_location": "L22",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_tools_deletes_projectdelete_ts",
+      "target": "projectdelete_astooltext",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\deletes\\projectDelete.ts",
+      "source_location": "L26",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_tools_deletes_projectdelete_ts",
+      "target": "projectdelete_rejectworkflowinitiated",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\deletes\\projectDelete.ts",
+      "source_location": "L32",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_tools_deletes_projectdelete_ts",
+      "target": "projectdelete_projectdelete",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\deletes\\projectDelete.ts",
+      "source_location": "L41",
+      "weight": 1.0
+    }
+  ],
+  "raw_calls": [
+    {
+      "caller_nid": "projectdelete_astooltext",
+      "callee": "stringify",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\deletes\\projectDelete.ts",
+      "source_location": "L28"
+    },
+    {
+      "caller_nid": "projectdelete_rejectworkflowinitiated",
+      "callee": "isInvokedFrom",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\deletes\\projectDelete.ts",
+      "source_location": "L33"
+    },
+    {
+      "caller_nid": "projectdelete_projectdelete",
+      "callee": "withToolTelemetry",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\deletes\\projectDelete.ts",
+      "source_location": "L42"
+    }
+  ]
+}

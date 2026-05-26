@@ -36,7 +36,6 @@ AGENT_INSTRUCTIONS.md
 
 # Tests (Requested)
 tests/
-src/tests/
 test_output.txt
 
 # Logs

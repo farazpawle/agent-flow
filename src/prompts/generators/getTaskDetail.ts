@@ -3,11 +3,7 @@
  * Responsible for combining templates and parameters into the final prompt
  */
 
-import {
-  loadPrompt,
-  generatePrompt,
-  loadPromptFromTemplate,
-} from "../loader.js";
+import { loadPrompt, generatePrompt, loadPromptFromTemplate } from "../loader.js";
 import { Task } from "../../types/index.js";
 
 /**
@@ -18,6 +14,7 @@ export interface GetTaskDetailPromptParams {
   error?: string;
   task?: Task;
   relatedFilesSummary?: string;
+  allTasks?: Task[];
 }
 
 /**
@@ -26,7 +23,7 @@ export interface GetTaskDetailPromptParams {
  * @returns generated prompt
  */
 export function getTaskDetailPrompt(params: GetTaskDetailPromptParams): string {
-  const { taskId, error, task, relatedFilesSummary } = params;
+  const { taskId, error, task, relatedFilesSummary, allTasks } = params;
 
   // If there's an error, show error message
   if (error) {
@@ -39,9 +36,7 @@ export function getTaskDetailPrompt(params: GetTaskDetailPromptParams): string {
 
   // If task not found, show task not found message
   if (!task) {
-    const notFoundTemplate = loadPromptFromTemplate(
-      "getTaskDetail/notFound.md"
-    );
+    const notFoundTemplate = loadPromptFromTemplate("getTaskDetail/notFound.md");
     return generatePrompt(notFoundTemplate, {
       taskId,
     });
@@ -50,7 +45,7 @@ export function getTaskDetailPrompt(params: GetTaskDetailPromptParams): string {
   // Process task files if available
   let filesContentPrompt = "";
   const filesTemplate = loadPromptFromTemplate("getTaskDetail/relatedFiles.md"); // Moved this line
-  
+
   if (relatedFilesSummary) {
     filesContentPrompt = generatePrompt(filesTemplate, {
       relatedFilesSummary,
@@ -97,21 +92,38 @@ export function getTaskDetailPrompt(params: GetTaskDetailPromptParams): string {
     });
   }
 
+  // Process task dependencies if available
+  let dependenciesPrompt = "";
+  if (task.dependencies && task.dependencies.length > 0) {
+    const depsTemplate = loadPromptFromTemplate("getTaskDetail/dependencies.md");
+    const taskMap = new Map((allTasks || []).map((t) => [t.id, t.name]));
+    const depsList = task.dependencies
+      .map((d) => {
+        const name = taskMap.get(d.taskId);
+        return name ? `\`${name}\` (\`${d.taskId}\`)` : `\`${d.taskId}\``;
+      })
+      .join(", ");
+    dependenciesPrompt = generatePrompt(depsTemplate, {
+      dependencies: depsList,
+    });
+  }
+
   // Start building the base prompt
   const indexTemplate = loadPromptFromTemplate("getTaskDetail/index.md");
-  
-  let prompt = generatePrompt(indexTemplate, {
+
+  const prompt = generatePrompt(indexTemplate, {
     id: task.id,
     name: task.name,
     description: task.description,
     status: task.status,
-    createdAt: task.createdAt ? task.createdAt.toLocaleString() : "unknown",
-    completedAt: task.completedAt ? task.completedAt.toLocaleString() : "not completed",
+    createdTime: task.createdAt ? task.createdAt.toLocaleString() : "unknown",
+    updatedTime: task.updatedAt ? task.updatedAt.toLocaleString() : "unknown",
     notesTemplate: notesPrompt,
+    dependenciesTemplate: dependenciesPrompt,
     implementationGuideTemplate: implementationGuidePrompt,
     verificationCriteriaTemplate: verificationCriteriaPrompt,
-    summaryTemplate: summaryPrompt,
-    filesTemplate: filesContentPrompt,
+    complatedSummaryTemplate: summaryPrompt,
+    relatedFilesTemplate: filesContentPrompt,
   });
 
   // Load possible custom prompt

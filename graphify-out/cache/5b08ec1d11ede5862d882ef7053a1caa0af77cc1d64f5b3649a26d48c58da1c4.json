@@ -1,0 +1,605 @@
+{
+  "nodes": [
+    {
+      "id": "d_d_drive_projects_mcp_servers_agent_flow_src_public_app_js",
+      "label": "app.js",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\public\\app.js",
+      "source_location": "L1"
+    },
+    {
+      "id": "app_boot",
+      "label": "boot()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\public\\app.js",
+      "source_location": "L41"
+    },
+    {
+      "id": "app_rendersidebar",
+      "label": "renderSidebar()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\public\\app.js",
+      "source_location": "L100"
+    },
+    {
+      "id": "app_updatechrome",
+      "label": "updateChrome()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\public\\app.js",
+      "source_location": "L125"
+    },
+    {
+      "id": "app_buildbreadcrumbs",
+      "label": "buildBreadcrumbs()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\public\\app.js",
+      "source_location": "L145"
+    },
+    {
+      "id": "app_refreshagentcount",
+      "label": "refreshAgentCount()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\public\\app.js",
+      "source_location": "L162"
+    }
+  ],
+  "edges": [
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_public_app_js",
+      "target": "d_d_drive_projects_mcp_servers_agent_flow_src_public_lib_router_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\public\\app.js",
+      "source_location": "L5",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_public_app_js",
+      "target": "d_d_drive_projects_mcp_servers_agent_flow_src_public_lib_i18n_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\public\\app.js",
+      "source_location": "L6",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_public_app_js",
+      "target": "d_d_drive_projects_mcp_servers_agent_flow_src_public_lib_toast_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\public\\app.js",
+      "source_location": "L7",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_public_app_js",
+      "target": "d_d_drive_projects_mcp_servers_agent_flow_src_public_lib_api_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\public\\app.js",
+      "source_location": "L8",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_public_app_js",
+      "target": "d_d_drive_projects_mcp_servers_agent_flow_src_public_lib_utils_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\public\\app.js",
+      "source_location": "L9",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_public_app_js",
+      "target": "d_d_drive_projects_mcp_servers_agent_flow_src_public_pages_dashboard_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\public\\app.js",
+      "source_location": "L11",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_public_app_js",
+      "target": "d_d_drive_projects_mcp_servers_agent_flow_src_public_pages_projects_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\public\\app.js",
+      "source_location": "L12",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_public_app_js",
+      "target": "d_d_drive_projects_mcp_servers_agent_flow_src_public_pages_projectdetail_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\public\\app.js",
+      "source_location": "L13",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_public_app_js",
+      "target": "d_d_drive_projects_mcp_servers_agent_flow_src_public_pages_tasksboard_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\public\\app.js",
+      "source_location": "L14",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_public_app_js",
+      "target": "d_d_drive_projects_mcp_servers_agent_flow_src_public_pages_tasksgraph_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\public\\app.js",
+      "source_location": "L15",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_public_app_js",
+      "target": "d_d_drive_projects_mcp_servers_agent_flow_src_public_pages_taskdetail_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\public\\app.js",
+      "source_location": "L16",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_public_app_js",
+      "target": "d_d_drive_projects_mcp_servers_agent_flow_src_public_pages_knowledge_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\public\\app.js",
+      "source_location": "L17",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_public_app_js",
+      "target": "d_d_drive_projects_mcp_servers_agent_flow_src_public_pages_sourcedetail_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\public\\app.js",
+      "source_location": "L18",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_public_app_js",
+      "target": "d_d_drive_projects_mcp_servers_agent_flow_src_public_pages_pageviewer_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\public\\app.js",
+      "source_location": "L19",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_public_app_js",
+      "target": "d_d_drive_projects_mcp_servers_agent_flow_src_public_pages_knowledgesearch_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\public\\app.js",
+      "source_location": "L20",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_public_app_js",
+      "target": "d_d_drive_projects_mcp_servers_agent_flow_src_public_pages_agents_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\public\\app.js",
+      "source_location": "L21",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_public_app_js",
+      "target": "d_d_drive_projects_mcp_servers_agent_flow_src_public_pages_settings_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\public\\app.js",
+      "source_location": "L22",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_public_app_js",
+      "target": "app_boot",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\public\\app.js",
+      "source_location": "L41",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_public_app_js",
+      "target": "app_rendersidebar",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\public\\app.js",
+      "source_location": "L100",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_public_app_js",
+      "target": "app_updatechrome",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\public\\app.js",
+      "source_location": "L125",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_public_app_js",
+      "target": "app_buildbreadcrumbs",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\public\\app.js",
+      "source_location": "L145",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_public_app_js",
+      "target": "app_refreshagentcount",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\public\\app.js",
+      "source_location": "L162",
+      "weight": 1.0
+    },
+    {
+      "source": "app_boot",
+      "target": "app_rendersidebar",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\public\\app.js",
+      "source_location": "L66",
+      "weight": 1.0
+    },
+    {
+      "source": "app_boot",
+      "target": "app_refreshagentcount",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\public\\app.js",
+      "source_location": "L93",
+      "weight": 1.0
+    },
+    {
+      "source": "app_updatechrome",
+      "target": "app_buildbreadcrumbs",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\public\\app.js",
+      "source_location": "L133",
+      "weight": 1.0
+    }
+  ],
+  "raw_calls": [
+    {
+      "caller_nid": "app_boot",
+      "callee": "loadLocale",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\public\\app.js",
+      "source_location": "L43"
+    },
+    {
+      "caller_nid": "app_boot",
+      "callee": "mountToastHost",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\public\\app.js",
+      "source_location": "L44"
+    },
+    {
+      "caller_nid": "app_boot",
+      "callee": "getElementById",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\public\\app.js",
+      "source_location": "L44"
+    },
+    {
+      "caller_nid": "app_boot",
+      "callee": "getItem",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\public\\app.js",
+      "source_location": "L47"
+    },
+    {
+      "caller_nid": "app_boot",
+      "callee": "setAttribute",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\public\\app.js",
+      "source_location": "L48"
+    },
+    {
+      "caller_nid": "app_boot",
+      "callee": "addEventListener",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\public\\app.js",
+      "source_location": "L49"
+    },
+    {
+      "caller_nid": "app_boot",
+      "callee": "getElementById",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\public\\app.js",
+      "source_location": "L49"
+    },
+    {
+      "caller_nid": "app_boot",
+      "callee": "getElementById",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\public\\app.js",
+      "source_location": "L56"
+    },
+    {
+      "caller_nid": "app_boot",
+      "callee": "addEventListener",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\public\\app.js",
+      "source_location": "L57"
+    },
+    {
+      "caller_nid": "app_boot",
+      "callee": "getElementById",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\public\\app.js",
+      "source_location": "L57"
+    },
+    {
+      "caller_nid": "app_boot",
+      "callee": "addEventListener",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\public\\app.js",
+      "source_location": "L63"
+    },
+    {
+      "caller_nid": "app_boot",
+      "callee": "getElementById",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\public\\app.js",
+      "source_location": "L63"
+    },
+    {
+      "caller_nid": "app_boot",
+      "callee": "getElementById",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\public\\app.js",
+      "source_location": "L69"
+    },
+    {
+      "caller_nid": "app_boot",
+      "callee": "notFound",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\public\\app.js",
+      "source_location": "L71"
+    },
+    {
+      "caller_nid": "app_boot",
+      "callee": "on",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\public\\app.js",
+      "source_location": "L71"
+    },
+    {
+      "caller_nid": "app_boot",
+      "callee": "on",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\public\\app.js",
+      "source_location": "L71"
+    },
+    {
+      "caller_nid": "app_boot",
+      "callee": "on",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\public\\app.js",
+      "source_location": "L71"
+    },
+    {
+      "caller_nid": "app_boot",
+      "callee": "on",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\public\\app.js",
+      "source_location": "L71"
+    },
+    {
+      "caller_nid": "app_boot",
+      "callee": "on",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\public\\app.js",
+      "source_location": "L71"
+    },
+    {
+      "caller_nid": "app_boot",
+      "callee": "on",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\public\\app.js",
+      "source_location": "L71"
+    },
+    {
+      "caller_nid": "app_boot",
+      "callee": "on",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\public\\app.js",
+      "source_location": "L71"
+    },
+    {
+      "caller_nid": "app_boot",
+      "callee": "on",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\public\\app.js",
+      "source_location": "L71"
+    },
+    {
+      "caller_nid": "app_boot",
+      "callee": "on",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\public\\app.js",
+      "source_location": "L71"
+    },
+    {
+      "caller_nid": "app_boot",
+      "callee": "on",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\public\\app.js",
+      "source_location": "L71"
+    },
+    {
+      "caller_nid": "app_boot",
+      "callee": "on",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\public\\app.js",
+      "source_location": "L71"
+    },
+    {
+      "caller_nid": "app_boot",
+      "callee": "on",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\public\\app.js",
+      "source_location": "L71"
+    },
+    {
+      "caller_nid": "app_boot",
+      "callee": "subscribe",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\public\\app.js",
+      "source_location": "L89"
+    },
+    {
+      "caller_nid": "app_boot",
+      "callee": "start",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\public\\app.js",
+      "source_location": "L90"
+    },
+    {
+      "caller_nid": "app_boot",
+      "callee": "setInterval",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\public\\app.js",
+      "source_location": "L94"
+    },
+    {
+      "caller_nid": "app_boot",
+      "callee": "applyI18n",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\public\\app.js",
+      "source_location": "L97"
+    },
+    {
+      "caller_nid": "app_rendersidebar",
+      "callee": "getElementById",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\public\\app.js",
+      "source_location": "L101"
+    },
+    {
+      "caller_nid": "app_rendersidebar",
+      "callee": "push",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\public\\app.js",
+      "source_location": "L105"
+    },
+    {
+      "caller_nid": "app_rendersidebar",
+      "callee": "escapeHtml",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\public\\app.js",
+      "source_location": "L105"
+    },
+    {
+      "caller_nid": "app_rendersidebar",
+      "callee": "push",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\public\\app.js",
+      "source_location": "L108"
+    },
+    {
+      "caller_nid": "app_rendersidebar",
+      "callee": "escapeHtml",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\public\\app.js",
+      "source_location": "L108"
+    },
+    {
+      "caller_nid": "app_rendersidebar",
+      "callee": "escapeHtml",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\public\\app.js",
+      "source_location": "L110"
+    },
+    {
+      "caller_nid": "app_rendersidebar",
+      "callee": "push",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\public\\app.js",
+      "source_location": "L113"
+    },
+    {
+      "caller_nid": "app_rendersidebar",
+      "callee": "push",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\public\\app.js",
+      "source_location": "L115"
+    },
+    {
+      "caller_nid": "app_rendersidebar",
+      "callee": "escapeHtml",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\public\\app.js",
+      "source_location": "L115"
+    },
+    {
+      "caller_nid": "app_rendersidebar",
+      "callee": "escapeHtml",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\public\\app.js",
+      "source_location": "L116"
+    },
+    {
+      "caller_nid": "app_rendersidebar",
+      "callee": "push",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\public\\app.js",
+      "source_location": "L119"
+    },
+    {
+      "caller_nid": "app_rendersidebar",
+      "callee": "join",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\public\\app.js",
+      "source_location": "L122"
+    },
+    {
+      "caller_nid": "app_updatechrome",
+      "callee": "forEach",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\public\\app.js",
+      "source_location": "L127"
+    },
+    {
+      "caller_nid": "app_updatechrome",
+      "callee": "querySelectorAll",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\public\\app.js",
+      "source_location": "L127"
+    },
+    {
+      "caller_nid": "app_updatechrome",
+      "callee": "getElementById",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\public\\app.js",
+      "source_location": "L134"
+    },
+    {
+      "caller_nid": "app_updatechrome",
+      "callee": "join",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\public\\app.js",
+      "source_location": "L135"
+    },
+    {
+      "caller_nid": "app_updatechrome",
+      "callee": "map",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\public\\app.js",
+      "source_location": "L135"
+    },
+    {
+      "caller_nid": "app_updatechrome",
+      "callee": "remove",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\public\\app.js",
+      "source_location": "L142"
+    },
+    {
+      "caller_nid": "app_updatechrome",
+      "callee": "getElementById",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\public\\app.js",
+      "source_location": "L142"
+    },
+    {
+      "caller_nid": "app_buildbreadcrumbs",
+      "callee": "test",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\public\\app.js",
+      "source_location": "L149"
+    },
+    {
+      "caller_nid": "app_buildbreadcrumbs",
+      "callee": "test",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\public\\app.js",
+      "source_location": "L152"
+    },
+    {
+      "caller_nid": "app_buildbreadcrumbs",
+      "callee": "test",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\public\\app.js",
+      "source_location": "L155"
+    },
+    {
+      "caller_nid": "app_buildbreadcrumbs",
+      "callee": "test",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\public\\app.js",
+      "source_location": "L156"
+    },
+    {
+      "caller_nid": "app_refreshagentcount",
+      "callee": "get",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\public\\app.js",
+      "source_location": "L164"
+    },
+    {
+      "caller_nid": "app_refreshagentcount",
+      "callee": "getElementById",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\public\\app.js",
+      "source_location": "L165"
+    }
+  ]
+}

@@ -1,0 +1,116 @@
+{
+  "nodes": [
+    {
+      "id": "d_d_drive_projects_mcp_servers_agent_flow_src_utils_gitutils_ts",
+      "label": "gitUtils.ts",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\utils\\gitUtils.ts",
+      "source_location": "L1"
+    },
+    {
+      "id": "gitutils_getgitremoteurl",
+      "label": "getGitRemoteUrl()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\utils\\gitUtils.ts",
+      "source_location": "L11"
+    },
+    {
+      "id": "gitutils_normalizegiturl",
+      "label": "normalizeGitUrl()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\utils\\gitUtils.ts",
+      "source_location": "L35"
+    }
+  ],
+  "edges": [
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_utils_gitutils_ts",
+      "target": "child_process",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\utils\\gitUtils.ts",
+      "source_location": "L2",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_utils_gitutils_ts",
+      "target": "util",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\utils\\gitUtils.ts",
+      "source_location": "L3",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_utils_gitutils_ts",
+      "target": "gitutils_getgitremoteurl",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\utils\\gitUtils.ts",
+      "source_location": "L11",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_utils_gitutils_ts",
+      "target": "gitutils_normalizegiturl",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\utils\\gitUtils.ts",
+      "source_location": "L35",
+      "weight": 1.0
+    },
+    {
+      "source": "gitutils_getgitremoteurl",
+      "target": "gitutils_normalizegiturl",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\utils\\gitUtils.ts",
+      "source_location": "L15",
+      "weight": 1.0
+    }
+  ],
+  "raw_calls": [
+    {
+      "caller_nid": "gitutils_getgitremoteurl",
+      "callee": "execAsync",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\utils\\gitUtils.ts",
+      "source_location": "L13"
+    },
+    {
+      "caller_nid": "gitutils_getgitremoteurl",
+      "callee": "trim",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\utils\\gitUtils.ts",
+      "source_location": "L14"
+    },
+    {
+      "caller_nid": "gitutils_normalizegiturl",
+      "callee": "trim",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\utils\\gitUtils.ts",
+      "source_location": "L37"
+    },
+    {
+      "caller_nid": "gitutils_normalizegiturl",
+      "callee": "endsWith",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\utils\\gitUtils.ts",
+      "source_location": "L40"
+    },
+    {
+      "caller_nid": "gitutils_normalizegiturl",
+      "callee": "slice",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\utils\\gitUtils.ts",
+      "source_location": "L41"
+    },
+    {
+      "caller_nid": "gitutils_normalizegiturl",
+      "callee": "endsWith",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\utils\\gitUtils.ts",
+      "source_location": "L45"
+    },
+    {
+      "caller_nid": "gitutils_normalizegiturl",
+      "callee": "slice",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\utils\\gitUtils.ts",
+      "source_location": "L46"
+    }
+  ]
+}

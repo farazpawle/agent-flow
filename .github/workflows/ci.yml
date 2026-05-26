@@ -1,0 +1,62 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  verify:
+    name: Verify (lint + typecheck + test)
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    strategy:
+      fail-fast: false
+      matrix:
+        node-version: [20.x]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lint
+        run: npm run lint
+        continue-on-error: true # warnings should not block until codebase is clean
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Format check
+        run: npm run format:check
+        continue-on-error: true
+
+      - name: Test
+        run: npm test
+
+      - name: Prompt audits
+        run: |
+          npm run audit:hardcoded-prompts
+          npm run audit:prompt-tools
+          npm run audit:superrefine
+
+      # Phase 2 Group 14.6 — fail CI on concrete model-id literals
+      # under `src/llm/**`. Resolution must go through
+      # `resolveModelForCall` so live provider catalogues stay
+      # authoritative.
+      - name: LLM hardcoded-models audit
+        run: npm run audit:hardcoded-models
+
+      # Phase 1 Group 12.5 — assert the generated tool JSON Schemas
+      # match the committed fixtures. Drift is a signal that a schema
+      # change was merged without updating the contract.
+      - name: Schema fixture check
+        run: npm run schemas:check

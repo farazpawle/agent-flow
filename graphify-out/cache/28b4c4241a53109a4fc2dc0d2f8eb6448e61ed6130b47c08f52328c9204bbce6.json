@@ -1,0 +1,88 @@
+{
+  "nodes": [
+    {
+      "id": "d_d_drive_projects_mcp_servers_agent_flow_src_models_dbfactory_ts",
+      "label": "dbFactory.ts",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\dbFactory.ts",
+      "source_location": "L1"
+    },
+    {
+      "id": "dbfactory_createadapter",
+      "label": "createAdapter()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\dbFactory.ts",
+      "source_location": "L9"
+    }
+  ],
+  "edges": [
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_models_dbfactory_ts",
+      "target": "d_d_drive_projects_mcp_servers_agent_flow_src_models_interfaces_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\dbFactory.ts",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_models_dbfactory_ts",
+      "target": "d_d_drive_projects_mcp_servers_agent_flow_src_models_sqliteadapter_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\dbFactory.ts",
+      "source_location": "L2",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_models_dbfactory_ts",
+      "target": "d_d_drive_projects_mcp_servers_agent_flow_src_models_supabaseadapter_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\dbFactory.ts",
+      "source_location": "L3",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_models_dbfactory_ts",
+      "target": "d_d_drive_projects_mcp_servers_agent_flow_src_utils_envconfig_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\dbFactory.ts",
+      "source_location": "L4",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_models_dbfactory_ts",
+      "target": "d_d_drive_projects_mcp_servers_agent_flow_src_utils_logger_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\dbFactory.ts",
+      "source_location": "L5",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_models_dbfactory_ts",
+      "target": "dbfactory_createadapter",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\dbFactory.ts",
+      "source_location": "L9",
+      "weight": 1.0
+    }
+  ],
+  "raw_calls": [
+    {
+      "caller_nid": "dbfactory_createadapter",
+      "callee": "applyEnvironmentAliases",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\dbFactory.ts",
+      "source_location": "L10"
+    },
+    {
+      "caller_nid": "dbfactory_createadapter",
+      "callee": "info",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\dbFactory.ts",
+      "source_location": "L13"
+    }
+  ]
+}

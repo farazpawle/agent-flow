@@ -1,0 +1,297 @@
+{
+  "nodes": [
+    {
+      "id": "d_d_drive_projects_mcp_servers_agent_flow_src_services_crawl_crawlerservice_ts",
+      "label": "crawlerService.ts",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\services\\crawl\\crawlerService.ts",
+      "source_location": "L1"
+    },
+    {
+      "id": "crawlerservice_startcrawl",
+      "label": "startCrawl()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\services\\crawl\\crawlerService.ts",
+      "source_location": "L28"
+    },
+    {
+      "id": "crawlerservice_runstrategy",
+      "label": "runStrategy()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\services\\crawl\\crawlerService.ts",
+      "source_location": "L72"
+    },
+    {
+      "id": "crawlerservice_ingestcrawled",
+      "label": "ingestCrawled()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\services\\crawl\\crawlerService.ts",
+      "source_location": "L101"
+    }
+  ],
+  "edges": [
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_services_crawl_crawlerservice_ts",
+      "target": "crypto",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\services\\crawl\\crawlerService.ts",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_services_crawl_crawlerservice_ts",
+      "target": "d_d_drive_projects_mcp_servers_agent_flow_src_models_db_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\services\\crawl\\crawlerService.ts",
+      "source_location": "L2",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_services_crawl_crawlerservice_ts",
+      "target": "d_d_drive_projects_mcp_servers_agent_flow_src_models_knowledgesourcemodel_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\services\\crawl\\crawlerService.ts",
+      "source_location": "L3",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_services_crawl_crawlerservice_ts",
+      "target": "d_d_drive_projects_mcp_servers_agent_flow_src_models_knowledgepagemodel_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\services\\crawl\\crawlerService.ts",
+      "source_location": "L8",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_services_crawl_crawlerservice_ts",
+      "target": "d_d_drive_projects_mcp_servers_agent_flow_src_models_knowledgechunkmodel_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\services\\crawl\\crawlerService.ts",
+      "source_location": "L9",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_services_crawl_crawlerservice_ts",
+      "target": "d_d_drive_projects_mcp_servers_agent_flow_src_services_crawl_chunker_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\services\\crawl\\crawlerService.ts",
+      "source_location": "L10",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_services_crawl_crawlerservice_ts",
+      "target": "d_d_drive_projects_mcp_servers_agent_flow_src_services_embeddings_embeddingservice_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\services\\crawl\\crawlerService.ts",
+      "source_location": "L11",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_services_crawl_crawlerservice_ts",
+      "target": "d_d_drive_projects_mcp_servers_agent_flow_src_services_crawl_strategies_singlepage_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\services\\crawl\\crawlerService.ts",
+      "source_location": "L12",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_services_crawl_crawlerservice_ts",
+      "target": "d_d_drive_projects_mcp_servers_agent_flow_src_services_crawl_strategies_batch_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\services\\crawl\\crawlerService.ts",
+      "source_location": "L13",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_services_crawl_crawlerservice_ts",
+      "target": "d_d_drive_projects_mcp_servers_agent_flow_src_services_crawl_strategies_sitemap_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\services\\crawl\\crawlerService.ts",
+      "source_location": "L14",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_services_crawl_crawlerservice_ts",
+      "target": "d_d_drive_projects_mcp_servers_agent_flow_src_services_crawl_strategies_recursive_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\services\\crawl\\crawlerService.ts",
+      "source_location": "L15",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_services_crawl_crawlerservice_ts",
+      "target": "d_d_drive_projects_mcp_servers_agent_flow_src_services_crawl_crawlprogress_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\services\\crawl\\crawlerService.ts",
+      "source_location": "L16",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_services_crawl_crawlerservice_ts",
+      "target": "crawlerservice_startcrawl",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\services\\crawl\\crawlerService.ts",
+      "source_location": "L28",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_services_crawl_crawlerservice_ts",
+      "target": "crawlerservice_runstrategy",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\services\\crawl\\crawlerService.ts",
+      "source_location": "L72",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_services_crawl_crawlerservice_ts",
+      "target": "crawlerservice_ingestcrawled",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\services\\crawl\\crawlerService.ts",
+      "source_location": "L101",
+      "weight": 1.0
+    }
+  ],
+  "raw_calls": [
+    {
+      "caller_nid": "crawlerservice_startcrawl",
+      "callee": "buildKnowledgeSource",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\services\\crawl\\crawlerService.ts",
+      "source_location": "L29"
+    },
+    {
+      "caller_nid": "crawlerservice_startcrawl",
+      "callee": "randomUUID",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\services\\crawl\\crawlerService.ts",
+      "source_location": "L30"
+    },
+    {
+      "caller_nid": "crawlerservice_startcrawl",
+      "callee": "(async () => {\n        await db.createKnowledgeSource(source);\n        crawlProgress.publish({ progressId, sourceId: source.id, phase: \"queued\", message: \"Queued\" });\n        try {\n            const crawled = await runStrategy(source, input.urls, progressId);\n            await ingestCrawled(source, crawled, progressId);\n            source.status = \"ready\";\n            source.updatedAt = new Date();\n            source.pageCount = crawled.length;\n            await db.saveKnowledgeSource(source);\n            crawlProgress.publish({\n                progressId,\n                sourceId: source.id,\n                phase: \"completed\",\n                message: `Completed: ${crawled.length} pages`,\n                pagesCrawled: crawled.length,\n                pagesTotal: crawled.length,\n            });\n            return source;\n        } catch (err) {\n            const msg = err instanceof Error ? err.message : String(err);\n            source.status = \"failed\";\n            source.errorMessage = msg;\n            source.updatedAt = new Date();\n            await db.saveKnowledgeSource(source);\n            crawlProgress.publish({\n                progressId,\n                sourceId: source.id,\n                phase: \"failed\",\n                errorMessage: msg,\n            });\n            throw err;\n        }\n    })",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\services\\crawl\\crawlerService.ts",
+      "source_location": "L32"
+    },
+    {
+      "caller_nid": "crawlerservice_startcrawl",
+      "callee": "catch",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\services\\crawl\\crawlerService.ts",
+      "source_location": "L67"
+    },
+    {
+      "caller_nid": "crawlerservice_runstrategy",
+      "callee": "publish",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\services\\crawl\\crawlerService.ts",
+      "source_location": "L74"
+    },
+    {
+      "caller_nid": "crawlerservice_runstrategy",
+      "callee": "crawlSinglePage",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\services\\crawl\\crawlerService.ts",
+      "source_location": "L89"
+    },
+    {
+      "caller_nid": "crawlerservice_runstrategy",
+      "callee": "crawlSitemap",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\services\\crawl\\crawlerService.ts",
+      "source_location": "L91"
+    },
+    {
+      "caller_nid": "crawlerservice_runstrategy",
+      "callee": "crawlRecursive",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\services\\crawl\\crawlerService.ts",
+      "source_location": "L93"
+    },
+    {
+      "caller_nid": "crawlerservice_runstrategy",
+      "callee": "crawlBatch",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\services\\crawl\\crawlerService.ts",
+      "source_location": "L95"
+    },
+    {
+      "caller_nid": "crawlerservice_ingestcrawled",
+      "callee": "buildKnowledgePage",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\services\\crawl\\crawlerService.ts",
+      "source_location": "L105"
+    },
+    {
+      "caller_nid": "crawlerservice_ingestcrawled",
+      "callee": "saveKnowledgePage",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\services\\crawl\\crawlerService.ts",
+      "source_location": "L111"
+    },
+    {
+      "caller_nid": "crawlerservice_ingestcrawled",
+      "callee": "push",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\services\\crawl\\crawlerService.ts",
+      "source_location": "L112"
+    },
+    {
+      "caller_nid": "crawlerservice_ingestcrawled",
+      "callee": "chunkMarkdown",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\services\\crawl\\crawlerService.ts",
+      "source_location": "L119"
+    },
+    {
+      "caller_nid": "crawlerservice_ingestcrawled",
+      "callee": "push",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\services\\crawl\\crawlerService.ts",
+      "source_location": "L121"
+    },
+    {
+      "caller_nid": "crawlerservice_ingestcrawled",
+      "callee": "buildChunkId",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\services\\crawl\\crawlerService.ts",
+      "source_location": "L122"
+    },
+    {
+      "caller_nid": "crawlerservice_ingestcrawled",
+      "callee": "publish",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\services\\crawl\\crawlerService.ts",
+      "source_location": "L139"
+    },
+    {
+      "caller_nid": "crawlerservice_ingestcrawled",
+      "callee": "slice",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\services\\crawl\\crawlerService.ts",
+      "source_location": "L151"
+    },
+    {
+      "caller_nid": "crawlerservice_ingestcrawled",
+      "callee": "embedTexts",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\services\\crawl\\crawlerService.ts",
+      "source_location": "L152"
+    },
+    {
+      "caller_nid": "crawlerservice_ingestcrawled",
+      "callee": "map",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\services\\crawl\\crawlerService.ts",
+      "source_location": "L152"
+    },
+    {
+      "caller_nid": "crawlerservice_ingestcrawled",
+      "callee": "saveKnowledgeChunks",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\services\\crawl\\crawlerService.ts",
+      "source_location": "L156"
+    },
+    {
+      "caller_nid": "crawlerservice_ingestcrawled",
+      "callee": "publish",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\services\\crawl\\crawlerService.ts",
+      "source_location": "L158"
+    }
+  ]
+}

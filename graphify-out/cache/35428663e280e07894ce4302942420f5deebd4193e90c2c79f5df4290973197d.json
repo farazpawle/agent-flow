@@ -1,0 +1,1516 @@
+{
+  "nodes": [
+    {
+      "id": "d_d_drive_projects_mcp_servers_agent_flow_src_models_supabaseadapter_ts",
+      "label": "supabaseAdapter.ts",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L1"
+    },
+    {
+      "id": "supabaseadapter_supabaseadapter",
+      "label": "SupabaseAdapter",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L10"
+    },
+    {
+      "id": "supabaseadapter_supabaseadapter_init",
+      "label": ".init()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L15"
+    },
+    {
+      "id": "supabaseadapter_supabaseadapter_close",
+      "label": ".close()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L68"
+    },
+    {
+      "id": "supabaseadapter_supabaseadapter_getsupabase",
+      "label": ".getSupabase()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L79"
+    },
+    {
+      "id": "supabaseadapter_supabaseadapter_getalltasks",
+      "label": ".getAllTasks()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L86"
+    },
+    {
+      "id": "supabaseadapter_supabaseadapter_gettask",
+      "label": ".getTask()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L126"
+    },
+    {
+      "id": "supabaseadapter_supabaseadapter_savetask",
+      "label": ".saveTask()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L149"
+    },
+    {
+      "id": "supabaseadapter_supabaseadapter_deletetask",
+      "label": ".deleteTask()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L184"
+    },
+    {
+      "id": "supabaseadapter_supabaseadapter_savetasks",
+      "label": ".saveTasks()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L189"
+    },
+    {
+      "id": "supabaseadapter_supabaseadapter_maptasktorow",
+      "label": ".mapTaskToRow()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L207"
+    },
+    {
+      "id": "supabaseadapter_supabaseadapter_createproject",
+      "label": ".createProject()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L234"
+    },
+    {
+      "id": "supabaseadapter_supabaseadapter_getproject",
+      "label": ".getProject()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L249"
+    },
+    {
+      "id": "supabaseadapter_supabaseadapter_getallprojects",
+      "label": ".getAllProjects()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L271"
+    },
+    {
+      "id": "supabaseadapter_supabaseadapter_deleteproject",
+      "label": ".deleteProject()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L298"
+    },
+    {
+      "id": "supabaseadapter_supabaseadapter_mapprojectrow",
+      "label": ".mapProjectRow()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L303"
+    },
+    {
+      "id": "supabaseadapter_supabaseadapter_createworkflowstep",
+      "label": ".createWorkflowStep()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L319"
+    },
+    {
+      "id": "supabaseadapter_supabaseadapter_getworkflowstep",
+      "label": ".getWorkflowStep()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L340"
+    },
+    {
+      "id": "supabaseadapter_supabaseadapter_getworkflowsteps",
+      "label": ".getWorkflowSteps()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L355"
+    },
+    {
+      "id": "supabaseadapter_supabaseadapter_mapworkflowsteprow",
+      "label": ".mapWorkflowStepRow()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L367"
+    },
+    {
+      "id": "supabaseadapter_supabaseadapter_deleteworkflowstepsbyproject",
+      "label": ".deleteWorkflowStepsByProject()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L386"
+    },
+    {
+      "id": "supabaseadapter_supabaseadapter_registerclient",
+      "label": ".registerClient()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L398"
+    },
+    {
+      "id": "supabaseadapter_supabaseadapter_getallclients",
+      "label": ".getAllClients()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L412"
+    },
+    {
+      "id": "supabaseadapter_supabaseadapter_getclient",
+      "label": ".getClient()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L433"
+    },
+    {
+      "id": "supabaseadapter_supabaseadapter_deleteclient",
+      "label": ".deleteClient()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L456"
+    },
+    {
+      "id": "supabaseadapter_supabaseadapter_deleteinactiveclients",
+      "label": ".deleteInactiveClients()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L461"
+    },
+    {
+      "id": "supabaseadapter_supabaseadapter_updateclientheartbeat",
+      "label": ".updateClientHeartbeat()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L471"
+    },
+    {
+      "id": "supabaseadapter_supabaseadapter_cleanupstaleclients",
+      "label": ".cleanupStaleClients()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L483"
+    },
+    {
+      "id": "supabaseadapter_supabaseadapter_markallclientsinactive",
+      "label": ".markAllClientsInactive()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L499"
+    }
+  ],
+  "edges": [
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_models_supabaseadapter_ts",
+      "target": "supabase_js",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_models_supabaseadapter_ts",
+      "target": "d_d_drive_projects_mcp_servers_agent_flow_src_models_interfaces_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L2",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_models_supabaseadapter_ts",
+      "target": "d_d_drive_projects_mcp_servers_agent_flow_src_types_index_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L3",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_models_supabaseadapter_ts",
+      "target": "d_d_drive_projects_mcp_servers_agent_flow_src_models_projectmodel_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L4",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_models_supabaseadapter_ts",
+      "target": "d_d_drive_projects_mcp_servers_agent_flow_src_models_clientmodel_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L5",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_models_supabaseadapter_ts",
+      "target": "d_d_drive_projects_mcp_servers_agent_flow_src_models_workflowmodel_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L6",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_models_supabaseadapter_ts",
+      "target": "d_d_drive_projects_mcp_servers_agent_flow_src_utils_events_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L7",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_models_supabaseadapter_ts",
+      "target": "d_d_drive_projects_mcp_servers_agent_flow_src_utils_envconfig_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L8",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_models_supabaseadapter_ts",
+      "target": "supabaseadapter_supabaseadapter",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L10",
+      "weight": 1.0
+    },
+    {
+      "source": "supabaseadapter_supabaseadapter",
+      "target": "supabaseadapter_supabaseadapter_init",
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L15",
+      "weight": 1.0
+    },
+    {
+      "source": "supabaseadapter_supabaseadapter",
+      "target": "supabaseadapter_supabaseadapter_close",
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L68",
+      "weight": 1.0
+    },
+    {
+      "source": "supabaseadapter_supabaseadapter",
+      "target": "supabaseadapter_supabaseadapter_getsupabase",
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L79",
+      "weight": 1.0
+    },
+    {
+      "source": "supabaseadapter_supabaseadapter",
+      "target": "supabaseadapter_supabaseadapter_getalltasks",
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L86",
+      "weight": 1.0
+    },
+    {
+      "source": "supabaseadapter_supabaseadapter",
+      "target": "supabaseadapter_supabaseadapter_gettask",
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L126",
+      "weight": 1.0
+    },
+    {
+      "source": "supabaseadapter_supabaseadapter",
+      "target": "supabaseadapter_supabaseadapter_savetask",
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L149",
+      "weight": 1.0
+    },
+    {
+      "source": "supabaseadapter_supabaseadapter",
+      "target": "supabaseadapter_supabaseadapter_deletetask",
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L184",
+      "weight": 1.0
+    },
+    {
+      "source": "supabaseadapter_supabaseadapter",
+      "target": "supabaseadapter_supabaseadapter_savetasks",
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L189",
+      "weight": 1.0
+    },
+    {
+      "source": "supabaseadapter_supabaseadapter",
+      "target": "supabaseadapter_supabaseadapter_maptasktorow",
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L207",
+      "weight": 1.0
+    },
+    {
+      "source": "supabaseadapter_supabaseadapter",
+      "target": "supabaseadapter_supabaseadapter_createproject",
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L234",
+      "weight": 1.0
+    },
+    {
+      "source": "supabaseadapter_supabaseadapter",
+      "target": "supabaseadapter_supabaseadapter_getproject",
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L249",
+      "weight": 1.0
+    },
+    {
+      "source": "supabaseadapter_supabaseadapter",
+      "target": "supabaseadapter_supabaseadapter_getallprojects",
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L271",
+      "weight": 1.0
+    },
+    {
+      "source": "supabaseadapter_supabaseadapter",
+      "target": "supabaseadapter_supabaseadapter_deleteproject",
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L298",
+      "weight": 1.0
+    },
+    {
+      "source": "supabaseadapter_supabaseadapter",
+      "target": "supabaseadapter_supabaseadapter_mapprojectrow",
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L303",
+      "weight": 1.0
+    },
+    {
+      "source": "supabaseadapter_supabaseadapter",
+      "target": "supabaseadapter_supabaseadapter_createworkflowstep",
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L319",
+      "weight": 1.0
+    },
+    {
+      "source": "supabaseadapter_supabaseadapter",
+      "target": "supabaseadapter_supabaseadapter_getworkflowstep",
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L340",
+      "weight": 1.0
+    },
+    {
+      "source": "supabaseadapter_supabaseadapter",
+      "target": "supabaseadapter_supabaseadapter_getworkflowsteps",
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L355",
+      "weight": 1.0
+    },
+    {
+      "source": "supabaseadapter_supabaseadapter",
+      "target": "supabaseadapter_supabaseadapter_mapworkflowsteprow",
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L367",
+      "weight": 1.0
+    },
+    {
+      "source": "supabaseadapter_supabaseadapter",
+      "target": "supabaseadapter_supabaseadapter_deleteworkflowstepsbyproject",
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L386",
+      "weight": 1.0
+    },
+    {
+      "source": "supabaseadapter_supabaseadapter",
+      "target": "supabaseadapter_supabaseadapter_registerclient",
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L398",
+      "weight": 1.0
+    },
+    {
+      "source": "supabaseadapter_supabaseadapter",
+      "target": "supabaseadapter_supabaseadapter_getallclients",
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L412",
+      "weight": 1.0
+    },
+    {
+      "source": "supabaseadapter_supabaseadapter",
+      "target": "supabaseadapter_supabaseadapter_getclient",
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L433",
+      "weight": 1.0
+    },
+    {
+      "source": "supabaseadapter_supabaseadapter",
+      "target": "supabaseadapter_supabaseadapter_deleteclient",
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L456",
+      "weight": 1.0
+    },
+    {
+      "source": "supabaseadapter_supabaseadapter",
+      "target": "supabaseadapter_supabaseadapter_deleteinactiveclients",
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L461",
+      "weight": 1.0
+    },
+    {
+      "source": "supabaseadapter_supabaseadapter",
+      "target": "supabaseadapter_supabaseadapter_updateclientheartbeat",
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L471",
+      "weight": 1.0
+    },
+    {
+      "source": "supabaseadapter_supabaseadapter",
+      "target": "supabaseadapter_supabaseadapter_cleanupstaleclients",
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L483",
+      "weight": 1.0
+    },
+    {
+      "source": "supabaseadapter_supabaseadapter",
+      "target": "supabaseadapter_supabaseadapter_markallclientsinactive",
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L499",
+      "weight": 1.0
+    },
+    {
+      "source": "supabaseadapter_supabaseadapter_getalltasks",
+      "target": "supabaseadapter_supabaseadapter_getsupabase",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L87",
+      "weight": 1.0
+    },
+    {
+      "source": "supabaseadapter_supabaseadapter_gettask",
+      "target": "supabaseadapter_supabaseadapter_getsupabase",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L127",
+      "weight": 1.0
+    },
+    {
+      "source": "supabaseadapter_supabaseadapter_savetask",
+      "target": "supabaseadapter_supabaseadapter_getsupabase",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L170",
+      "weight": 1.0
+    },
+    {
+      "source": "supabaseadapter_supabaseadapter_deletetask",
+      "target": "supabaseadapter_supabaseadapter_getsupabase",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L185",
+      "weight": 1.0
+    },
+    {
+      "source": "supabaseadapter_supabaseadapter_savetasks",
+      "target": "supabaseadapter_supabaseadapter_getsupabase",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L193",
+      "weight": 1.0
+    },
+    {
+      "source": "supabaseadapter_supabaseadapter_createproject",
+      "target": "supabaseadapter_supabaseadapter_getsupabase",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L235",
+      "weight": 1.0
+    },
+    {
+      "source": "supabaseadapter_supabaseadapter_getproject",
+      "target": "supabaseadapter_supabaseadapter_getsupabase",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L250",
+      "weight": 1.0
+    },
+    {
+      "source": "supabaseadapter_supabaseadapter_getproject",
+      "target": "supabaseadapter_supabaseadapter_mapprojectrow",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L268",
+      "weight": 1.0
+    },
+    {
+      "source": "supabaseadapter_supabaseadapter_getallprojects",
+      "target": "supabaseadapter_supabaseadapter_getsupabase",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L272",
+      "weight": 1.0
+    },
+    {
+      "source": "supabaseadapter_supabaseadapter_deleteproject",
+      "target": "supabaseadapter_supabaseadapter_getsupabase",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L299",
+      "weight": 1.0
+    },
+    {
+      "source": "supabaseadapter_supabaseadapter_createworkflowstep",
+      "target": "supabaseadapter_supabaseadapter_getsupabase",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L320",
+      "weight": 1.0
+    },
+    {
+      "source": "supabaseadapter_supabaseadapter_getworkflowstep",
+      "target": "supabaseadapter_supabaseadapter_getsupabase",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L341",
+      "weight": 1.0
+    },
+    {
+      "source": "supabaseadapter_supabaseadapter_getworkflowstep",
+      "target": "supabaseadapter_supabaseadapter_mapworkflowsteprow",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L352",
+      "weight": 1.0
+    },
+    {
+      "source": "supabaseadapter_supabaseadapter_getworkflowsteps",
+      "target": "supabaseadapter_supabaseadapter_getsupabase",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L356",
+      "weight": 1.0
+    },
+    {
+      "source": "supabaseadapter_supabaseadapter_deleteworkflowstepsbyproject",
+      "target": "supabaseadapter_supabaseadapter_getsupabase",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L387",
+      "weight": 1.0
+    },
+    {
+      "source": "supabaseadapter_supabaseadapter_registerclient",
+      "target": "supabaseadapter_supabaseadapter_getsupabase",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L399",
+      "weight": 1.0
+    },
+    {
+      "source": "supabaseadapter_supabaseadapter_getallclients",
+      "target": "supabaseadapter_supabaseadapter_getsupabase",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L413",
+      "weight": 1.0
+    },
+    {
+      "source": "supabaseadapter_supabaseadapter_getclient",
+      "target": "supabaseadapter_supabaseadapter_getsupabase",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L434",
+      "weight": 1.0
+    },
+    {
+      "source": "supabaseadapter_supabaseadapter_deleteclient",
+      "target": "supabaseadapter_supabaseadapter_getsupabase",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L457",
+      "weight": 1.0
+    },
+    {
+      "source": "supabaseadapter_supabaseadapter_deleteinactiveclients",
+      "target": "supabaseadapter_supabaseadapter_getsupabase",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L462",
+      "weight": 1.0
+    },
+    {
+      "source": "supabaseadapter_supabaseadapter_updateclientheartbeat",
+      "target": "supabaseadapter_supabaseadapter_getsupabase",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L472",
+      "weight": 1.0
+    },
+    {
+      "source": "supabaseadapter_supabaseadapter_cleanupstaleclients",
+      "target": "supabaseadapter_supabaseadapter_getsupabase",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L486",
+      "weight": 1.0
+    },
+    {
+      "source": "supabaseadapter_supabaseadapter_markallclientsinactive",
+      "target": "supabaseadapter_supabaseadapter_getsupabase",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L501",
+      "weight": 1.0
+    }
+  ],
+  "raw_calls": [
+    {
+      "caller_nid": "supabaseadapter_supabaseadapter_init",
+      "callee": "applyEnvironmentAliases",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L18"
+    },
+    {
+      "caller_nid": "supabaseadapter_supabaseadapter_init",
+      "callee": "createClient",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L28"
+    },
+    {
+      "caller_nid": "supabaseadapter_supabaseadapter_init",
+      "callee": "limit",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L33"
+    },
+    {
+      "caller_nid": "supabaseadapter_supabaseadapter_init",
+      "callee": "select",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L33"
+    },
+    {
+      "caller_nid": "supabaseadapter_supabaseadapter_init",
+      "callee": "from",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L33"
+    },
+    {
+      "caller_nid": "supabaseadapter_supabaseadapter_init",
+      "callee": "error",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L39"
+    },
+    {
+      "caller_nid": "supabaseadapter_supabaseadapter_init",
+      "callee": "subscribe",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L45"
+    },
+    {
+      "caller_nid": "supabaseadapter_supabaseadapter_init",
+      "callee": "on",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L45"
+    },
+    {
+      "caller_nid": "supabaseadapter_supabaseadapter_init",
+      "callee": "channel",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L45"
+    },
+    {
+      "caller_nid": "supabaseadapter_supabaseadapter_init",
+      "callee": "error",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L61"
+    },
+    {
+      "caller_nid": "supabaseadapter_supabaseadapter_init",
+      "callee": "error",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L63"
+    },
+    {
+      "caller_nid": "supabaseadapter_supabaseadapter_close",
+      "callee": "removeChannel",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L70"
+    },
+    {
+      "caller_nid": "supabaseadapter_supabaseadapter_close",
+      "callee": "resolve",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L76"
+    },
+    {
+      "caller_nid": "supabaseadapter_supabaseadapter_getalltasks",
+      "callee": "select",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L87"
+    },
+    {
+      "caller_nid": "supabaseadapter_supabaseadapter_getalltasks",
+      "callee": "from",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L87"
+    },
+    {
+      "caller_nid": "supabaseadapter_supabaseadapter_getalltasks",
+      "callee": "eq",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L90"
+    },
+    {
+      "caller_nid": "supabaseadapter_supabaseadapter_getalltasks",
+      "callee": "order",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L94"
+    },
+    {
+      "caller_nid": "supabaseadapter_supabaseadapter_getalltasks",
+      "callee": "order",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L94"
+    },
+    {
+      "caller_nid": "supabaseadapter_supabaseadapter_getalltasks",
+      "callee": "map",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L96"
+    },
+    {
+      "caller_nid": "supabaseadapter_supabaseadapter_getalltasks",
+      "callee": "includes",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L108"
+    },
+    {
+      "caller_nid": "supabaseadapter_supabaseadapter_getalltasks",
+      "callee": "warn",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L109"
+    },
+    {
+      "caller_nid": "supabaseadapter_supabaseadapter_getalltasks",
+      "callee": "order",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L110"
+    },
+    {
+      "caller_nid": "supabaseadapter_supabaseadapter_getalltasks",
+      "callee": "select",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L110"
+    },
+    {
+      "caller_nid": "supabaseadapter_supabaseadapter_getalltasks",
+      "callee": "from",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L110"
+    },
+    {
+      "caller_nid": "supabaseadapter_supabaseadapter_getalltasks",
+      "callee": "map",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L112"
+    },
+    {
+      "caller_nid": "supabaseadapter_supabaseadapter_gettask",
+      "callee": "single",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L127"
+    },
+    {
+      "caller_nid": "supabaseadapter_supabaseadapter_gettask",
+      "callee": "eq",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L127"
+    },
+    {
+      "caller_nid": "supabaseadapter_supabaseadapter_gettask",
+      "callee": "select",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L127"
+    },
+    {
+      "caller_nid": "supabaseadapter_supabaseadapter_gettask",
+      "callee": "from",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L127"
+    },
+    {
+      "caller_nid": "supabaseadapter_supabaseadapter_savetask",
+      "callee": "toISOString",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L150"
+    },
+    {
+      "caller_nid": "supabaseadapter_supabaseadapter_savetask",
+      "callee": "toISOString",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L150"
+    },
+    {
+      "caller_nid": "supabaseadapter_supabaseadapter_savetask",
+      "callee": "toISOString",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L151"
+    },
+    {
+      "caller_nid": "supabaseadapter_supabaseadapter_savetask",
+      "callee": "toISOString",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L151"
+    },
+    {
+      "caller_nid": "supabaseadapter_supabaseadapter_savetask",
+      "callee": "toISOString",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L153"
+    },
+    {
+      "caller_nid": "supabaseadapter_supabaseadapter_savetask",
+      "callee": "toISOString",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L153"
+    },
+    {
+      "caller_nid": "supabaseadapter_supabaseadapter_savetask",
+      "callee": "upsert",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L170"
+    },
+    {
+      "caller_nid": "supabaseadapter_supabaseadapter_savetask",
+      "callee": "from",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L170"
+    },
+    {
+      "caller_nid": "supabaseadapter_supabaseadapter_savetask",
+      "callee": "includes",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L173"
+    },
+    {
+      "caller_nid": "supabaseadapter_supabaseadapter_savetask",
+      "callee": "warn",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L174"
+    },
+    {
+      "caller_nid": "supabaseadapter_supabaseadapter_savetask",
+      "callee": "upsert",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L176"
+    },
+    {
+      "caller_nid": "supabaseadapter_supabaseadapter_savetask",
+      "callee": "from",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L176"
+    },
+    {
+      "caller_nid": "supabaseadapter_supabaseadapter_deletetask",
+      "callee": "eq",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L185"
+    },
+    {
+      "caller_nid": "supabaseadapter_supabaseadapter_deletetask",
+      "callee": "delete",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L185"
+    },
+    {
+      "caller_nid": "supabaseadapter_supabaseadapter_deletetask",
+      "callee": "from",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L185"
+    },
+    {
+      "caller_nid": "supabaseadapter_supabaseadapter_savetasks",
+      "callee": "map",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L192"
+    },
+    {
+      "caller_nid": "supabaseadapter_supabaseadapter_savetasks",
+      "callee": "upsert",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L193"
+    },
+    {
+      "caller_nid": "supabaseadapter_supabaseadapter_savetasks",
+      "callee": "from",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L193"
+    },
+    {
+      "caller_nid": "supabaseadapter_supabaseadapter_savetasks",
+      "callee": "includes",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L196"
+    },
+    {
+      "caller_nid": "supabaseadapter_supabaseadapter_savetasks",
+      "callee": "warn",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L197"
+    },
+    {
+      "caller_nid": "supabaseadapter_supabaseadapter_savetasks",
+      "callee": "map",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L198"
+    },
+    {
+      "caller_nid": "supabaseadapter_supabaseadapter_savetasks",
+      "callee": "upsert",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L199"
+    },
+    {
+      "caller_nid": "supabaseadapter_supabaseadapter_savetasks",
+      "callee": "from",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L199"
+    },
+    {
+      "caller_nid": "supabaseadapter_supabaseadapter_maptasktorow",
+      "callee": "toISOString",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L208"
+    },
+    {
+      "caller_nid": "supabaseadapter_supabaseadapter_maptasktorow",
+      "callee": "toISOString",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L208"
+    },
+    {
+      "caller_nid": "supabaseadapter_supabaseadapter_maptasktorow",
+      "callee": "toISOString",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L209"
+    },
+    {
+      "caller_nid": "supabaseadapter_supabaseadapter_maptasktorow",
+      "callee": "toISOString",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L209"
+    },
+    {
+      "caller_nid": "supabaseadapter_supabaseadapter_maptasktorow",
+      "callee": "toISOString",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L211"
+    },
+    {
+      "caller_nid": "supabaseadapter_supabaseadapter_maptasktorow",
+      "callee": "toISOString",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L211"
+    },
+    {
+      "caller_nid": "supabaseadapter_supabaseadapter_createproject",
+      "callee": "upsert",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L235"
+    },
+    {
+      "caller_nid": "supabaseadapter_supabaseadapter_createproject",
+      "callee": "from",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L235"
+    },
+    {
+      "caller_nid": "supabaseadapter_supabaseadapter_createproject",
+      "callee": "toISOString",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L242"
+    },
+    {
+      "caller_nid": "supabaseadapter_supabaseadapter_createproject",
+      "callee": "toISOString",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L243"
+    },
+    {
+      "caller_nid": "supabaseadapter_supabaseadapter_getproject",
+      "callee": "single",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L250"
+    },
+    {
+      "caller_nid": "supabaseadapter_supabaseadapter_getproject",
+      "callee": "eq",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L250"
+    },
+    {
+      "caller_nid": "supabaseadapter_supabaseadapter_getproject",
+      "callee": "select",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L250"
+    },
+    {
+      "caller_nid": "supabaseadapter_supabaseadapter_getproject",
+      "callee": "from",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L250"
+    },
+    {
+      "caller_nid": "supabaseadapter_supabaseadapter_getproject",
+      "callee": "eq",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L261"
+    },
+    {
+      "caller_nid": "supabaseadapter_supabaseadapter_getproject",
+      "callee": "select",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L261"
+    },
+    {
+      "caller_nid": "supabaseadapter_supabaseadapter_getproject",
+      "callee": "from",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L261"
+    },
+    {
+      "caller_nid": "supabaseadapter_supabaseadapter_getallprojects",
+      "callee": "order",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L272"
+    },
+    {
+      "caller_nid": "supabaseadapter_supabaseadapter_getallprojects",
+      "callee": "select",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L272"
+    },
+    {
+      "caller_nid": "supabaseadapter_supabaseadapter_getallprojects",
+      "callee": "from",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L272"
+    },
+    {
+      "caller_nid": "supabaseadapter_supabaseadapter_getallprojects",
+      "callee": "not",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L281"
+    },
+    {
+      "caller_nid": "supabaseadapter_supabaseadapter_getallprojects",
+      "callee": "select",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L281"
+    },
+    {
+      "caller_nid": "supabaseadapter_supabaseadapter_getallprojects",
+      "callee": "from",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L281"
+    },
+    {
+      "caller_nid": "supabaseadapter_supabaseadapter_getallprojects",
+      "callee": "set",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L292"
+    },
+    {
+      "caller_nid": "supabaseadapter_supabaseadapter_getallprojects",
+      "callee": "get",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L292"
+    },
+    {
+      "caller_nid": "supabaseadapter_supabaseadapter_getallprojects",
+      "callee": "map",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L295"
+    },
+    {
+      "caller_nid": "supabaseadapter_supabaseadapter_deleteproject",
+      "callee": "eq",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L299"
+    },
+    {
+      "caller_nid": "supabaseadapter_supabaseadapter_deleteproject",
+      "callee": "delete",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L299"
+    },
+    {
+      "caller_nid": "supabaseadapter_supabaseadapter_deleteproject",
+      "callee": "from",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L299"
+    },
+    {
+      "caller_nid": "supabaseadapter_supabaseadapter_createworkflowstep",
+      "callee": "insert",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L320"
+    },
+    {
+      "caller_nid": "supabaseadapter_supabaseadapter_createworkflowstep",
+      "callee": "from",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L320"
+    },
+    {
+      "caller_nid": "supabaseadapter_supabaseadapter_createworkflowstep",
+      "callee": "toISOString",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L327"
+    },
+    {
+      "caller_nid": "supabaseadapter_supabaseadapter_getworkflowstep",
+      "callee": "single",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L341"
+    },
+    {
+      "caller_nid": "supabaseadapter_supabaseadapter_getworkflowstep",
+      "callee": "eq",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L341"
+    },
+    {
+      "caller_nid": "supabaseadapter_supabaseadapter_getworkflowstep",
+      "callee": "select",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L341"
+    },
+    {
+      "caller_nid": "supabaseadapter_supabaseadapter_getworkflowstep",
+      "callee": "from",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L341"
+    },
+    {
+      "caller_nid": "supabaseadapter_supabaseadapter_getworkflowsteps",
+      "callee": "order",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L356"
+    },
+    {
+      "caller_nid": "supabaseadapter_supabaseadapter_getworkflowsteps",
+      "callee": "eq",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L356"
+    },
+    {
+      "caller_nid": "supabaseadapter_supabaseadapter_getworkflowsteps",
+      "callee": "select",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L356"
+    },
+    {
+      "caller_nid": "supabaseadapter_supabaseadapter_getworkflowsteps",
+      "callee": "from",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L356"
+    },
+    {
+      "caller_nid": "supabaseadapter_supabaseadapter_getworkflowsteps",
+      "callee": "map",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L364"
+    },
+    {
+      "caller_nid": "supabaseadapter_supabaseadapter_deleteworkflowstepsbyproject",
+      "callee": "eq",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L387"
+    },
+    {
+      "caller_nid": "supabaseadapter_supabaseadapter_deleteworkflowstepsbyproject",
+      "callee": "delete",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L387"
+    },
+    {
+      "caller_nid": "supabaseadapter_supabaseadapter_deleteworkflowstepsbyproject",
+      "callee": "from",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L387"
+    },
+    {
+      "caller_nid": "supabaseadapter_supabaseadapter_registerclient",
+      "callee": "upsert",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L399"
+    },
+    {
+      "caller_nid": "supabaseadapter_supabaseadapter_registerclient",
+      "callee": "from",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L399"
+    },
+    {
+      "caller_nid": "supabaseadapter_supabaseadapter_registerclient",
+      "callee": "toISOString",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L404"
+    },
+    {
+      "caller_nid": "supabaseadapter_supabaseadapter_registerclient",
+      "callee": "toISOString",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L405"
+    },
+    {
+      "caller_nid": "supabaseadapter_supabaseadapter_getallclients",
+      "callee": "select",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L413"
+    },
+    {
+      "caller_nid": "supabaseadapter_supabaseadapter_getallclients",
+      "callee": "from",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L413"
+    },
+    {
+      "caller_nid": "supabaseadapter_supabaseadapter_getallclients",
+      "callee": "eq",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L415"
+    },
+    {
+      "caller_nid": "supabaseadapter_supabaseadapter_getallclients",
+      "callee": "order",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L418"
+    },
+    {
+      "caller_nid": "supabaseadapter_supabaseadapter_getallclients",
+      "callee": "map",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L422"
+    },
+    {
+      "caller_nid": "supabaseadapter_supabaseadapter_getclient",
+      "callee": "single",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L434"
+    },
+    {
+      "caller_nid": "supabaseadapter_supabaseadapter_getclient",
+      "callee": "eq",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L434"
+    },
+    {
+      "caller_nid": "supabaseadapter_supabaseadapter_getclient",
+      "callee": "select",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L434"
+    },
+    {
+      "caller_nid": "supabaseadapter_supabaseadapter_getclient",
+      "callee": "from",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L434"
+    },
+    {
+      "caller_nid": "supabaseadapter_supabaseadapter_deleteclient",
+      "callee": "eq",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L457"
+    },
+    {
+      "caller_nid": "supabaseadapter_supabaseadapter_deleteclient",
+      "callee": "delete",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L457"
+    },
+    {
+      "caller_nid": "supabaseadapter_supabaseadapter_deleteclient",
+      "callee": "from",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L457"
+    },
+    {
+      "caller_nid": "supabaseadapter_supabaseadapter_deleteinactiveclients",
+      "callee": "eq",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L462"
+    },
+    {
+      "caller_nid": "supabaseadapter_supabaseadapter_deleteinactiveclients",
+      "callee": "delete",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L462"
+    },
+    {
+      "caller_nid": "supabaseadapter_supabaseadapter_deleteinactiveclients",
+      "callee": "from",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L462"
+    },
+    {
+      "caller_nid": "supabaseadapter_supabaseadapter_updateclientheartbeat",
+      "callee": "eq",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L472"
+    },
+    {
+      "caller_nid": "supabaseadapter_supabaseadapter_updateclientheartbeat",
+      "callee": "update",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L472"
+    },
+    {
+      "caller_nid": "supabaseadapter_supabaseadapter_updateclientheartbeat",
+      "callee": "from",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L472"
+    },
+    {
+      "caller_nid": "supabaseadapter_supabaseadapter_updateclientheartbeat",
+      "callee": "toISOString",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L475"
+    },
+    {
+      "caller_nid": "supabaseadapter_supabaseadapter_cleanupstaleclients",
+      "callee": "toISOString",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L484"
+    },
+    {
+      "caller_nid": "supabaseadapter_supabaseadapter_cleanupstaleclients",
+      "callee": "now",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L484"
+    },
+    {
+      "caller_nid": "supabaseadapter_supabaseadapter_cleanupstaleclients",
+      "callee": "select",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L486"
+    },
+    {
+      "caller_nid": "supabaseadapter_supabaseadapter_cleanupstaleclients",
+      "callee": "lt",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L486"
+    },
+    {
+      "caller_nid": "supabaseadapter_supabaseadapter_cleanupstaleclients",
+      "callee": "eq",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L486"
+    },
+    {
+      "caller_nid": "supabaseadapter_supabaseadapter_cleanupstaleclients",
+      "callee": "update",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L486"
+    },
+    {
+      "caller_nid": "supabaseadapter_supabaseadapter_cleanupstaleclients",
+      "callee": "from",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L486"
+    },
+    {
+      "caller_nid": "supabaseadapter_supabaseadapter_markallclientsinactive",
+      "callee": "eq",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L501"
+    },
+    {
+      "caller_nid": "supabaseadapter_supabaseadapter_markallclientsinactive",
+      "callee": "update",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L501"
+    },
+    {
+      "caller_nid": "supabaseadapter_supabaseadapter_markallclientsinactive",
+      "callee": "from",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\supabaseAdapter.ts",
+      "source_location": "L501"
+    }
+  ]
+}

@@ -1,0 +1,91 @@
+{
+  "nodes": [
+    {
+      "id": "d_d_drive_projects_mcp_servers_agent_flow_src_utils_auditlog_ts",
+      "label": "auditLog.ts",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\utils\\auditLog.ts",
+      "source_location": "L1"
+    },
+    {
+      "id": "auditlog_writedestructiveaudit",
+      "label": "writeDestructiveAudit()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\utils\\auditLog.ts",
+      "source_location": "L31"
+    }
+  ],
+  "edges": [
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_utils_auditlog_ts",
+      "target": "uuid",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\utils\\auditLog.ts",
+      "source_location": "L11",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_utils_auditlog_ts",
+      "target": "d_d_drive_projects_mcp_servers_agent_flow_src_models_db_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\utils\\auditLog.ts",
+      "source_location": "L12",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_utils_auditlog_ts",
+      "target": "d_d_drive_projects_mcp_servers_agent_flow_src_utils_logger_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\utils\\auditLog.ts",
+      "source_location": "L13",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_utils_auditlog_ts",
+      "target": "d_d_drive_projects_mcp_servers_agent_flow_src_utils_callercontext_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\utils\\auditLog.ts",
+      "source_location": "L14",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_utils_auditlog_ts",
+      "target": "auditlog_writedestructiveaudit",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\utils\\auditLog.ts",
+      "source_location": "L31",
+      "weight": 1.0
+    }
+  ],
+  "raw_calls": [
+    {
+      "caller_nid": "auditlog_writedestructiveaudit",
+      "callee": "getCurrentCaller",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\utils\\auditLog.ts",
+      "source_location": "L32"
+    },
+    {
+      "caller_nid": "auditlog_writedestructiveaudit",
+      "callee": "appendDestructiveAudit",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\utils\\auditLog.ts",
+      "source_location": "L34"
+    },
+    {
+      "caller_nid": "auditlog_writedestructiveaudit",
+      "callee": "uuidv4",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\utils\\auditLog.ts",
+      "source_location": "L35"
+    },
+    {
+      "caller_nid": "auditlog_writedestructiveaudit",
+      "callee": "error",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\utils\\auditLog.ts",
+      "source_location": "L46"
+    }
+  ]
+}

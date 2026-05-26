@@ -1,0 +1,741 @@
+{
+  "nodes": [
+    {
+      "id": "d_d_drive_projects_mcp_servers_agent_flow_src_tools_lifecycle_tasklifecycle_ts",
+      "label": "taskLifecycle.ts",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\lifecycle\\taskLifecycle.ts",
+      "source_location": "L1"
+    },
+    {
+      "id": "tasklifecycle_astooltext",
+      "label": "asToolText()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\lifecycle\\taskLifecycle.ts",
+      "source_location": "L36"
+    },
+    {
+      "id": "tasklifecycle_loadorthrow",
+      "label": "loadOrThrow()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\lifecycle\\taskLifecycle.ts",
+      "source_location": "L42"
+    },
+    {
+      "id": "tasklifecycle_ensuretransition",
+      "label": "ensureTransition()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\lifecycle\\taskLifecycle.ts",
+      "source_location": "L69"
+    },
+    {
+      "id": "tasklifecycle_persistbumped",
+      "label": "persistBumped()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\lifecycle\\taskLifecycle.ts",
+      "source_location": "L94"
+    },
+    {
+      "id": "tasklifecycle_tasklifecycle",
+      "label": "taskLifecycle()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\lifecycle\\taskLifecycle.ts",
+      "source_location": "L106"
+    },
+    {
+      "id": "tasklifecycle_dispatch",
+      "label": "dispatch()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\lifecycle\\taskLifecycle.ts",
+      "source_location": "L110"
+    },
+    {
+      "id": "tasklifecycle_claim",
+      "label": "claim()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\lifecycle\\taskLifecycle.ts",
+      "source_location": "L127"
+    },
+    {
+      "id": "tasklifecycle_start",
+      "label": "start()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\lifecycle\\taskLifecycle.ts",
+      "source_location": "L140"
+    },
+    {
+      "id": "tasklifecycle_block",
+      "label": "block()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\lifecycle\\taskLifecycle.ts",
+      "source_location": "L152"
+    },
+    {
+      "id": "tasklifecycle_unblock",
+      "label": "unblock()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\lifecycle\\taskLifecycle.ts",
+      "source_location": "L162"
+    },
+    {
+      "id": "tasklifecycle_requestreview",
+      "label": "requestReview()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\lifecycle\\taskLifecycle.ts",
+      "source_location": "L174"
+    },
+    {
+      "id": "tasklifecycle_reopen",
+      "label": "reopen()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\lifecycle\\taskLifecycle.ts",
+      "source_location": "L195"
+    },
+    {
+      "id": "tasklifecycle_archive",
+      "label": "archive()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\lifecycle\\taskLifecycle.ts",
+      "source_location": "L207"
+    },
+    {
+      "id": "tasklifecycle_finalize",
+      "label": "finalize()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\lifecycle\\taskLifecycle.ts",
+      "source_location": "L223"
+    },
+    {
+      "id": "tasklifecycle_applyfinalize",
+      "label": "applyFinalize()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\lifecycle\\taskLifecycle.ts",
+      "source_location": "L269"
+    }
+  ],
+  "edges": [
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_tools_lifecycle_tasklifecycle_ts",
+      "target": "d_d_drive_projects_mcp_servers_agent_flow_src_models_db_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\lifecycle\\taskLifecycle.ts",
+      "source_location": "L26",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_tools_lifecycle_tasklifecycle_ts",
+      "target": "d_d_drive_projects_mcp_servers_agent_flow_src_utils_errors_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\lifecycle\\taskLifecycle.ts",
+      "source_location": "L27",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_tools_lifecycle_tasklifecycle_ts",
+      "target": "d_d_drive_projects_mcp_servers_agent_flow_src_utils_telemetry_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\lifecycle\\taskLifecycle.ts",
+      "source_location": "L28",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_tools_lifecycle_tasklifecycle_ts",
+      "target": "d_d_drive_projects_mcp_servers_agent_flow_src_models_concurrency_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\lifecycle\\taskLifecycle.ts",
+      "source_location": "L29",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_tools_lifecycle_tasklifecycle_ts",
+      "target": "d_d_drive_projects_mcp_servers_agent_flow_src_types_index_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\lifecycle\\taskLifecycle.ts",
+      "source_location": "L30",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_tools_lifecycle_tasklifecycle_ts",
+      "target": "d_d_drive_projects_mcp_servers_agent_flow_src_types_index_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\lifecycle\\taskLifecycle.ts",
+      "source_location": "L31",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_tools_lifecycle_tasklifecycle_ts",
+      "target": "d_d_drive_projects_mcp_servers_agent_flow_src_tools_lifecycle_schemas_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\lifecycle\\taskLifecycle.ts",
+      "source_location": "L32",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_tools_lifecycle_tasklifecycle_ts",
+      "target": "tasklifecycle_astooltext",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\lifecycle\\taskLifecycle.ts",
+      "source_location": "L36",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_tools_lifecycle_tasklifecycle_ts",
+      "target": "tasklifecycle_loadorthrow",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\lifecycle\\taskLifecycle.ts",
+      "source_location": "L42",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_tools_lifecycle_tasklifecycle_ts",
+      "target": "tasklifecycle_ensuretransition",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\lifecycle\\taskLifecycle.ts",
+      "source_location": "L69",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_tools_lifecycle_tasklifecycle_ts",
+      "target": "tasklifecycle_persistbumped",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\lifecycle\\taskLifecycle.ts",
+      "source_location": "L94",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_tools_lifecycle_tasklifecycle_ts",
+      "target": "tasklifecycle_tasklifecycle",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\lifecycle\\taskLifecycle.ts",
+      "source_location": "L106",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_tools_lifecycle_tasklifecycle_ts",
+      "target": "tasklifecycle_dispatch",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\lifecycle\\taskLifecycle.ts",
+      "source_location": "L110",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_tools_lifecycle_tasklifecycle_ts",
+      "target": "tasklifecycle_claim",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\lifecycle\\taskLifecycle.ts",
+      "source_location": "L127",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_tools_lifecycle_tasklifecycle_ts",
+      "target": "tasklifecycle_start",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\lifecycle\\taskLifecycle.ts",
+      "source_location": "L140",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_tools_lifecycle_tasklifecycle_ts",
+      "target": "tasklifecycle_block",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\lifecycle\\taskLifecycle.ts",
+      "source_location": "L152",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_tools_lifecycle_tasklifecycle_ts",
+      "target": "tasklifecycle_unblock",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\lifecycle\\taskLifecycle.ts",
+      "source_location": "L162",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_tools_lifecycle_tasklifecycle_ts",
+      "target": "tasklifecycle_requestreview",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\lifecycle\\taskLifecycle.ts",
+      "source_location": "L174",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_tools_lifecycle_tasklifecycle_ts",
+      "target": "tasklifecycle_reopen",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\lifecycle\\taskLifecycle.ts",
+      "source_location": "L195",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_tools_lifecycle_tasklifecycle_ts",
+      "target": "tasklifecycle_archive",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\lifecycle\\taskLifecycle.ts",
+      "source_location": "L207",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_tools_lifecycle_tasklifecycle_ts",
+      "target": "tasklifecycle_finalize",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\lifecycle\\taskLifecycle.ts",
+      "source_location": "L223",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_tools_lifecycle_tasklifecycle_ts",
+      "target": "tasklifecycle_applyfinalize",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\lifecycle\\taskLifecycle.ts",
+      "source_location": "L269",
+      "weight": 1.0
+    },
+    {
+      "source": "tasklifecycle_dispatch",
+      "target": "tasklifecycle_claim",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\lifecycle\\taskLifecycle.ts",
+      "source_location": "L112",
+      "weight": 1.0
+    },
+    {
+      "source": "tasklifecycle_dispatch",
+      "target": "tasklifecycle_start",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\lifecycle\\taskLifecycle.ts",
+      "source_location": "L113",
+      "weight": 1.0
+    },
+    {
+      "source": "tasklifecycle_dispatch",
+      "target": "tasklifecycle_block",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\lifecycle\\taskLifecycle.ts",
+      "source_location": "L114",
+      "weight": 1.0
+    },
+    {
+      "source": "tasklifecycle_dispatch",
+      "target": "tasklifecycle_unblock",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\lifecycle\\taskLifecycle.ts",
+      "source_location": "L115",
+      "weight": 1.0
+    },
+    {
+      "source": "tasklifecycle_dispatch",
+      "target": "tasklifecycle_requestreview",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\lifecycle\\taskLifecycle.ts",
+      "source_location": "L116",
+      "weight": 1.0
+    },
+    {
+      "source": "tasklifecycle_dispatch",
+      "target": "tasklifecycle_finalize",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\lifecycle\\taskLifecycle.ts",
+      "source_location": "L117",
+      "weight": 1.0
+    },
+    {
+      "source": "tasklifecycle_dispatch",
+      "target": "tasklifecycle_reopen",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\lifecycle\\taskLifecycle.ts",
+      "source_location": "L118",
+      "weight": 1.0
+    },
+    {
+      "source": "tasklifecycle_dispatch",
+      "target": "tasklifecycle_archive",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\lifecycle\\taskLifecycle.ts",
+      "source_location": "L119",
+      "weight": 1.0
+    },
+    {
+      "source": "tasklifecycle_claim",
+      "target": "tasklifecycle_loadorthrow",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\lifecycle\\taskLifecycle.ts",
+      "source_location": "L128",
+      "weight": 1.0
+    },
+    {
+      "source": "tasklifecycle_claim",
+      "target": "tasklifecycle_ensuretransition",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\lifecycle\\taskLifecycle.ts",
+      "source_location": "L129",
+      "weight": 1.0
+    },
+    {
+      "source": "tasklifecycle_claim",
+      "target": "tasklifecycle_persistbumped",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\lifecycle\\taskLifecycle.ts",
+      "source_location": "L136",
+      "weight": 1.0
+    },
+    {
+      "source": "tasklifecycle_claim",
+      "target": "tasklifecycle_astooltext",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\lifecycle\\taskLifecycle.ts",
+      "source_location": "L137",
+      "weight": 1.0
+    },
+    {
+      "source": "tasklifecycle_start",
+      "target": "tasklifecycle_loadorthrow",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\lifecycle\\taskLifecycle.ts",
+      "source_location": "L141",
+      "weight": 1.0
+    },
+    {
+      "source": "tasklifecycle_start",
+      "target": "tasklifecycle_ensuretransition",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\lifecycle\\taskLifecycle.ts",
+      "source_location": "L142",
+      "weight": 1.0
+    },
+    {
+      "source": "tasklifecycle_start",
+      "target": "tasklifecycle_persistbumped",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\lifecycle\\taskLifecycle.ts",
+      "source_location": "L148",
+      "weight": 1.0
+    },
+    {
+      "source": "tasklifecycle_start",
+      "target": "tasklifecycle_astooltext",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\lifecycle\\taskLifecycle.ts",
+      "source_location": "L149",
+      "weight": 1.0
+    },
+    {
+      "source": "tasklifecycle_block",
+      "target": "tasklifecycle_loadorthrow",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\lifecycle\\taskLifecycle.ts",
+      "source_location": "L153",
+      "weight": 1.0
+    },
+    {
+      "source": "tasklifecycle_block",
+      "target": "tasklifecycle_ensuretransition",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\lifecycle\\taskLifecycle.ts",
+      "source_location": "L154",
+      "weight": 1.0
+    },
+    {
+      "source": "tasklifecycle_block",
+      "target": "tasklifecycle_persistbumped",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\lifecycle\\taskLifecycle.ts",
+      "source_location": "L158",
+      "weight": 1.0
+    },
+    {
+      "source": "tasklifecycle_block",
+      "target": "tasklifecycle_astooltext",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\lifecycle\\taskLifecycle.ts",
+      "source_location": "L159",
+      "weight": 1.0
+    },
+    {
+      "source": "tasklifecycle_unblock",
+      "target": "tasklifecycle_loadorthrow",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\lifecycle\\taskLifecycle.ts",
+      "source_location": "L163",
+      "weight": 1.0
+    },
+    {
+      "source": "tasklifecycle_unblock",
+      "target": "tasklifecycle_ensuretransition",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\lifecycle\\taskLifecycle.ts",
+      "source_location": "L164",
+      "weight": 1.0
+    },
+    {
+      "source": "tasklifecycle_unblock",
+      "target": "tasklifecycle_persistbumped",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\lifecycle\\taskLifecycle.ts",
+      "source_location": "L170",
+      "weight": 1.0
+    },
+    {
+      "source": "tasklifecycle_unblock",
+      "target": "tasklifecycle_astooltext",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\lifecycle\\taskLifecycle.ts",
+      "source_location": "L171",
+      "weight": 1.0
+    },
+    {
+      "source": "tasklifecycle_requestreview",
+      "target": "tasklifecycle_loadorthrow",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\lifecycle\\taskLifecycle.ts",
+      "source_location": "L177",
+      "weight": 1.0
+    },
+    {
+      "source": "tasklifecycle_requestreview",
+      "target": "tasklifecycle_ensuretransition",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\lifecycle\\taskLifecycle.ts",
+      "source_location": "L178",
+      "weight": 1.0
+    },
+    {
+      "source": "tasklifecycle_requestreview",
+      "target": "tasklifecycle_persistbumped",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\lifecycle\\taskLifecycle.ts",
+      "source_location": "L187",
+      "weight": 1.0
+    },
+    {
+      "source": "tasklifecycle_requestreview",
+      "target": "tasklifecycle_astooltext",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\lifecycle\\taskLifecycle.ts",
+      "source_location": "L188",
+      "weight": 1.0
+    },
+    {
+      "source": "tasklifecycle_reopen",
+      "target": "tasklifecycle_loadorthrow",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\lifecycle\\taskLifecycle.ts",
+      "source_location": "L196",
+      "weight": 1.0
+    },
+    {
+      "source": "tasklifecycle_reopen",
+      "target": "tasklifecycle_ensuretransition",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\lifecycle\\taskLifecycle.ts",
+      "source_location": "L197",
+      "weight": 1.0
+    },
+    {
+      "source": "tasklifecycle_reopen",
+      "target": "tasklifecycle_persistbumped",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\lifecycle\\taskLifecycle.ts",
+      "source_location": "L203",
+      "weight": 1.0
+    },
+    {
+      "source": "tasklifecycle_reopen",
+      "target": "tasklifecycle_astooltext",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\lifecycle\\taskLifecycle.ts",
+      "source_location": "L204",
+      "weight": 1.0
+    },
+    {
+      "source": "tasklifecycle_archive",
+      "target": "tasklifecycle_loadorthrow",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\lifecycle\\taskLifecycle.ts",
+      "source_location": "L208",
+      "weight": 1.0
+    },
+    {
+      "source": "tasklifecycle_archive",
+      "target": "tasklifecycle_ensuretransition",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\lifecycle\\taskLifecycle.ts",
+      "source_location": "L209",
+      "weight": 1.0
+    },
+    {
+      "source": "tasklifecycle_archive",
+      "target": "tasklifecycle_persistbumped",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\lifecycle\\taskLifecycle.ts",
+      "source_location": "L215",
+      "weight": 1.0
+    },
+    {
+      "source": "tasklifecycle_archive",
+      "target": "tasklifecycle_astooltext",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\lifecycle\\taskLifecycle.ts",
+      "source_location": "L216",
+      "weight": 1.0
+    },
+    {
+      "source": "tasklifecycle_finalize",
+      "target": "tasklifecycle_loadorthrow",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\lifecycle\\taskLifecycle.ts",
+      "source_location": "L224",
+      "weight": 1.0
+    },
+    {
+      "source": "tasklifecycle_finalize",
+      "target": "tasklifecycle_ensuretransition",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\lifecycle\\taskLifecycle.ts",
+      "source_location": "L225",
+      "weight": 1.0
+    },
+    {
+      "source": "tasklifecycle_finalize",
+      "target": "tasklifecycle_astooltext",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\lifecycle\\taskLifecycle.ts",
+      "source_location": "L260",
+      "weight": 1.0
+    }
+  ],
+  "raw_calls": [
+    {
+      "caller_nid": "tasklifecycle_astooltext",
+      "callee": "stringify",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\lifecycle\\taskLifecycle.ts",
+      "source_location": "L38"
+    },
+    {
+      "caller_nid": "tasklifecycle_loadorthrow",
+      "callee": "getTask",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\lifecycle\\taskLifecycle.ts",
+      "source_location": "L43"
+    },
+    {
+      "caller_nid": "tasklifecycle_ensuretransition",
+      "callee": "includes",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\lifecycle\\taskLifecycle.ts",
+      "source_location": "L71"
+    },
+    {
+      "caller_nid": "tasklifecycle_ensuretransition",
+      "callee": "join",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\lifecycle\\taskLifecycle.ts",
+      "source_location": "L75"
+    },
+    {
+      "caller_nid": "tasklifecycle_persistbumped",
+      "callee": "saveTask",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\lifecycle\\taskLifecycle.ts",
+      "source_location": "L98"
+    },
+    {
+      "caller_nid": "tasklifecycle_tasklifecycle",
+      "callee": "withToolTelemetry",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\lifecycle\\taskLifecycle.ts",
+      "source_location": "L107"
+    },
+    {
+      "caller_nid": "tasklifecycle_claim",
+      "callee": "toISOString",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\lifecycle\\taskLifecycle.ts",
+      "source_location": "L133"
+    },
+    {
+      "caller_nid": "tasklifecycle_archive",
+      "callee": "toISOString",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\lifecycle\\taskLifecycle.ts",
+      "source_location": "L213"
+    },
+    {
+      "caller_nid": "tasklifecycle_finalize",
+      "callee": "withVersionCheck",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\lifecycle\\taskLifecycle.ts",
+      "source_location": "L227"
+    },
+    {
+      "caller_nid": "tasklifecycle_finalize",
+      "callee": "createFinding",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\lifecycle\\taskLifecycle.ts",
+      "source_location": "L238"
+    },
+    {
+      "caller_nid": "tasklifecycle_applyfinalize",
+      "callee": "then",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\lifecycle\\taskLifecycle.ts",
+      "source_location": "L310"
+    },
+    {
+      "caller_nid": "tasklifecycle_applyfinalize",
+      "callee": "saveTask",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\lifecycle\\taskLifecycle.ts",
+      "source_location": "L310"
+    }
+  ]
+}

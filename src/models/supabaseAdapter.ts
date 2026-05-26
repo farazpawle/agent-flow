@@ -1,441 +1,876 @@
-import { createClient, SupabaseClient, RealtimeChannel } from '@supabase/supabase-js';
-import { DatabaseAdapter } from './interfaces.js';
-import { Task } from '../types/index.js';
-import { Project } from './projectModel.js';
-import { Client } from './clientModel.js';
-import { WorkflowStep, WorkflowStepType } from './workflowModel.js';
-import { taskEvents, TASK_EVENTS } from '../utils/events.js';
+import { createClient, SupabaseClient, RealtimeChannel } from "@supabase/supabase-js";
+import { randomUUID } from "crypto";
+import {
+  ClientActiveProject,
+  DatabaseAdapter,
+  DestructiveAuditFilter,
+  DestructiveAuditRow,
+  IncrementTaskVersionResult,
+  LessonSummary,
+  LessonSummaryInput,
+  ListFindingsFilter,
+  ListLessonsFilter,
+  LlmSettings,
+  LlmSettingsInput,
+  TaskFinding,
+  TaskFindingInput,
+} from "./interfaces.js";
+import { Task } from "../types/index.js";
+import { Project } from "./projectModel.js";
+import { Client } from "./clientModel.js";
+import { WorkflowStep, WorkflowStepType } from "./workflowModel.js";
+import { taskEvents, TASK_EVENTS } from "../utils/events.js";
+import { applyEnvironmentAliases } from "../utils/envConfig.js";
 
 export class SupabaseAdapter implements DatabaseAdapter {
-    private supabase: SupabaseClient | null = null;
-    private initialized: boolean = false;
-    private tasksChannel: RealtimeChannel | null = null;
+  private supabase: SupabaseClient | null = null;
+  private initialized: boolean = false;
+  private tasksChannel: RealtimeChannel | null = null;
 
-    async init(): Promise<void> {
-        if (this.initialized) return;
+  async init(): Promise<void> {
+    if (this.initialized) return;
 
-        console.error('(AgentFlow) Initializing Supabase connection...');
+    applyEnvironmentAliases(process.env);
 
-        const supabaseUrl = process.env.SUPABASE_URL;
-        const supabaseKey = process.env.SUPABASE_SERVICE_KEY;
+    const supabaseUrl = process.env.SUPABASE_URL;
+    const supabaseKey = process.env.SUPABASE_SERVICE_KEY;
 
-        if (!supabaseUrl || !supabaseKey) {
-            throw new Error('Missing SUPABASE_URL or SUPABASE_SERVICE_KEY environment variables');
-        }
-
-        try {
-            this.supabase = createClient(supabaseUrl, supabaseKey, {
-                auth: { persistSession: false }
-            });
-
-            // Verify connection by making a lightweight call
-            const { error } = await this.supabase.from('projects').select('id').limit(1);
-
-            if (error) {
-                // If table doesn't exist, it might be a 404 or specific error.
-                // Since we can't easily auto-create tables in Supabase from here (requires admin API or SQL editor),
-                // we assume the user has run the schema script.
-                console.error('(AgentFlow) Supabase connection check failed:', error.message);
-                throw error;
-            }
-
-            // --- Realtime Subscription Setup ---
-            // Subscribe to all changes in 'tasks' table
-            this.tasksChannel = this.supabase
-                .channel('room_tasks')
-                .on(
-                    'postgres_changes',
-                    { event: '*', schema: 'public', table: 'tasks' },
-                    (payload) => {
-                        console.error('(AgentFlow) Realtime update received:', payload.eventType);
-                        // Emit event so the server can push SSE to clients
-                        taskEvents.emit(TASK_EVENTS.UPDATED);
-                    }
-                )
-                .subscribe((status) => {
-                    console.error(`(AgentFlow) Realtime subscription status: ${status}`);
-                });
-
-            this.initialized = true;
-            console.error('(AgentFlow) Supabase connection established successfully');
-        } catch (error) {
-            console.error('(AgentFlow) Failed to initialize Supabase client:', error);
-            throw error;
-        }
+    if (!supabaseUrl || !supabaseKey) {
+      throw new Error("Missing SUPABASE_URL or SUPABASE_SERVICE_KEY environment variables");
     }
 
-    async close(): Promise<void> {
-        if (this.tasksChannel) {
-            await this.supabase?.removeChannel(this.tasksChannel);
-            this.tasksChannel = null;
-        }
-        // Supabase client is stateless mostly, but we can set null
-        this.supabase = null;
-        this.initialized = false;
-        return Promise.resolve();
-    }
+    try {
+      this.supabase = createClient(supabaseUrl, supabaseKey, {
+        auth: { persistSession: false },
+      });
 
-    private getSupabase(): SupabaseClient {
-        if (!this.supabase) throw new Error('Supabase client not initialized');
-        return this.supabase;
-    }
+      // Verify connection by making a lightweight call
+      const { error } = await this.supabase.from("projects").select("id").limit(1);
 
-    // --- Task Operations ---
+      if (error) {
+        // If table doesn't exist, it might be a 404 or specific error.
+        // Since we can't easily auto-create tables in Supabase from here (requires admin API or SQL editor),
+        // we assume the user has run the schema script.
+        console.error("(AgentFlow) Supabase connection check failed:", error.message);
+        throw error;
+      }
 
-    async getAllTasks(projectId?: string): Promise<Task[]> {
-        let query = this.getSupabase().from('tasks').select('content, execution_order');
-
-        if (projectId) {
-            query = query.eq('project_id', projectId);
-        }
-
-        try {
-            const { data, error } = await query.order('execution_order', { ascending: true }).order('created_at', { ascending: true });
-            if (error) throw error;
-            return data.map((row: any) => ({
-                ...row.content,
-                executionOrder: row.execution_order ?? row.content.executionOrder
-            }));
-        } catch (error: any) {
-            // Fallback if execution_order column is missing
-            if (error.message?.includes('execution_order') || error.code === '42703') { // 42703 is undefined_column
-                console.warn('(AgentFlow) execution_order column missing, falling back to created_at sort');
-                const { data, error: retryError } = await this.getSupabase().from('tasks').select('content').order('created_at', { ascending: true });
-                if (retryError) throw retryError;
-                return data.map((row: any) => row.content);
-            }
-            throw error;
-        }
-    }
-
-    async getTask(id: string): Promise<Task | null> {
-        const { data, error } = await this.getSupabase()
-            .from('tasks')
-            .select('content, execution_order')
-            .eq('id', id)
-            .single();
-
-        if (error) {
-            if (error.code === 'PGRST116') return null; // Not found code
-            throw error;
-        }
-
-        return data ? { ...data.content, executionOrder: data.execution_order ?? data.content.executionOrder } : null;
-    }
-
-    async saveTask(task: Task): Promise<void> {
-        const createdAt = task.createdAt instanceof Date ? task.createdAt.toISOString() : new Date(task.createdAt).toISOString();
-        const updatedAt = task.updatedAt instanceof Date ? task.updatedAt.toISOString() : new Date(task.updatedAt).toISOString();
-        const completedAt = task.completedAt
-            ? (task.completedAt instanceof Date ? task.completedAt.toISOString() : new Date(task.completedAt).toISOString())
-            : null;
-
-        const taskData = {
-            id: task.id,
-            name: task.name,
-            status: task.status,
-            created_at: createdAt,
-            updated_at: updatedAt,
-            completed_at: completedAt,
-            client_id: (task as any).clientId ?? null,
-            project_id: (task as any).projectId ?? null,
-            content: task, // Supabase handles object -> JSONB automatically
-            execution_order: (task.executionOrder || 0)
-        };
-
-        try {
-            const { error } = await this.getSupabase().from('tasks').upsert(taskData);
-            if (error) throw error;
-        } catch (error: any) {
-            if (error.message?.includes('execution_order') || error.code === '42703') {
-                console.warn('(AgentFlow) execution_order column missing in saveTask, retrying without it');
-                const { execution_order, ...fallbackData } = taskData;
-                const { error: retryError } = await this.getSupabase().from('tasks').upsert(fallbackData);
-                if (retryError) throw retryError;
-                return;
-            }
-            throw error;
-        }
-    }
-
-    async deleteTask(id: string): Promise<void> {
-        const { error } = await this.getSupabase().from('tasks').delete().eq('id', id);
-        if (error) throw error;
-    }
-
-    async saveTasks(tasks: Task[]): Promise<void> {
-        try {
-            // Try with execution_order
-            const rows = tasks.map(task => this.mapTaskToRow(task, true));
-            const { error } = await this.getSupabase().from('tasks').upsert(rows);
-            if (error) throw error;
-        } catch (error: any) {
-            if (error.message?.includes('execution_order') || error.code === '42703') {
-                console.warn('(AgentFlow) execution_order column missing in saveTasks, retrying without it');
-                const rows = tasks.map(task => this.mapTaskToRow(task, false));
-                const { error: retryError } = await this.getSupabase().from('tasks').upsert(rows);
-                if (retryError) throw retryError;
-                return;
-            }
-            throw error;
-        }
-    }
-
-    private mapTaskToRow(task: Task, includeOrder: boolean): any {
-        const createdAt = task.createdAt instanceof Date ? task.createdAt.toISOString() : new Date(task.createdAt).toISOString();
-        const updatedAt = task.updatedAt instanceof Date ? task.updatedAt.toISOString() : new Date(task.updatedAt).toISOString();
-        const completedAt = task.completedAt
-            ? (task.completedAt instanceof Date ? task.completedAt.toISOString() : new Date(task.completedAt).toISOString())
-            : null;
-
-        const row: any = {
-            id: task.id,
-            name: task.name,
-            status: task.status,
-            created_at: createdAt,
-            updated_at: updatedAt,
-            completed_at: completedAt,
-            client_id: (task as any).clientId ?? null,
-            project_id: (task as any).projectId ?? null,
-            content: task
-        };
-        if (includeOrder) {
-            row.execution_order = (task.executionOrder || 0);
-        }
-        return row;
-    }
-
-
-    // --- Project Operations ---
-
-    async createProject(project: Project): Promise<void> {
-        const { error } = await this.getSupabase().from('projects').upsert({
-            id: project.id,
-            name: project.name,
-            description: project.description,
-            path: project.path,
-            git_remote_url: project.gitRemoteUrl,
-            tech_stack: project.techStack, // JSONB array support
-            created_at: project.createdAt instanceof Date ? project.createdAt.toISOString() : project.createdAt,
-            updated_at: project.updatedAt instanceof Date ? project.updatedAt.toISOString() : project.updatedAt
+      // --- Realtime Subscription Setup ---
+      // Subscribe to all changes in 'tasks' table
+      this.tasksChannel = this.supabase
+        .channel("room_tasks")
+        .on("postgres_changes", { event: "*", schema: "public", table: "tasks" }, (payload) => {
+          console.error("(AgentFlow) Realtime update received:", payload.eventType);
+          // Emit event so the server can push SSE to clients
+          taskEvents.emit(TASK_EVENTS.UPDATED);
+        })
+        .subscribe((status) => {
+          // console.error(`(AgentFlow) Realtime subscription status: ${status}`);
         });
 
-        if (error) throw error;
+      this.initialized = true;
+      console.error("(AgentFlow) Supabase connection established successfully");
+    } catch (error) {
+      console.error("(AgentFlow) Failed to initialize Supabase client:", error);
+      throw error;
+    }
+  }
+
+  async close(): Promise<void> {
+    if (this.tasksChannel) {
+      await this.supabase?.removeChannel(this.tasksChannel);
+      this.tasksChannel = null;
+    }
+    // Supabase client is stateless mostly, but we can set null
+    this.supabase = null;
+    this.initialized = false;
+    return Promise.resolve();
+  }
+
+  private getSupabase(): SupabaseClient {
+    if (!this.supabase) throw new Error("Supabase client not initialized");
+    return this.supabase;
+  }
+
+  // --- Task Operations ---
+
+  async getAllTasks(projectId?: string): Promise<Task[]> {
+    let query = this.getSupabase().from("tasks").select("content, execution_order, version");
+
+    if (projectId) {
+      query = query.eq("project_id", projectId);
     }
 
-    async getProject(id: string): Promise<Project | null> {
-        const { data, error } = await this.getSupabase()
-            .from('projects')
-            .select('*')
-            .eq('id', id)
-            .single();
-
-        if (error) {
-            if (error.code === 'PGRST116') return null;
-            throw error;
-        }
-
-        return this.mapProjectRow(data);
-    }
-
-    async getAllProjects(): Promise<Project[]> {
-        const { data, error } = await this.getSupabase()
-            .from('projects')
-            .select('*')
-            .order('updated_at', { ascending: false });
-
-        if (error) throw error;
-        return data.map(row => this.mapProjectRow(row)) || [];
-    }
-
-    async deleteProject(id: string): Promise<void> {
-        const { error } = await this.getSupabase().from('projects').delete().eq('id', id);
-        if (error) throw error;
-    }
-
-    private mapProjectRow(row: any): Project {
+    try {
+      const { data, error } = await query
+        .order("execution_order", { ascending: true })
+        .order("created_at", { ascending: true });
+      if (error) throw error;
+      return data.map((row: any) => {
+        const task = row.content;
         return {
-            id: row.id,
-            name: row.name,
-            description: row.description,
-            path: row.path,
-            gitRemoteUrl: row.git_remote_url,
-            techStack: row.tech_stack || [],
-            taskCount: 0, // TODO: Implement count if needed
-            createdAt: new Date(row.created_at),
-            updatedAt: new Date(row.updated_at)
+          ...task,
+          executionOrder: row.execution_order ?? task.executionOrder,
+          version: row.version, // Group 1.3 — OCC column is source of truth
+          createdAt: task.createdAt ? new Date(task.createdAt) : new Date(),
+          updatedAt: task.updatedAt ? new Date(task.updatedAt) : new Date(),
+          completedAt: task.completedAt ? new Date(task.completedAt) : undefined,
         };
-    }
-
-    // --- Workflow Step Operations ---
-
-    async createWorkflowStep(step: WorkflowStep): Promise<void> {
-        const { error } = await this.getSupabase().from('workflow_steps').insert({
-            id: step.id,
-            project_id: step.projectId,
-            task_id: step.taskId,
-            step_type: step.stepType,
-            content: step.content,
-            previous_step_id: step.previousStepId,
-            created_at: step.createdAt instanceof Date ? step.createdAt.toISOString() : step.createdAt
+      });
+    } catch (error: any) {
+      // Fallback if execution_order column is missing
+      if (error.message?.includes("execution_order") || error.code === "42703") {
+        // 42703 is undefined_column
+        console.warn("(AgentFlow) execution_order column missing, falling back to created_at sort");
+        const { data, error: retryError } = await this.getSupabase()
+          .from("tasks")
+          .select("content")
+          .order("created_at", { ascending: true });
+        if (retryError) throw retryError;
+        return data.map((row: any) => {
+          const task = row.content;
+          return {
+            ...task,
+            createdAt: task.createdAt ? new Date(task.createdAt) : new Date(),
+            updatedAt: task.updatedAt ? new Date(task.updatedAt) : new Date(),
+            completedAt: task.completedAt ? new Date(task.completedAt) : undefined,
+          };
         });
+      }
+      throw error;
+    }
+  }
 
-        if (error) throw error;
+  async getTask(id: string): Promise<Task | null> {
+    const { data, error } = await this.getSupabase()
+      .from("tasks")
+      .select("content, execution_order, version")
+      .eq("id", id)
+      .single();
+
+    if (error) {
+      if (error.code === "PGRST116") return null; // Not found code
+      throw error;
     }
 
-    async getWorkflowStep(id: string): Promise<WorkflowStep | null> {
-        const { data, error } = await this.getSupabase()
-            .from('workflow_steps')
-            .select('*')
-            .eq('id', id)
-            .single();
+    if (!data) return null;
+    const task = data.content;
+    return {
+      ...task,
+      executionOrder: data.execution_order ?? task.executionOrder,
+      version: data.version, // Group 1.3 — OCC column is source of truth
+      createdAt: task.createdAt ? new Date(task.createdAt) : new Date(),
+      updatedAt: task.updatedAt ? new Date(task.updatedAt) : new Date(),
+      completedAt: task.completedAt ? new Date(task.completedAt) : undefined,
+    };
+  }
 
-        if (error) {
-            if (error.code === 'PGRST116') return null;
-            throw error;
-        }
+  async saveTask(task: Task): Promise<void> {
+    const createdAt =
+      task.createdAt instanceof Date
+        ? task.createdAt.toISOString()
+        : new Date(task.createdAt).toISOString();
+    const updatedAt =
+      task.updatedAt instanceof Date
+        ? task.updatedAt.toISOString()
+        : new Date(task.updatedAt).toISOString();
+    const completedAt = task.completedAt
+      ? task.completedAt instanceof Date
+        ? task.completedAt.toISOString()
+        : new Date(task.completedAt).toISOString()
+      : null;
 
-        return {
-            id: data.id,
-            projectId: data.project_id,
-            taskId: data.task_id,
-            stepType: data.step_type as WorkflowStepType,
-            content: data.content,
-            previousStepId: data.previous_step_id,
-            createdAt: new Date(data.created_at)
-        };
+    const taskData = {
+      id: task.id,
+      name: task.name,
+      status: task.status,
+      created_at: createdAt,
+      updated_at: updatedAt,
+      completed_at: completedAt,
+      client_id: (task as any).clientId ?? null,
+      project_id: (task as any).projectId ?? null,
+      content: task, // Supabase handles object -> JSONB automatically
+      execution_order: task.executionOrder || 0,
+      // Group 1.3 OCC column. Upserts must echo the current version
+      // (or 1 for new rows) so `incrementTaskVersion`'s bump is
+      // never clobbered by a downstream saveTask.
+      version: (task as Task & { version?: number }).version ?? 1,
+    };
+
+    try {
+      const { error } = await this.getSupabase().from("tasks").upsert(taskData);
+      if (error) throw error;
+    } catch (error: any) {
+      if (error.message?.includes("execution_order") || error.code === "42703") {
+        console.warn("(AgentFlow) execution_order column missing in saveTask, retrying without it");
+        const { execution_order, ...fallbackData } = taskData;
+        const { error: retryError } = await this.getSupabase().from("tasks").upsert(fallbackData);
+        if (retryError) throw retryError;
+        return;
+      }
+      throw error;
+    }
+  }
+
+  async deleteTask(id: string): Promise<void> {
+    const { error } = await this.getSupabase().from("tasks").delete().eq("id", id);
+    if (error) throw error;
+  }
+
+  async saveTasks(tasks: Task[]): Promise<void> {
+    try {
+      // Try with execution_order
+      const rows = tasks.map((task) => this.mapTaskToRow(task, true));
+      const { error } = await this.getSupabase().from("tasks").upsert(rows);
+      if (error) throw error;
+    } catch (error: any) {
+      if (error.message?.includes("execution_order") || error.code === "42703") {
+        console.warn(
+          "(AgentFlow) execution_order column missing in saveTasks, retrying without it"
+        );
+        const rows = tasks.map((task) => this.mapTaskToRow(task, false));
+        const { error: retryError } = await this.getSupabase().from("tasks").upsert(rows);
+        if (retryError) throw retryError;
+        return;
+      }
+      throw error;
+    }
+  }
+
+  private mapTaskToRow(task: Task, includeOrder: boolean): any {
+    const createdAt =
+      task.createdAt instanceof Date
+        ? task.createdAt.toISOString()
+        : new Date(task.createdAt).toISOString();
+    const updatedAt =
+      task.updatedAt instanceof Date
+        ? task.updatedAt.toISOString()
+        : new Date(task.updatedAt).toISOString();
+    const completedAt = task.completedAt
+      ? task.completedAt instanceof Date
+        ? task.completedAt.toISOString()
+        : new Date(task.completedAt).toISOString()
+      : null;
+
+    const row: any = {
+      id: task.id,
+      name: task.name,
+      status: task.status,
+      created_at: createdAt,
+      updated_at: updatedAt,
+      completed_at: completedAt,
+      client_id: (task as any).clientId ?? null,
+      project_id: (task as any).projectId ?? null,
+      content: task,
+      // Group 1.3 OCC column — see saveTask for rationale.
+      version: (task as Task & { version?: number }).version ?? 1,
+    };
+    if (includeOrder) {
+      row.execution_order = task.executionOrder || 0;
+    }
+    return row;
+  }
+
+  // --- Project Operations ---
+
+  async createProject(project: Project): Promise<void> {
+    const { error } = await this.getSupabase()
+      .from("projects")
+      .upsert({
+        id: project.id,
+        name: project.name,
+        description: project.description,
+        path: project.path,
+        git_remote_url: project.gitRemoteUrl,
+        tech_stack: project.techStack, // JSONB array support
+        created_at:
+          project.createdAt instanceof Date ? project.createdAt.toISOString() : project.createdAt,
+        updated_at:
+          project.updatedAt instanceof Date ? project.updatedAt.toISOString() : project.updatedAt,
+      });
+
+    if (error) throw error;
+  }
+
+  async getProject(id: string): Promise<Project | null> {
+    const { data, error } = await this.getSupabase()
+      .from("projects")
+      .select("*")
+      .eq("id", id)
+      .single();
+
+    if (error) {
+      if (error.code === "PGRST116") return null;
+      throw error;
     }
 
-    async getWorkflowSteps(projectId: string): Promise<WorkflowStep[]> {
-        const { data, error } = await this.getSupabase()
-            .from('workflow_steps')
-            .select('*')
-            .eq('project_id', projectId)
-            .order('created_at', { ascending: true });
+    const { count: taskCount, error: countError } = await this.getSupabase()
+      .from("tasks")
+      .select("id", { count: "exact", head: true })
+      .eq("project_id", id);
 
-        if (error) throw error;
+    if (countError) throw countError;
 
-        return data.map((row: any) => ({
-            id: row.id,
-            projectId: row.project_id,
-            taskId: row.task_id,
-            stepType: row.step_type as WorkflowStepType,
-            content: row.content,
-            previousStepId: row.previous_step_id,
-            createdAt: new Date(row.created_at)
-        }));
+    return this.mapProjectRow(data, taskCount || 0);
+  }
+
+  async getAllProjects(): Promise<Project[]> {
+    const { data, error } = await this.getSupabase()
+      .from("projects")
+      .select("*")
+      .order("updated_at", { ascending: false });
+
+    if (error) throw error;
+
+    if (!data || data.length === 0) return [];
+
+    const { data: taskRows, error: taskError } = await this.getSupabase()
+      .from("tasks")
+      .select("project_id")
+      .not("project_id", "is", null);
+
+    if (taskError) throw taskError;
+
+    const taskCountByProjectId = new Map<string, number>();
+    for (const row of taskRows || []) {
+      const projectId = row.project_id as string | null;
+      if (!projectId) continue;
+      taskCountByProjectId.set(projectId, (taskCountByProjectId.get(projectId) || 0) + 1);
     }
 
-    // --- Client Operations ---
+    return data.map((row) => this.mapProjectRow(row, taskCountByProjectId.get(row.id) || 0));
+  }
 
-    async registerClient(client: Client): Promise<void> {
-        const { error } = await this.getSupabase().from('clients').upsert({
-            id: client.id,
-            name: client.name,
-            type: client.type,
-            workspace: client.workspace,
-            connected_at: client.connectedAt instanceof Date ? client.connectedAt.toISOString() : client.connectedAt,
-            last_activity_at: client.lastActivityAt instanceof Date ? client.lastActivityAt.toISOString() : client.lastActivityAt,
-            is_active: client.isActive
-        });
+  async deleteProject(id: string): Promise<void> {
+    const { error } = await this.getSupabase().from("projects").delete().eq("id", id);
+    if (error) throw error;
+  }
 
-        if (error) throw error;
+  private mapProjectRow(row: any, taskCount: number = 0): Project {
+    return {
+      id: row.id,
+      name: row.name,
+      description: row.description,
+      path: row.path,
+      gitRemoteUrl: row.git_remote_url,
+      techStack: row.tech_stack || [],
+      taskCount,
+      createdAt: new Date(row.created_at),
+      updatedAt: new Date(row.updated_at),
+    };
+  }
+
+  // --- Workflow Step Operations ---
+
+  async createWorkflowStep(step: WorkflowStep): Promise<void> {
+    const { error } = await this.getSupabase()
+      .from("workflow_steps")
+      .insert({
+        id: step.id,
+        project_id: step.projectId,
+        task_id: step.taskId,
+        step_type: step.stepType,
+        content: step.content,
+        previous_step_id: step.previousStepId,
+        created_at: step.createdAt instanceof Date ? step.createdAt.toISOString() : step.createdAt,
+        tool_name: step.toolName ?? null,
+        duration_ms: step.durationMs ?? null,
+        input_tokens: step.inputTokens ?? null,
+        output_tokens: step.outputTokens ?? null,
+        outcome: step.outcome ?? null,
+        error_code: step.errorCode ?? null,
+        correlation_id: step.correlationId ?? null,
+      });
+
+    if (error) throw error;
+  }
+
+  async getWorkflowStep(id: string): Promise<WorkflowStep | null> {
+    const { data, error } = await this.getSupabase()
+      .from("workflow_steps")
+      .select("*")
+      .eq("id", id)
+      .single();
+
+    if (error) {
+      if (error.code === "PGRST116") return null;
+      throw error;
     }
 
-    async getAllClients(activeOnly: boolean = true): Promise<Client[]> {
-        let query = this.getSupabase().from('clients').select('*');
-        if (activeOnly) {
-            query = query.eq('is_active', true);
-        }
+    return this.mapWorkflowStepRow(data);
+  }
 
-        const { data, error } = await query.order('last_activity_at', { ascending: false });
+  async getWorkflowSteps(projectId: string): Promise<WorkflowStep[]> {
+    const { data, error } = await this.getSupabase()
+      .from("workflow_steps")
+      .select("*")
+      .eq("project_id", projectId)
+      .order("created_at", { ascending: true });
 
-        if (error) throw error;
+    if (error) throw error;
 
-        return data.map((row: any) => ({
-            id: row.id,
-            name: row.name,
-            type: row.type,
-            workspace: row.workspace,
-            connectedAt: new Date(row.connected_at),
-            lastActivityAt: new Date(row.last_activity_at),
-            isActive: row.is_active
-        }));
+    return (data || []).map((row: any) => this.mapWorkflowStepRow(row));
+  }
+
+  private mapWorkflowStepRow(row: any): WorkflowStep {
+    return {
+      id: row.id,
+      projectId: row.project_id,
+      taskId: row.task_id,
+      stepType: row.step_type as WorkflowStepType,
+      content: row.content,
+      previousStepId: row.previous_step_id,
+      createdAt: new Date(row.created_at),
+      toolName: row.tool_name ?? undefined,
+      durationMs: row.duration_ms ?? undefined,
+      inputTokens: row.input_tokens ?? undefined,
+      outputTokens: row.output_tokens ?? undefined,
+      outcome: (row.outcome as "success" | "error" | null) ?? undefined,
+      errorCode: row.error_code ?? undefined,
+      correlationId: row.correlation_id ?? undefined,
+    };
+  }
+
+  async deleteWorkflowStepsByProject(projectId: string): Promise<number> {
+    const { error, count } = await this.getSupabase()
+      .from("workflow_steps")
+      .delete({ count: "exact" })
+      .eq("project_id", projectId);
+
+    if (error) throw error;
+    return count || 0;
+  }
+
+  // --- Client Operations ---
+
+  async registerClient(client: Client): Promise<void> {
+    const { error } = await this.getSupabase()
+      .from("clients")
+      .upsert({
+        id: client.id,
+        name: client.name,
+        type: client.type,
+        workspace: client.workspace,
+        connected_at:
+          client.connectedAt instanceof Date
+            ? client.connectedAt.toISOString()
+            : client.connectedAt,
+        last_activity_at:
+          client.lastActivityAt instanceof Date
+            ? client.lastActivityAt.toISOString()
+            : client.lastActivityAt,
+        is_active: client.isActive,
+      });
+
+    if (error) throw error;
+  }
+
+  async getAllClients(activeOnly: boolean = true): Promise<Client[]> {
+    let query = this.getSupabase().from("clients").select("*");
+    if (activeOnly) {
+      query = query.eq("is_active", true);
     }
 
-    async getClient(id: string): Promise<Client | null> {
-        const { data, error } = await this.getSupabase()
-            .from('clients')
-            .select('*')
-            .eq('id', id)
-            .single();
+    const { data, error } = await query.order("last_activity_at", { ascending: false });
 
-        if (error) {
-            if (error.code === 'PGRST116') return null;
-            throw error;
-        }
+    if (error) throw error;
 
-        return {
-            id: data.id,
-            name: data.name,
-            type: data.type,
-            workspace: data.workspace,
-            connectedAt: new Date(data.connected_at),
-            lastActivityAt: new Date(data.last_activity_at),
-            isActive: data.is_active
-        };
+    return data.map((row: any) => ({
+      id: row.id,
+      name: row.name,
+      type: row.type,
+      workspace: row.workspace,
+      connectedAt: new Date(row.connected_at),
+      lastActivityAt: new Date(row.last_activity_at),
+      isActive: row.is_active,
+    }));
+  }
+
+  async getClient(id: string): Promise<Client | null> {
+    const { data, error } = await this.getSupabase()
+      .from("clients")
+      .select("*")
+      .eq("id", id)
+      .single();
+
+    if (error) {
+      if (error.code === "PGRST116") return null;
+      throw error;
     }
 
-    async deleteClient(id: string): Promise<void> {
-        const { error } = await this.getSupabase().from('clients').delete().eq('id', id);
-        if (error) throw error;
+    return {
+      id: data.id,
+      name: data.name,
+      type: data.type,
+      workspace: data.workspace,
+      connectedAt: new Date(data.connected_at),
+      lastActivityAt: new Date(data.last_activity_at),
+      isActive: data.is_active,
+    };
+  }
+
+  async deleteClient(id: string): Promise<void> {
+    const { error } = await this.getSupabase().from("clients").delete().eq("id", id);
+    if (error) throw error;
+  }
+
+  async deleteInactiveClients(): Promise<number> {
+    const { error, count } = await this.getSupabase()
+      .from("clients")
+      .delete({ count: "exact" })
+      .eq("is_active", false);
+
+    if (error) throw error;
+    return count || 0;
+  }
+
+  async updateClientHeartbeat(id: string): Promise<void> {
+    const { error } = await this.getSupabase()
+      .from("clients")
+      .update({
+        last_activity_at: new Date().toISOString(),
+        is_active: true,
+      })
+      .eq("id", id);
+
+    if (error) throw error;
+  }
+
+  async cleanupStaleClients(timeoutMs: number): Promise<number> {
+    const cutoff = new Date(Date.now() - timeoutMs).toISOString();
+
+    const { error, data } = await this.getSupabase()
+      .from("clients")
+      .update({ is_active: false })
+      .eq("is_active", true)
+      .lt("last_activity_at", cutoff)
+      .select("id");
+
+    const count = data?.length || 0;
+
+    if (error) throw error;
+    return count;
+  }
+
+  async markAllClientsInactive(): Promise<void> {
+    // Supabase requires a WHERE clause for UPDATE - target all active clients
+    const { error } = await this.getSupabase()
+      .from("clients")
+      .update({ is_active: false })
+      .eq("is_active", true);
+
+    if (error) throw error;
+  }
+
+  // --- Transactions (Group 3.2) ---
+
+  /**
+   * Best-effort transaction wrapper. The Supabase REST API does not
+   * expose a client-driven transaction handle, so we just execute `fn`.
+   * Cross-row atomicity for multi-task writes falls back to the
+   * per-row CAS in `incrementTaskVersion`.
+   *
+   * If true atomicity becomes load-bearing, a Postgres RPC function
+   * wrapping the batch is the upgrade path.
+   */
+  async runInTransaction<T>(fn: () => Promise<T>): Promise<T> {
+    return fn();
+  }
+
+  // --- Task version (optimistic concurrency) ---
+  // Postgres has no built-in CAS for arbitrary rows, but the conditional
+  // UPDATE-with-RETURNING pattern is atomic at the row level: only the
+  // row whose current version equals `expectedVersion` is mutated.
+
+  async incrementTaskVersion(
+    taskId: string,
+    expectedVersion: number
+  ): Promise<IncrementTaskVersionResult> {
+    const { data, error } = await this.getSupabase()
+      .from("tasks")
+      .update({ version: expectedVersion + 1 })
+      .eq("id", taskId)
+      .eq("version", expectedVersion)
+      .select("version");
+
+    if (error) throw error;
+
+    if (data && data.length === 1) {
+      return { ok: true, newVersion: expectedVersion + 1 };
     }
 
-    async deleteInactiveClients(): Promise<number> {
-        const { error, count } = await this.getSupabase()
-            .from('clients')
-            .delete({ count: 'exact' })
-            .eq('is_active', false);
+    const { data: currentRow, error: readError } = await this.getSupabase()
+      .from("tasks")
+      .select("version")
+      .eq("id", taskId)
+      .maybeSingle();
 
-        if (error) throw error;
-        return count || 0;
+    if (readError) throw readError;
+
+    return { ok: false, currentVersion: (currentRow?.version as number | undefined) ?? null };
+  }
+
+  // --- Findings (Group 1.1 / 1.7 / 1.8) ---
+
+  private async resolveProjectIdForTask(taskId: string): Promise<string | null> {
+    const { data, error } = await this.getSupabase()
+      .from("tasks")
+      .select("project_id")
+      .eq("id", taskId)
+      .maybeSingle();
+
+    if (error) throw error;
+    return (data?.project_id as string | null | undefined) ?? null;
+  }
+
+  async createFinding(input: TaskFindingInput): Promise<TaskFinding> {
+    let projectId = input.projectId;
+    if (!projectId) {
+      const resolved = await this.resolveProjectIdForTask(input.taskId);
+      if (!resolved) {
+        throw new Error(
+          `createFinding: cannot resolve project_id from taskId=${input.taskId} (task not found or has no project)`
+        );
+      }
+      projectId = resolved;
     }
 
-    async updateClientHeartbeat(id: string): Promise<void> {
-        const { error } = await this.getSupabase()
-            .from('clients')
-            .update({
-                last_activity_at: new Date().toISOString(),
-                is_active: true
-            })
-            .eq('id', id);
+    const id = input.id ?? randomUUID();
+    const createdAt = input.createdAt ?? new Date();
 
-        if (error) throw error;
-    }
+    const row = {
+      id,
+      project_id: projectId,
+      task_id: input.taskId,
+      kind: input.kind,
+      type: input.type ?? null,
+      content: input.content ?? null,
+      metadata: input.metadata ?? null,
+      created_at: createdAt.toISOString(),
+      created_by: input.createdBy ?? null,
+    };
 
-    async cleanupStaleClients(timeoutMs: number): Promise<number> {
-        const cutoff = new Date(Date.now() - timeoutMs).toISOString();
+    const { error } = await this.getSupabase().from("task_findings").insert(row);
+    if (error) throw error;
 
-        const { error, data } = await this.getSupabase()
-            .from('clients')
-            .update({ is_active: false })
-            .eq('is_active', true)
-            .lt('last_activity_at', cutoff)
-            .select('id');
+    return {
+      id,
+      projectId,
+      taskId: input.taskId,
+      kind: input.kind,
+      type: input.type,
+      content: input.content,
+      metadata: input.metadata,
+      createdAt,
+      createdBy: input.createdBy,
+    };
+  }
 
-        const count = data?.length || 0;
+  async listFindings(filter: ListFindingsFilter): Promise<TaskFinding[]> {
+    let query = this.getSupabase().from("task_findings").select("*");
+    if (filter.taskId) query = query.eq("task_id", filter.taskId);
+    if (filter.projectId) query = query.eq("project_id", filter.projectId);
+    if (filter.kind) query = query.eq("kind", filter.kind);
+    if (filter.type) query = query.eq("type", filter.type);
+    if (filter.sinceMs) query = query.gte("created_at", new Date(filter.sinceMs).toISOString());
 
-        if (error) throw error;
-        return count;
-    }
+    query = query.order("created_at", { ascending: false });
+    if (filter.limit && filter.limit > 0) query = query.limit(Math.floor(filter.limit));
 
-    async markAllClientsInactive(): Promise<void> {
-        // Supabase requires a WHERE clause for UPDATE - target all active clients
-        const { error } = await this.getSupabase()
-            .from('clients')
-            .update({ is_active: false })
-            .eq('is_active', true);
+    const { data, error } = await query;
+    if (error) throw error;
 
-        if (error) throw error;
-    }
+    return (data || []).map((row: any) => this.mapFindingRow(row));
+  }
+
+  async deleteFindingsOlderThan(cutoffMs: number): Promise<number> {
+    const { error, count } = await this.getSupabase()
+      .from("task_findings")
+      .delete({ count: "exact" })
+      .lt("created_at", new Date(cutoffMs).toISOString());
+
+    if (error) throw error;
+    return count || 0;
+  }
+
+  private mapFindingRow(row: any): TaskFinding {
+    return {
+      id: row.id,
+      projectId: row.project_id,
+      taskId: row.task_id,
+      kind: row.kind,
+      type: row.type ?? undefined,
+      content: row.content,
+      metadata: row.metadata ?? undefined,
+      createdAt: new Date(row.created_at),
+      createdBy: row.created_by ?? undefined,
+    };
+  }
+
+  // --- Lesson summaries (Group 1.2) ---
+
+  async createLessonSummary(input: LessonSummaryInput): Promise<LessonSummary> {
+    const id = input.id ?? randomUUID();
+    const now = new Date();
+
+    const row = {
+      id,
+      project_id: input.projectId,
+      topic: input.topic,
+      summary: input.summary,
+      source_finding_ids: input.sourceFindingIds ?? null,
+      created_at: now.toISOString(),
+      updated_at: now.toISOString(),
+    };
+
+    const { error } = await this.getSupabase().from("lesson_summaries").insert(row);
+    if (error) throw error;
+
+    return {
+      id,
+      projectId: input.projectId,
+      topic: input.topic,
+      summary: input.summary,
+      sourceFindingIds: input.sourceFindingIds,
+      createdAt: now,
+      updatedAt: now,
+    };
+  }
+
+  async listLessonSummaries(filter: ListLessonsFilter): Promise<LessonSummary[]> {
+    let query = this.getSupabase()
+      .from("lesson_summaries")
+      .select("*")
+      .eq("project_id", filter.projectId);
+    if (filter.topic) query = query.eq("topic", filter.topic);
+    query = query.order("updated_at", { ascending: false });
+    if (filter.limit && filter.limit > 0) query = query.limit(Math.floor(filter.limit));
+
+    const { data, error } = await query;
+    if (error) throw error;
+
+    return (data || []).map((row: any) => ({
+      id: row.id,
+      projectId: row.project_id,
+      topic: row.topic,
+      summary: row.summary,
+      sourceFindingIds: row.source_finding_ids ?? undefined,
+      createdAt: new Date(row.created_at),
+      updatedAt: new Date(row.updated_at),
+    }));
+  }
+
+  // --- Per-client active project (Group 1.4) ---
+
+  async getActiveProjectForClient(clientId: string): Promise<ClientActiveProject | null> {
+    const { data, error } = await this.getSupabase()
+      .from("client_active_project")
+      .select("*")
+      .eq("client_id", clientId)
+      .maybeSingle();
+
+    if (error) throw error;
+    if (!data) return null;
+    return {
+      clientId: data.client_id,
+      projectId: data.project_id,
+      setAt: new Date(data.set_at),
+    };
+  }
+
+  async setActiveProjectForClient(
+    clientId: string,
+    projectId: string
+  ): Promise<ClientActiveProject> {
+    const setAt = new Date();
+    const { error } = await this.getSupabase().from("client_active_project").upsert({
+      client_id: clientId,
+      project_id: projectId,
+      set_at: setAt.toISOString(),
+    });
+    if (error) throw error;
+    return { clientId, projectId, setAt };
+  }
+
+  // --- LLM settings (Group 1.5) ---
+
+  async getLlmSettings(): Promise<LlmSettings | null> {
+    const { data, error } = await this.getSupabase()
+      .from("llm_settings")
+      .select("*")
+      .eq("id", 1)
+      .maybeSingle();
+
+    if (error) throw error;
+    if (!data) return null;
+    return {
+      provider: data.provider ?? undefined,
+      model: data.model ?? undefined,
+      selectionStrategy: data.selection_strategy ?? undefined,
+      workflowMode: data.workflow_mode ?? undefined,
+      updatedAt: new Date(data.updated_at),
+    };
+  }
+
+  async setLlmSettings(input: LlmSettingsInput): Promise<LlmSettings> {
+    const updatedAt = new Date();
+    const { error } = await this.getSupabase()
+      .from("llm_settings")
+      .upsert({
+        id: 1,
+        provider: input.provider ?? null,
+        model: input.model ?? null,
+        selection_strategy: input.selectionStrategy ?? null,
+        workflow_mode: input.workflowMode ?? null,
+        updated_at: updatedAt.toISOString(),
+      });
+    if (error) throw error;
+    return {
+      provider: input.provider,
+      model: input.model,
+      selectionStrategy: input.selectionStrategy,
+      workflowMode: input.workflowMode,
+      updatedAt,
+    };
+  }
+
+  // --- Destructive audit log (Group 6.3) ---
+
+  async appendDestructiveAudit(row: DestructiveAuditRow): Promise<void> {
+    const { error } = await this.getSupabase()
+      .from("destructive_audits")
+      .insert({
+        id: row.id,
+        tool: row.tool,
+        project_id: row.projectId,
+        reason: row.reason,
+        affected_ids: row.affectedIds, // jsonb
+        invoked_by: row.invokedBy,
+        metadata: row.metadata ?? null, // jsonb
+        correlation_id: row.correlationId ?? null,
+        created_at: row.createdAt.toISOString(),
+      });
+    if (error) throw error;
+  }
+
+  async listDestructiveAudits(filter?: DestructiveAuditFilter): Promise<DestructiveAuditRow[]> {
+    let query = this.getSupabase().from("destructive_audits").select("*");
+    if (filter?.projectId) query = query.eq("project_id", filter.projectId);
+    if (filter?.tool) query = query.eq("tool", filter.tool);
+    query = query.order("created_at", { ascending: false });
+    if (filter?.limit && filter.limit > 0) query = query.limit(Math.floor(filter.limit));
+    const { data, error } = await query;
+    if (error) throw error;
+    return (data || []).map((r: any) => ({
+      id: r.id,
+      tool: r.tool,
+      projectId: r.project_id,
+      reason: r.reason,
+      affectedIds: r.affected_ids,
+      invokedBy: r.invoked_by,
+      metadata: r.metadata ?? undefined,
+      correlationId: r.correlation_id ?? undefined,
+      createdAt: new Date(r.created_at),
+    }));
+  }
 }

@@ -1,0 +1,775 @@
+{
+  "nodes": [
+    {
+      "id": "d_d_drive_projects_mcp_servers_agent_flow_docs_js_i18n_js",
+      "label": "i18n.js",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\i18n.js",
+      "source_location": "L1"
+    },
+    {
+      "id": "i18n_applytranslations",
+      "label": "applyTranslations()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\i18n.js",
+      "source_location": "L331"
+    },
+    {
+      "id": "i18n_setlanguage",
+      "label": "setLanguage()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\i18n.js",
+      "source_location": "L360"
+    },
+    {
+      "id": "i18n_getpreferredlanguage",
+      "label": "getPreferredLanguage()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\i18n.js",
+      "source_location": "L381"
+    },
+    {
+      "id": "i18n_initializelanguage",
+      "label": "initializeLanguage()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\i18n.js",
+      "source_location": "L410"
+    },
+    {
+      "id": "i18n_createdynamicelement",
+      "label": "createDynamicElement()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\i18n.js",
+      "source_location": "L439"
+    },
+    {
+      "id": "i18n_translatetext",
+      "label": "translateText()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\i18n.js",
+      "source_location": "L461"
+    },
+    {
+      "id": "i18n_batchapplytranslations",
+      "label": "batchApplyTranslations()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\i18n.js",
+      "source_location": "L472"
+    },
+    {
+      "id": "i18n_setlanguagewithanimation",
+      "label": "setLanguageWithAnimation()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\i18n.js",
+      "source_location": "L501"
+    },
+    {
+      "id": "i18n_safetranslate",
+      "label": "safeTranslate()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\i18n.js",
+      "source_location": "L556"
+    },
+    {
+      "id": "i18n_storageavailable",
+      "label": "storageAvailable()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\i18n.js",
+      "source_location": "L579"
+    },
+    {
+      "id": "i18n_enhancedinitializelanguage",
+      "label": "enhancedInitializeLanguage()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\i18n.js",
+      "source_location": "L606"
+    },
+    {
+      "id": "i18n_enhancedsetlanguage",
+      "label": "enhancedSetLanguage()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\i18n.js",
+      "source_location": "L642"
+    },
+    {
+      "id": "i18n_i18ncompatibilitytest",
+      "label": "i18nCompatibilityTest()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\i18n.js",
+      "source_location": "L706"
+    }
+  ],
+  "edges": [
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_docs_js_i18n_js",
+      "target": "i18n_applytranslations",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\i18n.js",
+      "source_location": "L331",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_docs_js_i18n_js",
+      "target": "i18n_setlanguage",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\i18n.js",
+      "source_location": "L360",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_docs_js_i18n_js",
+      "target": "i18n_getpreferredlanguage",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\i18n.js",
+      "source_location": "L381",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_docs_js_i18n_js",
+      "target": "i18n_initializelanguage",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\i18n.js",
+      "source_location": "L410",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_docs_js_i18n_js",
+      "target": "i18n_createdynamicelement",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\i18n.js",
+      "source_location": "L439",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_docs_js_i18n_js",
+      "target": "i18n_translatetext",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\i18n.js",
+      "source_location": "L461",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_docs_js_i18n_js",
+      "target": "i18n_batchapplytranslations",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\i18n.js",
+      "source_location": "L472",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_docs_js_i18n_js",
+      "target": "i18n_setlanguagewithanimation",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\i18n.js",
+      "source_location": "L501",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_docs_js_i18n_js",
+      "target": "i18n_safetranslate",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\i18n.js",
+      "source_location": "L556",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_docs_js_i18n_js",
+      "target": "i18n_storageavailable",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\i18n.js",
+      "source_location": "L579",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_docs_js_i18n_js",
+      "target": "i18n_enhancedinitializelanguage",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\i18n.js",
+      "source_location": "L606",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_docs_js_i18n_js",
+      "target": "i18n_enhancedsetlanguage",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\i18n.js",
+      "source_location": "L642",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_docs_js_i18n_js",
+      "target": "i18n_i18ncompatibilitytest",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\i18n.js",
+      "source_location": "L706",
+      "weight": 1.0
+    },
+    {
+      "source": "i18n_setlanguage",
+      "target": "i18n_applytranslations",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\i18n.js",
+      "source_location": "L365",
+      "weight": 1.0
+    },
+    {
+      "source": "i18n_initializelanguage",
+      "target": "i18n_getpreferredlanguage",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\i18n.js",
+      "source_location": "L411",
+      "weight": 1.0
+    },
+    {
+      "source": "i18n_initializelanguage",
+      "target": "i18n_setlanguage",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\i18n.js",
+      "source_location": "L412",
+      "weight": 1.0
+    },
+    {
+      "source": "i18n_setlanguagewithanimation",
+      "target": "i18n_setlanguage",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\i18n.js",
+      "source_location": "L507",
+      "weight": 1.0
+    },
+    {
+      "source": "i18n_enhancedinitializelanguage",
+      "target": "i18n_storageavailable",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\i18n.js",
+      "source_location": "L609",
+      "weight": 1.0
+    },
+    {
+      "source": "i18n_enhancedinitializelanguage",
+      "target": "i18n_setlanguage",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\i18n.js",
+      "source_location": "L624",
+      "weight": 1.0
+    },
+    {
+      "source": "i18n_enhancedsetlanguage",
+      "target": "i18n_storageavailable",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\i18n.js",
+      "source_location": "L652",
+      "weight": 1.0
+    },
+    {
+      "source": "i18n_enhancedsetlanguage",
+      "target": "i18n_applytranslations",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\i18n.js",
+      "source_location": "L660",
+      "weight": 1.0
+    },
+    {
+      "source": "i18n_i18ncompatibilitytest",
+      "target": "i18n_storageavailable",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\i18n.js",
+      "source_location": "L721",
+      "weight": 1.0
+    },
+    {
+      "source": "i18n_i18ncompatibilitytest",
+      "target": "i18n_enhancedsetlanguage",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\i18n.js",
+      "source_location": "L742",
+      "weight": 1.0
+    },
+    {
+      "source": "i18n_i18ncompatibilitytest",
+      "target": "i18n_setlanguage",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\i18n.js",
+      "source_location": "L744",
+      "weight": 1.0
+    },
+    {
+      "source": "i18n_i18ncompatibilitytest",
+      "target": "i18n_createdynamicelement",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\i18n.js",
+      "source_location": "L805",
+      "weight": 1.0
+    }
+  ],
+  "raw_calls": [
+    {
+      "caller_nid": "i18n_applytranslations",
+      "callee": "error",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\i18n.js",
+      "source_location": "L334"
+    },
+    {
+      "caller_nid": "i18n_applytranslations",
+      "callee": "forEach",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\i18n.js",
+      "source_location": "L339"
+    },
+    {
+      "caller_nid": "i18n_applytranslations",
+      "callee": "querySelectorAll",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\i18n.js",
+      "source_location": "L339"
+    },
+    {
+      "caller_nid": "i18n_applytranslations",
+      "callee": "forEach",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\i18n.js",
+      "source_location": "L349"
+    },
+    {
+      "caller_nid": "i18n_applytranslations",
+      "callee": "querySelectorAll",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\i18n.js",
+      "source_location": "L349"
+    },
+    {
+      "caller_nid": "i18n_setlanguage",
+      "callee": "setItem",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\i18n.js",
+      "source_location": "L362"
+    },
+    {
+      "caller_nid": "i18n_setlanguage",
+      "callee": "forEach",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\i18n.js",
+      "source_location": "L368"
+    },
+    {
+      "caller_nid": "i18n_setlanguage",
+      "callee": "querySelectorAll",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\i18n.js",
+      "source_location": "L368"
+    },
+    {
+      "caller_nid": "i18n_setlanguage",
+      "callee": "getAttribute",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\i18n.js",
+      "source_location": "L369"
+    },
+    {
+      "caller_nid": "i18n_setlanguage",
+      "callee": "add",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\i18n.js",
+      "source_location": "L370"
+    },
+    {
+      "caller_nid": "i18n_setlanguage",
+      "callee": "remove",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\i18n.js",
+      "source_location": "L372"
+    },
+    {
+      "caller_nid": "i18n_setlanguage",
+      "callee": "setAttribute",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\i18n.js",
+      "source_location": "L377"
+    },
+    {
+      "caller_nid": "i18n_getpreferredlanguage",
+      "callee": "getItem",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\i18n.js",
+      "source_location": "L383"
+    },
+    {
+      "caller_nid": "i18n_getpreferredlanguage",
+      "callee": "split",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\i18n.js",
+      "source_location": "L397"
+    },
+    {
+      "caller_nid": "i18n_getpreferredlanguage",
+      "callee": "startsWith",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\i18n.js",
+      "source_location": "L399"
+    },
+    {
+      "caller_nid": "i18n_createdynamicelement",
+      "callee": "createElement",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\i18n.js",
+      "source_location": "L440"
+    },
+    {
+      "caller_nid": "i18n_createdynamicelement",
+      "callee": "setAttribute",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\i18n.js",
+      "source_location": "L441"
+    },
+    {
+      "caller_nid": "i18n_createdynamicelement",
+      "callee": "getItem",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\i18n.js",
+      "source_location": "L444"
+    },
+    {
+      "caller_nid": "i18n_translatetext",
+      "callee": "getItem",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\i18n.js",
+      "source_location": "L462"
+    },
+    {
+      "caller_nid": "i18n_batchapplytranslations",
+      "callee": "addEventListener",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\i18n.js",
+      "source_location": "L474"
+    },
+    {
+      "caller_nid": "i18n_batchapplytranslations",
+      "callee": "setTimeout",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\i18n.js",
+      "source_location": "L476"
+    },
+    {
+      "caller_nid": "i18n_batchapplytranslations",
+      "callee": "querySelectorAll",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\i18n.js",
+      "source_location": "L477"
+    },
+    {
+      "caller_nid": "i18n_batchapplytranslations",
+      "callee": "getItem",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\i18n.js",
+      "source_location": "L479"
+    },
+    {
+      "caller_nid": "i18n_batchapplytranslations",
+      "callee": "setTimeout",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\i18n.js",
+      "source_location": "L482"
+    },
+    {
+      "caller_nid": "i18n_batchapplytranslations",
+      "callee": "call",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\i18n.js",
+      "source_location": "L483"
+    },
+    {
+      "caller_nid": "i18n_batchapplytranslations",
+      "callee": "forEach",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\i18n.js",
+      "source_location": "L484"
+    },
+    {
+      "caller_nid": "i18n_batchapplytranslations",
+      "callee": "getAttribute",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\i18n.js",
+      "source_location": "L486"
+    },
+    {
+      "caller_nid": "i18n_setlanguagewithanimation",
+      "callee": "add",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\i18n.js",
+      "source_location": "L503"
+    },
+    {
+      "caller_nid": "i18n_setlanguagewithanimation",
+      "callee": "setTimeout",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\i18n.js",
+      "source_location": "L505"
+    },
+    {
+      "caller_nid": "i18n_setlanguagewithanimation",
+      "callee": "remove",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\i18n.js",
+      "source_location": "L510"
+    },
+    {
+      "caller_nid": "i18n_safetranslate",
+      "callee": "getItem",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\i18n.js",
+      "source_location": "L558"
+    },
+    {
+      "caller_nid": "i18n_safetranslate",
+      "callee": "warn",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\i18n.js",
+      "source_location": "L564"
+    },
+    {
+      "caller_nid": "i18n_safetranslate",
+      "callee": "error",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\i18n.js",
+      "source_location": "L569"
+    },
+    {
+      "caller_nid": "i18n_storageavailable",
+      "callee": "setItem",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\i18n.js",
+      "source_location": "L583"
+    },
+    {
+      "caller_nid": "i18n_storageavailable",
+      "callee": "removeItem",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\i18n.js",
+      "source_location": "L584"
+    },
+    {
+      "caller_nid": "i18n_enhancedinitializelanguage",
+      "callee": "getItem",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\i18n.js",
+      "source_location": "L610"
+    },
+    {
+      "caller_nid": "i18n_enhancedinitializelanguage",
+      "callee": "startsWith",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\i18n.js",
+      "source_location": "L615"
+    },
+    {
+      "caller_nid": "i18n_enhancedinitializelanguage",
+      "callee": "warn",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\i18n.js",
+      "source_location": "L620"
+    },
+    {
+      "caller_nid": "i18n_enhancedinitializelanguage",
+      "callee": "warn",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\i18n.js",
+      "source_location": "L627"
+    },
+    {
+      "caller_nid": "i18n_enhancedinitializelanguage",
+      "callee": "error",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\i18n.js",
+      "source_location": "L631"
+    },
+    {
+      "caller_nid": "i18n_enhancedinitializelanguage",
+      "callee": "error",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\i18n.js",
+      "source_location": "L636"
+    },
+    {
+      "caller_nid": "i18n_enhancedsetlanguage",
+      "callee": "warn",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\i18n.js",
+      "source_location": "L646"
+    },
+    {
+      "caller_nid": "i18n_enhancedsetlanguage",
+      "callee": "setItem",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\i18n.js",
+      "source_location": "L653"
+    },
+    {
+      "caller_nid": "i18n_enhancedsetlanguage",
+      "callee": "warn",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\i18n.js",
+      "source_location": "L656"
+    },
+    {
+      "caller_nid": "i18n_enhancedsetlanguage",
+      "callee": "forEach",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\i18n.js",
+      "source_location": "L664"
+    },
+    {
+      "caller_nid": "i18n_enhancedsetlanguage",
+      "callee": "querySelectorAll",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\i18n.js",
+      "source_location": "L664"
+    },
+    {
+      "caller_nid": "i18n_enhancedsetlanguage",
+      "callee": "getAttribute",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\i18n.js",
+      "source_location": "L665"
+    },
+    {
+      "caller_nid": "i18n_enhancedsetlanguage",
+      "callee": "add",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\i18n.js",
+      "source_location": "L666"
+    },
+    {
+      "caller_nid": "i18n_enhancedsetlanguage",
+      "callee": "remove",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\i18n.js",
+      "source_location": "L668"
+    },
+    {
+      "caller_nid": "i18n_enhancedsetlanguage",
+      "callee": "warn",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\i18n.js",
+      "source_location": "L672"
+    },
+    {
+      "caller_nid": "i18n_enhancedsetlanguage",
+      "callee": "setAttribute",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\i18n.js",
+      "source_location": "L677"
+    },
+    {
+      "caller_nid": "i18n_enhancedsetlanguage",
+      "callee": "warn",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\i18n.js",
+      "source_location": "L679"
+    },
+    {
+      "caller_nid": "i18n_enhancedsetlanguage",
+      "callee": "dispatchEvent",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\i18n.js",
+      "source_location": "L687"
+    },
+    {
+      "caller_nid": "i18n_enhancedsetlanguage",
+      "callee": "warn",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\i18n.js",
+      "source_location": "L689"
+    },
+    {
+      "caller_nid": "i18n_enhancedsetlanguage",
+      "callee": "error",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\i18n.js",
+      "source_location": "L692"
+    },
+    {
+      "caller_nid": "i18n_i18ncompatibilitytest",
+      "callee": "push",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\i18n.js",
+      "source_location": "L722"
+    },
+    {
+      "caller_nid": "i18n_i18ncompatibilitytest",
+      "callee": "push",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\i18n.js",
+      "source_location": "L726"
+    },
+    {
+      "caller_nid": "i18n_i18ncompatibilitytest",
+      "callee": "getItem",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\i18n.js",
+      "source_location": "L734"
+    },
+    {
+      "caller_nid": "i18n_i18ncompatibilitytest",
+      "callee": "getItem",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\i18n.js",
+      "source_location": "L752"
+    },
+    {
+      "caller_nid": "i18n_i18ncompatibilitytest",
+      "callee": "push",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\i18n.js",
+      "source_location": "L755"
+    },
+    {
+      "caller_nid": "i18n_i18ncompatibilitytest",
+      "callee": "push",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\i18n.js",
+      "source_location": "L766"
+    },
+    {
+      "caller_nid": "i18n_i18ncompatibilitytest",
+      "callee": "querySelectorAll",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\i18n.js",
+      "source_location": "L772"
+    },
+    {
+      "caller_nid": "i18n_i18ncompatibilitytest",
+      "callee": "forEach",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\i18n.js",
+      "source_location": "L776"
+    },
+    {
+      "caller_nid": "i18n_i18ncompatibilitytest",
+      "callee": "push",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\i18n.js",
+      "source_location": "L783"
+    },
+    {
+      "caller_nid": "i18n_i18ncompatibilitytest",
+      "callee": "push",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\i18n.js",
+      "source_location": "L790"
+    },
+    {
+      "caller_nid": "i18n_i18ncompatibilitytest",
+      "callee": "push",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\i18n.js",
+      "source_location": "L793"
+    },
+    {
+      "caller_nid": "i18n_i18ncompatibilitytest",
+      "callee": "getAttribute",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\i18n.js",
+      "source_location": "L810"
+    },
+    {
+      "caller_nid": "i18n_i18ncompatibilitytest",
+      "callee": "push",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\i18n.js",
+      "source_location": "L816"
+    },
+    {
+      "caller_nid": "i18n_i18ncompatibilitytest",
+      "callee": "push",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\i18n.js",
+      "source_location": "L820"
+    },
+    {
+      "caller_nid": "i18n_i18ncompatibilitytest",
+      "callee": "push",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\i18n.js",
+      "source_location": "L823"
+    },
+    {
+      "caller_nid": "i18n_i18ncompatibilitytest",
+      "callee": "log",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\i18n.js",
+      "source_location": "L827"
+    },
+    {
+      "caller_nid": "i18n_i18ncompatibilitytest",
+      "callee": "table",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\i18n.js",
+      "source_location": "L833"
+    },
+    {
+      "caller_nid": "i18n_i18ncompatibilitytest",
+      "callee": "error",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\i18n.js",
+      "source_location": "L841"
+    },
+    {
+      "caller_nid": "i18n_i18ncompatibilitytest",
+      "callee": "warn",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\docs\\js\\i18n.js",
+      "source_location": "L845"
+    }
+  ]
+}

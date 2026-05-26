@@ -1,0 +1,1475 @@
+{
+  "nodes": [
+    {
+      "id": "d_d_drive_projects_mcp_servers_agent_flow_src_models_taskmodel_ts",
+      "label": "taskModel.ts",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L1"
+    },
+    {
+      "id": "taskmodel_ensuredatadir",
+      "label": "ensureDataDir()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L41"
+    },
+    {
+      "id": "taskmodel_notifyupdate",
+      "label": "notifyUpdate()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L92"
+    },
+    {
+      "id": "taskmodel_getalltasks",
+      "label": "getAllTasks()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L96"
+    },
+    {
+      "id": "taskmodel_gettasksbyproject",
+      "label": "getTasksByProject()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L102"
+    },
+    {
+      "id": "taskmodel_gettaskbyid",
+      "label": "getTaskById()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L109"
+    },
+    {
+      "id": "taskmodel_createtask",
+      "label": "createTask()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L115"
+    },
+    {
+      "id": "taskmodel_updatetask",
+      "label": "updateTask()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L177"
+    },
+    {
+      "id": "taskmodel_updatetaskstatus",
+      "label": "updateTaskStatus()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L220"
+    },
+    {
+      "id": "taskmodel_updatetasksummary",
+      "label": "updateTaskSummary()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L234"
+    },
+    {
+      "id": "taskmodel_updatetaskconversationhistory",
+      "label": "updateTaskConversationHistory()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L244"
+    },
+    {
+      "id": "taskmodel_updatetaskcontent",
+      "label": "updateTaskContent()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L268"
+    },
+    {
+      "id": "taskmodel_updatetaskrelatedfiles",
+      "label": "updateTaskRelatedFiles()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L330"
+    },
+    {
+      "id": "taskmodel_batchcreateorupdatetasks",
+      "label": "batchCreateOrUpdateTasks()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L358"
+    },
+    {
+      "id": "taskmodel_recalculatetaskorder",
+      "label": "recalculateTaskOrder()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L512"
+    },
+    {
+      "id": "taskmodel_reordertasks",
+      "label": "reorderTasks()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L529"
+    },
+    {
+      "id": "taskmodel_canexecutetask",
+      "label": "canExecuteTask()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L619"
+    },
+    {
+      "id": "taskmodel_deletetask",
+      "label": "deleteTask()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L645"
+    },
+    {
+      "id": "taskmodel_clearalltasks",
+      "label": "clearAllTasks()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L678"
+    },
+    {
+      "id": "taskmodel_assesstaskcomplexity",
+      "label": "assessTaskComplexity()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L698"
+    },
+    {
+      "id": "taskmodel_searchtaskswithcommand",
+      "label": "searchTasksWithCommand()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L747"
+    }
+  ],
+  "edges": [
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_models_taskmodel_ts",
+      "target": "d_d_drive_projects_mcp_servers_agent_flow_src_types_index_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_models_taskmodel_ts",
+      "target": "uuid",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L10",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_models_taskmodel_ts",
+      "target": "url",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L11",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_models_taskmodel_ts",
+      "target": "path",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L12",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_models_taskmodel_ts",
+      "target": "d_d_drive_projects_mcp_servers_agent_flow_src_models_db_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L15",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_models_taskmodel_ts",
+      "target": "d_d_drive_projects_mcp_servers_agent_flow_src_models_persistence_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L16",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_models_taskmodel_ts",
+      "target": "d_d_drive_projects_mcp_servers_agent_flow_src_utils_events_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L23",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_models_taskmodel_ts",
+      "target": "d_d_drive_projects_mcp_servers_agent_flow_src_models_projectmodel_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L24",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_models_taskmodel_ts",
+      "target": "d_d_drive_projects_mcp_servers_agent_flow_src_utils_taskgraph_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L29",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_models_taskmodel_ts",
+      "target": "taskmodel_ensuredatadir",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L41",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_models_taskmodel_ts",
+      "target": "taskmodel_notifyupdate",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L92",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_models_taskmodel_ts",
+      "target": "taskmodel_getalltasks",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L96",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_models_taskmodel_ts",
+      "target": "taskmodel_gettasksbyproject",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L102",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_models_taskmodel_ts",
+      "target": "taskmodel_gettaskbyid",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L109",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_models_taskmodel_ts",
+      "target": "taskmodel_createtask",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L115",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_models_taskmodel_ts",
+      "target": "taskmodel_updatetask",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L177",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_models_taskmodel_ts",
+      "target": "taskmodel_updatetaskstatus",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L220",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_models_taskmodel_ts",
+      "target": "taskmodel_updatetasksummary",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L234",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_models_taskmodel_ts",
+      "target": "taskmodel_updatetaskconversationhistory",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L244",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_models_taskmodel_ts",
+      "target": "taskmodel_updatetaskcontent",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L268",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_models_taskmodel_ts",
+      "target": "taskmodel_updatetaskrelatedfiles",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L330",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_models_taskmodel_ts",
+      "target": "taskmodel_batchcreateorupdatetasks",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L358",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_models_taskmodel_ts",
+      "target": "taskmodel_recalculatetaskorder",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L512",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_models_taskmodel_ts",
+      "target": "taskmodel_reordertasks",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L529",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_models_taskmodel_ts",
+      "target": "taskmodel_canexecutetask",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L619",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_models_taskmodel_ts",
+      "target": "taskmodel_deletetask",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L645",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_models_taskmodel_ts",
+      "target": "taskmodel_clearalltasks",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L678",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_models_taskmodel_ts",
+      "target": "taskmodel_assesstaskcomplexity",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L698",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_models_taskmodel_ts",
+      "target": "taskmodel_searchtaskswithcommand",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L747",
+      "weight": 1.0
+    },
+    {
+      "source": "taskmodel_ensuredatadir",
+      "target": "taskmodel_getalltasks",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L53",
+      "weight": 1.0
+    },
+    {
+      "source": "taskmodel_ensuredatadir",
+      "target": "taskmodel_deletetask",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L64",
+      "weight": 1.0
+    },
+    {
+      "source": "taskmodel_ensuredatadir",
+      "target": "taskmodel_recalculatetaskorder",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L79",
+      "weight": 1.0
+    },
+    {
+      "source": "taskmodel_getalltasks",
+      "target": "taskmodel_ensuredatadir",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L97",
+      "weight": 1.0
+    },
+    {
+      "source": "taskmodel_gettasksbyproject",
+      "target": "taskmodel_ensuredatadir",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L103",
+      "weight": 1.0
+    },
+    {
+      "source": "taskmodel_gettasksbyproject",
+      "target": "taskmodel_getalltasks",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L104",
+      "weight": 1.0
+    },
+    {
+      "source": "taskmodel_gettaskbyid",
+      "target": "taskmodel_ensuredatadir",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L110",
+      "weight": 1.0
+    },
+    {
+      "source": "taskmodel_createtask",
+      "target": "taskmodel_ensuredatadir",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L123",
+      "weight": 1.0
+    },
+    {
+      "source": "taskmodel_createtask",
+      "target": "taskmodel_recalculatetaskorder",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L169",
+      "weight": 1.0
+    },
+    {
+      "source": "taskmodel_createtask",
+      "target": "taskmodel_notifyupdate",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L171",
+      "weight": 1.0
+    },
+    {
+      "source": "taskmodel_updatetask",
+      "target": "taskmodel_ensuredatadir",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L181",
+      "weight": 1.0
+    },
+    {
+      "source": "taskmodel_updatetask",
+      "target": "taskmodel_recalculatetaskorder",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L207",
+      "weight": 1.0
+    },
+    {
+      "source": "taskmodel_updatetask",
+      "target": "taskmodel_notifyupdate",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L214",
+      "weight": 1.0
+    },
+    {
+      "source": "taskmodel_updatetaskstatus",
+      "target": "taskmodel_updatetask",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L230",
+      "weight": 1.0
+    },
+    {
+      "source": "taskmodel_updatetasksummary",
+      "target": "taskmodel_updatetask",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L238",
+      "weight": 1.0
+    },
+    {
+      "source": "taskmodel_updatetaskconversationhistory",
+      "target": "taskmodel_gettaskbyid",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L250",
+      "weight": 1.0
+    },
+    {
+      "source": "taskmodel_updatetaskconversationhistory",
+      "target": "taskmodel_updatetask",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L264",
+      "weight": 1.0
+    },
+    {
+      "source": "taskmodel_updatetaskcontent",
+      "target": "taskmodel_gettaskbyid",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L284",
+      "weight": 1.0
+    },
+    {
+      "source": "taskmodel_updatetaskcontent",
+      "target": "taskmodel_updatetask",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L316",
+      "weight": 1.0
+    },
+    {
+      "source": "taskmodel_updatetaskrelatedfiles",
+      "target": "taskmodel_gettaskbyid",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L334",
+      "weight": 1.0
+    },
+    {
+      "source": "taskmodel_updatetaskrelatedfiles",
+      "target": "taskmodel_updatetask",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L344",
+      "weight": 1.0
+    },
+    {
+      "source": "taskmodel_batchcreateorupdatetasks",
+      "target": "taskmodel_ensuredatadir",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L375",
+      "weight": 1.0
+    },
+    {
+      "source": "taskmodel_batchcreateorupdatetasks",
+      "target": "taskmodel_getalltasks",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L376",
+      "weight": 1.0
+    },
+    {
+      "source": "taskmodel_batchcreateorupdatetasks",
+      "target": "taskmodel_deletetask",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L398",
+      "weight": 1.0
+    },
+    {
+      "source": "taskmodel_batchcreateorupdatetasks",
+      "target": "taskmodel_recalculatetaskorder",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L499",
+      "weight": 1.0
+    },
+    {
+      "source": "taskmodel_batchcreateorupdatetasks",
+      "target": "taskmodel_notifyupdate",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L504",
+      "weight": 1.0
+    },
+    {
+      "source": "taskmodel_recalculatetaskorder",
+      "target": "taskmodel_ensuredatadir",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L513",
+      "weight": 1.0
+    },
+    {
+      "source": "taskmodel_recalculatetaskorder",
+      "target": "taskmodel_gettasksbyproject",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L514",
+      "weight": 1.0
+    },
+    {
+      "source": "taskmodel_reordertasks",
+      "target": "taskmodel_ensuredatadir",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L530",
+      "weight": 1.0
+    },
+    {
+      "source": "taskmodel_reordertasks",
+      "target": "taskmodel_gettasksbyproject",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L531",
+      "weight": 1.0
+    },
+    {
+      "source": "taskmodel_reordertasks",
+      "target": "taskmodel_notifyupdate",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L614",
+      "weight": 1.0
+    },
+    {
+      "source": "taskmodel_canexecutetask",
+      "target": "taskmodel_ensuredatadir",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L622",
+      "weight": 1.0
+    },
+    {
+      "source": "taskmodel_canexecutetask",
+      "target": "taskmodel_gettaskbyid",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L623",
+      "weight": 1.0
+    },
+    {
+      "source": "taskmodel_canexecutetask",
+      "target": "taskmodel_getalltasks",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L628",
+      "weight": 1.0
+    },
+    {
+      "source": "taskmodel_deletetask",
+      "target": "taskmodel_ensuredatadir",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L648",
+      "weight": 1.0
+    },
+    {
+      "source": "taskmodel_deletetask",
+      "target": "taskmodel_getalltasks",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L649",
+      "weight": 1.0
+    },
+    {
+      "source": "taskmodel_deletetask",
+      "target": "taskmodel_recalculatetaskorder",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L669",
+      "weight": 1.0
+    },
+    {
+      "source": "taskmodel_deletetask",
+      "target": "taskmodel_notifyupdate",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L672",
+      "weight": 1.0
+    },
+    {
+      "source": "taskmodel_clearalltasks",
+      "target": "taskmodel_ensuredatadir",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L683",
+      "weight": 1.0
+    },
+    {
+      "source": "taskmodel_clearalltasks",
+      "target": "taskmodel_getalltasks",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L684",
+      "weight": 1.0
+    },
+    {
+      "source": "taskmodel_clearalltasks",
+      "target": "taskmodel_deletetask",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L688",
+      "weight": 1.0
+    },
+    {
+      "source": "taskmodel_clearalltasks",
+      "target": "taskmodel_notifyupdate",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L692",
+      "weight": 1.0
+    },
+    {
+      "source": "taskmodel_assesstaskcomplexity",
+      "target": "taskmodel_gettaskbyid",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L701",
+      "weight": 1.0
+    },
+    {
+      "source": "taskmodel_searchtaskswithcommand",
+      "target": "taskmodel_ensuredatadir",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L762",
+      "weight": 1.0
+    },
+    {
+      "source": "taskmodel_searchtaskswithcommand",
+      "target": "taskmodel_getalltasks",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L763",
+      "weight": 1.0
+    }
+  ],
+  "raw_calls": [
+    {
+      "caller_nid": "taskmodel_ensuredatadir",
+      "callee": "ensureDirectories",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L44"
+    },
+    {
+      "caller_nid": "taskmodel_ensuredatadir",
+      "callee": "init",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L45"
+    },
+    {
+      "caller_nid": "taskmodel_ensuredatadir",
+      "callee": "archiveOldTasks",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L56"
+    },
+    {
+      "caller_nid": "taskmodel_ensuredatadir",
+      "callee": "map",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L60"
+    },
+    {
+      "caller_nid": "taskmodel_ensuredatadir",
+      "callee": "filter",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L61"
+    },
+    {
+      "caller_nid": "taskmodel_ensuredatadir",
+      "callee": "error",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L66"
+    },
+    {
+      "caller_nid": "taskmodel_ensuredatadir",
+      "callee": "getSearchIndex",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L70"
+    },
+    {
+      "caller_nid": "taskmodel_ensuredatadir",
+      "callee": "rebuild",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L71"
+    },
+    {
+      "caller_nid": "taskmodel_ensuredatadir",
+      "callee": "import",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L76"
+    },
+    {
+      "caller_nid": "taskmodel_ensuredatadir",
+      "callee": "getAllProjects",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L77"
+    },
+    {
+      "caller_nid": "taskmodel_ensuredatadir",
+      "callee": "error",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L81"
+    },
+    {
+      "caller_nid": "taskmodel_ensuredatadir",
+      "callee": "error",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L83"
+    },
+    {
+      "caller_nid": "taskmodel_ensuredatadir",
+      "callee": "error",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L87"
+    },
+    {
+      "caller_nid": "taskmodel_notifyupdate",
+      "callee": "emit",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L93"
+    },
+    {
+      "caller_nid": "taskmodel_gettasksbyproject",
+      "callee": "filter",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L105"
+    },
+    {
+      "caller_nid": "taskmodel_gettaskbyid",
+      "callee": "getTask",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L111"
+    },
+    {
+      "caller_nid": "taskmodel_createtask",
+      "callee": "getCurrentProjectId",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L129"
+    },
+    {
+      "caller_nid": "taskmodel_createtask",
+      "callee": "cwd",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L134"
+    },
+    {
+      "caller_nid": "taskmodel_createtask",
+      "callee": "getOrCreateProjectFromPath",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L135"
+    },
+    {
+      "caller_nid": "taskmodel_createtask",
+      "callee": "map",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L146"
+    },
+    {
+      "caller_nid": "taskmodel_createtask",
+      "callee": "uuidv4",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L151"
+    },
+    {
+      "caller_nid": "taskmodel_createtask",
+      "callee": "saveTask",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L163"
+    },
+    {
+      "caller_nid": "taskmodel_createtask",
+      "callee": "add",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L166"
+    },
+    {
+      "caller_nid": "taskmodel_createtask",
+      "callee": "getSearchIndex",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L166"
+    },
+    {
+      "caller_nid": "taskmodel_updatetask",
+      "callee": "getTask",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L182"
+    },
+    {
+      "caller_nid": "taskmodel_updatetask",
+      "callee": "saveTask",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L198"
+    },
+    {
+      "caller_nid": "taskmodel_updatetask",
+      "callee": "add",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L202"
+    },
+    {
+      "caller_nid": "taskmodel_updatetask",
+      "callee": "getSearchIndex",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L202"
+    },
+    {
+      "caller_nid": "taskmodel_updatetask",
+      "callee": "error",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L206"
+    },
+    {
+      "caller_nid": "taskmodel_updatetask",
+      "callee": "error",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L210"
+    },
+    {
+      "caller_nid": "taskmodel_updatetaskcontent",
+      "callee": "map",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L301"
+    },
+    {
+      "caller_nid": "taskmodel_updatetaskcontent",
+      "callee": "keys",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L312"
+    },
+    {
+      "caller_nid": "taskmodel_batchcreateorupdatetasks",
+      "callee": "getCurrentProjectId",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L381"
+    },
+    {
+      "caller_nid": "taskmodel_batchcreateorupdatetasks",
+      "callee": "cwd",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L385"
+    },
+    {
+      "caller_nid": "taskmodel_batchcreateorupdatetasks",
+      "callee": "getOrCreateProjectFromPath",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L386"
+    },
+    {
+      "caller_nid": "taskmodel_batchcreateorupdatetasks",
+      "callee": "filter",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L396"
+    },
+    {
+      "caller_nid": "taskmodel_batchcreateorupdatetasks",
+      "callee": "filter",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L397"
+    },
+    {
+      "caller_nid": "taskmodel_batchcreateorupdatetasks",
+      "callee": "map",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L400"
+    },
+    {
+      "caller_nid": "taskmodel_batchcreateorupdatetasks",
+      "callee": "filter",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L401"
+    },
+    {
+      "caller_nid": "taskmodel_batchcreateorupdatetasks",
+      "callee": "forEach",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L415"
+    },
+    {
+      "caller_nid": "taskmodel_batchcreateorupdatetasks",
+      "callee": "forEach",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L417"
+    },
+    {
+      "caller_nid": "taskmodel_batchcreateorupdatetasks",
+      "callee": "has",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L423"
+    },
+    {
+      "caller_nid": "taskmodel_batchcreateorupdatetasks",
+      "callee": "get",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L424"
+    },
+    {
+      "caller_nid": "taskmodel_batchcreateorupdatetasks",
+      "callee": "find",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L425"
+    },
+    {
+      "caller_nid": "taskmodel_batchcreateorupdatetasks",
+      "callee": "push",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L443"
+    },
+    {
+      "caller_nid": "taskmodel_batchcreateorupdatetasks",
+      "callee": "push",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L444"
+    },
+    {
+      "caller_nid": "taskmodel_batchcreateorupdatetasks",
+      "callee": "uuidv4",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L447"
+    },
+    {
+      "caller_nid": "taskmodel_batchcreateorupdatetasks",
+      "callee": "set",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L448"
+    },
+    {
+      "caller_nid": "taskmodel_batchcreateorupdatetasks",
+      "callee": "push",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L467"
+    },
+    {
+      "caller_nid": "taskmodel_batchcreateorupdatetasks",
+      "callee": "push",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L468"
+    },
+    {
+      "caller_nid": "taskmodel_batchcreateorupdatetasks",
+      "callee": "match",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L481"
+    },
+    {
+      "caller_nid": "taskmodel_batchcreateorupdatetasks",
+      "callee": "has",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L482"
+    },
+    {
+      "caller_nid": "taskmodel_batchcreateorupdatetasks",
+      "callee": "get",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L482"
+    },
+    {
+      "caller_nid": "taskmodel_batchcreateorupdatetasks",
+      "callee": "some",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L485"
+    },
+    {
+      "caller_nid": "taskmodel_batchcreateorupdatetasks",
+      "callee": "some",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L485"
+    },
+    {
+      "caller_nid": "taskmodel_batchcreateorupdatetasks",
+      "callee": "push",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L488"
+    },
+    {
+      "caller_nid": "taskmodel_batchcreateorupdatetasks",
+      "callee": "saveTasks",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L495"
+    },
+    {
+      "caller_nid": "taskmodel_batchcreateorupdatetasks",
+      "callee": "rebuild",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L502"
+    },
+    {
+      "caller_nid": "taskmodel_batchcreateorupdatetasks",
+      "callee": "getSearchIndex",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L502"
+    },
+    {
+      "caller_nid": "taskmodel_recalculatetaskorder",
+      "callee": "recalculateOrder",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L518"
+    },
+    {
+      "caller_nid": "taskmodel_recalculatetaskorder",
+      "callee": "saveTasks",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L521"
+    },
+    {
+      "caller_nid": "taskmodel_reordertasks",
+      "callee": "map",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L535"
+    },
+    {
+      "caller_nid": "taskmodel_reordertasks",
+      "callee": "map",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L536"
+    },
+    {
+      "caller_nid": "taskmodel_reordertasks",
+      "callee": "filter",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L536"
+    },
+    {
+      "caller_nid": "taskmodel_reordertasks",
+      "callee": "map",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L580"
+    },
+    {
+      "caller_nid": "taskmodel_reordertasks",
+      "callee": "min",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L581"
+    },
+    {
+      "caller_nid": "taskmodel_reordertasks",
+      "callee": "forEach",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L590"
+    },
+    {
+      "caller_nid": "taskmodel_reordertasks",
+      "callee": "map",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L600"
+    },
+    {
+      "caller_nid": "taskmodel_reordertasks",
+      "callee": "recalculateOrder",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L606"
+    },
+    {
+      "caller_nid": "taskmodel_reordertasks",
+      "callee": "error",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L609"
+    },
+    {
+      "caller_nid": "taskmodel_reordertasks",
+      "callee": "join",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L609"
+    },
+    {
+      "caller_nid": "taskmodel_reordertasks",
+      "callee": "slice",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L609"
+    },
+    {
+      "caller_nid": "taskmodel_reordertasks",
+      "callee": "map",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L609"
+    },
+    {
+      "caller_nid": "taskmodel_reordertasks",
+      "callee": "saveTasks",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L612"
+    },
+    {
+      "caller_nid": "taskmodel_canexecutetask",
+      "callee": "find",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L632"
+    },
+    {
+      "caller_nid": "taskmodel_canexecutetask",
+      "callee": "push",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L634"
+    },
+    {
+      "caller_nid": "taskmodel_deletetask",
+      "callee": "find",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L650"
+    },
+    {
+      "caller_nid": "taskmodel_deletetask",
+      "callee": "filter",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L655"
+    },
+    {
+      "caller_nid": "taskmodel_deletetask",
+      "callee": "join",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L657"
+    },
+    {
+      "caller_nid": "taskmodel_deletetask",
+      "callee": "map",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L657"
+    },
+    {
+      "caller_nid": "taskmodel_deletetask",
+      "callee": "remove",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L662"
+    },
+    {
+      "caller_nid": "taskmodel_deletetask",
+      "callee": "getSearchIndex",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L662"
+    },
+    {
+      "caller_nid": "taskmodel_clearalltasks",
+      "callee": "rebuild",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L691"
+    },
+    {
+      "caller_nid": "taskmodel_clearalltasks",
+      "callee": "getSearchIndex",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L691"
+    },
+    {
+      "caller_nid": "taskmodel_assesstaskcomplexity",
+      "callee": "push",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L725"
+    },
+    {
+      "caller_nid": "taskmodel_assesstaskcomplexity",
+      "callee": "push",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L726"
+    },
+    {
+      "caller_nid": "taskmodel_assesstaskcomplexity",
+      "callee": "push",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L728"
+    },
+    {
+      "caller_nid": "taskmodel_assesstaskcomplexity",
+      "callee": "push",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L729"
+    },
+    {
+      "caller_nid": "taskmodel_assesstaskcomplexity",
+      "callee": "push",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L731"
+    },
+    {
+      "caller_nid": "taskmodel_assesstaskcomplexity",
+      "callee": "push",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L732"
+    },
+    {
+      "caller_nid": "taskmodel_assesstaskcomplexity",
+      "callee": "push",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L733"
+    },
+    {
+      "caller_nid": "taskmodel_assesstaskcomplexity",
+      "callee": "push",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L735"
+    },
+    {
+      "caller_nid": "taskmodel_assesstaskcomplexity",
+      "callee": "push",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L736"
+    },
+    {
+      "caller_nid": "taskmodel_searchtaskswithcommand",
+      "callee": "find",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L768"
+    },
+    {
+      "caller_nid": "taskmodel_searchtaskswithcommand",
+      "callee": "trim",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L770"
+    },
+    {
+      "caller_nid": "taskmodel_searchtaskswithcommand",
+      "callee": "getSearchIndex",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L771"
+    },
+    {
+      "caller_nid": "taskmodel_searchtaskswithcommand",
+      "callee": "isReady",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L772"
+    },
+    {
+      "caller_nid": "taskmodel_searchtaskswithcommand",
+      "callee": "rebuild",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L772"
+    },
+    {
+      "caller_nid": "taskmodel_searchtaskswithcommand",
+      "callee": "search",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L780"
+    },
+    {
+      "caller_nid": "taskmodel_searchtaskswithcommand",
+      "callee": "filter",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L782"
+    },
+    {
+      "caller_nid": "taskmodel_searchtaskswithcommand",
+      "callee": "searchArchives",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L785"
+    },
+    {
+      "caller_nid": "taskmodel_searchtaskswithcommand",
+      "callee": "has",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L787"
+    },
+    {
+      "caller_nid": "taskmodel_searchtaskswithcommand",
+      "callee": "push",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L788"
+    },
+    {
+      "caller_nid": "taskmodel_searchtaskswithcommand",
+      "callee": "sort",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L796"
+    },
+    {
+      "caller_nid": "taskmodel_searchtaskswithcommand",
+      "callee": "ceil",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L805"
+    },
+    {
+      "caller_nid": "taskmodel_searchtaskswithcommand",
+      "callee": "max",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L806"
+    },
+    {
+      "caller_nid": "taskmodel_searchtaskswithcommand",
+      "callee": "min",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L806"
+    },
+    {
+      "caller_nid": "taskmodel_searchtaskswithcommand",
+      "callee": "min",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L808"
+    },
+    {
+      "caller_nid": "taskmodel_searchtaskswithcommand",
+      "callee": "slice",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\taskModel.ts",
+      "source_location": "L809"
+    }
+  ]
+}

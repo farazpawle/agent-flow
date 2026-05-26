@@ -1,8 +1,4 @@
-import {
-  loadPrompt,
-  generatePrompt,
-  loadPromptFromTemplate,
-} from "../loader.js";
+import { loadPrompt, generatePrompt, loadPromptFromTemplate } from "../loader.js";
 
 // Focus type definition
 type FocusMode = "logic" | "vibe" | "debug" | "security" | "performance" | "accessibility";
@@ -13,6 +9,20 @@ interface DesignTokens {
   fonts?: string[];
   mood?: "bold" | "minimal" | "playful" | "elegant" | "dark" | "vibrant";
 }
+
+const PROCESS_THOUGHT_TEMPLATE = {
+  MORE_THOUGHT: "processThought/moreThought.md",
+  COMPLETED_THOUGHT: "processThought/completedThought.md",
+  INDEX: "processThought/index.md",
+  PREVIOUS_CONTEXT: "processThought/previousContext.md",
+  DESIGN_CONTEXT: "processThought/designContext.md",
+  DESIGN_COLORS: "processThought/designColors.md",
+  DESIGN_FONTS: "processThought/designFonts.md",
+  DESIGN_MOOD: "processThought/designMood.md",
+  DEFAULT_TAGS: "processThought/defaultTags.md",
+  DEFAULT_AXIOMS: "processThought/defaultAxioms.md",
+  DEFAULT_ASSUMPTIONS: "processThought/defaultAssumptions.md",
+} as const;
 
 export interface ProcessThoughtPromptParams {
   thought: string;
@@ -38,7 +48,7 @@ function getFocusEmoji(focus: FocusMode): string {
     debug: "🐛",
     security: "🔒",
     performance: "⚡",
-    accessibility: "♿"
+    accessibility: "♿",
   };
   return emojis[focus] || "🧠";
 }
@@ -53,7 +63,7 @@ function getStageEmoji(stage: string): string {
     implementation: "⚙️",
     verification: "✅",
     exploration: "🌟",
-    debugging: "🐛"
+    debugging: "🐛",
   };
   return emojis[stage] || "💭";
 }
@@ -62,57 +72,8 @@ function getStageEmoji(stage: string): string {
  * Get focus-specific guidance based on the focus mode
  */
 function getFocusGuidance(focus: FocusMode): string {
-  switch (focus) {
-    case "logic":
-      return `**Guidance (🔬 Logic Mode):**
-- Prohibit all speculation. Verify every fact before using it.
-- For any doubts, review relevant code or use web search tools.
-- Prioritize correctness, security, and performance.
-- Use established patterns and best practices.`;
-
-    case "vibe":
-      return `**Guidance (🎨 Vibe Mode):**
-- Explore freely and trust your aesthetic intuition.
-- Break conventional rules when it makes the design better.
-- Ask yourself: Does this FEEL right? Does it create the desired mood?
-- Prioritize user experience, visual harmony, and creative impact.
-- Iterate on ideas - the first solution may not be the best.`;
-
-    case "debug":
-      return `**Guidance (🐛 Debug Mode):**
-- Use systematic investigation: binary search, divide and conquer.
-- Check the most recent changes first.
-- Verify assumptions about what the code is doing vs what you expect.
-- Look for common error patterns: off-by-one, null references, race conditions.
-- Use logging and breakpoints to narrow down the issue.`;
-
-    case "security":
-      return `**Guidance (🔒 Security Mode):**
-- Assume all input is malicious until validated.
-- Check authentication, authorization, and data encryption.
-- Look for injection vulnerabilities (SQL, XSS, command injection).
-- Verify secure defaults and fail-safe behaviors.
-- Review attack surface and potential exploit paths.`;
-
-    case "performance":
-      return `**Guidance (⚡ Performance Mode):**
-- Identify bottlenecks before optimizing.
-- Measure before and after - don't assume.
-- Consider algorithmic complexity (Big O).
-- Check for N+1 queries, unnecessary re-renders, memory leaks.
-- Profile in production-like conditions.`;
-
-    case "accessibility":
-      return `**Guidance (♿ Accessibility Mode):**
-- Ensure keyboard navigation works for all interactions.
-- Check color contrast meets WCAG AA (4.5:1 for text).
-- Verify screen reader compatibility with semantic HTML.
-- Add ARIA labels where native semantics are insufficient.
-- Test with actual assistive technologies when possible.`;
-
-    default:
-      return "";
-  }
+  const focusTemplatePath = `processThought/focusGuidance/${focus}.md`;
+  return loadPromptFromTemplate(focusTemplatePath);
 }
 
 /**
@@ -123,28 +84,40 @@ function formatDesignTokens(tokens?: DesignTokens): string {
 
   const parts: string[] = [];
   if (tokens.colors && tokens.colors.length > 0) {
-    parts.push(`Colors: ${tokens.colors.join(", ")}`);
+    parts.push(
+      generatePrompt(loadPromptFromTemplate(PROCESS_THOUGHT_TEMPLATE.DESIGN_COLORS), {
+        colors: tokens.colors.join(", "),
+      })
+    );
   }
   if (tokens.fonts && tokens.fonts.length > 0) {
-    parts.push(`Fonts: ${tokens.fonts.join(", ")}`);
+    parts.push(
+      generatePrompt(loadPromptFromTemplate(PROCESS_THOUGHT_TEMPLATE.DESIGN_FONTS), {
+        fonts: tokens.fonts.join(", "),
+      })
+    );
   }
   if (tokens.mood) {
-    parts.push(`Mood: ${tokens.mood}`);
+    parts.push(
+      generatePrompt(loadPromptFromTemplate(PROCESS_THOUGHT_TEMPLATE.DESIGN_MOOD), {
+        mood: tokens.mood,
+      })
+    );
   }
 
-  return parts.length > 0 ? `\n**Design Context:** ${parts.join(" | ")}` : "";
+  return parts.length > 0
+    ? generatePrompt(loadPromptFromTemplate(PROCESS_THOUGHT_TEMPLATE.DESIGN_CONTEXT), {
+        parts: parts.join(" | "),
+      })
+    : "";
 }
 
-export function getProcessThoughtPrompt(
-  param: ProcessThoughtPromptParams
-): string {
+export function getProcessThoughtPrompt(param: ProcessThoughtPromptParams): string {
   let nextThoughtNeeded = "";
   if (param.nextThoughtNeeded) {
-    nextThoughtNeeded = loadPromptFromTemplate("processThought/moreThought.md");
+    nextThoughtNeeded = loadPromptFromTemplate(PROCESS_THOUGHT_TEMPLATE.MORE_THOUGHT);
   } else {
-    nextThoughtNeeded = loadPromptFromTemplate(
-      "processThought/completedThought.md"
-    );
+    nextThoughtNeeded = loadPromptFromTemplate(PROCESS_THOUGHT_TEMPLATE.COMPLETED_THOUGHT);
   }
 
   const focusGuidance = getFocusGuidance(param.focus);
@@ -152,10 +125,16 @@ export function getProcessThoughtPrompt(
   const stageEmoji = getStageEmoji(param.stage);
   const designTokensDisplay = formatDesignTokens(param.design_tokens);
   const previousSummaryDisplay = param.previous_summary
-    ? `\n**Previous Context:** ${param.previous_summary}`
+    ? generatePrompt(loadPromptFromTemplate(PROCESS_THOUGHT_TEMPLATE.PREVIOUS_CONTEXT), {
+        previous_summary: param.previous_summary,
+      })
     : "";
 
-  const indexTemplate = loadPromptFromTemplate("processThought/index.md");
+  const indexTemplate = loadPromptFromTemplate(PROCESS_THOUGHT_TEMPLATE.INDEX);
+
+  const defaultTags = loadPromptFromTemplate(PROCESS_THOUGHT_TEMPLATE.DEFAULT_TAGS);
+  const defaultAxioms = loadPromptFromTemplate(PROCESS_THOUGHT_TEMPLATE.DEFAULT_AXIOMS);
+  const defaultAssumptions = loadPromptFromTemplate(PROCESS_THOUGHT_TEMPLATE.DEFAULT_ASSUMPTIONS);
 
   const prompt = generatePrompt(indexTemplate, {
     thought: param.thought,
@@ -168,10 +147,9 @@ export function getProcessThoughtPrompt(
     focusGuidance: focusGuidance,
     previousSummary: previousSummaryDisplay,
     designTokens: designTokensDisplay,
-    tags: param.tags.join(", ") || "no tags",
-    axioms_used: param.axioms_used.join(", ") || "no axioms used",
-    assumptions_challenged:
-      param.assumptions_challenged.join(", ") || "no assumptions challenged",
+    tags: param.tags.join(", ") || defaultTags,
+    axioms_used: param.axioms_used.join(", ") || defaultAxioms,
+    assumptions_challenged: param.assumptions_challenged.join(", ") || defaultAssumptions,
     nextThoughtNeeded,
   });
 

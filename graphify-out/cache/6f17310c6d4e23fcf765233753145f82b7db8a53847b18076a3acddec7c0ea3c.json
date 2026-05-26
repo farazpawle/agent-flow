@@ -1,0 +1,290 @@
+{
+  "nodes": [
+    {
+      "id": "d_d_drive_projects_mcp_servers_agent_flow_src_utils_taskgraph_ts",
+      "label": "taskGraph.ts",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\utils\\taskGraph.ts",
+      "source_location": "L1"
+    },
+    {
+      "id": "taskgraph_taskgraph",
+      "label": "TaskGraph",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\utils\\taskGraph.ts",
+      "source_location": "L8"
+    },
+    {
+      "id": "taskgraph_taskgraph_constructor",
+      "label": ".constructor()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\utils\\taskGraph.ts",
+      "source_location": "L13"
+    },
+    {
+      "id": "taskgraph_taskgraph_getcomponents",
+      "label": ".getComponents()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\utils\\taskGraph.ts",
+      "source_location": "L41"
+    },
+    {
+      "id": "taskgraph_taskgraph_topologicalsort",
+      "label": ".topologicalSort()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\utils\\taskGraph.ts",
+      "source_location": "L86"
+    },
+    {
+      "id": "taskgraph_taskgraph_recalculateorder",
+      "label": ".recalculateOrder()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\utils\\taskGraph.ts",
+      "source_location": "L155"
+    }
+  ],
+  "edges": [
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_utils_taskgraph_ts",
+      "target": "d_d_drive_projects_mcp_servers_agent_flow_src_types_index_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\utils\\taskGraph.ts",
+      "source_location": "L2",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_utils_taskgraph_ts",
+      "target": "taskgraph_taskgraph",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\utils\\taskGraph.ts",
+      "source_location": "L8",
+      "weight": 1.0
+    },
+    {
+      "source": "taskgraph_taskgraph",
+      "target": "taskgraph_taskgraph_constructor",
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\utils\\taskGraph.ts",
+      "source_location": "L13",
+      "weight": 1.0
+    },
+    {
+      "source": "taskgraph_taskgraph",
+      "target": "taskgraph_taskgraph_getcomponents",
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\utils\\taskGraph.ts",
+      "source_location": "L41",
+      "weight": 1.0
+    },
+    {
+      "source": "taskgraph_taskgraph",
+      "target": "taskgraph_taskgraph_topologicalsort",
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\utils\\taskGraph.ts",
+      "source_location": "L86",
+      "weight": 1.0
+    },
+    {
+      "source": "taskgraph_taskgraph",
+      "target": "taskgraph_taskgraph_recalculateorder",
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\utils\\taskGraph.ts",
+      "source_location": "L155",
+      "weight": 1.0
+    },
+    {
+      "source": "taskgraph_taskgraph_recalculateorder",
+      "target": "taskgraph_taskgraph_getcomponents",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\utils\\taskGraph.ts",
+      "source_location": "L156",
+      "weight": 1.0
+    },
+    {
+      "source": "taskgraph_taskgraph_recalculateorder",
+      "target": "taskgraph_taskgraph_topologicalsort",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\utils\\taskGraph.ts",
+      "source_location": "L181",
+      "weight": 1.0
+    }
+  ],
+  "raw_calls": [
+    {
+      "caller_nid": "taskgraph_taskgraph_constructor",
+      "callee": "map",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\utils\\taskGraph.ts",
+      "source_location": "L14"
+    },
+    {
+      "caller_nid": "taskgraph_taskgraph_constructor",
+      "callee": "forEach",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\utils\\taskGraph.ts",
+      "source_location": "L19"
+    },
+    {
+      "caller_nid": "taskgraph_taskgraph_constructor",
+      "callee": "forEach",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\utils\\taskGraph.ts",
+      "source_location": "L25"
+    },
+    {
+      "caller_nid": "taskgraph_taskgraph_getcomponents",
+      "callee": "forEach",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\utils\\taskGraph.ts",
+      "source_location": "L47"
+    },
+    {
+      "caller_nid": "taskgraph_taskgraph_getcomponents",
+      "callee": "forEach",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\utils\\taskGraph.ts",
+      "source_location": "L49"
+    },
+    {
+      "caller_nid": "taskgraph_taskgraph_getcomponents",
+      "callee": "keys",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\utils\\taskGraph.ts",
+      "source_location": "L58"
+    },
+    {
+      "caller_nid": "taskgraph_taskgraph_getcomponents",
+      "callee": "has",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\utils\\taskGraph.ts",
+      "source_location": "L59"
+    },
+    {
+      "caller_nid": "taskgraph_taskgraph_getcomponents",
+      "callee": "add",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\utils\\taskGraph.ts",
+      "source_location": "L62"
+    },
+    {
+      "caller_nid": "taskgraph_taskgraph_getcomponents",
+      "callee": "shift",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\utils\\taskGraph.ts",
+      "source_location": "L65"
+    },
+    {
+      "caller_nid": "taskgraph_taskgraph_getcomponents",
+      "callee": "push",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\utils\\taskGraph.ts",
+      "source_location": "L66"
+    },
+    {
+      "caller_nid": "taskgraph_taskgraph_getcomponents",
+      "callee": "get",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\utils\\taskGraph.ts",
+      "source_location": "L68"
+    },
+    {
+      "caller_nid": "taskgraph_taskgraph_getcomponents",
+      "callee": "has",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\utils\\taskGraph.ts",
+      "source_location": "L70"
+    },
+    {
+      "caller_nid": "taskgraph_taskgraph_getcomponents",
+      "callee": "add",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\utils\\taskGraph.ts",
+      "source_location": "L71"
+    },
+    {
+      "caller_nid": "taskgraph_taskgraph_getcomponents",
+      "callee": "push",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\utils\\taskGraph.ts",
+      "source_location": "L72"
+    },
+    {
+      "caller_nid": "taskgraph_taskgraph_getcomponents",
+      "callee": "push",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\utils\\taskGraph.ts",
+      "source_location": "L76"
+    },
+    {
+      "caller_nid": "taskgraph_taskgraph_topologicalsort",
+      "callee": "forEach",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\utils\\taskGraph.ts",
+      "source_location": "L91"
+    },
+    {
+      "caller_nid": "taskgraph_taskgraph_topologicalsort",
+      "callee": "forEach",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\utils\\taskGraph.ts",
+      "source_location": "L95"
+    },
+    {
+      "caller_nid": "taskgraph_taskgraph_topologicalsort",
+      "callee": "forEach",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\utils\\taskGraph.ts",
+      "source_location": "L105"
+    },
+    {
+      "caller_nid": "taskgraph_taskgraph_topologicalsort",
+      "callee": "sort",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\utils\\taskGraph.ts",
+      "source_location": "L114"
+    },
+    {
+      "caller_nid": "taskgraph_taskgraph_topologicalsort",
+      "callee": "shift",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\utils\\taskGraph.ts",
+      "source_location": "L128"
+    },
+    {
+      "caller_nid": "taskgraph_taskgraph_topologicalsort",
+      "callee": "push",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\utils\\taskGraph.ts",
+      "source_location": "L129"
+    },
+    {
+      "caller_nid": "taskgraph_taskgraph_topologicalsort",
+      "callee": "get",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\utils\\taskGraph.ts",
+      "source_location": "L131"
+    },
+    {
+      "caller_nid": "taskgraph_taskgraph_topologicalsort",
+      "callee": "forEach",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\utils\\taskGraph.ts",
+      "source_location": "L132"
+    },
+    {
+      "caller_nid": "taskgraph_taskgraph_topologicalsort",
+      "callee": "filter",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\utils\\taskGraph.ts",
+      "source_location": "L145"
+    },
+    {
+      "caller_nid": "taskgraph_taskgraph_recalculateorder",
+      "callee": "map",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\utils\\taskGraph.ts",
+      "source_location": "L163"
+    },
+    {
+      "caller_nid": "taskgraph_taskgraph_recalculateorder",
+      "callee": "sort",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\utils\\taskGraph.ts",
+      "source_location": "L171"
+    },
+    {
+      "caller_nid": "taskgraph_taskgraph_recalculateorder",
+      "callee": "get",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\utils\\taskGraph.ts",
+      "source_location": "L183"
+    },
+    {
+      "caller_nid": "taskgraph_taskgraph_recalculateorder",
+      "callee": "push",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\utils\\taskGraph.ts",
+      "source_location": "L185"
+    }
+  ]
+}

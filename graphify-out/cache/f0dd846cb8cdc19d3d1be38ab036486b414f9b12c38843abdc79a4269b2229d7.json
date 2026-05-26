@@ -1,0 +1,46 @@
+{
+  "nodes": [
+    {
+      "id": "d_d_drive_projects_mcp_servers_agent_flow_src_models_knowledgechunkmodel_ts",
+      "label": "knowledgeChunkModel.ts",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\knowledgeChunkModel.ts",
+      "source_location": "L1"
+    },
+    {
+      "id": "knowledgechunkmodel_buildchunkid",
+      "label": "buildChunkId()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\knowledgeChunkModel.ts",
+      "source_location": "L20"
+    }
+  ],
+  "edges": [
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_models_knowledgechunkmodel_ts",
+      "target": "crypto",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\knowledgeChunkModel.ts",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_models_knowledgechunkmodel_ts",
+      "target": "knowledgechunkmodel_buildchunkid",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\knowledgeChunkModel.ts",
+      "source_location": "L20",
+      "weight": 1.0
+    }
+  ],
+  "raw_calls": [
+    {
+      "caller_nid": "knowledgechunkmodel_buildchunkid",
+      "callee": "randomUUID",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\models\\knowledgeChunkModel.ts",
+      "source_location": "L21"
+    }
+  ]
+}

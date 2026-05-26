@@ -1,0 +1,818 @@
+{
+  "nodes": [
+    {
+      "id": "d_d_drive_projects_mcp_servers_agent_flow_src_index_ts",
+      "label": "index.ts",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\index.ts",
+      "source_location": "L1"
+    },
+    {
+      "id": "index_debuglog",
+      "label": "debugLog()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\index.ts",
+      "source_location": "L17"
+    },
+    {
+      "id": "index_main",
+      "label": "main()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\index.ts",
+      "source_location": "L128"
+    }
+  ],
+  "edges": [
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_index_ts",
+      "target": "d_d_drive_projects_mcp_servers_agent_flow_src_utils_envloader_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\index.ts",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_index_ts",
+      "target": "path",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\index.ts",
+      "source_location": "L2",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_index_ts",
+      "target": "fs",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\index.ts",
+      "source_location": "L3",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_index_ts",
+      "target": "promises",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\index.ts",
+      "source_location": "L4",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_index_ts",
+      "target": "url",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\index.ts",
+      "source_location": "L5",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_index_ts",
+      "target": "child_process",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\index.ts",
+      "source_location": "L6",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_index_ts",
+      "target": "index_debuglog",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\index.ts",
+      "source_location": "L17",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_index_ts",
+      "target": "d_d_drive_projects_mcp_servers_agent_flow_src_prompts_loader_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\index.ts",
+      "source_location": "L28",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_index_ts",
+      "target": "index_js",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\index.ts",
+      "source_location": "L29",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_index_ts",
+      "target": "stdio_js",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\index.ts",
+      "source_location": "L30",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_index_ts",
+      "target": "zod_to_json_schema",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\index.ts",
+      "source_location": "L31",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_index_ts",
+      "target": "types_js",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\index.ts",
+      "source_location": "L32",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_index_ts",
+      "target": "express",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\index.ts",
+      "source_location": "L37",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_index_ts",
+      "target": "d_d_drive_projects_mcp_servers_agent_flow_src_utils_portutils_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\index.ts",
+      "source_location": "L38",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_index_ts",
+      "target": "open",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\index.ts",
+      "source_location": "L39",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_index_ts",
+      "target": "d_d_drive_projects_mcp_servers_agent_flow_src_tools_tasktools_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\index.ts",
+      "source_location": "L42",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_index_ts",
+      "target": "d_d_drive_projects_mcp_servers_agent_flow_src_tools_thoughtchaintools_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\index.ts",
+      "source_location": "L67",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_index_ts",
+      "target": "d_d_drive_projects_mcp_servers_agent_flow_src_tools_projecttools_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\index.ts",
+      "source_location": "L73",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_index_ts",
+      "target": "d_d_drive_projects_mcp_servers_agent_flow_src_tools_rag_index_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\index.ts",
+      "source_location": "L85",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_index_ts",
+      "target": "d_d_drive_projects_mcp_servers_agent_flow_src_routes_knowledgeroutes_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\index.ts",
+      "source_location": "L99",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_index_ts",
+      "target": "d_d_drive_projects_mcp_servers_agent_flow_src_models_taskmodel_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\index.ts",
+      "source_location": "L103",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_index_ts",
+      "target": "d_d_drive_projects_mcp_servers_agent_flow_src_utils_events_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\index.ts",
+      "source_location": "L110",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_index_ts",
+      "target": "d_d_drive_projects_mcp_servers_agent_flow_src_models_clientmodel_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\index.ts",
+      "source_location": "L113",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_index_ts",
+      "target": "d_d_drive_projects_mcp_servers_agent_flow_src_models_db_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\index.ts",
+      "source_location": "L126",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_index_ts",
+      "target": "index_main",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\index.ts",
+      "source_location": "L128",
+      "weight": 1.0
+    }
+  ],
+  "raw_calls": [
+    {
+      "caller_nid": "index_debuglog",
+      "callee": "toISOString",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\index.ts",
+      "source_location": "L18"
+    },
+    {
+      "caller_nid": "index_debuglog",
+      "callee": "appendFileSync",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\index.ts",
+      "source_location": "L20"
+    },
+    {
+      "caller_nid": "index_debuglog",
+      "callee": "join",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\index.ts",
+      "source_location": "L20"
+    },
+    {
+      "caller_nid": "index_main",
+      "callee": "includes",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\index.ts",
+      "source_location": "L130"
+    },
+    {
+      "caller_nid": "index_main",
+      "callee": "includes",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\index.ts",
+      "source_location": "L131"
+    },
+    {
+      "caller_nid": "index_main",
+      "callee": "init",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\index.ts",
+      "source_location": "L139"
+    },
+    {
+      "caller_nid": "index_main",
+      "callee": "error",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\index.ts",
+      "source_location": "L141"
+    },
+    {
+      "caller_nid": "index_main",
+      "callee": "exit",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\index.ts",
+      "source_location": "L142"
+    },
+    {
+      "caller_nid": "index_main",
+      "callee": "ensureDataDir",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\index.ts",
+      "source_location": "L146"
+    },
+    {
+      "caller_nid": "index_main",
+      "callee": "express",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\index.ts",
+      "source_location": "L150"
+    },
+    {
+      "caller_nid": "index_main",
+      "callee": "set",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\index.ts",
+      "source_location": "L153"
+    },
+    {
+      "caller_nid": "index_main",
+      "callee": "join",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\index.ts",
+      "source_location": "L196"
+    },
+    {
+      "caller_nid": "index_main",
+      "callee": "join",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\index.ts",
+      "source_location": "L197"
+    },
+    {
+      "caller_nid": "index_main",
+      "callee": "existsSync",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\index.ts",
+      "source_location": "L203"
+    },
+    {
+      "caller_nid": "index_main",
+      "callee": "error",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\index.ts",
+      "source_location": "L204"
+    },
+    {
+      "caller_nid": "index_main",
+      "callee": "watch",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\index.ts",
+      "source_location": "L205"
+    },
+    {
+      "caller_nid": "index_main",
+      "callee": "error",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\index.ts",
+      "source_location": "L218"
+    },
+    {
+      "caller_nid": "index_main",
+      "callee": "use",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\index.ts",
+      "source_location": "L221"
+    },
+    {
+      "caller_nid": "index_main",
+      "callee": "static",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\index.ts",
+      "source_location": "L221"
+    },
+    {
+      "caller_nid": "index_main",
+      "callee": "use",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\index.ts",
+      "source_location": "L222"
+    },
+    {
+      "caller_nid": "index_main",
+      "callee": "json",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\index.ts",
+      "source_location": "L222"
+    },
+    {
+      "caller_nid": "index_main",
+      "callee": "use",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\index.ts",
+      "source_location": "L225"
+    },
+    {
+      "caller_nid": "index_main",
+      "callee": "use",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\index.ts",
+      "source_location": "L238"
+    },
+    {
+      "caller_nid": "index_main",
+      "callee": "buildKnowledgeRouter",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\index.ts",
+      "source_location": "L238"
+    },
+    {
+      "caller_nid": "index_main",
+      "callee": "get",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\index.ts",
+      "source_location": "L243"
+    },
+    {
+      "caller_nid": "index_main",
+      "callee": "get",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\index.ts",
+      "source_location": "L253"
+    },
+    {
+      "caller_nid": "index_main",
+      "callee": "delete",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\index.ts",
+      "source_location": "L264"
+    },
+    {
+      "caller_nid": "index_main",
+      "callee": "get",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\index.ts",
+      "source_location": "L294"
+    },
+    {
+      "caller_nid": "index_main",
+      "callee": "patch",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\index.ts",
+      "source_location": "L308"
+    },
+    {
+      "caller_nid": "index_main",
+      "callee": "post",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\index.ts",
+      "source_location": "L318"
+    },
+    {
+      "caller_nid": "index_main",
+      "callee": "delete",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\index.ts",
+      "source_location": "L329"
+    },
+    {
+      "caller_nid": "index_main",
+      "callee": "post",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\index.ts",
+      "source_location": "L346"
+    },
+    {
+      "caller_nid": "index_main",
+      "callee": "post",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\index.ts",
+      "source_location": "L371"
+    },
+    {
+      "caller_nid": "index_main",
+      "callee": "get",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\index.ts",
+      "source_location": "L389"
+    },
+    {
+      "caller_nid": "index_main",
+      "callee": "get",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\index.ts",
+      "source_location": "L400"
+    },
+    {
+      "caller_nid": "index_main",
+      "callee": "delete",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\index.ts",
+      "source_location": "L415"
+    },
+    {
+      "caller_nid": "index_main",
+      "callee": "get",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\index.ts",
+      "source_location": "L449"
+    },
+    {
+      "caller_nid": "index_main",
+      "callee": "get",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\index.ts",
+      "source_location": "L471"
+    },
+    {
+      "caller_nid": "index_main",
+      "callee": "get",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\index.ts",
+      "source_location": "L491"
+    },
+    {
+      "caller_nid": "index_main",
+      "callee": "patch",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\index.ts",
+      "source_location": "L505"
+    },
+    {
+      "caller_nid": "index_main",
+      "callee": "post",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\index.ts",
+      "source_location": "L549"
+    },
+    {
+      "caller_nid": "index_main",
+      "callee": "get",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\index.ts",
+      "source_location": "L574"
+    },
+    {
+      "caller_nid": "index_main",
+      "callee": "parseInt",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\index.ts",
+      "source_location": "L603"
+    },
+    {
+      "caller_nid": "index_main",
+      "callee": "isPortInUse",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\index.ts",
+      "source_location": "L606"
+    },
+    {
+      "caller_nid": "index_main",
+      "callee": "includes",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\index.ts",
+      "source_location": "L609"
+    },
+    {
+      "caller_nid": "index_main",
+      "callee": "error",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\index.ts",
+      "source_location": "L614"
+    },
+    {
+      "caller_nid": "index_main",
+      "callee": "join",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\index.ts",
+      "source_location": "L617"
+    },
+    {
+      "caller_nid": "index_main",
+      "callee": "error",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\index.ts",
+      "source_location": "L618"
+    },
+    {
+      "caller_nid": "index_main",
+      "callee": "join",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\index.ts",
+      "source_location": "L622"
+    },
+    {
+      "caller_nid": "index_main",
+      "callee": "existsSync",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\index.ts",
+      "source_location": "L623"
+    },
+    {
+      "caller_nid": "index_main",
+      "callee": "mkdirSync",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\index.ts",
+      "source_location": "L624"
+    },
+    {
+      "caller_nid": "index_main",
+      "callee": "join",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\index.ts",
+      "source_location": "L626"
+    },
+    {
+      "caller_nid": "index_main",
+      "callee": "openSync",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\index.ts",
+      "source_location": "L627"
+    },
+    {
+      "caller_nid": "index_main",
+      "callee": "spawn",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\index.ts",
+      "source_location": "L630"
+    },
+    {
+      "caller_nid": "index_main",
+      "callee": "unref",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\index.ts",
+      "source_location": "L642"
+    },
+    {
+      "caller_nid": "index_main",
+      "callee": "error",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\index.ts",
+      "source_location": "L644"
+    },
+    {
+      "caller_nid": "index_main",
+      "callee": "isPortInUse",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\index.ts",
+      "source_location": "L651"
+    },
+    {
+      "caller_nid": "index_main",
+      "callee": "isPortInUse",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\index.ts",
+      "source_location": "L656"
+    },
+    {
+      "caller_nid": "index_main",
+      "callee": "error",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\index.ts",
+      "source_location": "L659"
+    },
+    {
+      "caller_nid": "index_main",
+      "callee": "error",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\index.ts",
+      "source_location": "L661"
+    },
+    {
+      "caller_nid": "index_main",
+      "callee": "markAllClientsInactive",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\index.ts",
+      "source_location": "L673"
+    },
+    {
+      "caller_nid": "index_main",
+      "callee": "deleteInactiveClients",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\index.ts",
+      "source_location": "L674"
+    },
+    {
+      "caller_nid": "index_main",
+      "callee": "error",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\index.ts",
+      "source_location": "L675"
+    },
+    {
+      "caller_nid": "index_main",
+      "callee": "registerClient",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\index.ts",
+      "source_location": "L681"
+    },
+    {
+      "caller_nid": "index_main",
+      "callee": "error",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\index.ts",
+      "source_location": "L682"
+    },
+    {
+      "caller_nid": "index_main",
+      "callee": "error",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\index.ts",
+      "source_location": "L684"
+    },
+    {
+      "caller_nid": "index_main",
+      "callee": "sendClientUpdate",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\index.ts",
+      "source_location": "L690"
+    },
+    {
+      "caller_nid": "index_main",
+      "callee": "(async () => {\n            // Only notify if we successfully registered a client\n            if (!currentClient) return;\n\n            const notifyUrl = `http://localhost:${SERVER_PORT}/api/clients/notify`;\n            for (let attempt = 0; attempt < 5; attempt++) {\n              try {\n                if (attempt > 0) {\n                  await new Promise(resolve => setTimeout(resolve, 500 * Math.pow(2, attempt - 1)));\n                }\n                const response = await fetch(notifyUrl, { method: \"POST\" });\n                if (response.ok) {\n                  console.error(\"(AgentFlow) Notified primary server of client registration\");\n                  return; // Success, exit\n                }\n              } catch (err) {\n                if (attempt === 4) {\n                  console.error(\"(AgentFlow) Failed to notify primary server after retries\");\n                }\n              }\n            }\n          })",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\index.ts",
+      "source_location": "L694"
+    },
+    {
+      "caller_nid": "index_main",
+      "callee": "setInterval",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\index.ts",
+      "source_location": "L719"
+    },
+    {
+      "caller_nid": "index_main",
+      "callee": "setInterval",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\index.ts",
+      "source_location": "L732"
+    },
+    {
+      "caller_nid": "index_main",
+      "callee": "on",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\index.ts",
+      "source_location": "L776"
+    },
+    {
+      "caller_nid": "index_main",
+      "callee": "on",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\index.ts",
+      "source_location": "L777"
+    },
+    {
+      "caller_nid": "index_main",
+      "callee": "on",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\index.ts",
+      "source_location": "L778"
+    },
+    {
+      "caller_nid": "index_main",
+      "callee": "on",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\index.ts",
+      "source_location": "L779"
+    },
+    {
+      "caller_nid": "index_main",
+      "callee": "error",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\index.ts",
+      "source_location": "L787"
+    },
+    {
+      "caller_nid": "index_main",
+      "callee": "error",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\index.ts",
+      "source_location": "L791"
+    },
+    {
+      "caller_nid": "index_main",
+      "callee": "error",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\index.ts",
+      "source_location": "L792"
+    },
+    {
+      "caller_nid": "index_main",
+      "callee": "error",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\index.ts",
+      "source_location": "L795"
+    },
+    {
+      "caller_nid": "index_main",
+      "callee": "exit",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\index.ts",
+      "source_location": "L796"
+    },
+    {
+      "caller_nid": "index_main",
+      "callee": "listen",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\index.ts",
+      "source_location": "L802"
+    },
+    {
+      "caller_nid": "index_main",
+      "callee": "on",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\index.ts",
+      "source_location": "L844"
+    },
+    {
+      "caller_nid": "index_main",
+      "callee": "on",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\index.ts",
+      "source_location": "L888"
+    },
+    {
+      "caller_nid": "index_main",
+      "callee": "on",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\index.ts",
+      "source_location": "L889"
+    },
+    {
+      "caller_nid": "index_main",
+      "callee": "error",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\index.ts",
+      "source_location": "L896"
+    },
+    {
+      "caller_nid": "index_main",
+      "callee": "setRequestHandler",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\index.ts",
+      "source_location": "L913"
+    },
+    {
+      "caller_nid": "index_main",
+      "callee": "setRequestHandler",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\index.ts",
+      "source_location": "L1041"
+    },
+    {
+      "caller_nid": "index_main",
+      "callee": "error",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\index.ts",
+      "source_location": "L1366"
+    },
+    {
+      "caller_nid": "index_main",
+      "callee": "setInterval",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\index.ts",
+      "source_location": "L1368"
+    },
+    {
+      "caller_nid": "index_main",
+      "callee": "on",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\index.ts",
+      "source_location": "L1375"
+    },
+    {
+      "caller_nid": "index_main",
+      "callee": "on",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\index.ts",
+      "source_location": "L1381"
+    },
+    {
+      "caller_nid": "index_main",
+      "callee": "connect",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\index.ts",
+      "source_location": "L1386"
+    },
+    {
+      "caller_nid": "index_main",
+      "callee": "error",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\index.ts",
+      "source_location": "L1388"
+    },
+    {
+      "caller_nid": "index_main",
+      "callee": "error",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\index.ts",
+      "source_location": "L1399"
+    },
+    {
+      "caller_nid": "index_main",
+      "callee": "exit",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\index.ts",
+      "source_location": "L1402"
+    }
+  ]
+}

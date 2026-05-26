@@ -1,0 +1,132 @@
+{
+  "nodes": [
+    {
+      "id": "d_d_drive_projects_mcp_servers_agent_flow_src_tools_shims_completetaskshim_ts",
+      "label": "completeTaskShim.ts",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\shims\\completeTaskShim.ts",
+      "source_location": "L1"
+    },
+    {
+      "id": "completetaskshim_astooltext",
+      "label": "asToolText()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\shims\\completeTaskShim.ts",
+      "source_location": "L31"
+    },
+    {
+      "id": "completetaskshim_emitdeprecationevent",
+      "label": "emitDeprecationEvent()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\shims\\completeTaskShim.ts",
+      "source_location": "L37"
+    },
+    {
+      "id": "completetaskshim_completetaskshim",
+      "label": "completeTaskShim()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\shims\\completeTaskShim.ts",
+      "source_location": "L52"
+    }
+  ],
+  "edges": [
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_tools_shims_completetaskshim_ts",
+      "target": "d_d_drive_projects_mcp_servers_agent_flow_src_utils_events_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\shims\\completeTaskShim.ts",
+      "source_location": "L20",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_tools_shims_completetaskshim_ts",
+      "target": "d_d_drive_projects_mcp_servers_agent_flow_src_utils_telemetry_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\shims\\completeTaskShim.ts",
+      "source_location": "L21",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_tools_shims_completetaskshim_ts",
+      "target": "d_d_drive_projects_mcp_servers_agent_flow_src_tools_lifecycle_tasklifecycle_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\shims\\completeTaskShim.ts",
+      "source_location": "L22",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_tools_shims_completetaskshim_ts",
+      "target": "d_d_drive_projects_mcp_servers_agent_flow_src_tools_shims_deprecation_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\shims\\completeTaskShim.ts",
+      "source_location": "L23",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_tools_shims_completetaskshim_ts",
+      "target": "d_d_drive_projects_mcp_servers_agent_flow_src_tools_shims_schemas_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\shims\\completeTaskShim.ts",
+      "source_location": "L27",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_tools_shims_completetaskshim_ts",
+      "target": "completetaskshim_astooltext",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\shims\\completeTaskShim.ts",
+      "source_location": "L31",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_tools_shims_completetaskshim_ts",
+      "target": "completetaskshim_emitdeprecationevent",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\shims\\completeTaskShim.ts",
+      "source_location": "L37",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_tools_shims_completetaskshim_ts",
+      "target": "completetaskshim_completetaskshim",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\shims\\completeTaskShim.ts",
+      "source_location": "L52",
+      "weight": 1.0
+    }
+  ],
+  "raw_calls": [
+    {
+      "caller_nid": "completetaskshim_astooltext",
+      "callee": "stringify",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\shims\\completeTaskShim.ts",
+      "source_location": "L33"
+    },
+    {
+      "caller_nid": "completetaskshim_emitdeprecationevent",
+      "callee": "toISOString",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\shims\\completeTaskShim.ts",
+      "source_location": "L43"
+    },
+    {
+      "caller_nid": "completetaskshim_emitdeprecationevent",
+      "callee": "emit",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\shims\\completeTaskShim.ts",
+      "source_location": "L46"
+    },
+    {
+      "caller_nid": "completetaskshim_completetaskshim",
+      "callee": "withToolTelemetry",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\shims\\completeTaskShim.ts",
+      "source_location": "L53"
+    }
+  ]
+}

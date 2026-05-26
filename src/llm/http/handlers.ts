@@ -38,6 +38,13 @@ export interface ProviderStatus {
   keyConfigured: boolean;
   /** The env var name the key would be read from, for GUI hints. */
   keyEnv: string | null;
+  /**
+   * Partial masked preview of the configured key, in the form
+   * `first4•••last4` — e.g. `sk-p•••cdef`. `null` when the key is
+   * unset, when the provider is `"none"`, or when the key is too short
+   * (< 12 chars) for a safe 4+4 split. The full key is never sent.
+   */
+  keyPreview: string | null;
 }
 
 export interface ProvidersStatusResponse {
@@ -93,19 +100,34 @@ export function assertConfigUnlocked(env: NodeJS.ProcessEnv = process.env): void
 }
 
 /**
+ * Mask an API key for safe display: `first4•••last4`. Returns `null`
+ * for empty / undefined values, and a fully-masked `•••` for keys
+ * shorter than 12 chars so we never disclose a meaningful slice of a
+ * degenerate input. Industry-standard pattern (GitHub, Stripe, OpenAI
+ * dashboards all do the same).
+ */
+function maskKey(value: string | undefined): string | null {
+  if (typeof value !== "string") return null;
+  const trimmed = value.trim();
+  if (trimmed.length === 0) return null;
+  if (trimmed.length < 12) return "•••";
+  return `${trimmed.slice(0, 4)}•••${trimmed.slice(-4)}`;
+}
+
+/**
  * `GET /api/llm/providers` — which providers have an API key configured.
- * Returns booleans, never raw keys.
+ * Returns booleans + a masked preview, never raw keys.
  */
 export function getProvidersStatus(env: NodeJS.ProcessEnv = process.env): ProvidersStatusResponse {
   const e = readEnv(env);
   const providers: ProviderStatus[] = SUPPORTED_PROVIDERS.map((provider) => {
     if (provider === "none") {
-      return { provider, keyConfigured: false, keyEnv: null };
+      return { provider, keyConfigured: false, keyEnv: null, keyPreview: null };
     }
     const keyEnv = PROVIDER_KEY_ENV[provider];
     const value = e[keyEnv];
     const keyConfigured = typeof value === "string" && value.trim().length > 0;
-    return { provider, keyConfigured, keyEnv };
+    return { provider, keyConfigured, keyEnv, keyPreview: maskKey(value) };
   });
   return {
     providers,

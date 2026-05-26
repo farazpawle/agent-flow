@@ -1,0 +1,77 @@
+{
+  "nodes": [
+    {
+      "id": "d_d_drive_projects_mcp_servers_agent_flow_src_services_embeddings_embeddingservice_ts",
+      "label": "embeddingService.ts",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\services\\embeddings\\embeddingService.ts",
+      "source_location": "L1"
+    },
+    {
+      "id": "embeddingservice_embedtexts",
+      "label": "embedTexts()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\services\\embeddings\\embeddingService.ts",
+      "source_location": "L3"
+    },
+    {
+      "id": "embeddingservice_embedquery",
+      "label": "embedQuery()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\services\\embeddings\\embeddingService.ts",
+      "source_location": "L9"
+    }
+  ],
+  "edges": [
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_services_embeddings_embeddingservice_ts",
+      "target": "d_d_drive_projects_mcp_servers_agent_flow_src_services_embeddings_providers_index_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\services\\embeddings\\embeddingService.ts",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_services_embeddings_embeddingservice_ts",
+      "target": "embeddingservice_embedtexts",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\services\\embeddings\\embeddingService.ts",
+      "source_location": "L3",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_services_embeddings_embeddingservice_ts",
+      "target": "embeddingservice_embedquery",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\services\\embeddings\\embeddingService.ts",
+      "source_location": "L9",
+      "weight": 1.0
+    },
+    {
+      "source": "embeddingservice_embedquery",
+      "target": "embeddingservice_embedtexts",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\services\\embeddings\\embeddingService.ts",
+      "source_location": "L10",
+      "weight": 1.0
+    }
+  ],
+  "raw_calls": [
+    {
+      "caller_nid": "embeddingservice_embedtexts",
+      "callee": "getEmbeddingProvider",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\services\\embeddings\\embeddingService.ts",
+      "source_location": "L5"
+    },
+    {
+      "caller_nid": "embeddingservice_embedtexts",
+      "callee": "embed",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\services\\embeddings\\embeddingService.ts",
+      "source_location": "L6"
+    }
+  ]
+}

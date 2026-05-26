@@ -1,0 +1,104 @@
+{
+  "nodes": [
+    {
+      "id": "d_d_drive_projects_mcp_servers_agent_flow_src_prompts_generators_splittasks_ts",
+      "label": "splitTasks.ts",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\prompts\\generators\\splitTasks.ts",
+      "source_location": "L1"
+    },
+    {
+      "id": "splittasks_buildsplitprompt",
+      "label": "buildSplitPrompt()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\prompts\\generators\\splitTasks.ts",
+      "source_location": "L26"
+    },
+    {
+      "id": "splittasks_getsplittasksprompt",
+      "label": "getSplitTasksPrompt()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\prompts\\generators\\splitTasks.ts",
+      "source_location": "L85"
+    }
+  ],
+  "edges": [
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_prompts_generators_splittasks_ts",
+      "target": "d_d_drive_projects_mcp_servers_agent_flow_src_prompts_loader_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\prompts\\generators\\splitTasks.ts",
+      "source_location": "L6",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_prompts_generators_splittasks_ts",
+      "target": "d_d_drive_projects_mcp_servers_agent_flow_src_types_index_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\prompts\\generators\\splitTasks.ts",
+      "source_location": "L11",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_prompts_generators_splittasks_ts",
+      "target": "splittasks_buildsplitprompt",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\prompts\\generators\\splitTasks.ts",
+      "source_location": "L26",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_prompts_generators_splittasks_ts",
+      "target": "splittasks_getsplittasksprompt",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\prompts\\generators\\splitTasks.ts",
+      "source_location": "L85",
+      "weight": 1.0
+    },
+    {
+      "source": "splittasks_getsplittasksprompt",
+      "target": "splittasks_buildsplitprompt",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\prompts\\generators\\splitTasks.ts",
+      "source_location": "L86",
+      "weight": 1.0
+    }
+  ],
+  "raw_calls": [
+    {
+      "caller_nid": "splittasks_buildsplitprompt",
+      "callee": "loadPromptFromTemplate",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\prompts\\generators\\splitTasks.ts",
+      "source_location": "L30"
+    },
+    {
+      "caller_nid": "splittasks_buildsplitprompt",
+      "callee": "loadPromptFromTemplate",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\prompts\\generators\\splitTasks.ts",
+      "source_location": "L34"
+    },
+    {
+      "caller_nid": "splittasks_buildsplitprompt",
+      "callee": "forEach",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\prompts\\generators\\splitTasks.ts",
+      "source_location": "L37"
+    },
+    {
+      "caller_nid": "splittasks_buildsplitprompt",
+      "callee": "generatePrompt",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\prompts\\generators\\splitTasks.ts",
+      "source_location": "L68"
+    },
+    {
+      "caller_nid": "splittasks_buildsplitprompt",
+      "callee": "loadPrompt",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\prompts\\generators\\splitTasks.ts",
+      "source_location": "L77"
+    }
+  ]
+}

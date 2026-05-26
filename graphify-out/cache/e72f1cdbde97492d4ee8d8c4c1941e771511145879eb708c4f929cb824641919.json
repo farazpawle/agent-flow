@@ -1,0 +1,141 @@
+{
+  "nodes": [
+    {
+      "id": "d_d_drive_projects_mcp_servers_agent_flow_src_tools_shims_verifytaskshim_ts",
+      "label": "verifyTaskShim.ts",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\shims\\verifyTaskShim.ts",
+      "source_location": "L1"
+    },
+    {
+      "id": "verifytaskshim_astooltext",
+      "label": "asToolText()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\shims\\verifyTaskShim.ts",
+      "source_location": "L29"
+    },
+    {
+      "id": "verifytaskshim_emitdeprecationevent",
+      "label": "emitDeprecationEvent()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\shims\\verifyTaskShim.ts",
+      "source_location": "L35"
+    },
+    {
+      "id": "verifytaskshim_verifytaskshim",
+      "label": "verifyTaskShim()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\shims\\verifyTaskShim.ts",
+      "source_location": "L50"
+    }
+  ],
+  "edges": [
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_tools_shims_verifytaskshim_ts",
+      "target": "d_d_drive_projects_mcp_servers_agent_flow_src_models_db_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\shims\\verifyTaskShim.ts",
+      "source_location": "L17",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_tools_shims_verifytaskshim_ts",
+      "target": "d_d_drive_projects_mcp_servers_agent_flow_src_utils_events_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\shims\\verifyTaskShim.ts",
+      "source_location": "L18",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_tools_shims_verifytaskshim_ts",
+      "target": "d_d_drive_projects_mcp_servers_agent_flow_src_utils_telemetry_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\shims\\verifyTaskShim.ts",
+      "source_location": "L19",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_tools_shims_verifytaskshim_ts",
+      "target": "d_d_drive_projects_mcp_servers_agent_flow_src_tools_lifecycle_tasklifecycle_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\shims\\verifyTaskShim.ts",
+      "source_location": "L20",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_tools_shims_verifytaskshim_ts",
+      "target": "d_d_drive_projects_mcp_servers_agent_flow_src_tools_shims_deprecation_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\shims\\verifyTaskShim.ts",
+      "source_location": "L21",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_tools_shims_verifytaskshim_ts",
+      "target": "d_d_drive_projects_mcp_servers_agent_flow_src_tools_shims_schemas_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\shims\\verifyTaskShim.ts",
+      "source_location": "L25",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_tools_shims_verifytaskshim_ts",
+      "target": "verifytaskshim_astooltext",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\shims\\verifyTaskShim.ts",
+      "source_location": "L29",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_tools_shims_verifytaskshim_ts",
+      "target": "verifytaskshim_emitdeprecationevent",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\shims\\verifyTaskShim.ts",
+      "source_location": "L35",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_tools_shims_verifytaskshim_ts",
+      "target": "verifytaskshim_verifytaskshim",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\shims\\verifyTaskShim.ts",
+      "source_location": "L50",
+      "weight": 1.0
+    }
+  ],
+  "raw_calls": [
+    {
+      "caller_nid": "verifytaskshim_astooltext",
+      "callee": "stringify",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\shims\\verifyTaskShim.ts",
+      "source_location": "L31"
+    },
+    {
+      "caller_nid": "verifytaskshim_emitdeprecationevent",
+      "callee": "toISOString",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\shims\\verifyTaskShim.ts",
+      "source_location": "L41"
+    },
+    {
+      "caller_nid": "verifytaskshim_emitdeprecationevent",
+      "callee": "emit",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\shims\\verifyTaskShim.ts",
+      "source_location": "L44"
+    },
+    {
+      "caller_nid": "verifytaskshim_verifytaskshim",
+      "callee": "withToolTelemetry",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\shims\\verifyTaskShim.ts",
+      "source_location": "L51"
+    }
+  ]
+}

@@ -3,11 +3,7 @@
  * Responsible for combining templates and parameters into the final prompt
  */
 
-import {
-  loadPrompt,
-  generatePrompt,
-  loadPromptFromTemplate,
-} from "../loader.js";
+import { loadPrompt, generatePrompt, loadPromptFromTemplate } from "../loader.js";
 import { Task, TaskStatus } from "../../types/index.js";
 
 /**
@@ -69,13 +65,39 @@ function getComplexityBasedGuidance(level: string): string {
 }
 
 /**
+ * Detect focus mode from task content and return the relevant guidance section
+ */
+function getFocusGuidance(task: Task): string {
+  const text = `${task.name} ${task.description} ${task.notes || ""}`.toLowerCase();
+  if (/debug|error|fix|bug|crash|exception|fail/.test(text)) {
+    return `### 🐛 Debug Mode (Error Investigation)\n- Start with the most recent changes\n- Use binary search to narrow down the issue\n- Check logs and error messages carefully\n- Verify assumptions with console.log/breakpoints\n- Don't assume - verify everything`;
+  }
+  if (/security|\bauth\b|encrypt|permission|vulnerab|\binject\b|xss|\bsql injection\b/.test(text)) {
+    return `### 🔒 Security Mode (Auth/Encryption)\n- Validate ALL user input\n- Check authentication and authorization at every step\n- Look for injection vulnerabilities\n- Use parameterized queries\n- Never expose sensitive data in logs`;
+  }
+  if (/performance|optim|speed|slow|cache|bottleneck|profil/.test(text)) {
+    return `### ⚡ Performance Mode (Optimization)\n- Measure before optimizing\n- Identify the bottleneck first\n- Check for N+1 queries\n- Minimize unnecessary re-renders\n- Profile in production-like conditions`;
+  }
+  if (/accessib|wcag|aria|screen reader|keyboard nav|contrast/.test(text)) {
+    return `### ♿ Accessibility Mode (WCAG)\n- Test keyboard navigation\n- Verify color contrast (4.5:1 minimum)\n- Add ARIA labels where needed\n- Test with screen reader\n- Ensure focus states are visible`;
+  }
+  if (
+    /\bui\b|\bstyle\b|design|animation|layout|\bcss\b|\bcolor\b|\bfont\b|\bvibe\b|aesthetic/.test(
+      text
+    )
+  ) {
+    return `### 🎨 Vibe Mode (Creative/UI)\n- Trust your aesthetic intuition\n- Focus on how it FEELS, not just how it works\n- Iterate on animations and transitions\n- Test on different screen sizes\n- Get the spacing and typography right`;
+  }
+  return `### 🔬 Logic Mode (Technical/Backend)\n- Follow established patterns and best practices\n- Prioritize correctness over speed\n- Write comprehensive error handling\n- Add logging for debugging\n- Write unit tests for edge cases`;
+}
+
+/**
  * Get the complete executeTask prompt
  * @param params prompt parameters
  * @returns generated prompt
  */
 export function getExecuteTaskPrompt(params: ExecuteTaskPromptParams): string {
-  const { task, complexityAssessment, relatedFilesSummary, dependencyTasks } =
-    params;
+  const { task, complexityAssessment, relatedFilesSummary, dependencyTasks } = params;
 
   const notesTemplate = loadPromptFromTemplate("executeTask/notes.md");
   let notesPrompt = "";
@@ -85,9 +107,7 @@ export function getExecuteTaskPrompt(params: ExecuteTaskPromptParams): string {
     });
   }
 
-  const implementationGuideTemplate = loadPromptFromTemplate(
-    "executeTask/implementationGuide.md"
-  );
+  const implementationGuideTemplate = loadPromptFromTemplate("executeTask/implementationGuide.md");
   let implementationGuidePrompt = "";
   if (task.implementationGuide) {
     implementationGuidePrompt = generatePrompt(implementationGuideTemplate, {
@@ -105,9 +125,7 @@ export function getExecuteTaskPrompt(params: ExecuteTaskPromptParams): string {
     });
   }
 
-  const analysisResultTemplate = loadPromptFromTemplate(
-    "executeTask/analysisResult.md"
-  );
+  const analysisResultTemplate = loadPromptFromTemplate("executeTask/analysisResult.md");
   let analysisResultPrompt = "";
   if (task.analysisResult) {
     analysisResultPrompt = generatePrompt(analysisResultTemplate, {
@@ -115,9 +133,7 @@ export function getExecuteTaskPrompt(params: ExecuteTaskPromptParams): string {
     });
   }
 
-  const dependencyTasksTemplate = loadPromptFromTemplate(
-    "executeTask/dependencyTasks.md"
-  );
+  const dependencyTasksTemplate = loadPromptFromTemplate("executeTask/dependencyTasks.md");
   let dependencyTasksPrompt = "";
   if (dependencyTasks && dependencyTasks.length > 0) {
     const completedDependencyTasks = dependencyTasks.filter(
@@ -137,25 +153,18 @@ export function getExecuteTaskPrompt(params: ExecuteTaskPromptParams): string {
     }
   }
 
-  const relatedFilesSummaryTemplate = loadPromptFromTemplate(
-    "executeTask/relatedFilesSummary.md"
-  );
+  const relatedFilesSummaryTemplate = loadPromptFromTemplate("executeTask/relatedFilesSummary.md");
   let relatedFilesSummaryPrompt = "";
   relatedFilesSummaryPrompt = generatePrompt(relatedFilesSummaryTemplate, {
     relatedFilesSummary: relatedFilesSummary || "The current task has no related files.",
   });
 
-  const complexityTemplate = loadPromptFromTemplate(
-    "executeTask/complexity.md"
-  );
+  const complexityTemplate = loadPromptFromTemplate("executeTask/complexity.md");
   let complexityPrompt = "";
   if (complexityAssessment) {
     const complexityStyle = getComplexityStyle(complexityAssessment.level);
     let recommendationContent = "";
-    if (
-      complexityAssessment.recommendations &&
-      complexityAssessment.recommendations.length > 0
-    ) {
+    if (complexityAssessment.recommendations && complexityAssessment.recommendations.length > 0) {
       for (const recommendation of complexityAssessment.recommendations) {
         recommendationContent += `- ${recommendation}\n`;
       }
@@ -169,9 +178,7 @@ export function getExecuteTaskPrompt(params: ExecuteTaskPromptParams): string {
     });
   }
 
-  const subtaskEvaluationTemplate = loadPromptFromTemplate(
-    "executeTask/subtaskEvaluation.md"
-  );
+  const subtaskEvaluationTemplate = loadPromptFromTemplate("executeTask/subtaskEvaluation.md");
   let subtaskEvaluationPrompt = "";
   if (complexityAssessment) {
     const complexityBasedGuidance = getComplexityBasedGuidance(complexityAssessment.level);
@@ -181,12 +188,13 @@ export function getExecuteTaskPrompt(params: ExecuteTaskPromptParams): string {
   } else {
     // Default guidance if complexity assessment is missing
     subtaskEvaluationPrompt = generatePrompt(subtaskEvaluationTemplate, {
-      complexityBasedGuidance: "Unable to determine task complexity. Evaluate the task based on your understanding and the assessment criteria.",
+      complexityBasedGuidance:
+        "Unable to determine task complexity. Evaluate the task based on your understanding and the assessment criteria.",
     });
   }
 
   const indexTemplate = loadPromptFromTemplate("executeTask/index.md");
-  let prompt = generatePrompt(indexTemplate, {
+  const prompt = generatePrompt(indexTemplate, {
     name: task.name,
     id: task.id,
     description: task.description,
@@ -198,6 +206,7 @@ export function getExecuteTaskPrompt(params: ExecuteTaskPromptParams): string {
     relatedFilesSummaryTemplate: relatedFilesSummaryPrompt,
     complexityTemplate: complexityPrompt,
     subtaskEvaluationTemplate: subtaskEvaluationPrompt,
+    focusGuidance: getFocusGuidance(task),
   });
 
   // Load possible custom prompt

@@ -1,0 +1,101 @@
+{
+  "nodes": [
+    {
+      "id": "d_d_drive_projects_mcp_servers_agent_flow_src_public_pages_tasksgraph_js",
+      "label": "tasksGraph.js",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\public\\pages\\tasksGraph.js",
+      "source_location": "L1"
+    },
+    {
+      "id": "tasksgraph_mount",
+      "label": "mount()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\public\\pages\\tasksGraph.js",
+      "source_location": "L7"
+    },
+    {
+      "id": "tasksgraph_unmount",
+      "label": "unmount()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\public\\pages\\tasksGraph.js",
+      "source_location": "L41"
+    }
+  ],
+  "edges": [
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_public_pages_tasksgraph_js",
+      "target": "d_d_drive_projects_mcp_servers_agent_flow_src_public_lib_api_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\public\\pages\\tasksGraph.js",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_public_pages_tasksgraph_js",
+      "target": "d_d_drive_projects_mcp_servers_agent_flow_src_public_legacy_d3_graph_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\public\\pages\\tasksGraph.js",
+      "source_location": "L2",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_public_pages_tasksgraph_js",
+      "target": "tasksgraph_mount",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\public\\pages\\tasksGraph.js",
+      "source_location": "L7",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_public_pages_tasksgraph_js",
+      "target": "tasksgraph_unmount",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\public\\pages\\tasksGraph.js",
+      "source_location": "L41",
+      "weight": 1.0
+    }
+  ],
+  "raw_calls": [
+    {
+      "caller_nid": "tasksgraph_mount",
+      "callee": "getElementById",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\public\\pages\\tasksGraph.js",
+      "source_location": "L21"
+    },
+    {
+      "caller_nid": "tasksgraph_mount",
+      "callee": "createDependencyGraph",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\public\\pages\\tasksGraph.js",
+      "source_location": "L22"
+    },
+    {
+      "caller_nid": "tasksgraph_mount",
+      "callee": "refresh",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\public\\pages\\tasksGraph.js",
+      "source_location": "L33"
+    },
+    {
+      "caller_nid": "tasksgraph_mount",
+      "callee": "addEventListener",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\public\\pages\\tasksGraph.js",
+      "source_location": "L36"
+    },
+    {
+      "caller_nid": "tasksgraph_unmount",
+      "callee": "close",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\public\\pages\\tasksGraph.js",
+      "source_location": "L42"
+    },
+    {
+      "caller_nid": "tasksgraph_unmount",
+      "callee": "destroy",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\public\\pages\\tasksGraph.js",
+      "source_location": "L43"
+    }
+  ]
+}

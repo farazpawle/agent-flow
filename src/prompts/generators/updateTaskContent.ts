@@ -3,11 +3,7 @@
  * Responsible for combining templates and parameters into the final prompt
  */
 
-import {
-  loadPrompt,
-  generatePrompt,
-  loadPromptFromTemplate,
-} from "../loader.js";
+import { loadPrompt, generatePrompt, loadPromptFromTemplate } from "../loader.js";
 import { Task, RelatedFile } from "../../types/index.js";
 
 /**
@@ -21,6 +17,7 @@ export interface UpdateTaskContentPromptParams {
   validationError?: string;
   emptyUpdate?: boolean;
   updatedTask?: Task;
+  changedFields?: string[];
 }
 
 /**
@@ -28,9 +25,7 @@ export interface UpdateTaskContentPromptParams {
  * @param params prompt parameters
  * @returns generated prompt
  */
-export function getUpdateTaskContentPrompt(
-  params: UpdateTaskContentPromptParams
-): string {
+export function getUpdateTaskContentPrompt(params: UpdateTaskContentPromptParams): string {
   const {
     taskId,
     task,
@@ -39,13 +34,12 @@ export function getUpdateTaskContentPrompt(
     validationError,
     emptyUpdate,
     updatedTask,
+    changedFields,
   } = params;
 
   // Handle case where task doesn't exist
   if (!task) {
-    const notFoundTemplate = loadPromptFromTemplate(
-      "updateTaskContent/notFound.md"
-    );
+    const notFoundTemplate = loadPromptFromTemplate("updateTaskContent/notFound.md");
     return generatePrompt(notFoundTemplate, {
       taskId,
     });
@@ -53,9 +47,7 @@ export function getUpdateTaskContentPrompt(
 
   // Handle validation error case
   if (validationError) {
-    const validationTemplate = loadPromptFromTemplate(
-      "updateTaskContent/validation.md"
-    );
+    const validationTemplate = loadPromptFromTemplate("updateTaskContent/validation.md");
     return generatePrompt(validationTemplate, {
       error: validationError,
     });
@@ -63,9 +55,7 @@ export function getUpdateTaskContentPrompt(
 
   // Handle empty update case
   if (emptyUpdate) {
-    const emptyUpdateTemplate = loadPromptFromTemplate(
-      "updateTaskContent/emptyUpdate.md"
-    );
+    const emptyUpdateTemplate = loadPromptFromTemplate("updateTaskContent/emptyUpdate.md");
     return generatePrompt(emptyUpdateTemplate, {});
   }
 
@@ -75,25 +65,24 @@ export function getUpdateTaskContentPrompt(
 
   // Success update with updated task details
   if (success && updatedTask) {
-    const successTemplate = loadPromptFromTemplate(
-      "updateTaskContent/success.md"
-    );
+    const successTemplate = loadPromptFromTemplate("updateTaskContent/success.md");
 
     // Compile related files information
     let filesContent = "";
     if (updatedTask.relatedFiles && updatedTask.relatedFiles.length > 0) {
-      const fileDetailsTemplate = loadPromptFromTemplate(
-        "updateTaskContent/fileDetails.md"
-      );
+      const fileDetailsTemplate = loadPromptFromTemplate("updateTaskContent/fileDetails.md");
 
       // Group files by type
-      const filesByType = updatedTask.relatedFiles.reduce((acc, file) => {
-        if (!acc[file.type]) {
-          acc[file.type] = [];
-        }
-        acc[file.type].push(file);
-        return acc;
-      }, {} as Record<string, RelatedFile[]>);
+      const filesByType = updatedTask.relatedFiles.reduce(
+        (acc, file) => {
+          if (!acc[file.type]) {
+            acc[file.type] = [];
+          }
+          acc[file.type].push(file);
+          return acc;
+        },
+        {} as Record<string, RelatedFile[]>
+      );
 
       // Generate content for each file type
       for (const [type, files] of Object.entries(filesByType)) {
@@ -131,9 +120,13 @@ export function getUpdateTaskContentPrompt(
   }
 
   const indexTemplate = loadPromptFromTemplate("updateTaskContent/index.md");
+  const changedFieldsSummary =
+    changedFields && changedFields.length > 0
+      ? `**Changed fields:** ${changedFields.join(", ")}\n\n`
+      : "";
   const prompt = generatePrompt(indexTemplate, {
     responseTitle,
-    message: content,
+    message: changedFieldsSummary + content,
   });
 
   // Load possible custom prompt

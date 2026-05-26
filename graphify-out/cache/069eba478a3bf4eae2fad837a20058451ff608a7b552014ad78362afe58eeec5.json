@@ -1,0 +1,139 @@
+{
+  "nodes": [
+    {
+      "id": "d_d_drive_projects_mcp_servers_agent_flow_src_public_lib_i18n_js",
+      "label": "i18n.js",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\public\\lib\\i18n.js",
+      "source_location": "L1"
+    },
+    {
+      "id": "i18n_loadlocale",
+      "label": "loadLocale()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\public\\lib\\i18n.js",
+      "source_location": "L4"
+    },
+    {
+      "id": "i18n_t",
+      "label": "t()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\public\\lib\\i18n.js",
+      "source_location": "L14"
+    },
+    {
+      "id": "i18n_applyi18n",
+      "label": "applyI18n()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\public\\lib\\i18n.js",
+      "source_location": "L22"
+    },
+    {
+      "id": "i18n_isloaded",
+      "label": "isLoaded()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\public\\lib\\i18n.js",
+      "source_location": "L37"
+    }
+  ],
+  "edges": [
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_public_lib_i18n_js",
+      "target": "i18n_loadlocale",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\public\\lib\\i18n.js",
+      "source_location": "L4",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_public_lib_i18n_js",
+      "target": "i18n_t",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\public\\lib\\i18n.js",
+      "source_location": "L14",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_public_lib_i18n_js",
+      "target": "i18n_applyi18n",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\public\\lib\\i18n.js",
+      "source_location": "L22",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_public_lib_i18n_js",
+      "target": "i18n_isloaded",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\public\\lib\\i18n.js",
+      "source_location": "L37",
+      "weight": 1.0
+    }
+  ],
+  "raw_calls": [
+    {
+      "caller_nid": "i18n_loadlocale",
+      "callee": "fetch",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\public\\lib\\i18n.js",
+      "source_location": "L6"
+    },
+    {
+      "caller_nid": "i18n_loadlocale",
+      "callee": "json",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\public\\lib\\i18n.js",
+      "source_location": "L7"
+    },
+    {
+      "caller_nid": "i18n_loadlocale",
+      "callee": "warn",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\public\\lib\\i18n.js",
+      "source_location": "L9"
+    },
+    {
+      "caller_nid": "i18n_t",
+      "callee": "entries",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\public\\lib\\i18n.js",
+      "source_location": "L16"
+    },
+    {
+      "caller_nid": "i18n_t",
+      "callee": "replace",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\public\\lib\\i18n.js",
+      "source_location": "L17"
+    },
+    {
+      "caller_nid": "i18n_t",
+      "callee": "String",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\public\\lib\\i18n.js",
+      "source_location": "L17"
+    },
+    {
+      "caller_nid": "i18n_applyi18n",
+      "callee": "forEach",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\public\\lib\\i18n.js",
+      "source_location": "L23"
+    },
+    {
+      "caller_nid": "i18n_applyi18n",
+      "callee": "querySelectorAll",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\public\\lib\\i18n.js",
+      "source_location": "L23"
+    },
+    {
+      "caller_nid": "i18n_applyi18n",
+      "callee": "forEach",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\public\\lib\\i18n.js",
+      "source_location": "L29"
+    },
+    {
+      "caller_nid": "i18n_applyi18n",
+      "callee": "querySelectorAll",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\public\\lib\\i18n.js",
+      "source_location": "L29"
+    }
+  ]
+}

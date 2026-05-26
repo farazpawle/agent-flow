@@ -428,10 +428,11 @@
 .markdown-render ul, .markdown-render ol { padding-left: var(--space-5); }
 
 /* ---------- LLM Settings panel (Phase 2 Group 17) ---------- */
-.llm-card .llm-header { margin-bottom: var(--space-3); }
+.llm-card .llm-header { margin-bottom: var(--space-2); }
 .llm-card .llm-header h3 { margin-bottom: var(--space-1); }
+.llm-card .llm-header .muted.tiny { line-height: 1.35; }
 
-.llm-panel { display: flex; flex-direction: column; gap: var(--space-3); }
+.llm-panel { display: flex; flex-direction: column; gap: var(--space-2); }
 .llm-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -457,7 +458,12 @@
 }
 .llm-provider-row:hover { border-color: var(--border-strong); }
 .llm-provider-row input[type="radio"] { margin-top: 4px; }
-.llm-provider-meta { display: flex; flex-direction: column; gap: 2px; flex: 1; min-width: 0; }
+/* This class is reused on two different elements:
+ *   - .llm-provider-row > .llm-provider-meta (legacy provider rows, vertical stack)
+ *   - .llm-section-providers > .llm-provider-meta (the key/source line below the tiles, single inline row)
+ * Scope the vertical-flex layout to the legacy use only.
+ */
+.llm-provider-row > .llm-provider-meta { display: flex; flex-direction: column; gap: 2px; flex: 1; min-width: 0; }
 .llm-provider-name {
   font-weight: 600;
   text-transform: capitalize;
@@ -491,7 +497,6 @@
   color: var(--warning, #d4a017);
 }
 
-.llm-models-meta { margin-top: 2px; }
 .llm-actions { margin-top: var(--space-2); align-items: center; }
 
 /* ---------- Runtime Configuration card (Phase 2 follow-up) ---------- */
@@ -547,10 +552,23 @@
 }
 .rt-badge.rt-set { background: rgba(16, 185, 129, 0.15); color: var(--success); border-color: rgba(16, 185, 129, 0.30); }
 .rt-badge.rt-unset { background: var(--bg-card-solid); color: var(--text-tertiary); }
-.rt-badge.rt-restart { background: rgba(245, 158, 11, 0.15); color: var(--warning); border-color: rgba(245, 158, 11, 0.30); }
 .rt-badge.rt-default { background: rgba(94, 106, 210, 0.10); color: var(--text-secondary); border-color: rgba(94, 106, 210, 0.20); text-transform: none; letter-spacing: 0; font-weight: 500; }
 
 .runtime-footer { margin-top: var(--space-3); }
+.rt-pointer { padding-bottom: var(--space-2); border-bottom: 1px dashed var(--border); margin-bottom: var(--space-3); }
+
+/* Settings page — Server card sits at the top with a stronger header. */
+.server-card-prominent { border-left: 3px solid var(--accent); }
+.server-card-prominent h3 { font-size: var(--fs-lg); margin-bottom: var(--space-1); }
+.server-card-prominent .page-actions { margin-top: var(--space-3); }
+
+/* Provider key-status line beneath the provider <select>. */
+.llm-provider-meta { margin-top: 2px; }
+.llm-provider-meta code {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.5px;
+}
 
 /* ---------- Runtime Config inline-edit row ---------- */
 .rt-edit-row {
@@ -574,50 +592,12 @@
 .rt-inline-hint { flex-basis: 100%; }
 
 /* ---------- LLM panel — compact redesign ---------- */
-.llm-active-banner {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 6px;
-  padding: 8px 12px;
-  background: var(--bg-card-solid);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
-  margin-bottom: var(--space-3);
-  font-size: 12px;
-}
-.llm-active-label {
-  font-size: 10px;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  color: var(--text-tertiary);
-  font-weight: 600;
-}
-.llm-active-pill {
-  background: var(--bg-card);
-  padding: 2px 8px;
-  border-radius: var(--radius-xs);
-  font-family: var(--font-mono);
-  font-size: 11px;
-  max-width: 280px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-.llm-active-pill.llm-active-provider {
-  color: var(--primary);
-  font-weight: 600;
-  text-transform: capitalize;
-}
-.llm-active-sep { color: var(--text-tertiary); }
-.llm-active-saved { font-size: 11px; margin-left: auto; }
-
 /* Section headers: tighter than the default field-block label */
 .llm-section-head {
   display: flex;
   align-items: center;
   gap: var(--space-2);
-  margin-bottom: 6px;
+  margin-bottom: 4px;
 }
 .llm-section-title {
   font-size: 12px;
@@ -627,81 +607,21 @@
   font-weight: 600;
 }
 
-/* Provider cards (replaces the radio list) */
-.llm-pcard-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-  gap: var(--space-2);
-}
-.llm-pcard {
-  appearance: none;
-  text-align: left;
-  cursor: pointer;
-  background: var(--bg-card-solid);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
-  padding: 10px 12px;
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  transition: border-color var(--transition-fast), background var(--transition-fast);
-  font-family: inherit;
-}
-.llm-pcard:hover:not(:disabled) { border-color: var(--border-strong); }
-.llm-pcard.is-active {
-  border-color: var(--primary);
-  background: rgba(94, 106, 210, 0.08);
-}
-.llm-pcard.is-locked, .llm-pcard:disabled { opacity: 0.5; cursor: not-allowed; }
-.llm-pcard-head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 6px;
-}
-.llm-pcard-name {
-  font-weight: 600;
-  text-transform: capitalize;
-  font-size: 13px;
-}
-.llm-pcard-chip {
-  padding: 1px 6px;
-  border-radius: var(--radius-xs);
-  font-size: 9px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.4px;
-  white-space: nowrap;
-}
-.llm-pcard-chip-ok { background: rgba(16, 185, 129, 0.18); color: var(--success); }
-.llm-pcard-chip-missing { background: rgba(239, 68, 68, 0.15); color: var(--danger); }
-.llm-pcard-chip-none { background: var(--bg-card); color: var(--text-tertiary); }
-.llm-pcard-hint {
-  font-size: 10px;
-  font-family: var(--font-mono);
-  color: var(--text-tertiary);
-  background: transparent;
-  padding: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
 /* Single-column stack for Model / Strategy / Mode. Each section gets a
  * full row, the select is capped to a sensible max-width so it doesn't
  * stretch into empty space (which made the value look right-aligned). */
 .llm-row-grid {
   display: flex;
   flex-direction: column;
-  gap: var(--space-3);
-  margin-top: var(--space-3);
+  gap: var(--space-2);
+  margin-top: var(--space-2);
 }
 .llm-section-providers { margin-bottom: 0; }
 
 /* Sticky Save bar inside the LLM card */
 .llm-actions-sticky {
-  margin-top: var(--space-3);
-  padding: var(--space-2) var(--space-3);
+  margin-top: var(--space-2);
+  padding: var(--space-1) var(--space-3);
   background: var(--bg-card-solid);
   border-top: 1px solid var(--border);
   border-radius: var(--radius-sm);
@@ -743,8 +663,8 @@
 
 /* Tighter hint text directly under each select. */
 .llm-select-hint {
-  margin-top: 4px;
-  line-height: 1.4;
+  margin-top: 2px;
+  line-height: 1.3;
 }
 
 /* The Refresh button in the section head is icon-only. */
@@ -756,7 +676,64 @@
 }
 
 /* Cached-models meta line sits directly under the select. */
-.llm-models-meta { margin-top: 4px; }
+.llm-models-meta { margin-top: 2px; }
 
 /* Strategy + Mode columns can shrink without their selects clipping. */
 .llm-row-grid .llm-section { min-width: 0; }
+
+/* ---------- Provider tile grid (compact card row) ---------- */
+.llm-provider-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+.llm-provider-tile {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--bg-card-solid);
+  color: var(--text-secondary);
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.2;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: border-color 120ms ease, background 120ms ease, color 120ms ease;
+}
+.llm-provider-tile:hover { border-color: var(--border-strong); color: var(--text-primary); }
+.llm-provider-tile.is-active {
+  border-color: var(--primary);
+  background: rgba(94, 106, 210, 0.12);
+  color: var(--text-primary);
+}
+.llm-provider-tile.is-locked,
+.llm-provider-tile[disabled] {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+.llm-provider-tile .tile-name {
+  text-transform: capitalize;
+  white-space: nowrap;
+}
+.llm-provider-tile .tile-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--text-tertiary);
+  flex-shrink: 0;
+}
+.llm-provider-tile .tile-dot-ok { background: var(--success, #10b981); }
+.llm-provider-tile .tile-dot-miss { background: var(--danger, #ef4444); }
+.llm-provider-tile .tile-dot-none { background: var(--text-tertiary); }
+
+/* No wrapping for the key/source meta lines or the cached-models line. */
+.llm-provider-meta,
+.llm-models-meta,
+.llm-select-hint {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

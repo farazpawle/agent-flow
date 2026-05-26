@@ -1,0 +1,113 @@
+{
+  "nodes": [
+    {
+      "id": "d_d_drive_projects_mcp_servers_agent_flow_src_utils_callercontext_ts",
+      "label": "callerContext.ts",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\utils\\callerContext.ts",
+      "source_location": "L1"
+    },
+    {
+      "id": "callercontext_withcallercontext",
+      "label": "withCallerContext()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\utils\\callerContext.ts",
+      "source_location": "L31"
+    },
+    {
+      "id": "callercontext_getcurrentcaller",
+      "label": "getCurrentCaller()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\utils\\callerContext.ts",
+      "source_location": "L44"
+    },
+    {
+      "id": "callercontext_getcallerstack",
+      "label": "getCallerStack()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\utils\\callerContext.ts",
+      "source_location": "L49"
+    },
+    {
+      "id": "callercontext_isinvokedfrom",
+      "label": "isInvokedFrom()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\utils\\callerContext.ts",
+      "source_location": "L57"
+    },
+    {
+      "id": "callercontext_resetcallercontextfortests",
+      "label": "_resetCallerContextForTests()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\utils\\callerContext.ts",
+      "source_location": "L65"
+    }
+  ],
+  "edges": [
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_utils_callercontext_ts",
+      "target": "callercontext_withcallercontext",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\utils\\callerContext.ts",
+      "source_location": "L31",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_utils_callercontext_ts",
+      "target": "callercontext_getcurrentcaller",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\utils\\callerContext.ts",
+      "source_location": "L44",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_utils_callercontext_ts",
+      "target": "callercontext_getcallerstack",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\utils\\callerContext.ts",
+      "source_location": "L49",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_utils_callercontext_ts",
+      "target": "callercontext_isinvokedfrom",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\utils\\callerContext.ts",
+      "source_location": "L57",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_utils_callercontext_ts",
+      "target": "callercontext_resetcallercontextfortests",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\utils\\callerContext.ts",
+      "source_location": "L65",
+      "weight": 1.0
+    }
+  ],
+  "raw_calls": [
+    {
+      "caller_nid": "callercontext_withcallercontext",
+      "callee": "push",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\utils\\callerContext.ts",
+      "source_location": "L35"
+    },
+    {
+      "caller_nid": "callercontext_withcallercontext",
+      "callee": "fn",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\utils\\callerContext.ts",
+      "source_location": "L37"
+    },
+    {
+      "caller_nid": "callercontext_withcallercontext",
+      "callee": "pop",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\utils\\callerContext.ts",
+      "source_location": "L39"
+    }
+  ]
+}

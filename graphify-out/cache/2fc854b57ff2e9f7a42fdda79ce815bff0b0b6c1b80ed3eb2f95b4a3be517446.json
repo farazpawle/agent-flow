@@ -1,0 +1,352 @@
+{
+  "nodes": [
+    {
+      "id": "d_d_drive_projects_mcp_servers_agent_flow_src_tools_deletes_taskdelete_ts",
+      "label": "taskDelete.ts",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\deletes\\taskDelete.ts",
+      "source_location": "L1"
+    },
+    {
+      "id": "taskdelete_astooltext",
+      "label": "asToolText()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\deletes\\taskDelete.ts",
+      "source_location": "L31"
+    },
+    {
+      "id": "taskdelete_rejectworkflowinitiated",
+      "label": "rejectWorkflowInitiated()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\deletes\\taskDelete.ts",
+      "source_location": "L37"
+    },
+    {
+      "id": "taskdelete_pickprojectidfor",
+      "label": "pickProjectIdFor()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\deletes\\taskDelete.ts",
+      "source_location": "L46"
+    },
+    {
+      "id": "taskdelete_taskdelete",
+      "label": "taskDelete()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\deletes\\taskDelete.ts",
+      "source_location": "L53"
+    },
+    {
+      "id": "taskdelete_handledeleteone",
+      "label": "handleDeleteOne()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\deletes\\taskDelete.ts",
+      "source_location": "L71"
+    },
+    {
+      "id": "taskdelete_handledeletemany",
+      "label": "handleDeleteMany()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\deletes\\taskDelete.ts",
+      "source_location": "L107"
+    },
+    {
+      "id": "taskdelete_handleclearall",
+      "label": "handleClearAll()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\deletes\\taskDelete.ts",
+      "source_location": "L157"
+    }
+  ],
+  "edges": [
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_tools_deletes_taskdelete_ts",
+      "target": "d_d_drive_projects_mcp_servers_agent_flow_src_models_db_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\deletes\\taskDelete.ts",
+      "source_location": "L17",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_tools_deletes_taskdelete_ts",
+      "target": "d_d_drive_projects_mcp_servers_agent_flow_src_utils_errors_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\deletes\\taskDelete.ts",
+      "source_location": "L18",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_tools_deletes_taskdelete_ts",
+      "target": "d_d_drive_projects_mcp_servers_agent_flow_src_utils_telemetry_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\deletes\\taskDelete.ts",
+      "source_location": "L23",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_tools_deletes_taskdelete_ts",
+      "target": "d_d_drive_projects_mcp_servers_agent_flow_src_utils_auditlog_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\deletes\\taskDelete.ts",
+      "source_location": "L24",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_tools_deletes_taskdelete_ts",
+      "target": "d_d_drive_projects_mcp_servers_agent_flow_src_utils_callercontext_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\deletes\\taskDelete.ts",
+      "source_location": "L25",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_tools_deletes_taskdelete_ts",
+      "target": "d_d_drive_projects_mcp_servers_agent_flow_src_types_index_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\deletes\\taskDelete.ts",
+      "source_location": "L26",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_tools_deletes_taskdelete_ts",
+      "target": "d_d_drive_projects_mcp_servers_agent_flow_src_tools_deletes_schemas_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\deletes\\taskDelete.ts",
+      "source_location": "L27",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_tools_deletes_taskdelete_ts",
+      "target": "taskdelete_astooltext",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\deletes\\taskDelete.ts",
+      "source_location": "L31",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_tools_deletes_taskdelete_ts",
+      "target": "taskdelete_rejectworkflowinitiated",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\deletes\\taskDelete.ts",
+      "source_location": "L37",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_tools_deletes_taskdelete_ts",
+      "target": "taskdelete_pickprojectidfor",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\deletes\\taskDelete.ts",
+      "source_location": "L46",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_tools_deletes_taskdelete_ts",
+      "target": "taskdelete_taskdelete",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\deletes\\taskDelete.ts",
+      "source_location": "L53",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_tools_deletes_taskdelete_ts",
+      "target": "taskdelete_handledeleteone",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\deletes\\taskDelete.ts",
+      "source_location": "L71",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_tools_deletes_taskdelete_ts",
+      "target": "taskdelete_handledeletemany",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\deletes\\taskDelete.ts",
+      "source_location": "L107",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_tools_deletes_taskdelete_ts",
+      "target": "taskdelete_handleclearall",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\deletes\\taskDelete.ts",
+      "source_location": "L157",
+      "weight": 1.0
+    },
+    {
+      "source": "taskdelete_handledeleteone",
+      "target": "taskdelete_astooltext",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\deletes\\taskDelete.ts",
+      "source_location": "L81",
+      "weight": 1.0
+    },
+    {
+      "source": "taskdelete_handledeletemany",
+      "target": "taskdelete_astooltext",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\deletes\\taskDelete.ts",
+      "source_location": "L122",
+      "weight": 1.0
+    },
+    {
+      "source": "taskdelete_handledeletemany",
+      "target": "taskdelete_pickprojectidfor",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\deletes\\taskDelete.ts",
+      "source_location": "L135",
+      "weight": 1.0
+    },
+    {
+      "source": "taskdelete_handleclearall",
+      "target": "taskdelete_astooltext",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\deletes\\taskDelete.ts",
+      "source_location": "L168",
+      "weight": 1.0
+    }
+  ],
+  "raw_calls": [
+    {
+      "caller_nid": "taskdelete_astooltext",
+      "callee": "stringify",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\deletes\\taskDelete.ts",
+      "source_location": "L33"
+    },
+    {
+      "caller_nid": "taskdelete_rejectworkflowinitiated",
+      "callee": "isInvokedFrom",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\deletes\\taskDelete.ts",
+      "source_location": "L38"
+    },
+    {
+      "caller_nid": "taskdelete_taskdelete",
+      "callee": "withToolTelemetry",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\deletes\\taskDelete.ts",
+      "source_location": "L54"
+    },
+    {
+      "caller_nid": "taskdelete_handledeleteone",
+      "callee": "getTask",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\deletes\\taskDelete.ts",
+      "source_location": "L74"
+    },
+    {
+      "caller_nid": "taskdelete_handledeleteone",
+      "callee": "writeDestructiveAudit",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\deletes\\taskDelete.ts",
+      "source_location": "L90"
+    },
+    {
+      "caller_nid": "taskdelete_handledeleteone",
+      "callee": "deleteTask",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\deletes\\taskDelete.ts",
+      "source_location": "L97"
+    },
+    {
+      "caller_nid": "taskdelete_handledeletemany",
+      "callee": "getTask",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\deletes\\taskDelete.ts",
+      "source_location": "L112"
+    },
+    {
+      "caller_nid": "taskdelete_handledeletemany",
+      "callee": "push",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\deletes\\taskDelete.ts",
+      "source_location": "L113"
+    },
+    {
+      "caller_nid": "taskdelete_handledeletemany",
+      "callee": "filter",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\deletes\\taskDelete.ts",
+      "source_location": "L127"
+    },
+    {
+      "caller_nid": "taskdelete_handledeletemany",
+      "callee": "map",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\deletes\\taskDelete.ts",
+      "source_location": "L128"
+    },
+    {
+      "caller_nid": "taskdelete_handledeletemany",
+      "callee": "slice",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\deletes\\taskDelete.ts",
+      "source_location": "L128"
+    },
+    {
+      "caller_nid": "taskdelete_handledeletemany",
+      "callee": "writeDestructiveAudit",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\deletes\\taskDelete.ts",
+      "source_location": "L136"
+    },
+    {
+      "caller_nid": "taskdelete_handledeletemany",
+      "callee": "map",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\deletes\\taskDelete.ts",
+      "source_location": "L140"
+    },
+    {
+      "caller_nid": "taskdelete_handledeletemany",
+      "callee": "deleteTask",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\deletes\\taskDelete.ts",
+      "source_location": "L146"
+    },
+    {
+      "caller_nid": "taskdelete_handleclearall",
+      "callee": "getProject",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\deletes\\taskDelete.ts",
+      "source_location": "L160"
+    },
+    {
+      "caller_nid": "taskdelete_handleclearall",
+      "callee": "getAllTasks",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\deletes\\taskDelete.ts",
+      "source_location": "L166"
+    },
+    {
+      "caller_nid": "taskdelete_handleclearall",
+      "callee": "map",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\deletes\\taskDelete.ts",
+      "source_location": "L173"
+    },
+    {
+      "caller_nid": "taskdelete_handleclearall",
+      "callee": "slice",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\deletes\\taskDelete.ts",
+      "source_location": "L173"
+    },
+    {
+      "caller_nid": "taskdelete_handleclearall",
+      "callee": "writeDestructiveAudit",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\deletes\\taskDelete.ts",
+      "source_location": "L189"
+    },
+    {
+      "caller_nid": "taskdelete_handleclearall",
+      "callee": "map",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\deletes\\taskDelete.ts",
+      "source_location": "L193"
+    },
+    {
+      "caller_nid": "taskdelete_handleclearall",
+      "callee": "deleteTask",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\deletes\\taskDelete.ts",
+      "source_location": "L200"
+    }
+  ]
+}

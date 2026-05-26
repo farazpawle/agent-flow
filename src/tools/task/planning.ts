@@ -1,168 +1,204 @@
-
 import { z } from "zod";
 import path from "path";
-import { fileURLToPath } from "url";
-import { getAllTasks } from "../../models/taskModel.js";
-import { TaskStatus, Task } from "../../types/index.js";
-import {
-    getPlanTaskPrompt,
-    getAnalyzeTaskPrompt,
-    getReflectTaskPrompt,
-} from "../../prompts/index.js";
-import {
-    planIdeaSchema,
-    analyzeIdeaSchema,
-    reflectIdeaSchema,
-} from "./schemas.js";
+import { getPlanTaskPrompt } from "../../prompts/index.js";
+import { planIdeaSchema } from "./schemas.js";
 import { validateProjectContext } from "../../utils/projectValidation.js";
 import { createStep, getStepById } from "../../models/workflowModel.js";
+import { renderTaskToolMessage } from "./messageTemplates.js";
 
 // ============================================================================
 // IDEA PHASE TOOLS (Brainstorming & Planning)
 // ============================================================================
 
 export async function planIdea({
-    description,
-    requirements,
-    projectId,
-    focus,
-}: z.infer<typeof planIdeaSchema>) {
-    // 1. Validate Context
-    const projectValidation = await validateProjectContext(projectId);
-    if (!projectValidation.isValid) {
-        return {
-            content: [{ type: "text" as const, text: projectValidation.error! }],
-            isError: true,
-        };
-    }
-
-    const MEMORY_DIR = path.join(process.env.DATA_DIR || "data", "memory");
-
-    // 2. Generate Prompt
-    // Note: We are using the "getPlanTaskPrompt" generator for now, 
-    // we will rename it in the next step but the logic is compatible.
-    const prompt = getPlanTaskPrompt({
-        description,
-        requirements,
-        existingTasksReference: false, // Idea phase doesn't care about tasks yet
-        completedTasks: [],
-        pendingTasks: [],
-        memoryDir: MEMORY_DIR,
-        projectId: projectValidation.projectId,
-        checkDependencies: false,
-    });
-
-    // 3. Save Step (PLAN)
-    const pId = projectValidation.projectId;
-    let stepId = "N/A";
-
-    if (pId) {
-        const step = await createStep(pId, "PLAN", JSON.stringify({ description, requirements, focus }), undefined, undefined);
-        stepId = step.id;
-
-        return {
-            content: [
-                {
-                    type: "text" as const,
-                    text: `${prompt}\n\n[SYSTEM] IDEA Saved (ID: ${stepId}).\nNEXT STEP: Call 'analyze_idea' with inputStepId='${stepId}'.`,
-                },
-            ],
-        };
-    }
-
-    return {
-        content: [{ type: "text" as const, text: prompt }],
-    };
-}
-
-export async function analyzeIdea({
-    inputStepId,
-    projectId: explicitProjectId,
-}: z.infer<typeof analyzeIdeaSchema>) {
-    // 1. Strict Chain Validation
-    const step = await getStepById(inputStepId);
+  stage = "plan",
+  description,
+  requirements,
+  projectId,
+  focus,
+  inputStepId,
+  analysis,
+}: z.input<typeof planIdeaSchema>) {
+  if (stage === "analyze") {
+    const step = await getStepById(inputStepId!);
     if (!step) {
-        return {
-            content: [{ type: "text" as const, text: `Error: inputStepId '${inputStepId}' not found. You must start with 'plan_idea'.` }],
-            isError: true
-        };
+      return {
+        content: [
+          {
+            type: "text" as const,
+            text: renderTaskToolMessage("taskToolMessages/planning/analyzeInputStepNotFound.md", {
+              inputStepId,
+            }),
+          },
+        ],
+        isError: true,
+      };
     }
 
     if (step.stepType !== "PLAN") {
-        return {
-            content: [{ type: "text" as const, text: `Error: inputStepId '${inputStepId}' is a ${step.stepType} step. 'analyze_idea' must follow a PLAN step.` }],
-            isError: true
-        };
+      return {
+        content: [
+          {
+            type: "text" as const,
+            text: renderTaskToolMessage("taskToolMessages/planning/analyzeInputStepWrongType.md", {
+              inputStepId,
+              stepType: step.stepType,
+            }),
+          },
+        ],
+        isError: true,
+      };
     }
 
-    // 2. Context Resolution
-    const projectId = step.projectId; // Always inherit from chain
     const content = JSON.parse(step.content);
     const contextSummary = content.description;
     const contextRequirements = content.requirements;
 
-    // 3. Generate Prompt
-    const prompt = getAnalyzeTaskPrompt({
-        summary: contextSummary,
-        initialConcept: contextRequirements || "",
+    const prompt = getPlanTaskPrompt({
+      stage: "analyze",
+      summary: contextSummary,
+      initialConcept: contextRequirements || "",
     });
 
-    // 4. Save Step (ANALYZE)
-    const newStep = await createStep(projectId, "ANALYZE", JSON.stringify({ summary: contextSummary }), undefined, inputStepId);
+    const newStep = await createStep(
+      step.projectId,
+      "ANALYZE",
+      JSON.stringify({ summary: contextSummary }),
+      undefined,
+      inputStepId
+    );
 
     return {
-        content: [
+      content: [
+        {
+          type: "text" as const,
+          text: `${prompt}\n\n${renderTaskToolMessage(
+            "taskToolMessages/planning/analyzeStepSaved.md",
             {
-                type: "text" as const,
-                text: `${prompt}\n\n[SYSTEM] ANALYSIS Context Loaded (ID: ${newStep.id}).\nNEXT STEP: Call 'reflect_idea' with inputStepId='${newStep.id}'.`,
-            },
-        ],
+              stepId: newStep.id,
+            }
+          )}`,
+        },
+      ],
     };
-}
+  }
 
-export async function reflectIdea({
-    inputStepId,
-    analysis,
-    projectId: explicitProjectId,
-}: z.infer<typeof reflectIdeaSchema>) {
-    // 1. Strict Chain Validation
-    const step = await getStepById(inputStepId);
+  if (stage === "review") {
+    const step = await getStepById(inputStepId!);
     if (!step) {
-        return {
-            content: [{ type: "text" as const, text: `Error: inputStepId '${inputStepId}' not found. You must start with 'analyze_idea'.` }],
-            isError: true
-        };
+      return {
+        content: [
+          {
+            type: "text" as const,
+            text: renderTaskToolMessage("taskToolMessages/planning/reviewInputStepNotFound.md", {
+              inputStepId,
+            }),
+          },
+        ],
+        isError: true,
+      };
     }
 
     if (step.stepType !== "ANALYZE") {
-        return {
-            content: [{ type: "text" as const, text: `Error: inputStepId '${inputStepId}' is a ${step.stepType} step. 'reflect_idea' must follow an ANALYZE step.` }],
-            isError: true
-        };
+      return {
+        content: [
+          {
+            type: "text" as const,
+            text: renderTaskToolMessage("taskToolMessages/planning/reviewInputStepWrongType.md", {
+              inputStepId,
+              stepType: step.stepType,
+            }),
+          },
+        ],
+        isError: true,
+      };
     }
 
-    const projectId = step.projectId; // Inherit
-    const prevContent = JSON.parse(step.content);
-    // For reflection, we want the summary of what we are building
-    // The previous step was ANALYZE, its content was { summary: ... }
-    const contextSummary = prevContent.summary || "Analysis Step";
-
-    // 2. Generate Prompt
-    const prompt = getReflectTaskPrompt({
-        summary: contextSummary,
-        analysis: analysis || "(Self-Reflection Mode)",
+    const prompt = getPlanTaskPrompt({
+      stage: "review",
+      analysis: analysis || "(Self-Review Mode)",
     });
 
-    // 3. Save Step (REFLECT)
-    // We save the 'analysis' content if provided, as that represents the critique.
-    const newStep = await createStep(projectId, "REFLECT", JSON.stringify({ analysis: analysis }), undefined, inputStepId);
+    // Persist using REFLECT step type for compatibility with existing DB model
+    const newStep = await createStep(
+      step.projectId,
+      "REFLECT",
+      JSON.stringify({ analysis }),
+      undefined,
+      inputStepId
+    );
 
     return {
-        content: [
+      content: [
+        {
+          type: "text" as const,
+          text: `${prompt}\n\n${renderTaskToolMessage(
+            "taskToolMessages/planning/reviewStepSaved.md",
             {
-                type: "text" as const,
-                text: `${prompt}\n\n[SYSTEM] REFLECTION Saved (ID: ${newStep.id}).\nNEXT STEP: Call 'split_tasks' with inputStepId='${newStep.id}'.`,
-            },
-        ],
+              stepId: newStep.id,
+            }
+          )}`,
+        },
+      ],
     };
+  }
+
+  // 1. Validate Context
+  const projectValidation = await validateProjectContext(projectId);
+  if (!projectValidation.isValid) {
+    return {
+      content: [{ type: "text" as const, text: projectValidation.error! }],
+      isError: true,
+    };
+  }
+
+  const MEMORY_DIR = path.join(process.env.DATA_DIR || "data", "memory");
+
+  // 3. Save Step (PLAN) first to get the step ID for the prompt
+  const pId = projectValidation.projectId;
+  let stepId = "N/A";
+
+  if (pId) {
+    const step = await createStep(
+      pId,
+      "PLAN",
+      JSON.stringify({ description: description || "", requirements, focus }),
+      undefined,
+      undefined
+    );
+    stepId = step.id;
+  }
+
+  const prompt = getPlanTaskPrompt({
+    stage: "plan",
+    description: description || "",
+    requirements,
+    existingTasksReference: false,
+    completedTasks: [],
+    pendingTasks: [],
+    memoryDir: MEMORY_DIR,
+    projectId: projectValidation.projectId,
+    checkDependencies: false,
+    currentStepId: stepId,
+  });
+
+  if (pId) {
+    return {
+      content: [
+        {
+          type: "text" as const,
+          text: `${prompt}\n\n${renderTaskToolMessage(
+            "taskToolMessages/planning/planStepSaved.md",
+            {
+              stepId,
+            }
+          )}`,
+        },
+      ],
+    };
+  }
+
+  return {
+    content: [{ type: "text" as const, text: prompt }],
+  };
 }

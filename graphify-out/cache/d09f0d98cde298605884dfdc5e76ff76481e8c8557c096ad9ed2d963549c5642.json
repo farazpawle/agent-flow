@@ -1,0 +1,250 @@
+{
+  "nodes": [
+    {
+      "id": "d_d_drive_projects_mcp_servers_agent_flow_src_prompts_loader_ts",
+      "label": "loader.ts",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\prompts\\loader.ts",
+      "source_location": "L1"
+    },
+    {
+      "id": "loader_processenvstring",
+      "label": "processEnvString()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\prompts\\loader.ts",
+      "source_location": "L14"
+    },
+    {
+      "id": "loader_loadprompt",
+      "label": "loadPrompt()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\prompts\\loader.ts",
+      "source_location": "L29"
+    },
+    {
+      "id": "loader_generateprompt",
+      "label": "generatePrompt()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\prompts\\loader.ts",
+      "source_location": "L57"
+    },
+    {
+      "id": "loader_loadpromptfromtemplate",
+      "label": "loadPromptFromTemplate()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\prompts\\loader.ts",
+      "source_location": "L90"
+    }
+  ],
+  "edges": [
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_prompts_loader_ts",
+      "target": "fs",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\prompts\\loader.ts",
+      "source_location": "L6",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_prompts_loader_ts",
+      "target": "path",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\prompts\\loader.ts",
+      "source_location": "L7",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_prompts_loader_ts",
+      "target": "url",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\prompts\\loader.ts",
+      "source_location": "L8",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_prompts_loader_ts",
+      "target": "d_d_drive_projects_mcp_servers_agent_flow_src_utils_envconfig_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\prompts\\loader.ts",
+      "source_location": "L9",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_prompts_loader_ts",
+      "target": "loader_processenvstring",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\prompts\\loader.ts",
+      "source_location": "L14",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_prompts_loader_ts",
+      "target": "loader_loadprompt",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\prompts\\loader.ts",
+      "source_location": "L29",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_prompts_loader_ts",
+      "target": "loader_generateprompt",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\prompts\\loader.ts",
+      "source_location": "L57",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_prompts_loader_ts",
+      "target": "loader_loadpromptfromtemplate",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\prompts\\loader.ts",
+      "source_location": "L90",
+      "weight": 1.0
+    },
+    {
+      "source": "loader_loadprompt",
+      "target": "loader_processenvstring",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\prompts\\loader.ts",
+      "source_location": "L37",
+      "weight": 1.0
+    }
+  ],
+  "raw_calls": [
+    {
+      "caller_nid": "loader_processenvstring",
+      "callee": "replace",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\prompts\\loader.ts",
+      "source_location": "L17"
+    },
+    {
+      "caller_nid": "loader_processenvstring",
+      "callee": "replace",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\prompts\\loader.ts",
+      "source_location": "L17"
+    },
+    {
+      "caller_nid": "loader_processenvstring",
+      "callee": "replace",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\prompts\\loader.ts",
+      "source_location": "L17"
+    },
+    {
+      "caller_nid": "loader_loadprompt",
+      "callee": "toUpperCase",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\prompts\\loader.ts",
+      "source_location": "L31"
+    },
+    {
+      "caller_nid": "loader_generateprompt",
+      "callee": "forEach",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\prompts\\loader.ts",
+      "source_location": "L64"
+    },
+    {
+      "caller_nid": "loader_generateprompt",
+      "callee": "entries",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\prompts\\loader.ts",
+      "source_location": "L64"
+    },
+    {
+      "caller_nid": "loader_loadpromptfromtemplate",
+      "callee": "applyEnvironmentAliases",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\prompts\\loader.ts",
+      "source_location": "L91"
+    },
+    {
+      "caller_nid": "loader_loadpromptfromtemplate",
+      "callee": "has",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\prompts\\loader.ts",
+      "source_location": "L97"
+    },
+    {
+      "caller_nid": "loader_loadpromptfromtemplate",
+      "callee": "get",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\prompts\\loader.ts",
+      "source_location": "L98"
+    },
+    {
+      "caller_nid": "loader_loadpromptfromtemplate",
+      "callee": "resolve",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\prompts\\loader.ts",
+      "source_location": "L110"
+    },
+    {
+      "caller_nid": "loader_loadpromptfromtemplate",
+      "callee": "push",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\prompts\\loader.ts",
+      "source_location": "L111"
+    },
+    {
+      "caller_nid": "loader_loadpromptfromtemplate",
+      "callee": "existsSync",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\prompts\\loader.ts",
+      "source_location": "L112"
+    },
+    {
+      "caller_nid": "loader_loadpromptfromtemplate",
+      "callee": "join",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\prompts\\loader.ts",
+      "source_location": "L120"
+    },
+    {
+      "caller_nid": "loader_loadpromptfromtemplate",
+      "callee": "push",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\prompts\\loader.ts",
+      "source_location": "L125"
+    },
+    {
+      "caller_nid": "loader_loadpromptfromtemplate",
+      "callee": "existsSync",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\prompts\\loader.ts",
+      "source_location": "L126"
+    },
+    {
+      "caller_nid": "loader_loadpromptfromtemplate",
+      "callee": "join",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\prompts\\loader.ts",
+      "source_location": "L133"
+    },
+    {
+      "caller_nid": "loader_loadpromptfromtemplate",
+      "callee": "push",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\prompts\\loader.ts",
+      "source_location": "L138"
+    },
+    {
+      "caller_nid": "loader_loadpromptfromtemplate",
+      "callee": "existsSync",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\prompts\\loader.ts",
+      "source_location": "L139"
+    },
+    {
+      "caller_nid": "loader_loadpromptfromtemplate",
+      "callee": "join",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\prompts\\loader.ts",
+      "source_location": "L147"
+    },
+    {
+      "caller_nid": "loader_loadpromptfromtemplate",
+      "callee": "readFileSync",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\prompts\\loader.ts",
+      "source_location": "L154"
+    },
+    {
+      "caller_nid": "loader_loadpromptfromtemplate",
+      "callee": "set",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\prompts\\loader.ts",
+      "source_location": "L157"
+    }
+  ]
+}

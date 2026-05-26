@@ -26,7 +26,16 @@ export async function mount(container) {
     <div class="page-header">
       <div>
         <h1>Settings</h1>
-        <div class="page-subtitle">Appearance, LLM provider, server controls, and runtime info.</div>
+        <div class="page-subtitle">Server controls, appearance, LLM provider, and runtime configuration.</div>
+      </div>
+    </div>
+
+    <div class="card server-card-prominent" style="margin-bottom: var(--space-4);">
+      <h3>Server</h3>
+      <p class="muted tiny">The dashboard runs in the same Node process as your MCP server. Restart cleanly recycles the worker; Stop ends the process (use your launcher to bring it back).</p>
+      <div class="page-actions">
+        <button class="btn btn-secondary" id="btn-restart-server">🔄 Restart Server</button>
+        <button class="btn btn-danger" id="btn-stop-server">🛑 Stop Server</button>
       </div>
     </div>
 
@@ -54,22 +63,13 @@ export async function mount(container) {
       </div>
     </div>
 
-    <div class="card" style="margin-bottom: var(--space-4);">
-      <h3>Server</h3>
-      <p class="muted tiny">The dashboard runs in the same Node process as your MCP server. Restart cleanly recycles the worker; Stop ends the process (use your launcher to bring it back).</p>
-      <div class="page-actions">
-        <button class="btn btn-secondary" id="btn-restart-server">🔄 Restart Server</button>
-        <button class="btn btn-danger" id="btn-stop-server">🛑 Stop Server</button>
-      </div>
-    </div>
-
     <div class="card runtime-config-card" id="runtime-config-card" style="margin-bottom: var(--space-4);">
       <div class="runtime-config-header">
         <h3>Runtime configuration</h3>
         <div class="muted tiny">
-          Every env var the server actually reads. Secret values (API keys, service-role keys) are redacted —
-          the column shows only whether they're set. Edit <code>.env</code> at the project root and restart to change anything marked
-          <span class="rt-badge rt-restart">restart</span>.
+          Every env var the server actually reads. Fields marked
+          <em>read at boot</em> only take effect on the next server restart —
+          edit them inline or change <code>.env</code> directly.
         </div>
       </div>
       <div id="runtime-config-body" class="runtime-config-body">
@@ -184,6 +184,10 @@ async function mountRuntimeConfigCard() {
     .join("");
 
   body.innerHTML = `
+    <div class="muted tiny rt-pointer">
+      LLM provider, model, strategy, mode, and per-provider API key status are configured in the
+      <strong>LLM provider</strong> card above. API keys can be set only in <code>.env</code> at the project root.
+    </div>
     ${sectionsHtml}
     <div class="muted tiny runtime-footer">
       Snapshot taken at ${escapeHtml(new Date(snapshot.fetchedAt).toLocaleString())}.
@@ -251,9 +255,10 @@ function cssEscape(s) {
 }
 
 function renderRuntimeField(f) {
-  const restartBadge = f.restartRequired
-    ? `<span class="rt-badge rt-restart" title="Requires a server restart to take effect">restart</span>`
-    : "";
+  // No per-row warning pill — the per-card blurb already says
+  // "fields marked 'read at boot' take effect on next restart."
+  // Editable rows surface a quiet inline hint so the operator knows
+  // whether their edit applies immediately or after restart.
   const defaultBadge =
     f.default !== undefined
       ? `<span class="rt-badge rt-default" title="Default applied when unset">default: ${escapeHtml(String(f.default))}</span>`
@@ -269,7 +274,7 @@ function renderRuntimeField(f) {
     // sends a PATCH; success replaces the row with the new state.
     const current = f.set ? String(f.value ?? "") : "";
     const restartHint = f.restartRequired
-      ? `<span class="muted tiny rt-inline-hint">— takes effect after restart</span>`
+      ? `<span class="muted tiny rt-inline-hint">— read at boot; restart server to apply</span>`
       : `<span class="muted tiny rt-inline-hint">— applied live on save</span>`;
     valueCell = `
       <div class="rt-edit-row">
@@ -295,7 +300,7 @@ function renderRuntimeField(f) {
     <tr>
       <td class="rt-name"><code>${escapeHtml(f.name)}</code></td>
       <td class="rt-value-cell">${valueCell}</td>
-      <td class="rt-badges">${restartBadge}${defaultBadge}</td>
+      <td class="rt-badges">${defaultBadge}</td>
     </tr>
     <tr class="rt-desc">
       <td colspan="3" class="muted tiny">${escapeHtml(f.description)}</td>
@@ -391,37 +396,61 @@ async function mountLlmPanel() {
   }
 
   /**
-   * Clickable provider card — replaces the radio-list row. The whole
-   * card is the click target (data-provider tells the handler which
-   * one was clicked), with a key-status chip in the top right and the
-   * env var name in monospace at the bottom.
+   * Compact provider tile. Each tile is a small clickable card with the
+   * provider name and a key-status dot. Disabled when LLM_CONFIG_LOCK.
    */
-  function providerCard(p) {
-    const isActive = state.selectedProvider === p.provider;
-    const locked = state.configLocked;
-    const keyChip =
-      p.provider === "none"
-        ? `<span class="llm-pcard-chip llm-pcard-chip-none">no key needed</span>`
-        : p.keyConfigured
-          ? `<span class="llm-pcard-chip llm-pcard-chip-ok" title="API key detected via env var ${escapeHtml(p.keyEnv)}">key set</span>`
-          : `<span class="llm-pcard-chip llm-pcard-chip-missing" title="No API key found in ${escapeHtml(p.keyEnv)}">key missing</span>`;
-    const keyHint =
-      p.provider === "none" || p.keyEnv == null
-        ? `<span class="llm-pcard-hint muted">manual-only</span>`
-        : `<code class="llm-pcard-hint" title="API keys are env-only — never persisted to the DB.">${escapeHtml(p.keyEnv)}</code>`;
+  function providerTile(p) {
+    const active = p.provider === state.selectedProvider;
+    const cls = ["llm-provider-tile"];
+    if (active) cls.push("is-active");
+    if (state.configLocked) cls.push("is-locked");
+    const isNone = p.provider === "none";
+    let dotCls = "tile-dot tile-dot-none";
+    let dotTitle = "No key needed";
+    if (!isNone) {
+      if (p.keyConfigured) {
+        dotCls = "tile-dot tile-dot-ok";
+        dotTitle = `Key configured (${p.keyEnv})`;
+      } else {
+        dotCls = "tile-dot tile-dot-miss";
+        dotTitle = `Missing key (${p.keyEnv})`;
+      }
+    }
+    const disabled = state.configLocked ? "disabled" : "";
     return `
-      <button type="button"
-        class="llm-pcard ${isActive ? "is-active" : ""} ${locked ? "is-locked" : ""}"
+      <button
+        type="button"
+        class="${cls.join(" ")}"
+        role="radio"
+        aria-checked="${active ? "true" : "false"}"
         data-provider="${escapeHtml(p.provider)}"
-        ${locked ? "disabled" : ""}
-        aria-pressed="${isActive ? "true" : "false"}">
-        <div class="llm-pcard-head">
-          <span class="llm-pcard-name">${escapeHtml(p.provider)}</span>
-          ${keyChip}
-        </div>
-        ${keyHint}
+        ${disabled}
+        title="${escapeHtml(p.provider)}"
+      >
+        <span class="${dotCls}" title="${escapeHtml(dotTitle)}"></span>
+        <span class="tile-name">${escapeHtml(p.provider)}</span>
       </button>
     `;
+  }
+
+  /**
+   * The single line beneath the provider <select> that summarises key
+   * status for the currently-selected provider. Renders the masked
+   * preview when available so the operator can confirm which key is
+   * live without leaving the page.
+   */
+  function providerKeyLine(s) {
+    const p = s.providers.find((x) => x.provider === s.selectedProvider);
+    if (!p || p.provider === "none") {
+      return `Provider <code>none</code> — no key needed.`;
+    }
+    if (p.keyConfigured && p.keyPreview) {
+      return `Key (<code>${escapeHtml(p.keyEnv)}</code>): <code>${escapeHtml(p.keyPreview)}</code> ✅`;
+    }
+    if (p.keyConfigured) {
+      return `Key (<code>${escapeHtml(p.keyEnv)}</code>): set ✅`;
+    }
+    return `Key (<code>${escapeHtml(p.keyEnv)}</code>): <strong>missing</strong> — set it in <code>.env</code> and restart.`;
   }
 
   function modelOption(m) {
@@ -471,38 +500,18 @@ async function mountLlmPanel() {
       ? `<div class="llm-lock-banner" title="LLM_CONFIG_LOCK=true — settings are read-only">🔒 LLM_CONFIG_LOCK=true — settings are read-only. Persisted DB rows are ignored; env values win.</div>`
       : "";
 
-    // Active-state banner: one line summary so the user sees the
-    // current effective config without scanning the form.
-    const activeProvider = state.selectedProvider ?? "(unset)";
-    const activeModel = state.selectedModel ?? "(strategy-decides)";
-    const activeStrategy = state.selectedStrategy ?? "(unset)";
-    const activeMode = state.selectedMode ?? "manual";
-    const activeBanner = `
-      <div class="llm-active-banner">
-        <span class="llm-active-label">Active</span>
-        <code class="llm-active-pill llm-active-provider">${escapeHtml(activeProvider)}</code>
-        <span class="llm-active-sep">·</span>
-        <code class="llm-active-pill llm-active-model" title="${escapeAttr(activeModel)}">${escapeHtml(activeModel)}</code>
-        <span class="llm-active-sep">·</span>
-        <code class="llm-active-pill">strategy=${escapeHtml(activeStrategy)}</code>
-        <span class="llm-active-sep">·</span>
-        <code class="llm-active-pill">mode=${escapeHtml(activeMode)}</code>
-        ${state.settings?.updatedAt ? `<span class="llm-active-saved muted">· last saved ${escapeHtml(new Date(state.settings.updatedAt).toLocaleString())}</span>` : ""}
-      </div>
-    `;
-
-    const providersHtml = state.providers.map(providerCard).join("");
-
     panel.innerHTML = `
       ${lockBanner}
-      ${activeBanner}
 
       <div class="llm-section llm-section-providers">
         <div class="llm-section-head">
           <span class="llm-section-title">Provider</span>
           ${sourceBadge(state.settings?.providerSource)}
         </div>
-        <div class="llm-pcard-grid">${providersHtml}</div>
+        <div class="llm-provider-grid" id="llm-provider-grid" role="radiogroup" aria-label="LLM provider">
+          ${state.providers.map(providerTile).join("")}
+        </div>
+        <div class="muted tiny llm-provider-meta">${providerKeyLine(state)}</div>
       </div>
 
       <div class="llm-row-grid">
@@ -552,31 +561,30 @@ async function mountLlmPanel() {
               ? "🔒 Locked"
               : "Saves to <code>llm_settings</code>; the next <code>workflow_run(agent)</code> picks it up without restart."
           }
+          ${state.settings?.updatedAt ? `<span class="muted"> · last saved ${escapeHtml(new Date(state.settings.updatedAt).toLocaleString())}</span>` : ""}
         </span>
       </div>
     `;
 
-    // Wire events. Provider selection is now a clickable card grid
-    // (.llm-pcard) instead of a radio list. Clicks bubble up to the
-    // <button> element which carries the data-provider attribute.
-    panel.querySelectorAll(".llm-pcard").forEach((card) => {
-      card.addEventListener("click", async () => {
-        if (card.hasAttribute("disabled")) return;
-        const provider = card.getAttribute("data-provider");
+    // Provider selection is a row of tiles. Click → set selectedProvider
+    // and re-fetch the model list (model IDs are per-provider).
+    const providerGrid = document.getElementById("llm-provider-grid");
+    if (providerGrid) {
+      providerGrid.addEventListener("click", async (e) => {
+        const tile = e.target.closest(".llm-provider-tile");
+        if (!tile || tile.disabled) return;
+        const provider = tile.getAttribute("data-provider");
         if (!provider || provider === state.selectedProvider) return;
         state.selectedProvider = provider;
-        // Reset the selected model when switching providers; the new
-        // provider's list almost certainly doesn't share IDs with the
-        // old one.
         state.selectedModel = null;
-        if (state.selectedProvider && state.selectedProvider !== "none") {
+        if (state.selectedProvider !== "none") {
           await loadModels(state.selectedProvider, { force: false });
         } else {
           state.models = [];
         }
         render();
       });
-    });
+    }
     const modelSelect = document.getElementById("llm-model-select");
     if (modelSelect) {
       modelSelect.addEventListener("change", (e) => {

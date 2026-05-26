@@ -1,0 +1,61 @@
+{
+  "nodes": [
+    {
+      "id": "d_d_drive_projects_mcp_servers_agent_flow_src_services_crawl_strategies_singlepage_ts",
+      "label": "singlePage.ts",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\services\\crawl\\strategies\\singlePage.ts",
+      "source_location": "L1"
+    },
+    {
+      "id": "singlepage_crawlsinglepage",
+      "label": "crawlSinglePage()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\services\\crawl\\strategies\\singlePage.ts",
+      "source_location": "L10"
+    }
+  ],
+  "edges": [
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_services_crawl_strategies_singlepage_ts",
+      "target": "d_d_drive_projects_mcp_servers_agent_flow_src_services_crawl_fetcher_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\services\\crawl\\strategies\\singlePage.ts",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_services_crawl_strategies_singlepage_ts",
+      "target": "d_d_drive_projects_mcp_servers_agent_flow_src_services_crawl_htmltomarkdown_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\services\\crawl\\strategies\\singlePage.ts",
+      "source_location": "L2",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_services_crawl_strategies_singlepage_ts",
+      "target": "singlepage_crawlsinglepage",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\services\\crawl\\strategies\\singlePage.ts",
+      "source_location": "L10",
+      "weight": 1.0
+    }
+  ],
+  "raw_calls": [
+    {
+      "caller_nid": "singlepage_crawlsinglepage",
+      "callee": "fetchHtml",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\services\\crawl\\strategies\\singlePage.ts",
+      "source_location": "L11"
+    },
+    {
+      "caller_nid": "singlepage_crawlsinglepage",
+      "callee": "htmlToMarkdown",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\services\\crawl\\strategies\\singlePage.ts",
+      "source_location": "L12"
+    }
+  ]
+}

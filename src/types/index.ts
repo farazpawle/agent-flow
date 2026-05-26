@@ -13,14 +13,14 @@ export interface TaskDependency {
 
 // Project: defines a project that contains related tasks
 export interface Project {
-  id: string;              // Unique identifier of the project
-  name: string;            // Human-readable project name
-  description?: string;    // Description for agent identification across sessions
-  path?: string;           // Workspace path associated with this project
-  techStack?: string[];    // Technologies used in this project
-  taskCount?: number;      // Number of tasks in this project
-  createdAt: Date;         // Timestamp when the project was created
-  updatedAt: Date;         // Timestamp when the project was last updated
+  id: string; // Unique identifier of the project
+  name: string; // Human-readable project name
+  description?: string; // Description for agent identification across sessions
+  path?: string; // Workspace path associated with this project
+  techStack?: string[]; // Technologies used in this project
+  taskCount?: number; // Number of tasks in this project
+  createdAt: Date; // Timestamp when the project was created
+  updatedAt: Date; // Timestamp when the project was last updated
 }
 
 // Related file type: defines the relationship type between files and tasks
@@ -46,7 +46,7 @@ export interface RelatedFile {
 // Conversation message: defines the structure of a message in the task conversation history
 export interface ConversationMessage {
   timestamp: Date; // Timestamp when the message was created
-  role: 'user' | 'assistant'; // Role of the message sender (user or assistant)
+  role: "user" | "assistant"; // Role of the message sender (user or assistant)
   content: string; // Content of the message
   toolName?: string; // Name of the tool associated with the message (if applicable)
 }
@@ -62,9 +62,9 @@ export interface Task {
 
   // Context Fields
   problemStatement?: string; // The "Why": Problem context
-  technicalPlan?: string;    // The "How": Technical approach (from analyze_task)
-  finalOutcome?: string;     // The "What": Final result
-  lessonsLearned?: string;   // The "Advice": Key learnings for future reference
+  technicalPlan?: string; // The "How": Technical approach (from Idea Phase analysis/review)
+  finalOutcome?: string; // The "What": Final result
+  lessonsLearned?: string; // The "Advice": Key learnings for future reference
 
   createdAt: Date; // Timestamp when the task was created
   updatedAt: Date; // Timestamp when the task was last updated
@@ -73,7 +73,7 @@ export interface Task {
   relatedFiles?: RelatedFile[]; // List of files related to the task (optional)
 
   // Additional field: save complete technical analysis results
-  analysisResult?: string; // Complete analysis results from the analyze_task and reflect_task phases
+  analysisResult?: string; // Complete analysis results from the Idea Phase (analyze/review)
 
   // Additional field: save specific implementation guidelines
   implementationGuide?: string; // Specific implementation methods, steps, and suggestions
@@ -93,6 +93,11 @@ export interface Task {
 
   // Task execution order: defines the sequence in which tasks should be executed
   executionOrder?: number; // 0-indexed integer, used to sort tasks in UI and agent execution
+
+  // Optimistic concurrency (Phase 1 Group 1.3). Source of truth is the `tasks.version`
+  // DB column; bumped by `incrementTaskVersion`. Returned by every task read so the
+  // caller can echo it back as `expectedVersion` on the next mutating tool call.
+  version?: number;
 }
 
 // Parameters for planning a task: used to initialize the task planning phase
@@ -126,7 +131,7 @@ export interface SplitTasksArgs {
   updateMode: "append" | "overwrite" | "selective" | "clearAllTasks";
 
   // Global analysis result: shared analysis data for all tasks
-  globalAnalysisResult?: string; // Complete analysis result from reflect_task, applicable to the common parts of all tasks
+  globalAnalysisResult?: string; // Complete analysis result from Idea Phase review, applicable to common parts of all tasks
 
   tasks: Array<{
     name: string; // Concise and clear task name that should clearly express the task purpose

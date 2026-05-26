@@ -1,0 +1,48 @@
+{
+  "nodes": [
+    {
+      "id": "d_d_drive_projects_mcp_servers_agent_flow_src_services_embeddings_providers_openaiprovider_ts",
+      "label": "openaiProvider.ts",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\services\\embeddings\\providers\\openaiProvider.ts",
+      "source_location": "L1"
+    },
+    {
+      "id": "openaiprovider_getclient",
+      "label": "getClient()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\services\\embeddings\\providers\\openaiProvider.ts",
+      "source_location": "L6"
+    }
+  ],
+  "edges": [
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_services_embeddings_providers_openaiprovider_ts",
+      "target": "openai",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\services\\embeddings\\providers\\openaiProvider.ts",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_services_embeddings_providers_openaiprovider_ts",
+      "target": "d_d_drive_projects_mcp_servers_agent_flow_src_services_embeddings_providers_types_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\services\\embeddings\\providers\\openaiProvider.ts",
+      "source_location": "L2",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_services_embeddings_providers_openaiprovider_ts",
+      "target": "openaiprovider_getclient",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\services\\embeddings\\providers\\openaiProvider.ts",
+      "source_location": "L6",
+      "weight": 1.0
+    }
+  ],
+  "raw_calls": []
+}

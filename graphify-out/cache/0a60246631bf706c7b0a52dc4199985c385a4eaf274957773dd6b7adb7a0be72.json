@@ -1,0 +1,116 @@
+{
+  "nodes": [
+    {
+      "id": "d_d_drive_projects_mcp_servers_agent_flow_src_utils_telemetry_ts",
+      "label": "telemetry.ts",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\utils\\telemetry.ts",
+      "source_location": "L1"
+    },
+    {
+      "id": "telemetry_withtooltelemetry",
+      "label": "withToolTelemetry()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\utils\\telemetry.ts",
+      "source_location": "L33"
+    },
+    {
+      "id": "telemetry_safeemit",
+      "label": "safeEmit()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\utils\\telemetry.ts",
+      "source_location": "L61"
+    }
+  ],
+  "edges": [
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_utils_telemetry_ts",
+      "target": "d_d_drive_projects_mcp_servers_agent_flow_src_utils_logger_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\utils\\telemetry.ts",
+      "source_location": "L12",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_utils_telemetry_ts",
+      "target": "d_d_drive_projects_mcp_servers_agent_flow_src_utils_errors_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\utils\\telemetry.ts",
+      "source_location": "L13",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_utils_telemetry_ts",
+      "target": "telemetry_withtooltelemetry",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\utils\\telemetry.ts",
+      "source_location": "L33",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_utils_telemetry_ts",
+      "target": "telemetry_safeemit",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\utils\\telemetry.ts",
+      "source_location": "L61",
+      "weight": 1.0
+    },
+    {
+      "source": "telemetry_withtooltelemetry",
+      "target": "telemetry_safeemit",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\utils\\telemetry.ts",
+      "source_location": "L43",
+      "weight": 1.0
+    }
+  ],
+  "raw_calls": [
+    {
+      "caller_nid": "telemetry_withtooltelemetry",
+      "callee": "newCorrelationId",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\utils\\telemetry.ts",
+      "source_location": "L37"
+    },
+    {
+      "caller_nid": "telemetry_withtooltelemetry",
+      "callee": "now",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\utils\\telemetry.ts",
+      "source_location": "L38"
+    },
+    {
+      "caller_nid": "telemetry_withtooltelemetry",
+      "callee": "handler",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\utils\\telemetry.ts",
+      "source_location": "L42"
+    },
+    {
+      "caller_nid": "telemetry_withtooltelemetry",
+      "callee": "now",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\utils\\telemetry.ts",
+      "source_location": "L45"
+    },
+    {
+      "caller_nid": "telemetry_withtooltelemetry",
+      "callee": "toAppError",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\utils\\telemetry.ts",
+      "source_location": "L50"
+    },
+    {
+      "caller_nid": "telemetry_withtooltelemetry",
+      "callee": "now",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\utils\\telemetry.ts",
+      "source_location": "L53"
+    },
+    {
+      "caller_nid": "telemetry_safeemit",
+      "callee": "info",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\utils\\telemetry.ts",
+      "source_location": "L63"
+    }
+  ]
+}

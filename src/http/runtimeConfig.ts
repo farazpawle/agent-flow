@@ -34,7 +34,9 @@ export interface RuntimeConfigField {
   /**
    * True when changing this value requires a server restart to take
    * effect (e.g. `DATABASE_PROVIDER` or `DATA_DIRECTORY`). The runtime
-   * never re-reads these mid-process.
+   * never re-reads these mid-process. The GUI uses this to render a
+   * quiet "read at boot — restart to apply" inline hint on editable
+   * rows.
    */
   restartRequired?: boolean;
   /**
@@ -128,6 +130,18 @@ export function buildRuntimeConfig(env: NodeJS.ProcessEnv = process.env): Runtim
           default: "false",
           restartRequired: true,
         }),
+        field(
+          env,
+          "LLM_CONFIG_LOCK",
+          "When true, the LLM panel above is read-only and env wins over DB.",
+          { default: "false" }
+        ),
+        field(
+          env,
+          "LLM_MODEL_REFRESH_TTL_HOURS",
+          "Cache TTL for per-provider model lists shown in the LLM panel.",
+          { default: "24" }
+        ),
       ],
     },
     {
@@ -143,54 +157,6 @@ export function buildRuntimeConfig(env: NodeJS.ProcessEnv = process.env): Runtim
           restartRequired: true,
         }),
         field(env, "SUPABASE_SERVICE_ROLE_KEY", "Service-role key (secret) — bypasses RLS.", {
-          secret: true,
-          restartRequired: true,
-        }),
-      ],
-    },
-    {
-      title: "LLM provider",
-      description:
-        "Manage these from the LLM provider card above — the same values plus the per-field 'env vs db' source labels. Listed here too for completeness.",
-      fields: [
-        field(
-          env,
-          "LLM_PROVIDER",
-          "Active provider: openai | anthropic | openrouter | deepseek | none.",
-          { default: "none" }
-        ),
-        field(env, "LLM_MODEL", "Concrete model id (otherwise LLM_SELECTION_STRATEGY decides)."),
-        field(
-          env,
-          "LLM_SELECTION_STRATEGY",
-          "manual | latest_code | latest_reasoning | cheapest | fastest.",
-          { default: "latest_code" }
-        ),
-        field(env, "WORKFLOW_MODE", "workflow_run default mode: manual | agent | disabled.", {
-          default: "manual",
-        }),
-        field(
-          env,
-          "LLM_CONFIG_LOCK",
-          "When true: GUI/DB cannot override env. POST /api/llm/settings → 403.",
-          { default: "false" }
-        ),
-        field(env, "LLM_MODEL_REFRESH_TTL_HOURS", "Cache TTL for per-provider model lists.", {
-          default: "24",
-        }),
-        field(env, "OPENAI_API_KEY", "OpenAI API key (env-only — never persisted).", {
-          secret: true,
-          restartRequired: true,
-        }),
-        field(env, "ANTHROPIC_API_KEY", "Anthropic API key (env-only — never persisted).", {
-          secret: true,
-          restartRequired: true,
-        }),
-        field(env, "OPENROUTER_API_KEY", "OpenRouter API key (env-only — never persisted).", {
-          secret: true,
-          restartRequired: true,
-        }),
-        field(env, "DEEPSEEK_API_KEY", "DeepSeek API key (env-only — never persisted).", {
           secret: true,
           restartRequired: true,
         }),

@@ -1,0 +1,193 @@
+{
+  "nodes": [
+    {
+      "id": "d_d_drive_projects_mcp_servers_agent_flow_src_prompts_generators_gettaskdetail_ts",
+      "label": "getTaskDetail.ts",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\prompts\\generators\\getTaskDetail.ts",
+      "source_location": "L1"
+    },
+    {
+      "id": "gettaskdetail_gettaskdetailprompt",
+      "label": "getTaskDetailPrompt()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\prompts\\generators\\getTaskDetail.ts",
+      "source_location": "L29"
+    }
+  ],
+  "edges": [
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_prompts_generators_gettaskdetail_ts",
+      "target": "d_d_drive_projects_mcp_servers_agent_flow_src_prompts_loader_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\prompts\\generators\\getTaskDetail.ts",
+      "source_location": "L6",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_prompts_generators_gettaskdetail_ts",
+      "target": "d_d_drive_projects_mcp_servers_agent_flow_src_types_index_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\prompts\\generators\\getTaskDetail.ts",
+      "source_location": "L11",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_prompts_generators_gettaskdetail_ts",
+      "target": "gettaskdetail_gettaskdetailprompt",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\prompts\\generators\\getTaskDetail.ts",
+      "source_location": "L29",
+      "weight": 1.0
+    }
+  ],
+  "raw_calls": [
+    {
+      "caller_nid": "gettaskdetail_gettaskdetailprompt",
+      "callee": "loadPromptFromTemplate",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\prompts\\generators\\getTaskDetail.ts",
+      "source_location": "L34"
+    },
+    {
+      "caller_nid": "gettaskdetail_gettaskdetailprompt",
+      "callee": "generatePrompt",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\prompts\\generators\\getTaskDetail.ts",
+      "source_location": "L35"
+    },
+    {
+      "caller_nid": "gettaskdetail_gettaskdetailprompt",
+      "callee": "loadPromptFromTemplate",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\prompts\\generators\\getTaskDetail.ts",
+      "source_location": "L43"
+    },
+    {
+      "caller_nid": "gettaskdetail_gettaskdetailprompt",
+      "callee": "generatePrompt",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\prompts\\generators\\getTaskDetail.ts",
+      "source_location": "L46"
+    },
+    {
+      "caller_nid": "gettaskdetail_gettaskdetailprompt",
+      "callee": "loadPromptFromTemplate",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\prompts\\generators\\getTaskDetail.ts",
+      "source_location": "L53"
+    },
+    {
+      "caller_nid": "gettaskdetail_gettaskdetailprompt",
+      "callee": "generatePrompt",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\prompts\\generators\\getTaskDetail.ts",
+      "source_location": "L56"
+    },
+    {
+      "caller_nid": "gettaskdetail_gettaskdetailprompt",
+      "callee": "loadPromptFromTemplate",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\prompts\\generators\\getTaskDetail.ts",
+      "source_location": "L64"
+    },
+    {
+      "caller_nid": "gettaskdetail_gettaskdetailprompt",
+      "callee": "generatePrompt",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\prompts\\generators\\getTaskDetail.ts",
+      "source_location": "L67"
+    },
+    {
+      "caller_nid": "gettaskdetail_gettaskdetailprompt",
+      "callee": "loadPromptFromTemplate",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\prompts\\generators\\getTaskDetail.ts",
+      "source_location": "L75"
+    },
+    {
+      "caller_nid": "gettaskdetail_gettaskdetailprompt",
+      "callee": "generatePrompt",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\prompts\\generators\\getTaskDetail.ts",
+      "source_location": "L78"
+    },
+    {
+      "caller_nid": "gettaskdetail_gettaskdetailprompt",
+      "callee": "loadPromptFromTemplate",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\prompts\\generators\\getTaskDetail.ts",
+      "source_location": "L86"
+    },
+    {
+      "caller_nid": "gettaskdetail_gettaskdetailprompt",
+      "callee": "generatePrompt",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\prompts\\generators\\getTaskDetail.ts",
+      "source_location": "L87"
+    },
+    {
+      "caller_nid": "gettaskdetail_gettaskdetailprompt",
+      "callee": "loadPromptFromTemplate",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\prompts\\generators\\getTaskDetail.ts",
+      "source_location": "L95"
+    },
+    {
+      "caller_nid": "gettaskdetail_gettaskdetailprompt",
+      "callee": "generatePrompt",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\prompts\\generators\\getTaskDetail.ts",
+      "source_location": "L96"
+    },
+    {
+      "caller_nid": "gettaskdetail_gettaskdetailprompt",
+      "callee": "loadPromptFromTemplate",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\prompts\\generators\\getTaskDetail.ts",
+      "source_location": "L104"
+    },
+    {
+      "caller_nid": "gettaskdetail_gettaskdetailprompt",
+      "callee": "map",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\prompts\\generators\\getTaskDetail.ts",
+      "source_location": "L105"
+    },
+    {
+      "caller_nid": "gettaskdetail_gettaskdetailprompt",
+      "callee": "join",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\prompts\\generators\\getTaskDetail.ts",
+      "source_location": "L106"
+    },
+    {
+      "caller_nid": "gettaskdetail_gettaskdetailprompt",
+      "callee": "map",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\prompts\\generators\\getTaskDetail.ts",
+      "source_location": "L106"
+    },
+    {
+      "caller_nid": "gettaskdetail_gettaskdetailprompt",
+      "callee": "generatePrompt",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\prompts\\generators\\getTaskDetail.ts",
+      "source_location": "L110"
+    },
+    {
+      "caller_nid": "gettaskdetail_gettaskdetailprompt",
+      "callee": "loadPromptFromTemplate",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\prompts\\generators\\getTaskDetail.ts",
+      "source_location": "L116"
+    },
+    {
+      "caller_nid": "gettaskdetail_gettaskdetailprompt",
+      "callee": "generatePrompt",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\prompts\\generators\\getTaskDetail.ts",
+      "source_location": "L118"
+    },
+    {
+      "caller_nid": "gettaskdetail_gettaskdetailprompt",
+      "callee": "toLocaleString",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\prompts\\generators\\getTaskDetail.ts",
+      "source_location": "L123"
+    },
+    {
+      "caller_nid": "gettaskdetail_gettaskdetailprompt",
+      "callee": "toLocaleString",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\prompts\\generators\\getTaskDetail.ts",
+      "source_location": "L124"
+    },
+    {
+      "caller_nid": "gettaskdetail_gettaskdetailprompt",
+      "callee": "loadPrompt",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\prompts\\generators\\getTaskDetail.ts",
+      "source_location": "L134"
+    }
+  ]
+}

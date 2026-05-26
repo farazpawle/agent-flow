@@ -1,0 +1,337 @@
+{
+  "nodes": [
+    {
+      "id": "d_d_drive_projects_mcp_servers_agent_flow_src_public_pages_taskdetail_js",
+      "label": "taskDetail.js",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\public\\pages\\taskDetail.js",
+      "source_location": "L1"
+    },
+    {
+      "id": "taskdetail_mount",
+      "label": "mount()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\public\\pages\\taskDetail.js",
+      "source_location": "L5"
+    },
+    {
+      "id": "taskdetail_render",
+      "label": "render()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\public\\pages\\taskDetail.js",
+      "source_location": "L23"
+    },
+    {
+      "id": "taskdetail_attachhandlers",
+      "label": "attachHandlers()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\public\\pages\\taskDetail.js",
+      "source_location": "L113"
+    },
+    {
+      "id": "taskdetail_loadconversation",
+      "label": "loadConversation()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\public\\pages\\taskDetail.js",
+      "source_location": "L140"
+    }
+  ],
+  "edges": [
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_public_pages_taskdetail_js",
+      "target": "d_d_drive_projects_mcp_servers_agent_flow_src_public_lib_api_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\public\\pages\\taskDetail.js",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_public_pages_taskdetail_js",
+      "target": "d_d_drive_projects_mcp_servers_agent_flow_src_public_lib_toast_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\public\\pages\\taskDetail.js",
+      "source_location": "L2",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_public_pages_taskdetail_js",
+      "target": "d_d_drive_projects_mcp_servers_agent_flow_src_public_lib_utils_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\public\\pages\\taskDetail.js",
+      "source_location": "L3",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_public_pages_taskdetail_js",
+      "target": "taskdetail_mount",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\public\\pages\\taskDetail.js",
+      "source_location": "L5",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_public_pages_taskdetail_js",
+      "target": "taskdetail_render",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\public\\pages\\taskDetail.js",
+      "source_location": "L23",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_public_pages_taskdetail_js",
+      "target": "taskdetail_attachhandlers",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\public\\pages\\taskDetail.js",
+      "source_location": "L113",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_public_pages_taskdetail_js",
+      "target": "taskdetail_loadconversation",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\public\\pages\\taskDetail.js",
+      "source_location": "L140",
+      "weight": 1.0
+    },
+    {
+      "source": "taskdetail_mount",
+      "target": "taskdetail_render",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\public\\pages\\taskDetail.js",
+      "source_location": "L18",
+      "weight": 1.0
+    },
+    {
+      "source": "taskdetail_mount",
+      "target": "taskdetail_attachhandlers",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\public\\pages\\taskDetail.js",
+      "source_location": "L19",
+      "weight": 1.0
+    },
+    {
+      "source": "taskdetail_mount",
+      "target": "taskdetail_loadconversation",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\public\\pages\\taskDetail.js",
+      "source_location": "L20",
+      "weight": 1.0
+    }
+  ],
+  "raw_calls": [
+    {
+      "caller_nid": "taskdetail_mount",
+      "callee": "get",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\public\\pages\\taskDetail.js",
+      "source_location": "L11"
+    },
+    {
+      "caller_nid": "taskdetail_mount",
+      "callee": "encodeURIComponent",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\public\\pages\\taskDetail.js",
+      "source_location": "L11"
+    },
+    {
+      "caller_nid": "taskdetail_mount",
+      "callee": "escapeHtml",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\public\\pages\\taskDetail.js",
+      "source_location": "L14"
+    },
+    {
+      "caller_nid": "taskdetail_render",
+      "callee": "escapeHtml",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\public\\pages\\taskDetail.js",
+      "source_location": "L38"
+    },
+    {
+      "caller_nid": "taskdetail_render",
+      "callee": "replace",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\public\\pages\\taskDetail.js",
+      "source_location": "L40"
+    },
+    {
+      "caller_nid": "taskdetail_render",
+      "callee": "statusKey",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\public\\pages\\taskDetail.js",
+      "source_location": "L40"
+    },
+    {
+      "caller_nid": "taskdetail_render",
+      "callee": "escapeHtml",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\public\\pages\\taskDetail.js",
+      "source_location": "L40"
+    },
+    {
+      "caller_nid": "taskdetail_render",
+      "callee": "statusLabel",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\public\\pages\\taskDetail.js",
+      "source_location": "L40"
+    },
+    {
+      "caller_nid": "taskdetail_render",
+      "callee": "escapeHtml",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\public\\pages\\taskDetail.js",
+      "source_location": "L41"
+    },
+    {
+      "caller_nid": "taskdetail_render",
+      "callee": "formatDate",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\public\\pages\\taskDetail.js",
+      "source_location": "L41"
+    },
+    {
+      "caller_nid": "taskdetail_render",
+      "callee": "escapeHtml",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\public\\pages\\taskDetail.js",
+      "source_location": "L55"
+    },
+    {
+      "caller_nid": "taskdetail_render",
+      "callee": "join",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\public\\pages\\taskDetail.js",
+      "source_location": "L66"
+    },
+    {
+      "caller_nid": "taskdetail_render",
+      "callee": "map",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\public\\pages\\taskDetail.js",
+      "source_location": "L66"
+    },
+    {
+      "caller_nid": "taskdetail_render",
+      "callee": "escapeHtml",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\public\\pages\\taskDetail.js",
+      "source_location": "L85"
+    },
+    {
+      "caller_nid": "taskdetail_render",
+      "callee": "escapeHtml",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\public\\pages\\taskDetail.js",
+      "source_location": "L86"
+    },
+    {
+      "caller_nid": "taskdetail_render",
+      "callee": "join",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\public\\pages\\taskDetail.js",
+      "source_location": "L90"
+    },
+    {
+      "caller_nid": "taskdetail_render",
+      "callee": "map",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\public\\pages\\taskDetail.js",
+      "source_location": "L90"
+    },
+    {
+      "caller_nid": "taskdetail_render",
+      "callee": "getElementById",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\public\\pages\\taskDetail.js",
+      "source_location": "L108"
+    },
+    {
+      "caller_nid": "taskdetail_render",
+      "callee": "stringify",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\public\\pages\\taskDetail.js",
+      "source_location": "L108"
+    },
+    {
+      "caller_nid": "taskdetail_render",
+      "callee": "getElementById",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\public\\pages\\taskDetail.js",
+      "source_location": "L109"
+    },
+    {
+      "caller_nid": "taskdetail_render",
+      "callee": "stringify",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\public\\pages\\taskDetail.js",
+      "source_location": "L109"
+    },
+    {
+      "caller_nid": "taskdetail_render",
+      "callee": "getElementById",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\public\\pages\\taskDetail.js",
+      "source_location": "L110"
+    },
+    {
+      "caller_nid": "taskdetail_render",
+      "callee": "stringify",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\public\\pages\\taskDetail.js",
+      "source_location": "L110"
+    },
+    {
+      "caller_nid": "taskdetail_attachhandlers",
+      "callee": "querySelector",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\public\\pages\\taskDetail.js",
+      "source_location": "L114"
+    },
+    {
+      "caller_nid": "taskdetail_attachhandlers",
+      "callee": "addEventListener",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\public\\pages\\taskDetail.js",
+      "source_location": "L115"
+    },
+    {
+      "caller_nid": "taskdetail_attachhandlers",
+      "callee": "addEventListener",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\public\\pages\\taskDetail.js",
+      "source_location": "L128"
+    },
+    {
+      "caller_nid": "taskdetail_attachhandlers",
+      "callee": "querySelector",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\public\\pages\\taskDetail.js",
+      "source_location": "L128"
+    },
+    {
+      "caller_nid": "taskdetail_loadconversation",
+      "callee": "get",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\public\\pages\\taskDetail.js",
+      "source_location": "L142"
+    },
+    {
+      "caller_nid": "taskdetail_loadconversation",
+      "callee": "encodeURIComponent",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\public\\pages\\taskDetail.js",
+      "source_location": "L142"
+    },
+    {
+      "caller_nid": "taskdetail_loadconversation",
+      "callee": "querySelector",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\public\\pages\\taskDetail.js",
+      "source_location": "L143"
+    },
+    {
+      "caller_nid": "taskdetail_loadconversation",
+      "callee": "join",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\public\\pages\\taskDetail.js",
+      "source_location": "L148"
+    },
+    {
+      "caller_nid": "taskdetail_loadconversation",
+      "callee": "map",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\public\\pages\\taskDetail.js",
+      "source_location": "L148"
+    },
+    {
+      "caller_nid": "taskdetail_loadconversation",
+      "callee": "querySelector",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\public\\pages\\taskDetail.js",
+      "source_location": "L155"
+    },
+    {
+      "caller_nid": "taskdetail_loadconversation",
+      "callee": "escapeHtml",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\public\\pages\\taskDetail.js",
+      "source_location": "L155"
+    }
+  ]
+}

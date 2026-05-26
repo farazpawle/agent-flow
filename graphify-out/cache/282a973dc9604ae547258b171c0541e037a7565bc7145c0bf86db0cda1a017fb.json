@@ -1,0 +1,37 @@
+{
+  "nodes": [
+    {
+      "id": "d_d_drive_projects_mcp_servers_agent_flow_src_public_legacy_d3_graph_js",
+      "label": "d3-graph.js",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\public\\legacy\\d3-graph.js",
+      "source_location": "L1"
+    },
+    {
+      "id": "d3_graph_createdependencygraph",
+      "label": "createDependencyGraph()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\public\\legacy\\d3-graph.js",
+      "source_location": "L11"
+    }
+  ],
+  "edges": [
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_public_legacy_d3_graph_js",
+      "target": "d3_graph_createdependencygraph",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\public\\legacy\\d3-graph.js",
+      "source_location": "L11",
+      "weight": 1.0
+    }
+  ],
+  "raw_calls": [
+    {
+      "caller_nid": "d3_graph_createdependencygraph",
+      "callee": "addEventListener",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\public\\legacy\\d3-graph.js",
+      "source_location": "L199"
+    }
+  ]
+}

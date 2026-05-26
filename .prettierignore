@@ -1,0 +1,11 @@
+dist/
+node_modules/
+coverage/
+src/public/lib/vendor/
+tests/legacy/
+tests/fixtures/
+*.min.js
+*.min.css
+package-lock.json
+debug_server.log
+logs/

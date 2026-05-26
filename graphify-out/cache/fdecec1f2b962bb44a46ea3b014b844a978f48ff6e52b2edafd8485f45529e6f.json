@@ -1,0 +1,88 @@
+{
+  "nodes": [
+    {
+      "id": "d_d_drive_projects_mcp_servers_agent_flow_src_services_crawl_strategies_batch_ts",
+      "label": "batch.ts",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\services\\crawl\\strategies\\batch.ts",
+      "source_location": "L1"
+    },
+    {
+      "id": "batch_crawlbatch",
+      "label": "crawlBatch()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\services\\crawl\\strategies\\batch.ts",
+      "source_location": "L10"
+    }
+  ],
+  "edges": [
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_services_crawl_strategies_batch_ts",
+      "target": "d_d_drive_projects_mcp_servers_agent_flow_src_services_crawl_fetcher_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\services\\crawl\\strategies\\batch.ts",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_services_crawl_strategies_batch_ts",
+      "target": "d_d_drive_projects_mcp_servers_agent_flow_src_services_crawl_htmltomarkdown_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\services\\crawl\\strategies\\batch.ts",
+      "source_location": "L2",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_services_crawl_strategies_batch_ts",
+      "target": "d_d_drive_projects_mcp_servers_agent_flow_src_services_crawl_strategies_singlepage_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\services\\crawl\\strategies\\batch.ts",
+      "source_location": "L3",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_services_crawl_strategies_batch_ts",
+      "target": "batch_crawlbatch",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\services\\crawl\\strategies\\batch.ts",
+      "source_location": "L10",
+      "weight": 1.0
+    }
+  ],
+  "raw_calls": [
+    {
+      "caller_nid": "batch_crawlbatch",
+      "callee": "max",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\services\\crawl\\strategies\\batch.ts",
+      "source_location": "L11"
+    },
+    {
+      "caller_nid": "batch_crawlbatch",
+      "callee": "Number",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\services\\crawl\\strategies\\batch.ts",
+      "source_location": "L11"
+    },
+    {
+      "caller_nid": "batch_crawlbatch",
+      "callee": "from",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\services\\crawl\\strategies\\batch.ts",
+      "source_location": "L15"
+    },
+    {
+      "caller_nid": "batch_crawlbatch",
+      "callee": "min",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\services\\crawl\\strategies\\batch.ts",
+      "source_location": "L15"
+    },
+    {
+      "caller_nid": "batch_crawlbatch",
+      "callee": "all",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\services\\crawl\\strategies\\batch.ts",
+      "source_location": "L37"
+    }
+  ]
+}

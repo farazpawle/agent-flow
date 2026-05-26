@@ -1,0 +1,211 @@
+{
+  "nodes": [
+    {
+      "id": "d_d_drive_projects_mcp_servers_agent_flow_src_services_crawl_fetcher_ts",
+      "label": "fetcher.ts",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\services\\crawl\\fetcher.ts",
+      "source_location": "L1"
+    },
+    {
+      "id": "fetcher_fetchhtml",
+      "label": "fetchHtml()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\services\\crawl\\fetcher.ts",
+      "source_location": "L14"
+    },
+    {
+      "id": "fetcher_fetchwithnodefetch",
+      "label": "fetchWithNodeFetch()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\services\\crawl\\fetcher.ts",
+      "source_location": "L22"
+    },
+    {
+      "id": "fetcher_fetchwithplaywright",
+      "label": "fetchWithPlaywright()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\services\\crawl\\fetcher.ts",
+      "source_location": "L36"
+    },
+    {
+      "id": "fetcher_fetchtext",
+      "label": "fetchText()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\services\\crawl\\fetcher.ts",
+      "source_location": "L59"
+    }
+  ],
+  "edges": [
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_services_crawl_fetcher_ts",
+      "target": "fetcher_fetchhtml",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\services\\crawl\\fetcher.ts",
+      "source_location": "L14",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_services_crawl_fetcher_ts",
+      "target": "fetcher_fetchwithnodefetch",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\services\\crawl\\fetcher.ts",
+      "source_location": "L22",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_services_crawl_fetcher_ts",
+      "target": "fetcher_fetchwithplaywright",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\services\\crawl\\fetcher.ts",
+      "source_location": "L36",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_services_crawl_fetcher_ts",
+      "target": "fetcher_fetchtext",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\services\\crawl\\fetcher.ts",
+      "source_location": "L59",
+      "weight": 1.0
+    },
+    {
+      "source": "fetcher_fetchhtml",
+      "target": "fetcher_fetchwithplaywright",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\services\\crawl\\fetcher.ts",
+      "source_location": "L17",
+      "weight": 1.0
+    },
+    {
+      "source": "fetcher_fetchhtml",
+      "target": "fetcher_fetchwithnodefetch",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\services\\crawl\\fetcher.ts",
+      "source_location": "L19",
+      "weight": 1.0
+    }
+  ],
+  "raw_calls": [
+    {
+      "caller_nid": "fetcher_fetchwithnodefetch",
+      "callee": "setTimeout",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\services\\crawl\\fetcher.ts",
+      "source_location": "L24"
+    },
+    {
+      "caller_nid": "fetcher_fetchwithnodefetch",
+      "callee": "fetch",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\services\\crawl\\fetcher.ts",
+      "source_location": "L26"
+    },
+    {
+      "caller_nid": "fetcher_fetchwithnodefetch",
+      "callee": "get",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\services\\crawl\\fetcher.ts",
+      "source_location": "L28"
+    },
+    {
+      "caller_nid": "fetcher_fetchwithnodefetch",
+      "callee": "text",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\services\\crawl\\fetcher.ts",
+      "source_location": "L29"
+    },
+    {
+      "caller_nid": "fetcher_fetchwithnodefetch",
+      "callee": "clearTimeout",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\services\\crawl\\fetcher.ts",
+      "source_location": "L32"
+    },
+    {
+      "caller_nid": "fetcher_fetchwithplaywright",
+      "callee": "import",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\services\\crawl\\fetcher.ts",
+      "source_location": "L40"
+    },
+    {
+      "caller_nid": "fetcher_fetchwithplaywright",
+      "callee": "launch",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\services\\crawl\\fetcher.ts",
+      "source_location": "L44"
+    },
+    {
+      "caller_nid": "fetcher_fetchwithplaywright",
+      "callee": "newContext",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\services\\crawl\\fetcher.ts",
+      "source_location": "L46"
+    },
+    {
+      "caller_nid": "fetcher_fetchwithplaywright",
+      "callee": "newPage",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\services\\crawl\\fetcher.ts",
+      "source_location": "L47"
+    },
+    {
+      "caller_nid": "fetcher_fetchwithplaywright",
+      "callee": "goto",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\services\\crawl\\fetcher.ts",
+      "source_location": "L48"
+    },
+    {
+      "caller_nid": "fetcher_fetchwithplaywright",
+      "callee": "content",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\services\\crawl\\fetcher.ts",
+      "source_location": "L49"
+    },
+    {
+      "caller_nid": "fetcher_fetchwithplaywright",
+      "callee": "url",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\services\\crawl\\fetcher.ts",
+      "source_location": "L50"
+    },
+    {
+      "caller_nid": "fetcher_fetchwithplaywright",
+      "callee": "status",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\services\\crawl\\fetcher.ts",
+      "source_location": "L51"
+    },
+    {
+      "caller_nid": "fetcher_fetchwithplaywright",
+      "callee": "headers",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\services\\crawl\\fetcher.ts",
+      "source_location": "L52"
+    },
+    {
+      "caller_nid": "fetcher_fetchwithplaywright",
+      "callee": "close",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\services\\crawl\\fetcher.ts",
+      "source_location": "L55"
+    },
+    {
+      "caller_nid": "fetcher_fetchtext",
+      "callee": "setTimeout",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\services\\crawl\\fetcher.ts",
+      "source_location": "L61"
+    },
+    {
+      "caller_nid": "fetcher_fetchtext",
+      "callee": "fetch",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\services\\crawl\\fetcher.ts",
+      "source_location": "L63"
+    },
+    {
+      "caller_nid": "fetcher_fetchtext",
+      "callee": "text",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\services\\crawl\\fetcher.ts",
+      "source_location": "L64"
+    },
+    {
+      "caller_nid": "fetcher_fetchtext",
+      "callee": "clearTimeout",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\services\\crawl\\fetcher.ts",
+      "source_location": "L66"
+    }
+  ]
+}

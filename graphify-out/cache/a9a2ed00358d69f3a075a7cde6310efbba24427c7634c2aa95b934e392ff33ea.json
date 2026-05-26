@@ -1,0 +1,362 @@
+{
+  "nodes": [
+    {
+      "id": "d_d_drive_projects_mcp_servers_agent_flow_tests_unit_test_env_config_ts",
+      "label": "test-env-config.ts",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\tests\\unit\\test-env-config.ts",
+      "source_location": "L1"
+    },
+    {
+      "id": "test_env_config_buildenv",
+      "label": "buildEnv()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\tests\\unit\\test-env-config.ts",
+      "source_location": "L4"
+    },
+    {
+      "id": "test_env_config_runaliastest",
+      "label": "runAliasTest()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\tests\\unit\\test-env-config.ts",
+      "source_location": "L14"
+    },
+    {
+      "id": "test_env_config_testpreferrednamesoverridelegacynames",
+      "label": "testPreferredNamesOverrideLegacyNames()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\tests\\unit\\test-env-config.ts",
+      "source_location": "L18"
+    },
+    {
+      "id": "test_env_config_testlegacynamesstillpopulatepreferrednames",
+      "label": "testLegacyNamesStillPopulatePreferredNames()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\tests\\unit\\test-env-config.ts",
+      "source_location": "L28"
+    },
+    {
+      "id": "test_env_config_testautoopenpreferredflagdisableslegacyflagsconsistently",
+      "label": "testAutoOpenPreferredFlagDisablesLegacyFlagsConsistently()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\tests\\unit\\test-env-config.ts",
+      "source_location": "L40"
+    },
+    {
+      "id": "test_env_config_testlegacydisableflagmapstopreferredflag",
+      "label": "testLegacyDisableFlagMapsToPreferredFlag()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\tests\\unit\\test-env-config.ts",
+      "source_location": "L50"
+    },
+    {
+      "id": "test_env_config_testsupabasealiasesuseclearernames",
+      "label": "testSupabaseAliasesUseClearerNames()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\tests\\unit\\test-env-config.ts",
+      "source_location": "L60"
+    },
+    {
+      "id": "test_env_config_runtests",
+      "label": "runTests()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\tests\\unit\\test-env-config.ts",
+      "source_location": "L70"
+    }
+  ],
+  "edges": [
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_tests_unit_test_env_config_ts",
+      "target": "strict",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\tests\\unit\\test-env-config.ts",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_tests_unit_test_env_config_ts",
+      "target": "d_d_drive_projects_mcp_servers_agent_flow_tests_utils_envconfig_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\tests\\unit\\test-env-config.ts",
+      "source_location": "L2",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_tests_unit_test_env_config_ts",
+      "target": "test_env_config_buildenv",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\tests\\unit\\test-env-config.ts",
+      "source_location": "L4",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_tests_unit_test_env_config_ts",
+      "target": "test_env_config_runaliastest",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\tests\\unit\\test-env-config.ts",
+      "source_location": "L14",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_tests_unit_test_env_config_ts",
+      "target": "test_env_config_testpreferrednamesoverridelegacynames",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\tests\\unit\\test-env-config.ts",
+      "source_location": "L18",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_tests_unit_test_env_config_ts",
+      "target": "test_env_config_testlegacynamesstillpopulatepreferrednames",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\tests\\unit\\test-env-config.ts",
+      "source_location": "L28",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_tests_unit_test_env_config_ts",
+      "target": "test_env_config_testautoopenpreferredflagdisableslegacyflagsconsistently",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\tests\\unit\\test-env-config.ts",
+      "source_location": "L40",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_tests_unit_test_env_config_ts",
+      "target": "test_env_config_testlegacydisableflagmapstopreferredflag",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\tests\\unit\\test-env-config.ts",
+      "source_location": "L50",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_tests_unit_test_env_config_ts",
+      "target": "test_env_config_testsupabasealiasesuseclearernames",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\tests\\unit\\test-env-config.ts",
+      "source_location": "L60",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_tests_unit_test_env_config_ts",
+      "target": "test_env_config_runtests",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\tests\\unit\\test-env-config.ts",
+      "source_location": "L70",
+      "weight": 1.0
+    },
+    {
+      "source": "test_env_config_runaliastest",
+      "target": "test_env_config_buildenv",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\tests\\unit\\test-env-config.ts",
+      "source_location": "L15",
+      "weight": 1.0
+    },
+    {
+      "source": "test_env_config_testpreferrednamesoverridelegacynames",
+      "target": "test_env_config_runaliastest",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\tests\\unit\\test-env-config.ts",
+      "source_location": "L19",
+      "weight": 1.0
+    },
+    {
+      "source": "test_env_config_testlegacynamesstillpopulatepreferrednames",
+      "target": "test_env_config_runaliastest",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\tests\\unit\\test-env-config.ts",
+      "source_location": "L29",
+      "weight": 1.0
+    },
+    {
+      "source": "test_env_config_testautoopenpreferredflagdisableslegacyflagsconsistently",
+      "target": "test_env_config_runaliastest",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\tests\\unit\\test-env-config.ts",
+      "source_location": "L41",
+      "weight": 1.0
+    },
+    {
+      "source": "test_env_config_testlegacydisableflagmapstopreferredflag",
+      "target": "test_env_config_runaliastest",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\tests\\unit\\test-env-config.ts",
+      "source_location": "L51",
+      "weight": 1.0
+    },
+    {
+      "source": "test_env_config_testsupabasealiasesuseclearernames",
+      "target": "test_env_config_runaliastest",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\tests\\unit\\test-env-config.ts",
+      "source_location": "L61",
+      "weight": 1.0
+    },
+    {
+      "source": "test_env_config_runtests",
+      "target": "test_env_config_testpreferrednamesoverridelegacynames",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\tests\\unit\\test-env-config.ts",
+      "source_location": "L71",
+      "weight": 1.0
+    },
+    {
+      "source": "test_env_config_runtests",
+      "target": "test_env_config_testlegacynamesstillpopulatepreferrednames",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\tests\\unit\\test-env-config.ts",
+      "source_location": "L72",
+      "weight": 1.0
+    },
+    {
+      "source": "test_env_config_runtests",
+      "target": "test_env_config_testautoopenpreferredflagdisableslegacyflagsconsistently",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\tests\\unit\\test-env-config.ts",
+      "source_location": "L73",
+      "weight": 1.0
+    },
+    {
+      "source": "test_env_config_runtests",
+      "target": "test_env_config_testlegacydisableflagmapstopreferredflag",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\tests\\unit\\test-env-config.ts",
+      "source_location": "L74",
+      "weight": 1.0
+    },
+    {
+      "source": "test_env_config_runtests",
+      "target": "test_env_config_testsupabasealiasesuseclearernames",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\tests\\unit\\test-env-config.ts",
+      "source_location": "L75",
+      "weight": 1.0
+    }
+  ],
+  "raw_calls": [
+    {
+      "caller_nid": "test_env_config_buildenv",
+      "callee": "entries",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\tests\\unit\\test-env-config.ts",
+      "source_location": "L7"
+    },
+    {
+      "caller_nid": "test_env_config_runaliastest",
+      "callee": "applyEnvironmentAliases",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\tests\\unit\\test-env-config.ts",
+      "source_location": "L15"
+    },
+    {
+      "caller_nid": "test_env_config_testpreferrednamesoverridelegacynames",
+      "callee": "equal",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\tests\\unit\\test-env-config.ts",
+      "source_location": "L24"
+    },
+    {
+      "caller_nid": "test_env_config_testpreferrednamesoverridelegacynames",
+      "callee": "equal",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\tests\\unit\\test-env-config.ts",
+      "source_location": "L25"
+    },
+    {
+      "caller_nid": "test_env_config_testlegacynamesstillpopulatepreferrednames",
+      "callee": "equal",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\tests\\unit\\test-env-config.ts",
+      "source_location": "L34"
+    },
+    {
+      "caller_nid": "test_env_config_testlegacynamesstillpopulatepreferrednames",
+      "callee": "equal",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\tests\\unit\\test-env-config.ts",
+      "source_location": "L35"
+    },
+    {
+      "caller_nid": "test_env_config_testlegacynamesstillpopulatepreferrednames",
+      "callee": "equal",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\tests\\unit\\test-env-config.ts",
+      "source_location": "L36"
+    },
+    {
+      "caller_nid": "test_env_config_testlegacynamesstillpopulatepreferrednames",
+      "callee": "equal",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\tests\\unit\\test-env-config.ts",
+      "source_location": "L37"
+    },
+    {
+      "caller_nid": "test_env_config_testautoopenpreferredflagdisableslegacyflagsconsistently",
+      "callee": "equal",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\tests\\unit\\test-env-config.ts",
+      "source_location": "L45"
+    },
+    {
+      "caller_nid": "test_env_config_testautoopenpreferredflagdisableslegacyflagsconsistently",
+      "callee": "equal",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\tests\\unit\\test-env-config.ts",
+      "source_location": "L46"
+    },
+    {
+      "caller_nid": "test_env_config_testautoopenpreferredflagdisableslegacyflagsconsistently",
+      "callee": "equal",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\tests\\unit\\test-env-config.ts",
+      "source_location": "L47"
+    },
+    {
+      "caller_nid": "test_env_config_testlegacydisableflagmapstopreferredflag",
+      "callee": "equal",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\tests\\unit\\test-env-config.ts",
+      "source_location": "L55"
+    },
+    {
+      "caller_nid": "test_env_config_testlegacydisableflagmapstopreferredflag",
+      "callee": "equal",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\tests\\unit\\test-env-config.ts",
+      "source_location": "L56"
+    },
+    {
+      "caller_nid": "test_env_config_testlegacydisableflagmapstopreferredflag",
+      "callee": "equal",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\tests\\unit\\test-env-config.ts",
+      "source_location": "L57"
+    },
+    {
+      "caller_nid": "test_env_config_testsupabasealiasesuseclearernames",
+      "callee": "equal",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\tests\\unit\\test-env-config.ts",
+      "source_location": "L66"
+    },
+    {
+      "caller_nid": "test_env_config_testsupabasealiasesuseclearernames",
+      "callee": "equal",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\tests\\unit\\test-env-config.ts",
+      "source_location": "L67"
+    },
+    {
+      "caller_nid": "test_env_config_runtests",
+      "callee": "log",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\tests\\unit\\test-env-config.ts",
+      "source_location": "L76"
+    }
+  ]
+}

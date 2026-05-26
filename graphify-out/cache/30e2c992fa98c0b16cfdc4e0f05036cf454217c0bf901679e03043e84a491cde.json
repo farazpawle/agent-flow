@@ -1,0 +1,140 @@
+{
+  "nodes": [
+    {
+      "id": "d_d_drive_projects_mcp_servers_agent_flow_src_tools_workflows_workflowrun_ts",
+      "label": "workflowRun.ts",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\workflows\\workflowRun.ts",
+      "source_location": "L1"
+    },
+    {
+      "id": "workflowrun_astooltext",
+      "label": "asToolText()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\workflows\\workflowRun.ts",
+      "source_location": "L27"
+    },
+    {
+      "id": "workflowrun_resolveworkflowmode",
+      "label": "resolveWorkflowMode()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\workflows\\workflowRun.ts",
+      "source_location": "L37"
+    },
+    {
+      "id": "workflowrun_buildmanualresponse",
+      "label": "buildManualResponse()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\workflows\\workflowRun.ts",
+      "source_location": "L54"
+    },
+    {
+      "id": "workflowrun_builddisabledresponse",
+      "label": "buildDisabledResponse()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\workflows\\workflowRun.ts",
+      "source_location": "L72"
+    },
+    {
+      "id": "workflowrun_workflowrun",
+      "label": "workflowRun()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\workflows\\workflowRun.ts",
+      "source_location": "L84"
+    }
+  ],
+  "edges": [
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_tools_workflows_workflowrun_ts",
+      "target": "d_d_drive_projects_mcp_servers_agent_flow_src_utils_telemetry_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\workflows\\workflowRun.ts",
+      "source_location": "L19",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_tools_workflows_workflowrun_ts",
+      "target": "d_d_drive_projects_mcp_servers_agent_flow_src_tools_workflows_definitions_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\workflows\\workflowRun.ts",
+      "source_location": "L20",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_tools_workflows_workflowrun_ts",
+      "target": "d_d_drive_projects_mcp_servers_agent_flow_src_tools_workflows_schemas_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\workflows\\workflowRun.ts",
+      "source_location": "L25",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_tools_workflows_workflowrun_ts",
+      "target": "workflowrun_astooltext",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\workflows\\workflowRun.ts",
+      "source_location": "L27",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_tools_workflows_workflowrun_ts",
+      "target": "workflowrun_resolveworkflowmode",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\workflows\\workflowRun.ts",
+      "source_location": "L37",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_tools_workflows_workflowrun_ts",
+      "target": "workflowrun_buildmanualresponse",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\workflows\\workflowRun.ts",
+      "source_location": "L54",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_tools_workflows_workflowrun_ts",
+      "target": "workflowrun_builddisabledresponse",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\workflows\\workflowRun.ts",
+      "source_location": "L72",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_tools_workflows_workflowrun_ts",
+      "target": "workflowrun_workflowrun",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\workflows\\workflowRun.ts",
+      "source_location": "L84",
+      "weight": 1.0
+    }
+  ],
+  "raw_calls": [
+    {
+      "caller_nid": "workflowrun_astooltext",
+      "callee": "stringify",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\workflows\\workflowRun.ts",
+      "source_location": "L29"
+    },
+    {
+      "caller_nid": "workflowrun_resolveworkflowmode",
+      "callee": "toLowerCase",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\workflows\\workflowRun.ts",
+      "source_location": "L42"
+    },
+    {
+      "caller_nid": "workflowrun_workflowrun",
+      "callee": "withToolTelemetry",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\tools\\workflows\\workflowRun.ts",
+      "source_location": "L85"
+    }
+  ]
+}

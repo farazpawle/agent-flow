@@ -1,0 +1,94 @@
+{
+  "nodes": [
+    {
+      "id": "d_d_drive_projects_mcp_servers_agent_flow_src_prompts_generators_clearalltasks_ts",
+      "label": "clearAllTasks.ts",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\prompts\\generators\\clearAllTasks.ts",
+      "source_location": "L1"
+    },
+    {
+      "id": "clearalltasks_getclearalltasksprompt",
+      "label": "getClearAllTasksPrompt()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\prompts\\generators\\clearAllTasks.ts",
+      "source_location": "L28"
+    }
+  ],
+  "edges": [
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_prompts_generators_clearalltasks_ts",
+      "target": "d_d_drive_projects_mcp_servers_agent_flow_src_prompts_loader_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\prompts\\generators\\clearAllTasks.ts",
+      "source_location": "L6",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_prompts_generators_clearalltasks_ts",
+      "target": "clearalltasks_getclearalltasksprompt",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\prompts\\generators\\clearAllTasks.ts",
+      "source_location": "L28",
+      "weight": 1.0
+    }
+  ],
+  "raw_calls": [
+    {
+      "caller_nid": "clearalltasks_getclearalltasksprompt",
+      "callee": "loadPromptFromTemplate",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\prompts\\generators\\clearAllTasks.ts",
+      "source_location": "L35"
+    },
+    {
+      "caller_nid": "clearalltasks_getclearalltasksprompt",
+      "callee": "generatePrompt",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\prompts\\generators\\clearAllTasks.ts",
+      "source_location": "L36"
+    },
+    {
+      "caller_nid": "clearalltasks_getclearalltasksprompt",
+      "callee": "loadPromptFromTemplate",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\prompts\\generators\\clearAllTasks.ts",
+      "source_location": "L41"
+    },
+    {
+      "caller_nid": "clearalltasks_getclearalltasksprompt",
+      "callee": "generatePrompt",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\prompts\\generators\\clearAllTasks.ts",
+      "source_location": "L42"
+    },
+    {
+      "caller_nid": "clearalltasks_getclearalltasksprompt",
+      "callee": "generatePrompt",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\prompts\\generators\\clearAllTasks.ts",
+      "source_location": "L50"
+    },
+    {
+      "caller_nid": "clearalltasks_getclearalltasksprompt",
+      "callee": "loadPromptFromTemplate",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\prompts\\generators\\clearAllTasks.ts",
+      "source_location": "L50"
+    },
+    {
+      "caller_nid": "clearalltasks_getclearalltasksprompt",
+      "callee": "loadPromptFromTemplate",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\prompts\\generators\\clearAllTasks.ts",
+      "source_location": "L55"
+    },
+    {
+      "caller_nid": "clearalltasks_getclearalltasksprompt",
+      "callee": "generatePrompt",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\prompts\\generators\\clearAllTasks.ts",
+      "source_location": "L56"
+    },
+    {
+      "caller_nid": "clearalltasks_getclearalltasksprompt",
+      "callee": "loadPrompt",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\prompts\\generators\\clearAllTasks.ts",
+      "source_location": "L63"
+    }
+  ]
+}

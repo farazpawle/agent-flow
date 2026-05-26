@@ -1,0 +1,100 @@
+{
+  "nodes": [
+    {
+      "id": "d_d_drive_projects_mcp_servers_agent_flow_src_services_crawl_strategies_recursive_ts",
+      "label": "recursive.ts",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\services\\crawl\\strategies\\recursive.ts",
+      "source_location": "L1"
+    },
+    {
+      "id": "recursive_crawlrecursive",
+      "label": "crawlRecursive()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\services\\crawl\\strategies\\recursive.ts",
+      "source_location": "L12"
+    }
+  ],
+  "edges": [
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_services_crawl_strategies_recursive_ts",
+      "target": "d_d_drive_projects_mcp_servers_agent_flow_src_services_crawl_fetcher_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\services\\crawl\\strategies\\recursive.ts",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_services_crawl_strategies_recursive_ts",
+      "target": "d_d_drive_projects_mcp_servers_agent_flow_src_services_crawl_htmltomarkdown_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\services\\crawl\\strategies\\recursive.ts",
+      "source_location": "L2",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_services_crawl_strategies_recursive_ts",
+      "target": "d_d_drive_projects_mcp_servers_agent_flow_src_services_crawl_strategies_singlepage_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\services\\crawl\\strategies\\recursive.ts",
+      "source_location": "L3",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_services_crawl_strategies_recursive_ts",
+      "target": "recursive_crawlrecursive",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\services\\crawl\\strategies\\recursive.ts",
+      "source_location": "L12",
+      "weight": 1.0
+    }
+  ],
+  "raw_calls": [
+    {
+      "caller_nid": "recursive_crawlrecursive",
+      "callee": "Number",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\services\\crawl\\strategies\\recursive.ts",
+      "source_location": "L13"
+    },
+    {
+      "caller_nid": "recursive_crawlrecursive",
+      "callee": "Number",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\services\\crawl\\strategies\\recursive.ts",
+      "source_location": "L14"
+    },
+    {
+      "caller_nid": "recursive_crawlrecursive",
+      "callee": "max",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\services\\crawl\\strategies\\recursive.ts",
+      "source_location": "L15"
+    },
+    {
+      "caller_nid": "recursive_crawlrecursive",
+      "callee": "Number",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\services\\crawl\\strategies\\recursive.ts",
+      "source_location": "L15"
+    },
+    {
+      "caller_nid": "recursive_crawlrecursive",
+      "callee": "splice",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\services\\crawl\\strategies\\recursive.ts",
+      "source_location": "L29"
+    },
+    {
+      "caller_nid": "recursive_crawlrecursive",
+      "callee": "all",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\services\\crawl\\strategies\\recursive.ts",
+      "source_location": "L30"
+    },
+    {
+      "caller_nid": "recursive_crawlrecursive",
+      "callee": "map",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\services\\crawl\\strategies\\recursive.ts",
+      "source_location": "L30"
+    }
+  ]
+}

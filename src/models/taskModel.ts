@@ -57,8 +57,8 @@ export async function ensureDataDir(): Promise<void> {
 
     if (archivedCount > 0) {
       // Logic to sync DB with remaining tasks (delete archived ones)
-      const remainingIds = new Set(remainingTasks.map(t => t.id));
-      const archivedTasks = tasks.filter(t => !remainingIds.has(t.id));
+      const remainingIds = new Set(remainingTasks.map((t) => t.id));
+      const archivedTasks = tasks.filter((t) => !remainingIds.has(t.id));
 
       for (const t of archivedTasks) {
         await db.deleteTask(t.id);
@@ -82,7 +82,6 @@ export async function ensureDataDir(): Promise<void> {
     } catch (err) {
       console.error("(AgentFlow) Failed to initial recalculate orders:", err);
     }
-
   } catch (error) {
     console.error("(AgentFlow) Initialization error:", error);
   }
@@ -102,7 +101,7 @@ export async function getAllTasks(projectId?: string): Promise<Task[]> {
 export async function getTasksByProject(projectId: string): Promise<Task[]> {
   await ensureDataDir();
   const allTasks = await db.getAllTasks();
-  return allTasks.filter(t => t.projectId === projectId);
+  return allTasks.filter((t) => t.projectId === projectId);
 }
 
 // Get task by ID
@@ -174,10 +173,7 @@ export async function createTask(
 }
 
 // Update task
-export async function updateTask(
-  taskId: string,
-  updates: Partial<Task>
-): Promise<Task | null> {
+export async function updateTask(taskId: string, updates: Partial<Task>): Promise<Task | null> {
   await ensureDataDir();
   const task = await db.getTask(taskId);
 
@@ -203,7 +199,9 @@ export async function updateTask(
 
     // If dependencies were updated, recalculate order for the project
     if (updates.dependencies !== undefined && updatedTask.projectId) {
-      console.error(`(AgentFlow) Dependencies changed for task "${updatedTask.name}", recalculating order...`);
+      console.error(
+        `(AgentFlow) Dependencies changed for task "${updatedTask.name}", recalculating order...`
+      );
       await recalculateTaskOrder(updatedTask.projectId);
     }
   } catch (err) {
@@ -217,10 +215,7 @@ export async function updateTask(
 }
 
 // Update task status
-export async function updateTaskStatus(
-  taskId: string,
-  status: TaskStatus
-): Promise<Task | null> {
+export async function updateTaskStatus(taskId: string, status: TaskStatus): Promise<Task | null> {
   const updates: Partial<Task> = { status };
 
   if (status === TaskStatus.COMPLETED) {
@@ -231,10 +226,7 @@ export async function updateTaskStatus(
 }
 
 // Update task summary
-export async function updateTaskSummary(
-  taskId: string,
-  summary: string
-): Promise<Task | null> {
+export async function updateTaskSummary(taskId: string, summary: string): Promise<Task | null> {
   return await updateTask(taskId, { summary });
 }
 
@@ -243,7 +235,7 @@ export async function updateTaskSummary(
  */
 export async function updateTaskConversationHistory(
   taskId: string,
-  role: 'user' | 'assistant',
+  role: "user" | "assistant",
   content: string,
   toolName?: string
 ): Promise<Task | null> {
@@ -254,7 +246,7 @@ export async function updateTaskConversationHistory(
     timestamp: new Date(),
     role,
     content,
-    toolName
+    toolName,
   };
 
   const conversationHistory = task.conversationHistory || [];
@@ -302,8 +294,10 @@ export async function updateTaskContent(
       taskId: dep,
     }));
   }
-  if (updates.implementationGuide !== undefined) updateObj.implementationGuide = updates.implementationGuide;
-  if (updates.verificationCriteria !== undefined) updateObj.verificationCriteria = updates.verificationCriteria;
+  if (updates.implementationGuide !== undefined)
+    updateObj.implementationGuide = updates.implementationGuide;
+  if (updates.verificationCriteria !== undefined)
+    updateObj.verificationCriteria = updates.verificationCriteria;
   if (updates.problemStatement !== undefined) updateObj.problemStatement = updates.problemStatement;
   if (updates.technicalPlan !== undefined) updateObj.technicalPlan = updates.technicalPlan;
   if (updates.finalOutcome !== undefined) updateObj.finalOutcome = updates.finalOutcome;
@@ -393,8 +387,8 @@ export async function batchCreateOrUpdateTasks(
   if (updateMode === "append") {
     tasksToKeep = [...existingTasks];
   } else if (updateMode === "overwrite") {
-    tasksToKeep = existingTasks.filter(task => task.status === TaskStatus.COMPLETED);
-    const tasksToDelete = existingTasks.filter(task => task.status !== TaskStatus.COMPLETED);
+    tasksToKeep = existingTasks.filter((task) => task.status === TaskStatus.COMPLETED);
+    const tasksToDelete = existingTasks.filter((task) => task.status !== TaskStatus.COMPLETED);
     for (const t of tasksToDelete) await db.deleteTask(t.id);
   } else if (updateMode === "selective") {
     const updateTaskNames = new Set(taskDataList.map((task) => task.name));
@@ -412,9 +406,9 @@ export async function batchCreateOrUpdateTasks(
     );
   }
   if (updateMode === "selective") {
-    existingTasks.forEach(task => taskNameToIdMap.set(task.name, task.id));
+    existingTasks.forEach((task) => taskNameToIdMap.set(task.name, task.id));
   }
-  tasksToKeep.forEach(task => taskNameToIdMap.set(task.name, task.id));
+  tasksToKeep.forEach((task) => taskNameToIdMap.set(task.name, task.id));
 
   const newTasks: Task[] = [];
   const tasksToSave: Task[] = [];
@@ -422,7 +416,7 @@ export async function batchCreateOrUpdateTasks(
   for (const taskData of taskDataList) {
     if (updateMode === "selective" && taskNameToIdMap.has(taskData.name)) {
       const existingTaskId = taskNameToIdMap.get(taskData.name)!;
-      const existingTask = existingTasks.find(t => t.id === existingTaskId);
+      const existingTask = existingTasks.find((t) => t.id === existingTaskId);
 
       if (existingTask && existingTask.status !== TaskStatus.COMPLETED) {
         const updatedTask: Task = {
@@ -478,11 +472,16 @@ export async function batchCreateOrUpdateTasks(
       const resolvedDependencies: TaskDependency[] = [];
       for (const dependencyName of taskData.dependencies) {
         let dependencyTaskId = dependencyName;
-        if (!dependencyName.match(/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i)) {
-          if (taskNameToIdMap.has(dependencyName)) dependencyTaskId = taskNameToIdMap.get(dependencyName)!;
+        if (
+          !dependencyName.match(/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i)
+        ) {
+          if (taskNameToIdMap.has(dependencyName))
+            dependencyTaskId = taskNameToIdMap.get(dependencyName)!;
           else continue;
         } else {
-          const idExists = [...tasksToKeep, ...newTasks].some(t => t.id === dependencyTaskId) || existingTasks.some(t => t.id === dependencyTaskId);
+          const idExists =
+            [...tasksToKeep, ...newTasks].some((t) => t.id === dependencyTaskId) ||
+            existingTasks.some((t) => t.id === dependencyTaskId);
           if (!idExists) continue;
         }
         resolvedDependencies.push({ taskId: dependencyTaskId });
@@ -517,18 +516,9 @@ export async function recalculateTaskOrder(projectId: string): Promise<void> {
   const graph = new TaskGraph(tasks);
   const orderedTasks = graph.recalculateOrder();
 
-  // Debug logging to verify dependency order
-  console.error(`(AgentFlow) recalculateTaskOrder for project ${projectId}: ${orderedTasks.length} tasks`);
-  orderedTasks.slice(0, 10).forEach(t => {
-    const deps = t.dependencies?.map(d => (typeof d === 'object' ? d.taskId : d).slice(0, 8)).join(',') || 'none';
-    console.error(`  [${t.executionOrder}] ${t.name} (deps: ${deps})`);
-  });
-
   // Save updated orders
   await db.saveTasks(orderedTasks);
 }
-
-
 
 /**
  * Reorder tasks based on user input, while respecting dependencies.
@@ -539,14 +529,14 @@ export async function reorderTasks(projectId: string, taskIds: string[]): Promis
   if (tasks.length === 0) return [];
 
   // Create a map for quick lookup
-  const taskMap = new Map(tasks.map(t => [t.id, t]));
-  const inputTasks = taskIds.filter(id => taskMap.has(id)).map(id => taskMap.get(id)!);
+  const taskMap = new Map(tasks.map((t) => [t.id, t]));
+  const inputTasks = taskIds.filter((id) => taskMap.has(id)).map((id) => taskMap.get(id)!);
 
   // If input tasks are missing (e.g. user only sent a subset), we need to handle that.
-  // Strategy: 
+  // Strategy:
   // 1. Assign "User Preferred Order" based on the input list index.
   // 2. Tasks NOT in the input list keep their existing relative order, or mapped to end?
-  //    Let's assume input list is the "focus" area. 
+  //    Let's assume input list is the "focus" area.
   //    Actually, simpler: We calculate a new "weight" for topological sort based on this list.
 
   // Update executionOrder on the task objects to reflect user's manual preference
@@ -571,23 +561,23 @@ export async function reorderTasks(projectId: string, taskIds: string[]): Promis
   // then run the graph to legalize it.
 
   // 1. Normalize current orders to ensure gaps? No.
-  // 2. Just overwrite executionOrder for the provided IDs to be 0, 1, 2... 
+  // 2. Just overwrite executionOrder for the provided IDs to be 0, 1, 2...
   //    BUT! that would put them all at the top if other tasks are 100, 101...
   //    Or at the bottom if we choose high numbers.
 
   //    User probably wants to reorder a specific subset relative to each other, OR the whole list.
   //    If the user sends the WHOLE list, it's easy.
-  //    If partial: We assume they want to maintain relative position to unmentioned tasks? 
+  //    If partial: We assume they want to maintain relative position to unmentioned tasks?
   //    This is tricky. Let's assume the user UI sends the WHOLE list for now, or we treat it as "Move these to top".
 
   //    Safest: The user (UI) should likely send the re-ordered view of the visible list.
 
   //    Let's just assign sequential indices to the passed IDs starting from 0 (or finding the min of the current set).
   //    Find min executionOrder of the passed set.
-  const relevantOrders = inputTasks.map(t => t.executionOrder || 0);
+  const relevantOrders = inputTasks.map((t) => t.executionOrder || 0);
   let minOrder = relevantOrders.length > 0 ? Math.min(...relevantOrders) : 0;
 
-  // Heuristic: If we are reordering a LARGE chunk (likely the whole list), 
+  // Heuristic: If we are reordering a LARGE chunk (likely the whole list),
   // and the min is NOT 0, we might want to force it to 0 to "clean up" the list.
   // But safely: if inputTasks.length == tasks.length, set minOrder = 0.
   if (inputTasks.length === tasks.length) {
@@ -604,8 +594,8 @@ export async function reorderTasks(projectId: string, taskIds: string[]): Promis
 
   // Now legalize everything with the graph
   // We need to make sure 'tasks' array has the UPDATED objects for the input set.
-  const updatedAllTasks = tasks.map(t => {
-    const updated = inputTasks.find(it => it.id === t.id);
+  const updatedAllTasks = tasks.map((t) => {
+    const updated = inputTasks.find((it) => it.id === t.id);
     return updated || t;
   });
 
@@ -613,7 +603,12 @@ export async function reorderTasks(projectId: string, taskIds: string[]): Promis
   const validOrderTasks = finalGraph.recalculateOrder();
 
   // Log for debugging
-  console.error(`(AgentFlow) Reorder: ${taskIds.length} tasks reordered, ${validOrderTasks.length} total. Final orders: ${validOrderTasks.map(t => `${t.name}:${t.executionOrder}`).slice(0, 5).join(', ')}${validOrderTasks.length > 5 ? '...' : ''}`);
+  console.error(
+    `(AgentFlow) Reorder: ${taskIds.length} tasks reordered, ${validOrderTasks.length} total. Final orders: ${validOrderTasks
+      .map((t) => `${t.name}:${t.executionOrder}`)
+      .slice(0, 5)
+      .join(", ")}${validOrderTasks.length > 5 ? "..." : ""}`
+  );
 
   // Save the legalized (dependency-respecting) order
   await db.saveTasks(validOrderTasks);
@@ -649,19 +644,18 @@ export async function canExecuteTask(
 }
 
 // Delete task
-export async function deleteTask(
-  taskId: string
-): Promise<{ success: boolean; message: string }> {
+export async function deleteTask(taskId: string): Promise<{ success: boolean; message: string }> {
   await ensureDataDir();
   const tasks = await getAllTasks();
-  const task = tasks.find(t => t.id === taskId);
+  const task = tasks.find((t) => t.id === taskId);
 
   if (!task) return { success: false, message: "Task not found" };
-  if (task.status === TaskStatus.COMPLETED) return { success: false, message: "Cannot delete completed tasks" };
+  if (task.status === TaskStatus.COMPLETED)
+    return { success: false, message: "Cannot delete completed tasks" };
 
-  const dependentTasks = tasks.filter(t => t.dependencies.some(d => d.taskId === taskId));
+  const dependentTasks = tasks.filter((t) => t.dependencies.some((d) => d.taskId === taskId));
   if (dependentTasks.length > 0) {
-    const names = dependentTasks.map(t => `"${t.name}"`).join(", ");
+    const names = dependentTasks.map((t) => `"${t.name}"`).join(", ");
     return { success: false, message: `Cannot delete, dependent tasks: ${names}` };
   }
 
@@ -671,7 +665,7 @@ export async function deleteTask(
   // Recalculate execution order if possible (need project ID, but task is gone)
   // We can try to get siblings from the same project if we knew the project ID.
   // Ideally, deleteTask should take projectId or we look it up before deleting.
-  // For safety, we can skip or look up before. 
+  // For safety, we can skip or look up before.
   if (task.projectId) {
     await recalculateTaskOrder(task.projectId);
   }
@@ -715,24 +709,49 @@ export async function assessTaskComplexity(
 
   let level = TaskComplexityLevel.LOW;
 
-  if (descriptionLength >= TaskComplexityThresholds.DESCRIPTION_LENGTH.VERY_HIGH) level = TaskComplexityLevel.VERY_HIGH;
-  else if (descriptionLength >= TaskComplexityThresholds.DESCRIPTION_LENGTH.HIGH) level = TaskComplexityLevel.HIGH;
-  else if (descriptionLength >= TaskComplexityThresholds.DESCRIPTION_LENGTH.MEDIUM) level = TaskComplexityLevel.MEDIUM;
+  if (descriptionLength >= TaskComplexityThresholds.DESCRIPTION_LENGTH.VERY_HIGH)
+    level = TaskComplexityLevel.VERY_HIGH;
+  else if (descriptionLength >= TaskComplexityThresholds.DESCRIPTION_LENGTH.HIGH)
+    level = TaskComplexityLevel.HIGH;
+  else if (descriptionLength >= TaskComplexityThresholds.DESCRIPTION_LENGTH.MEDIUM)
+    level = TaskComplexityLevel.MEDIUM;
 
-  if (dependenciesCount >= TaskComplexityThresholds.DEPENDENCIES_COUNT.VERY_HIGH) level = TaskComplexityLevel.VERY_HIGH;
-  else if (dependenciesCount >= TaskComplexityThresholds.DEPENDENCIES_COUNT.HIGH && level !== TaskComplexityLevel.VERY_HIGH) level = TaskComplexityLevel.HIGH;
-  else if (dependenciesCount >= TaskComplexityThresholds.DEPENDENCIES_COUNT.MEDIUM && level !== TaskComplexityLevel.HIGH && level !== TaskComplexityLevel.VERY_HIGH) level = TaskComplexityLevel.MEDIUM;
+  if (dependenciesCount >= TaskComplexityThresholds.DEPENDENCIES_COUNT.VERY_HIGH)
+    level = TaskComplexityLevel.VERY_HIGH;
+  else if (
+    dependenciesCount >= TaskComplexityThresholds.DEPENDENCIES_COUNT.HIGH &&
+    level !== TaskComplexityLevel.VERY_HIGH
+  )
+    level = TaskComplexityLevel.HIGH;
+  else if (
+    dependenciesCount >= TaskComplexityThresholds.DEPENDENCIES_COUNT.MEDIUM &&
+    level !== TaskComplexityLevel.HIGH &&
+    level !== TaskComplexityLevel.VERY_HIGH
+  )
+    level = TaskComplexityLevel.MEDIUM;
 
-  if (notesLength >= TaskComplexityThresholds.NOTES_LENGTH.VERY_HIGH) level = TaskComplexityLevel.VERY_HIGH;
-  else if (notesLength >= TaskComplexityThresholds.NOTES_LENGTH.HIGH && level !== TaskComplexityLevel.VERY_HIGH) level = TaskComplexityLevel.HIGH;
-  else if (notesLength >= TaskComplexityThresholds.NOTES_LENGTH.MEDIUM && level !== TaskComplexityLevel.HIGH && level !== TaskComplexityLevel.VERY_HIGH) level = TaskComplexityLevel.MEDIUM;
+  if (notesLength >= TaskComplexityThresholds.NOTES_LENGTH.VERY_HIGH)
+    level = TaskComplexityLevel.VERY_HIGH;
+  else if (
+    notesLength >= TaskComplexityThresholds.NOTES_LENGTH.HIGH &&
+    level !== TaskComplexityLevel.VERY_HIGH
+  )
+    level = TaskComplexityLevel.HIGH;
+  else if (
+    notesLength >= TaskComplexityThresholds.NOTES_LENGTH.MEDIUM &&
+    level !== TaskComplexityLevel.HIGH &&
+    level !== TaskComplexityLevel.VERY_HIGH
+  )
+    level = TaskComplexityLevel.MEDIUM;
 
   const recommendations: string[] = [];
   if (level === TaskComplexityLevel.LOW) {
     recommendations.push("This task is low complexity, can be executed directly");
     recommendations.push("Suggest setting clear completion standards");
   } else if (level === TaskComplexityLevel.MEDIUM) {
-    recommendations.push("This task has some complexity, suggest detailed planning execution steps");
+    recommendations.push(
+      "This task has some complexity, suggest detailed planning execution steps"
+    );
     if (dependenciesCount > 0) recommendations.push("Pay attention to dependent tasks");
   } else if (level === TaskComplexityLevel.HIGH) {
     recommendations.push("High complexity, suggest thorough analysis");
@@ -755,7 +774,8 @@ export async function searchTasksWithCommand(
   query: string,
   isId: boolean = false,
   page: number = 1,
-  pageSize: number = 5
+  pageSize: number = 5,
+  projectId?: string
 ): Promise<{
   tasks: Task[];
   pagination: {
@@ -766,26 +786,26 @@ export async function searchTasksWithCommand(
   };
 }> {
   await ensureDataDir();
-  const currentTasks = await getAllTasks();
+  const currentTasks = await getAllTasks(projectId);
 
   let matchingTasks: Task[] = [];
 
   if (isId) {
-    const task = currentTasks.find(t => t.id === query);
+    const task = currentTasks.find((t) => t.id === query);
     if (task) matchingTasks = [task];
   } else if (query.trim()) {
     const searchIndex = getSearchIndex();
     if (!searchIndex.isReady()) searchIndex.rebuild(currentTasks);
-    // Note: ensure these fields are added to persistence.ts getSearchIndex configuration if needed, 
+    // Note: ensure these fields are added to persistence.ts getSearchIndex configuration if needed,
     // but typically MiniSearch indexing happens on the objects passed to .add/.rebuild.
-    // We implicitly rely on the object shape. 
+    // We implicitly rely on the object shape.
 
-    // However, if getSearchIndex() defines specific fields, we must update it there. 
+    // However, if getSearchIndex() defines specific fields, we must update it there.
     // Checking persistence.ts is prudent, but for now assuming it uses auto-field or we update the object.
 
     const matchedIds = searchIndex.search(query);
     const idSet = new Set(matchedIds);
-    matchingTasks = currentTasks.filter(t => idSet.has(t.id));
+    matchingTasks = currentTasks.filter((t) => idSet.has(t.id));
 
     try {
       const archivedMatches = await searchArchives(query);
@@ -794,7 +814,7 @@ export async function searchTasksWithCommand(
           matchingTasks.push(archivedTask);
         }
       }
-    } catch { }
+    } catch {}
   } else {
     matchingTasks = currentTasks;
   }

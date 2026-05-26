@@ -1,0 +1,91 @@
+{
+  "nodes": [
+    {
+      "id": "d_d_drive_projects_mcp_servers_agent_flow_src_prompts_generators_deletetask_ts",
+      "label": "deleteTask.ts",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\prompts\\generators\\deleteTask.ts",
+      "source_location": "L1"
+    },
+    {
+      "id": "deletetask_getdeletetaskprompt",
+      "label": "getDeleteTaskPrompt()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\prompts\\generators\\deleteTask.ts",
+      "source_location": "L32"
+    }
+  ],
+  "edges": [
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_prompts_generators_deletetask_ts",
+      "target": "d_d_drive_projects_mcp_servers_agent_flow_src_prompts_loader_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\prompts\\generators\\deleteTask.ts",
+      "source_location": "L6",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_prompts_generators_deletetask_ts",
+      "target": "d_d_drive_projects_mcp_servers_agent_flow_src_types_index_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\prompts\\generators\\deleteTask.ts",
+      "source_location": "L11",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_src_prompts_generators_deletetask_ts",
+      "target": "deletetask_getdeletetaskprompt",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\prompts\\generators\\deleteTask.ts",
+      "source_location": "L32",
+      "weight": 1.0
+    }
+  ],
+  "raw_calls": [
+    {
+      "caller_nid": "deletetask_getdeletetaskprompt",
+      "callee": "loadPromptFromTemplate",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\prompts\\generators\\deleteTask.ts",
+      "source_location": "L37"
+    },
+    {
+      "caller_nid": "deletetask_getdeletetaskprompt",
+      "callee": "generatePrompt",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\prompts\\generators\\deleteTask.ts",
+      "source_location": "L38"
+    },
+    {
+      "caller_nid": "deletetask_getdeletetaskprompt",
+      "callee": "loadPromptFromTemplate",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\prompts\\generators\\deleteTask.ts",
+      "source_location": "L45"
+    },
+    {
+      "caller_nid": "deletetask_getdeletetaskprompt",
+      "callee": "generatePrompt",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\prompts\\generators\\deleteTask.ts",
+      "source_location": "L48"
+    },
+    {
+      "caller_nid": "deletetask_getdeletetaskprompt",
+      "callee": "loadPromptFromTemplate",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\prompts\\generators\\deleteTask.ts",
+      "source_location": "L55"
+    },
+    {
+      "caller_nid": "deletetask_getdeletetaskprompt",
+      "callee": "generatePrompt",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\prompts\\generators\\deleteTask.ts",
+      "source_location": "L56"
+    },
+    {
+      "caller_nid": "deletetask_getdeletetaskprompt",
+      "callee": "loadPrompt",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\src\\prompts\\generators\\deleteTask.ts",
+      "source_location": "L65"
+    }
+  ]
+}

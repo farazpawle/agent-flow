@@ -7,25 +7,25 @@ import {
   updateProject,
   getCurrentProject,
   setCurrentProjectId,
-  deleteProject as deleteProjectModel,
+  deleteProjectWithTasks,
   Project,
 } from "../models/projectModel.js";
-import { getAllTasks, deleteTask as deleteTaskModel } from "../models/taskModel.js";
-
 
 // ==================== CREATE PROJECT TOOL ====================
 
 export const createProjectSchema = z.object({
-  project_name: z
-    .string()
-    .describe("Human-readable project name"),
+  project_name: z.string().describe("Human-readable project name"),
   project_description: z
     .string()
-    .describe("Description of the project for agent identification across sessions. Be specific about what this project does."),
+    .describe(
+      "Description of the project for agent identification across sessions. Be specific about what this project does."
+    ),
   tech_stack: z
     .array(z.string())
     .optional()
-    .describe("Technologies used in the project (e.g., ['React', 'TypeScript', 'Node.js', 'PostgreSQL'])"),
+    .describe(
+      "Technologies used in the project (e.g., ['React', 'TypeScript', 'Node.js', 'PostgreSQL'])"
+    ),
   workspace_path: z
     .string()
     .optional()
@@ -45,11 +45,12 @@ export async function createProject(params: z.infer<typeof createProjectSchema>)
     let project = await getOrCreateProjectFromPath(workspacePath);
 
     // Update project with provided information
-    project = await updateProject(project.id, {
-      name: params.project_name,
-      description: params.project_description,
-      techStack: params.tech_stack || [],
-    }) || project;
+    project =
+      (await updateProject(project.id, {
+        name: params.project_name,
+        description: params.project_description,
+        techStack: params.tech_stack || [],
+      })) || project;
 
     // Set as current project for the session
     setCurrentProjectId(project.id);
@@ -59,17 +60,21 @@ export async function createProject(params: z.infer<typeof createProjectSchema>)
       content: [
         {
           type: "text" as const,
-          text: JSON.stringify({
-            success: true,
-            project: {
-              id: project.id,
-              name: project.name,
-              description: project.description,
-              path: project.path,
-              techStack: project.techStack || [],
+          text: JSON.stringify(
+            {
+              success: true,
+              project: {
+                id: project.id,
+                name: project.name,
+                description: project.description,
+                path: project.path,
+                techStack: project.techStack || [],
+              },
+              message: `Project "${project.name}" created/updated successfully`,
             },
-            message: `Project "${project.name}" created/updated successfully`,
-          }, null, 2),
+            null,
+            2
+          ),
         },
       ],
     };
@@ -79,10 +84,14 @@ export async function createProject(params: z.infer<typeof createProjectSchema>)
       content: [
         {
           type: "text" as const,
-          text: JSON.stringify({
-            success: false,
-            error: `Failed to create project: ${errorMessage}`,
-          }, null, 2),
+          text: JSON.stringify(
+            {
+              success: false,
+              error: `Failed to create project: ${errorMessage}`,
+            },
+            null,
+            2
+          ),
         },
       ],
     };
@@ -112,17 +121,21 @@ export async function listProjects(params: z.infer<typeof listProjectsSchema>) {
         content: [
           {
             type: "text" as const,
-            text: JSON.stringify({
-              projects: [],
-              message: "No projects found. Use create_project to create a project.",
-            }, null, 2),
+            text: JSON.stringify(
+              {
+                projects: [],
+                message: "No projects found. Use create_project to create a project.",
+              },
+              null,
+              2
+            ),
           },
         ],
       };
     }
 
     // Format projects for agent consumption
-    const formattedProjects = projects.map(p => ({
+    const formattedProjects = projects.map((p) => ({
       id: p.id,
       name: p.name,
       description: p.description || "No description",
@@ -137,11 +150,15 @@ export async function listProjects(params: z.infer<typeof listProjectsSchema>) {
       content: [
         {
           type: "text" as const,
-          text: JSON.stringify({
-            projects: formattedProjects,
-            count: formattedProjects.length,
-            hint: "Read project descriptions to identify which project you're working on. Use project_id when creating tasks.",
-          }, null, 2),
+          text: JSON.stringify(
+            {
+              projects: formattedProjects,
+              count: formattedProjects.length,
+              hint: "Read project descriptions to identify which project you're working on. Use project_id when creating tasks.",
+            },
+            null,
+            2
+          ),
         },
       ],
     };
@@ -165,8 +182,14 @@ export const getProjectContextSchema = z.object({
   workspace_path: z
     .string()
     .optional()
-    .describe("Override workspace path detection (optional, uses current working directory if not provided)"),
+    .describe(
+      "Override workspace path detection (optional, uses current working directory if not provided)"
+    ),
   project_id: z
+    .string()
+    .optional()
+    .describe("Get a specific project by ID (snake_case alias for projectId)"),
+  projectId: z
     .string()
     .optional()
     .describe("Get a specific project by ID instead of auto-detecting from workspace"),
@@ -181,18 +204,23 @@ export async function getProjectContext(params: z.infer<typeof getProjectContext
     let project: Project | null = null;
     let isNew = false;
 
-    if (params.project_id) {
-      // Get specific project by ID
-      project = await getProjectById(params.project_id);
+    if (params.project_id || params.projectId) {
+      // Get specific project by ID (accept both project_id and projectId)
+      const id = params.projectId || params.project_id!;
+      project = await getProjectById(id);
       if (!project) {
         return {
           content: [
             {
               type: "text" as const,
-              text: JSON.stringify({
-                error: `Project not found: ${params.project_id}`,
-                hint: "Use list_projects to see available projects",
-              }, null, 2),
+              text: JSON.stringify(
+                {
+                  error: `Project not found: ${id}`,
+                  hint: "Use list_projects to see available projects",
+                },
+                null,
+                2
+              ),
             },
           ],
         };
@@ -218,21 +246,25 @@ export async function getProjectContext(params: z.infer<typeof getProjectContext
       content: [
         {
           type: "text" as const,
-          text: JSON.stringify({
-            project: {
-              id: project.id,
-              name: project.name,
-              description: project.description || "No description set",
-              path: project.path,
-              techStack: project.techStack || [],
-              taskCount: project.taskCount || 0,
+          text: JSON.stringify(
+            {
+              project: {
+                id: project.id,
+                name: project.name,
+                description: project.description || "No description set",
+                path: project.path,
+                techStack: project.techStack || [],
+                taskCount: project.taskCount || 0,
+              },
+              isNew,
+              message: isNew
+                ? `Created new project: ${project.name}`
+                : `Found existing project: ${project.name}`,
+              hint: "This project is now active. Tasks will be assigned to this project.",
             },
-            isNew,
-            message: isNew
-              ? `Created new project: ${project.name}`
-              : `Found existing project: ${project.name}`,
-            hint: "This project is now active. Tasks will be assigned to this project.",
-          }, null, 2),
+            null,
+            2
+          ),
         },
       ],
     };
@@ -253,12 +285,8 @@ export async function getProjectContext(params: z.infer<typeof getProjectContext
 // ==================== DELETE PROJECT TOOL ====================
 
 export const deleteProjectSchema = z.object({
-  projectId: z
-    .string()
-    .describe("ID of the project to delete"),
-  confirm: z
-    .boolean()
-    .describe("Confirm deletion (irreversible). Must be set to true."),
+  projectId: z.string().describe("ID of the project to delete"),
+  confirm: z.boolean().describe("Confirm deletion (irreversible). Must be set to true."),
 });
 
 /**
@@ -275,10 +303,14 @@ export async function deleteProject(params: z.infer<typeof deleteProjectSchema>)
         content: [
           {
             type: "text" as const,
-            text: JSON.stringify({
-              success: false,
-              error: "Operation cancelled. You must set 'confirm' to true to delete a project."
-            }, null, 2),
+            text: JSON.stringify(
+              {
+                success: false,
+                error: "Operation cancelled. You must set 'confirm' to true to delete a project.",
+              },
+              null,
+              2
+            ),
           },
         ],
         isError: true,
@@ -291,28 +323,23 @@ export async function deleteProject(params: z.infer<typeof deleteProjectSchema>)
         content: [
           {
             type: "text" as const,
-            text: JSON.stringify({
-              success: false,
-              error: `Project with ID '${projectId}' not found.`
-            }, null, 2),
+            text: JSON.stringify(
+              {
+                success: false,
+                error: `Project with ID '${projectId}' not found.`,
+              },
+              null,
+              2
+            ),
           },
         ],
         isError: true,
       };
     }
 
-    // 2. Delete associated tasks (Manual Cascade)
-    const allTasks = await getAllTasks(projectId);
-    let deletedTaskCount = 0;
-
-    // Iterate and delete tasks belonging to this project
-    for (const task of allTasks) {
-      await deleteTaskModel(task.id);
-      deletedTaskCount++;
-    }
-
-    // 3. Delete Project
-    await deleteProjectModel(projectId);
+    // 2. Delete project using shared DB-level cleanup path.
+    // This intentionally bypasses interactive single-task constraints.
+    const deletionResult = await deleteProjectWithTasks(projectId);
 
     // 4. Reset Session context if active project was deleted
     const currentProject = await getCurrentProject();
@@ -324,15 +351,19 @@ export async function deleteProject(params: z.infer<typeof deleteProjectSchema>)
       content: [
         {
           type: "text" as const,
-          text: JSON.stringify({
-            success: true,
-            projectId: projectId,
-            message: `Project '${project.name}' and ${deletedTaskCount} associated tasks deleted successfully.`,
-          }, null, 2),
+          text: JSON.stringify(
+            {
+              success: true,
+              projectId: deletionResult.projectId,
+              deletedTaskCount: deletionResult.deletedTaskCount,
+              message: `Project '${deletionResult.projectName}' and ${deletionResult.deletedTaskCount} associated tasks deleted successfully.`,
+            },
+            null,
+            2
+          ),
         },
       ],
     };
-
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : "Unknown error";
     return {

@@ -1,0 +1,235 @@
+{
+  "nodes": [
+    {
+      "id": "d_d_drive_projects_mcp_servers_agent_flow_scripts_generate_workflow_templates_mjs",
+      "label": "generate-workflow-templates.mjs",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\scripts\\generate-workflow-templates.mjs",
+      "source_location": "L1"
+    },
+    {
+      "id": "generate_workflow_templates_loaddefinitions",
+      "label": "loadDefinitions()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\scripts\\generate-workflow-templates.mjs",
+      "source_location": "L26"
+    },
+    {
+      "id": "generate_workflow_templates_bullet",
+      "label": "bullet()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\scripts\\generate-workflow-templates.mjs",
+      "source_location": "L39"
+    },
+    {
+      "id": "generate_workflow_templates_rendermarkdown",
+      "label": "renderMarkdown()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\scripts\\generate-workflow-templates.mjs",
+      "source_location": "L43"
+    },
+    {
+      "id": "generate_workflow_templates_main",
+      "label": "main()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\scripts\\generate-workflow-templates.mjs",
+      "source_location": "L78"
+    }
+  ],
+  "edges": [
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_scripts_generate_workflow_templates_mjs",
+      "target": "promises",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\scripts\\generate-workflow-templates.mjs",
+      "source_location": "L18",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_scripts_generate_workflow_templates_mjs",
+      "target": "node_path",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\scripts\\generate-workflow-templates.mjs",
+      "source_location": "L19",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_scripts_generate_workflow_templates_mjs",
+      "target": "node_url",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\scripts\\generate-workflow-templates.mjs",
+      "source_location": "L20",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_scripts_generate_workflow_templates_mjs",
+      "target": "generate_workflow_templates_loaddefinitions",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\scripts\\generate-workflow-templates.mjs",
+      "source_location": "L26",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_scripts_generate_workflow_templates_mjs",
+      "target": "generate_workflow_templates_bullet",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\scripts\\generate-workflow-templates.mjs",
+      "source_location": "L39",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_scripts_generate_workflow_templates_mjs",
+      "target": "generate_workflow_templates_rendermarkdown",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\scripts\\generate-workflow-templates.mjs",
+      "source_location": "L43",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_scripts_generate_workflow_templates_mjs",
+      "target": "generate_workflow_templates_main",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\scripts\\generate-workflow-templates.mjs",
+      "source_location": "L78",
+      "weight": 1.0
+    },
+    {
+      "source": "generate_workflow_templates_rendermarkdown",
+      "target": "generate_workflow_templates_bullet",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\scripts\\generate-workflow-templates.mjs",
+      "source_location": "L53",
+      "weight": 1.0
+    },
+    {
+      "source": "generate_workflow_templates_main",
+      "target": "generate_workflow_templates_loaddefinitions",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\scripts\\generate-workflow-templates.mjs",
+      "source_location": "L80",
+      "weight": 1.0
+    },
+    {
+      "source": "generate_workflow_templates_main",
+      "target": "generate_workflow_templates_rendermarkdown",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\scripts\\generate-workflow-templates.mjs",
+      "source_location": "L85",
+      "weight": 1.0
+    }
+  ],
+  "raw_calls": [
+    {
+      "caller_nid": "generate_workflow_templates_loaddefinitions",
+      "callee": "pathToFileURL",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\scripts\\generate-workflow-templates.mjs",
+      "source_location": "L27"
+    },
+    {
+      "caller_nid": "generate_workflow_templates_loaddefinitions",
+      "callee": "join",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\scripts\\generate-workflow-templates.mjs",
+      "source_location": "L28"
+    },
+    {
+      "caller_nid": "generate_workflow_templates_loaddefinitions",
+      "callee": "import",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\scripts\\generate-workflow-templates.mjs",
+      "source_location": "L31"
+    },
+    {
+      "caller_nid": "generate_workflow_templates_loaddefinitions",
+      "callee": "catch",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\scripts\\generate-workflow-templates.mjs",
+      "source_location": "L33"
+    },
+    {
+      "caller_nid": "generate_workflow_templates_loaddefinitions",
+      "callee": "import",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\scripts\\generate-workflow-templates.mjs",
+      "source_location": "L33"
+    },
+    {
+      "caller_nid": "generate_workflow_templates_loaddefinitions",
+      "callee": "register",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\scripts\\generate-workflow-templates.mjs",
+      "source_location": "L34"
+    },
+    {
+      "caller_nid": "generate_workflow_templates_loaddefinitions",
+      "callee": "import",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\scripts\\generate-workflow-templates.mjs",
+      "source_location": "L35"
+    },
+    {
+      "caller_nid": "generate_workflow_templates_bullet",
+      "callee": "join",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\scripts\\generate-workflow-templates.mjs",
+      "source_location": "L40"
+    },
+    {
+      "caller_nid": "generate_workflow_templates_bullet",
+      "callee": "map",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\scripts\\generate-workflow-templates.mjs",
+      "source_location": "L40"
+    },
+    {
+      "caller_nid": "generate_workflow_templates_rendermarkdown",
+      "callee": "join",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\scripts\\generate-workflow-templates.mjs",
+      "source_location": "L44"
+    },
+    {
+      "caller_nid": "generate_workflow_templates_rendermarkdown",
+      "callee": "join",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\scripts\\generate-workflow-templates.mjs",
+      "source_location": "L57"
+    },
+    {
+      "caller_nid": "generate_workflow_templates_rendermarkdown",
+      "callee": "map",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\scripts\\generate-workflow-templates.mjs",
+      "source_location": "L57"
+    },
+    {
+      "caller_nid": "generate_workflow_templates_rendermarkdown",
+      "callee": "stringify",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\scripts\\generate-workflow-templates.mjs",
+      "source_location": "L64"
+    },
+    {
+      "caller_nid": "generate_workflow_templates_main",
+      "callee": "mkdir",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\scripts\\generate-workflow-templates.mjs",
+      "source_location": "L79"
+    },
+    {
+      "caller_nid": "generate_workflow_templates_main",
+      "callee": "writeFile",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\scripts\\generate-workflow-templates.mjs",
+      "source_location": "L86"
+    },
+    {
+      "caller_nid": "generate_workflow_templates_main",
+      "callee": "join",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\scripts\\generate-workflow-templates.mjs",
+      "source_location": "L86"
+    },
+    {
+      "caller_nid": "generate_workflow_templates_main",
+      "callee": "log",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\scripts\\generate-workflow-templates.mjs",
+      "source_location": "L89"
+    }
+  ]
+}

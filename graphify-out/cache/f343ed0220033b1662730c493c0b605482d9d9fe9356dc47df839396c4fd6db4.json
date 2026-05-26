@@ -1,0 +1,149 @@
+{
+  "nodes": [
+    {
+      "id": "d_d_drive_projects_mcp_servers_agent_flow_tests_unit_reorder_test_repro_ts",
+      "label": "reorder_test_repro.ts",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\tests\\unit\\reorder_test_repro.ts",
+      "source_location": "L1"
+    },
+    {
+      "id": "reorder_test_repro_createmocktask",
+      "label": "createMockTask()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\tests\\unit\\reorder_test_repro.ts",
+      "source_location": "L7"
+    },
+    {
+      "id": "reorder_test_repro_runtest",
+      "label": "runTest()",
+      "file_type": "code",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\tests\\unit\\reorder_test_repro.ts",
+      "source_location": "L21"
+    }
+  ],
+  "edges": [
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_tests_unit_reorder_test_repro_ts",
+      "target": "d_d_drive_projects_mcp_servers_agent_flow_tests_utils_taskgraph_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\tests\\unit\\reorder_test_repro.ts",
+      "source_location": "L2",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_tests_unit_reorder_test_repro_ts",
+      "target": "d_d_drive_projects_mcp_servers_agent_flow_tests_types_index_ts",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\tests\\unit\\reorder_test_repro.ts",
+      "source_location": "L3",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_tests_unit_reorder_test_repro_ts",
+      "target": "uuid",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\tests\\unit\\reorder_test_repro.ts",
+      "source_location": "L4",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_tests_unit_reorder_test_repro_ts",
+      "target": "reorder_test_repro_createmocktask",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\tests\\unit\\reorder_test_repro.ts",
+      "source_location": "L7",
+      "weight": 1.0
+    },
+    {
+      "source": "d_d_drive_projects_mcp_servers_agent_flow_tests_unit_reorder_test_repro_ts",
+      "target": "reorder_test_repro_runtest",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\tests\\unit\\reorder_test_repro.ts",
+      "source_location": "L21",
+      "weight": 1.0
+    },
+    {
+      "source": "reorder_test_repro_runtest",
+      "target": "reorder_test_repro_createmocktask",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\tests\\unit\\reorder_test_repro.ts",
+      "source_location": "L28",
+      "weight": 1.0
+    }
+  ],
+  "raw_calls": [
+    {
+      "caller_nid": "reorder_test_repro_createmocktask",
+      "callee": "uuidv4",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\tests\\unit\\reorder_test_repro.ts",
+      "source_location": "L9"
+    },
+    {
+      "caller_nid": "reorder_test_repro_createmocktask",
+      "callee": "now",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\tests\\unit\\reorder_test_repro.ts",
+      "source_location": "L14"
+    },
+    {
+      "caller_nid": "reorder_test_repro_runtest",
+      "callee": "log",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\tests\\unit\\reorder_test_repro.ts",
+      "source_location": "L22"
+    },
+    {
+      "caller_nid": "reorder_test_repro_runtest",
+      "callee": "log",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\tests\\unit\\reorder_test_repro.ts",
+      "source_location": "L35"
+    },
+    {
+      "caller_nid": "reorder_test_repro_runtest",
+      "callee": "forEach",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\tests\\unit\\reorder_test_repro.ts",
+      "source_location": "L36"
+    },
+    {
+      "caller_nid": "reorder_test_repro_runtest",
+      "callee": "recalculateOrder",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\tests\\unit\\reorder_test_repro.ts",
+      "source_location": "L39"
+    },
+    {
+      "caller_nid": "reorder_test_repro_runtest",
+      "callee": "log",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\tests\\unit\\reorder_test_repro.ts",
+      "source_location": "L41"
+    },
+    {
+      "caller_nid": "reorder_test_repro_runtest",
+      "callee": "forEach",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\tests\\unit\\reorder_test_repro.ts",
+      "source_location": "L42"
+    },
+    {
+      "caller_nid": "reorder_test_repro_runtest",
+      "callee": "find",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\tests\\unit\\reorder_test_repro.ts",
+      "source_location": "L46"
+    },
+    {
+      "caller_nid": "reorder_test_repro_runtest",
+      "callee": "error",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\tests\\unit\\reorder_test_repro.ts",
+      "source_location": "L48"
+    },
+    {
+      "caller_nid": "reorder_test_repro_runtest",
+      "callee": "log",
+      "source_file": "D:\\D Drive\\Projects\\MCP Servers\\Agent Flow\\tests\\unit\\reorder_test_repro.ts",
+      "source_location": "L50"
+    }
+  ]
+}
