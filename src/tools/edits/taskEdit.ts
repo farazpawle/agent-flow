@@ -84,6 +84,8 @@ async function dispatch(input: TaskEditInput) {
       return split(input);
     case "merge":
       return merge(input);
+    case "append_note":
+      return appendNote(input);
   }
 }
 
@@ -236,6 +238,33 @@ async function clearDependency(input: Extract<TaskEditInput, { action: "clear_de
     async () => persistTask(existing, input.expectedVersion + 1)
   );
   return asToolText({ action: "clear_dependency", task: saved, newVersion });
+}
+
+// ────────────────────────────────────────────────────────────────────────
+// Wave 2 §10.H — append_note (append-only notes audit trail)
+// ────────────────────────────────────────────────────────────────────────
+
+async function appendNote(input: Extract<TaskEditInput, { action: "append_note" }>) {
+  const trimmed = input.text.trim();
+  if (!trimmed) {
+    throw new ValidationError("append_note: text must contain non-whitespace characters", {
+      hint: "Provide a meaningful audit note — empty or whitespace-only entries are rejected.",
+    });
+  }
+  const existing = await loadOrThrow(input.taskId);
+  const isoStamp = new Date().toISOString();
+  const block = `[${isoStamp}] ${trimmed}`;
+  // Prepend so the newest entry surfaces first when humans scan the trail.
+  // We separate blocks with a blank line so the audit log stays scannable
+  // even when individual entries span multiple lines.
+  const nextNotes =
+    existing.notes && existing.notes.length > 0 ? `${block}\n\n${existing.notes}` : block;
+  const { value: saved, newVersion } = await withVersionCheck(
+    input.taskId,
+    input.expectedVersion,
+    async () => persistTask({ ...existing, notes: nextNotes }, input.expectedVersion + 1)
+  );
+  return asToolText({ action: "append_note", task: saved, newVersion, appendedAt: isoStamp });
 }
 
 // ────────────────────────────────────────────────────────────────────────

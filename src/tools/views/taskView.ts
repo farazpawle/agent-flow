@@ -14,10 +14,11 @@
  */
 
 import { db } from "../../models/db.js";
-import { searchTasksWithCommand } from "../../models/taskModel.js";
+import { findAvailableTasks, searchTasksWithCommand } from "../../models/taskModel.js";
 import { TaskGraph } from "../../utils/taskGraph.js";
 import { NotFoundError } from "../../utils/errors.js";
 import { withToolTelemetry } from "../../utils/telemetry.js";
+import { recoverExpiredClaim } from "../../models/concurrency.js";
 import type { Task } from "../../types/index.js";
 import { TaskStatus } from "../../types/index.js";
 import type { TaskViewInput } from "./schemas.js";
@@ -80,12 +81,16 @@ async function dispatch(input: TaskViewInput) {
     }
 
     case "get": {
-      const task = await db.getTask(input.taskId);
-      if (!task) {
+      const raw = await db.getTask(input.taskId);
+      if (!raw) {
         throw new NotFoundError(`Task not found: ${input.taskId}`, {
           hint: "Call task_view(action='list') or task_view(action='search') to find an existing taskId.",
         });
       }
+      // Wave 2 §10.F — atomically flip IN_PROGRESS+expired tasks back to
+      // PENDING via CAS before returning. Idempotent and race-safe; see
+      // `recoverExpiredClaim`.
+      const task = await recoverExpiredClaim(raw as Task & { version?: number });
       const withVersion = ensureVersionPresent(task);
       // Wave 1 §10.C — surface lock state as a top-level `lock` field so
       // agents can branch on "claimed/expired/free" without having to
@@ -200,6 +205,26 @@ async function dispatch(input: TaskViewInput) {
         projectId: input.projectId,
         groupId: input.groupId ?? null,
         roots,
+      });
+    }
+
+    // Wave 2 §10.G — skinny ranked feed: PENDING tasks (deps met) plus
+    // IN_PROGRESS+expired-claim tasks. The model helper enforces ordering
+    // and excludes live-claimed-by-another rows.
+    case "available": {
+      const result = await findAvailableTasks({
+        projectId: input.projectId,
+        groupId: input.groupId,
+        limit: input.limit,
+        clientId: input.clientId,
+      });
+      return asToolText({
+        action: "available",
+        projectId: input.projectId,
+        groupId: input.groupId ?? null,
+        count: result.tasks.length,
+        truncated: result.truncated,
+        tasks: result.tasks,
       });
     }
   }

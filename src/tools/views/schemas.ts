@@ -97,6 +97,16 @@ export const taskViewSchema = z.discriminatedUnion("action", [
     projectId: z.string().min(1),
     groupId: z.string().min(1).optional(),
   }),
+  // Wave 2 §10.G — ranked "what can I work on right now?" feed. Returns
+  // PENDING tasks (deps met) plus IN_PROGRESS+expired-claim tasks. Skinny
+  // shape by design — agents fetch full bodies via `task_view(get)`.
+  z.object({
+    action: z.literal("available"),
+    projectId: z.string().min(1),
+    groupId: z.string().min(1).optional(),
+    limit: z.number().int().positive().max(100).default(20),
+    clientId: z.string().min(1).optional(),
+  }),
 ]);
 
 export type TaskViewInput = z.infer<typeof taskViewSchema>;

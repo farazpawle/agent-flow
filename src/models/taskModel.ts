@@ -737,6 +737,115 @@ export async function assessTaskComplexity(
   };
 }
 
+// ────────────────────────────────────────────────────────────────────────
+// Wave 2 §10.G — available_tasks view
+// ────────────────────────────────────────────────────────────────────────
+
+const PRIORITY_RANK: Record<string, number> = {
+  critical: 4,
+  high: 3,
+  medium: 2,
+  low: 1,
+};
+
+export interface FindAvailableFilter {
+  projectId: string;
+  groupId?: string;
+  limit?: number;
+  clientId?: string;
+}
+
+export interface AvailableTaskRow {
+  id: string;
+  name: string;
+  status: TaskStatus;
+  groupId: string | null;
+  priority: string | null;
+  dependsOn: string[];
+  lockedByOther: boolean;
+}
+
+export interface FindAvailableResult {
+  tasks: AvailableTaskRow[];
+  truncated: boolean;
+}
+
+/**
+ * Plan §10.G — the ranked, skinny "what can I work on right now?" feed.
+ *
+ * Includes PENDING tasks whose dependencies are all COMPLETED, plus
+ * IN_PROGRESS tasks whose claim has expired (treated as recoverable to
+ * PENDING). Excludes live-claimed-by-another tasks because they belong to
+ * a different working agent — surface them in a richer view if needed.
+ *
+ * Ordering: priority DESC → execution_order ASC → created_at ASC. Missing
+ * priority ranks below `low`.
+ *
+ * Output deliberately omits description / notes / artifacts; agents fetch
+ * full body via `task_view(action='get')`.
+ */
+export async function findAvailableTasks(
+  filter: FindAvailableFilter
+): Promise<FindAvailableResult> {
+  await ensureDataDir();
+  const limit = Math.min(Math.max(filter.limit ?? 20, 1), 100);
+  const all = await db.getAllTasks(filter.projectId);
+  const completedIds = new Set(
+    all.filter((t) => t.status === TaskStatus.COMPLETED).map((t) => t.id)
+  );
+  const now = Date.now();
+
+  const candidates = all.filter((t) => {
+    if (filter.groupId && t.groupId !== filter.groupId) return false;
+    const claimLive = t.claimedBy && t.claimExpiresAt && t.claimExpiresAt.getTime() > now;
+    // Status gate: PENDING is always eligible; IN_PROGRESS only if its
+    // claim has expired (read-time recovery will flip it on next read).
+    if (t.status === TaskStatus.PENDING) {
+      // PENDING tasks with a live claim by another agent are excluded —
+      // they are mid-claim and not free to take.
+      if (claimLive && t.claimedBy !== (filter.clientId ?? null)) return false;
+    } else if (t.status === TaskStatus.IN_PROGRESS) {
+      if (claimLive) return false; // actively being worked
+    } else {
+      return false; // BLOCKED / COMPLETED / etc are not available
+    }
+    // Dependency gate.
+    for (const dep of t.dependencies) {
+      if (!completedIds.has(dep.taskId)) return false;
+    }
+    return true;
+  });
+
+  candidates.sort((a, b) => {
+    const aPriority = PRIORITY_RANK[(a as Task & { priority?: string }).priority ?? ""] ?? 0;
+    const bPriority = PRIORITY_RANK[(b as Task & { priority?: string }).priority ?? ""] ?? 0;
+    if (aPriority !== bPriority) return bPriority - aPriority; // DESC
+    const aOrder = a.executionOrder ?? Number.MAX_SAFE_INTEGER;
+    const bOrder = b.executionOrder ?? Number.MAX_SAFE_INTEGER;
+    if (aOrder !== bOrder) return aOrder - bOrder; // ASC
+    return new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(); // ASC
+  });
+
+  const truncated = candidates.length > limit;
+  const slice = candidates.slice(0, limit);
+
+  const tasks: AvailableTaskRow[] = slice.map((t) => {
+    const claimLive = t.claimedBy && t.claimExpiresAt && t.claimExpiresAt.getTime() > now;
+    const lockedByOther = Boolean(claimLive && filter.clientId && t.claimedBy !== filter.clientId);
+    return {
+      id: t.id,
+      name: t.name,
+      status: t.status,
+      groupId: t.groupId ?? null,
+      priority: (t as Task & { priority?: string }).priority ?? null,
+      dependsOn: t.dependencies.map((d) => d.taskId),
+      lockedByOther,
+    };
+  });
+
+  return { tasks, truncated };
+}
+
 // Search tasks
 export async function searchTasksWithCommand(
   query: string,

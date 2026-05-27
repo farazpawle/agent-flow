@@ -166,6 +166,17 @@ export const taskEditSchema = z.discriminatedUnion("action", [
       priority: PRIORITY_ENUM.optional(),
     }),
   }),
+  // Wave 2 §10.H — append-only notes audit. The server prepends an ISO-
+  // timestamped block to `task.notes` so the most-recent entry surfaces
+  // first. NEVER overwrites — to "delete" a note, append a correction.
+  z.object({
+    action: z.literal("append_note"),
+    taskId: z.string().min(1),
+    expectedVersion: z.number().int().positive(),
+    text: z.string().min(1, {
+      message: "text must be at least 1 character — note body cannot be empty.",
+    }),
+  }),
 ]);
 
 export type TaskEditInput = z.infer<typeof taskEditSchema>;

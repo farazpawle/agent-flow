@@ -36,7 +36,7 @@ import {
   ValidationError,
 } from "../../utils/errors.js";
 import { withToolTelemetry } from "../../utils/telemetry.js";
-import { withVersionCheck } from "../../models/concurrency.js";
+import { recoverExpiredClaim, withVersionCheck } from "../../models/concurrency.js";
 import type { Task } from "../../types/index.js";
 import { TaskStatus } from "../../types/index.js";
 import type { FinalizeResult, TaskLifecycleInput } from "./schemas.js";
@@ -76,7 +76,12 @@ async function loadOrThrow(taskId: string): Promise<TaskWithVersion> {
       hint: "Call task_view(action='get', taskId) to confirm the id.",
     });
   }
-  return task as TaskWithVersion;
+  // Wave 2 §10.F — recover expired claims at read time so the subsequent
+  // state-machine check sees the recovered PENDING state. Without this, a
+  // re-claim after expiry would be rejected by `ensureTransition` because
+  // the on-disk status is still IN_PROGRESS.
+  const recovered = await recoverExpiredClaim(task as TaskWithVersion);
+  return recovered as TaskWithVersion;
 }
 
 /**
@@ -490,22 +495,46 @@ function applyFinalize(
       next.claimExpiresAt = undefined;
       break;
     case "fail":
-      // Failure does NOT collapse the task to COMPLETED. We leave
-      // status at IN_PROGRESS so the agent can attempt the
-      // nextStrategy, but stash the failure context. Claim retained
-      // until Wave 2 §10.F revisits and reverts to PENDING.
+      // Wave 2 §10.F — fail flips IN_PROGRESS → PENDING and clears the
+      // claim so another agent (or the same one after a context refresh)
+      // can re-claim and execute `nextStrategy`. The failure context is
+      // persisted in `finalOutcome` and tagged on `notes` for audit.
+      next.status = TaskStatus.PENDING;
       next.summary = result.summary;
       next.finalOutcome = `FAIL: ${result.failureReason}\nNext: ${result.nextStrategy}`;
       if (result.lessonsLearned) next.lessonsLearned = result.lessonsLearned;
       (next as TaskWithVersion & { verificationStatus?: string }).verificationStatus = "failed";
+      next.claimedBy = undefined;
+      next.claimedAt = undefined;
+      next.claimExpiresAt = undefined;
+      {
+        const tag = `[finalized fail ${new Date().toISOString()}: ${result.failureReason}]`;
+        next.notes = next.notes ? `${next.notes}\n${tag}` : tag;
+      }
       break;
     case "partial":
+      // Wave 2 §10.F — partial completion is also a revert: the work
+      // surfaced something that needs another pass, so the task returns
+      // to PENDING. The remaining-work pointer lives in `nextStrategy`
+      // and is appended as a partial-progress note for the audit trail.
+      next.status = TaskStatus.PENDING;
       next.summary = result.summary;
       next.finalOutcome = `PARTIAL: ${result.failureReason}\nNext: ${result.nextStrategy}`;
       if (result.lessonsLearned) next.lessonsLearned = result.lessonsLearned;
       (next as TaskWithVersion & { verificationStatus?: string }).verificationStatus = "partial";
+      next.claimedBy = undefined;
+      next.claimedAt = undefined;
+      next.claimExpiresAt = undefined;
+      {
+        const tag = `[finalized partial ${new Date().toISOString()}: ${result.nextStrategy}]`;
+        next.notes = next.notes ? `${next.notes}\n${tag}` : tag;
+      }
       break;
     case "needs_review":
+      // needs_review keeps the task IN_PROGRESS and retains the claim so
+      // the same agent can address the review feedback without losing
+      // the slot. Plan §10.F explicitly treats this as a continuation,
+      // not an abandonment.
       next.summary = result.summary;
       next.finalOutcome = `NEEDS REVIEW: ${result.reviewQuestion}`;
       if (result.lessonsLearned) next.lessonsLearned = result.lessonsLearned;

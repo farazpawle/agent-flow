@@ -22,6 +22,7 @@
 
 import type { DatabaseAdapter } from "./interfaces.js";
 import type { Task } from "../types/index.js";
+import { TaskStatus } from "../types/index.js";
 import { db as defaultDb } from "./db.js";
 import { ConflictError } from "../utils/errors.js";
 
@@ -250,4 +251,61 @@ export function isMultiConflictBody(body: unknown): body is MultiConflictBody {
   if (!body || typeof body !== "object") return false;
   const b = body as Record<string, unknown>;
   return b.code === "CONFLICT" && Array.isArray(b.conflicts) && "currentTasks" in b;
+}
+
+// ────────────────────────────────────────────────────────────────────────
+// Wave 2 §10.F — read-time recovery of expired claims
+// ────────────────────────────────────────────────────────────────────────
+
+/**
+ * Atomically flip an IN_PROGRESS task whose claim has expired back to
+ * PENDING via CAS, clearing the claim columns and appending a templated
+ * abandonment note. Idempotent and concurrency-safe — losing the CAS
+ * race re-reads and returns whatever the winner produced.
+ *
+ * Returns the task unchanged when:
+ *   - status is not IN_PROGRESS, or
+ *   - the task has no claim, or
+ *   - the claim is still live.
+ *
+ * Wave 3 §10.F upgrades the templated tag to LLM narration; provider=
+ * `none` keeps the templated form.
+ */
+export async function recoverExpiredClaim(
+  task: Task & { version?: number },
+  adapter: DatabaseAdapter = defaultDb
+): Promise<Task & { version?: number }> {
+  if (task.status !== TaskStatus.IN_PROGRESS) return task;
+  if (!task.claimExpiresAt) return task;
+  if (task.claimExpiresAt.getTime() >= Date.now()) return task;
+  const expectedVersion = (task as Task & { version?: number }).version ?? 1;
+  try {
+    const { value } = await withVersionCheck(
+      task.id,
+      expectedVersion,
+      async () => {
+        const next: Task & { version?: number } = { ...task };
+        next.status = TaskStatus.PENDING;
+        next.claimedBy = undefined;
+        next.claimedAt = undefined;
+        next.claimExpiresAt = undefined;
+        next.version = expectedVersion + 1;
+        next.updatedAt = new Date();
+        const tag = `[abandoned ${new Date().toISOString()}, claim expired]`;
+        next.notes = next.notes ? `${next.notes}\n${tag}` : tag;
+        await adapter.saveTask(next);
+        return next;
+      },
+      adapter
+    );
+    return value;
+  } catch (err) {
+    if (err instanceof ConflictError) {
+      // Lost the race — another reader already recovered. Re-read and
+      // return whatever they wrote so concurrent readers converge.
+      const reread = await adapter.getTask(task.id);
+      return (reread ?? task) as Task & { version?: number };
+    }
+    throw err;
+  }
 }
