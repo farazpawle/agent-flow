@@ -86,7 +86,22 @@ async function dispatch(input: TaskViewInput) {
           hint: "Call task_view(action='list') or task_view(action='search') to find an existing taskId.",
         });
       }
-      return asToolText({ action: "get", task: ensureVersionPresent(task) });
+      const withVersion = ensureVersionPresent(task);
+      // Wave 1 §10.C — surface lock state as a top-level `lock` field so
+      // agents can branch on "claimed/expired/free" without having to
+      // recompute from individual columns. `null` when unclaimed (no
+      // `claimedBy`) or when the existing claim is already past expiry.
+      const now = Date.now();
+      const expiresMs = task.claimExpiresAt ? task.claimExpiresAt.getTime() : 0;
+      const lock =
+        task.claimedBy && expiresMs > now
+          ? {
+              heldBy: task.claimedBy,
+              since: task.claimedAt ? task.claimedAt.toISOString() : null,
+              expiresAt: task.claimExpiresAt ? task.claimExpiresAt.toISOString() : null,
+            }
+          : null;
+      return asToolText({ action: "get", task: withVersion, lock });
     }
 
     case "search": {
@@ -139,6 +154,52 @@ async function dispatch(input: TaskViewInput) {
         status: input.status,
         count: filtered.length,
         tasks: filtered.map(ensureVersionPresent),
+      });
+    }
+
+    // Wave 1 §10.D — parent/child task tree, optionally narrowed to a
+    // group. Resolves children with a single in-memory pass after one
+    // adapter read; the heavy work (status counts, full DAG, etc.) lives
+    // in dedicated views. Skinny payload by design so the UI can lazy
+    // hydrate individual tasks via `task_view(action='get')`.
+    case "tree": {
+      const all = await db.getAllTasks(input.projectId);
+      const inGroup = input.groupId ? all.filter((t) => t.groupId === input.groupId) : all;
+      type TreeNode = {
+        id: string;
+        name: string;
+        status: string;
+        groupId: string | null;
+        parentTaskId: string | null;
+        children: TreeNode[];
+      };
+      const nodes = new Map<string, TreeNode>();
+      for (const t of inGroup) {
+        nodes.set(t.id, {
+          id: t.id,
+          name: t.name,
+          status: String(t.status),
+          groupId: t.groupId ?? null,
+          parentTaskId: t.parentTaskId ?? null,
+          children: [],
+        });
+      }
+      const roots: TreeNode[] = [];
+      for (const node of nodes.values()) {
+        if (node.parentTaskId && nodes.has(node.parentTaskId)) {
+          nodes.get(node.parentTaskId)!.children.push(node);
+        } else {
+          // Either a top-level task or a subtask whose parent lives in
+          // another group (shouldn't happen per the §10.D constraint,
+          // but we surface as a root rather than dropping it).
+          roots.push(node);
+        }
+      }
+      return asToolText({
+        action: "tree",
+        projectId: input.projectId,
+        groupId: input.groupId ?? null,
+        roots,
       });
     }
   }

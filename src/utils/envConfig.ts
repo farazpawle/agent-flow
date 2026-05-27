@@ -43,6 +43,8 @@ const ENV_ALIAS_SPECS: AliasSpec[] = [
   // MCP Prompts. Set to "false" if a downstream client hasn't migrated
   // and still needs the old tools list.
   { preferredKey: "MCP_REDUCED_TOOL_SURFACE", legacyKeys: [], kind: "boolean" },
+  // Wave 1 §10.C — multi-agent lock TTL (milliseconds). Default 30 min.
+  { preferredKey: "LOCK_TTL_MS", legacyKeys: [] },
 ];
 
 function normalizeEnvValue(

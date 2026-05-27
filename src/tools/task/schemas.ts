@@ -52,8 +52,8 @@ export const planIdeaSchema = z
       .describe(
         "For stage='review': critique/refinement notes. If omitted, self-review mode is used."
       ),
-    // @superrefine-allowed: legacy planIdea — slated for removal in Group 10 (workflow_run replaces it).
   })
+  // @superrefine-allowed: legacy planIdea — slated for removal in Group 10 (workflow_run replaces it).
   .superRefine((data, ctx) => {
     if (data.stage === "plan") {
       if (!data.description) {
@@ -148,18 +148,6 @@ export const splitTasksSchema = z.object({
                 .enum(["create", "modify", "reference", "dependency", "test", "document", "other"])
                 .describe("File relation type"),
               description: z.string().optional().describe("Brief description of file's relevance"),
-              lineStart: z
-                .number()
-                .int()
-                .positive()
-                .optional()
-                .describe("Starting line of the relevant code block (optional)"),
-              lineEnd: z
-                .number()
-                .int()
-                .positive()
-                .optional()
-                .describe("Ending line of the relevant code block (optional)"),
             })
           )
           .optional()
@@ -392,18 +380,6 @@ export const updateTaskContentSchema = z.object({
           .enum(["create", "modify", "reference", "dependency", "test", "document", "other"])
           .describe("File relation type"),
         description: z.string().optional().describe("Brief description of file's relevance"),
-        lineStart: z
-          .number()
-          .int()
-          .positive()
-          .optional()
-          .describe("Starting line of the relevant code block (optional)"),
-        lineEnd: z
-          .number()
-          .int()
-          .positive()
-          .optional()
-          .describe("Ending line of the relevant code block (optional)"),
       })
     )
     .optional()

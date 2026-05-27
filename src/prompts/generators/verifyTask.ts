@@ -73,7 +73,6 @@ export function getVerifyTaskPrompt(params: VerifyTaskPromptParams): string {
     verificationCriteria: task.verificationCriteria || "no verification criteria",
     implementationGuideSummary:
       extractSummary(task.implementationGuide, 200) || "no implementation guide",
-    analysisResult: extractSummary(task.analysisResult, 300) || "no analysis result",
     focusVerification: getFocusVerification(task),
   });
 

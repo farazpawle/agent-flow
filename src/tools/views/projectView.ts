@@ -122,5 +122,42 @@ async function dispatch(input: ProjectViewInput) {
           : { warning: "active row points to a missing project; consider clearing" }),
       });
     }
+
+    // Wave 1 §10.D — flat list of groups in a project plus per-group
+    // status counts. Fanout is bounded by the number of groups; we run
+    // one COUNT(*) GROUP BY and reshape it client-side for clarity.
+    case "groups_list": {
+      const project = await getProjectById(input.projectId);
+      if (!project) {
+        throw new NotFoundError(`Project not found: ${input.projectId}`, {
+          hint: "Call project_view(action='list') to see available projects.",
+        });
+      }
+      const groups = await db.listGroups(input.projectId);
+      const counts = await db.getGroupCounts(input.projectId);
+      // Index counts by groupId so the response can attach them next to
+      // each group definition.
+      const byGroup = new Map<string | null, Record<string, number>>();
+      for (const c of counts) {
+        const key = c.groupId;
+        const bucket = byGroup.get(key) ?? {};
+        bucket[c.status] = (bucket[c.status] ?? 0) + c.count;
+        byGroup.set(key, bucket);
+      }
+      return asToolText({
+        action: "groups_list",
+        projectId: input.projectId,
+        groups: groups.map((g) => ({
+          id: g.id,
+          name: g.name,
+          description: g.description ?? null,
+          status: g.status,
+          createdAt: g.createdAt instanceof Date ? g.createdAt.toISOString() : g.createdAt,
+          updatedAt: g.updatedAt instanceof Date ? g.updatedAt.toISOString() : g.updatedAt,
+          taskCounts: byGroup.get(g.id) ?? {},
+        })),
+        ungroupedTaskCounts: byGroup.get(null) ?? {},
+      });
+    }
   }
 }

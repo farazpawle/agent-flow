@@ -54,15 +54,14 @@ export async function loadTaskRelatedFiles(
     const fileInfo = generateFileInfo(file);
 
     // Add to total content
-    const fileHeader = `\n### ${file.type}: ${file.path}${file.description ? ` - ${file.description}` : ""
-      }${file.lineStart && file.lineEnd
-        ? ` (lines ${file.lineStart}-${file.lineEnd})`
-        : ""
-      }\n\n`;
+    const fileHeader = `\n### ${file.type}: ${file.path}${
+      file.description ? ` - ${file.description}` : ""
+    }\n\n`;
 
     totalContent += fileHeader + "```\n" + fileInfo + "\n```\n\n";
-    filesSummary += `- **${file.path}**${file.description ? ` - ${file.description}` : ""
-      } (${fileInfo.length} characters)\n`;
+    filesSummary += `- **${file.path}**${
+      file.description ? ` - ${file.description}` : ""
+    } (${fileInfo.length} characters)\n`;
 
     totalLength += fileInfo.length + fileHeader.length + 8; // 8 for "```\n" and "\n```"
   }
@@ -88,10 +87,6 @@ function generateFileInfo(file: RelatedFile): string {
 
   if (file.description) {
     fileInfo += `Description: ${file.description}\n`;
-  }
-
-  if (file.lineStart && file.lineEnd) {
-    fileInfo += `Line range: ${file.lineStart}-${file.lineEnd}\n`;
   }
 
   fileInfo += `If you need to view the actual content, please check the file directly: ${file.path}\n`;

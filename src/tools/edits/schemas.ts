@@ -41,6 +41,20 @@ export const projectEditSchema = z.discriminatedUnion("action", [
     // other's context. No global state is touched.
     clientId: z.string().min(1),
   }),
+  // Wave 1 §10.D — task groups (feature/epic clusters within a project).
+  z.object({
+    action: z.literal("create_group"),
+    projectId: z.string().min(1),
+    name: z.string().min(1),
+    description: z.string().optional(),
+  }),
+  z.object({
+    action: z.literal("update_group"),
+    groupId: z.string().min(1),
+    name: z.string().min(1).optional(),
+    description: z.string().optional(),
+    status: z.enum(["active", "completed", "archived"]).optional(),
+  }),
 ]);
 
 export type ProjectEditInput = z.infer<typeof projectEditSchema>;
@@ -95,6 +109,11 @@ export const taskEditSchema = z.discriminatedUnion("action", [
     verificationCriteria: z.string().optional(),
     priority: PRIORITY_ENUM.optional(),
     dependencies: z.array(z.string()).optional(),
+    // Wave 1 §10.D — optional group membership + parent/child hierarchy.
+    // A subtask must share its parent's groupId; no grandchildren allowed
+    // (the parent itself must not be a subtask). Validation in handler.
+    groupId: z.string().min(1).optional(),
+    parentTaskId: z.string().min(1).optional(),
   }),
   z.object({
     action: z.literal("update"),

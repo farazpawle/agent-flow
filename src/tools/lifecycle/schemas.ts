@@ -80,6 +80,12 @@ export type FinalizeResult = z.infer<typeof finalizeResultSchema>;
 
 const TASK_ID = z.string().min(1);
 
+// Wave 1 §10.C — clientId identifies the agent for multi-agent lock
+// ownership. Optional at the schema level so legacy callers don't break;
+// the handler treats absence as a synthetic "(anonymous)" identity. HTTP
+// callers can pass it in the body; MCP callers can pass it in tool args.
+const CLIENT_ID = z.string().min(1).optional();
+
 // Lifecycle actions other than `finalize` are best-effort state
 // transitions: the handler enforces the state machine and bumps the
 // version atomically, but the caller doesn't need to pre-fetch the
@@ -89,15 +95,18 @@ export const taskLifecycleSchema = z.discriminatedUnion("action", [
   z.object({
     action: z.literal("claim"),
     taskId: TASK_ID,
+    clientId: CLIENT_ID,
     agent: z.string().min(1).optional(),
   }),
   z.object({
     action: z.literal("start"),
     taskId: TASK_ID,
+    clientId: CLIENT_ID,
   }),
   z.object({
     action: z.literal("block"),
     taskId: TASK_ID,
+    clientId: CLIENT_ID,
     reason: z.string().min(10, {
       message: "reason must be at least 10 characters — explain what is blocking this task.",
     }),
@@ -105,22 +114,26 @@ export const taskLifecycleSchema = z.discriminatedUnion("action", [
   z.object({
     action: z.literal("unblock"),
     taskId: TASK_ID,
+    clientId: CLIENT_ID,
     note: z.string().optional(),
   }),
   z.object({
     action: z.literal("request_review"),
     taskId: TASK_ID,
+    clientId: CLIENT_ID,
     reviewQuestion: z.string().min(10).optional(),
   }),
   z.object({
     action: z.literal("finalize"),
     taskId: TASK_ID,
+    clientId: CLIENT_ID,
     expectedVersion: z.number().int().positive(),
     result: finalizeResultSchema,
   }),
   z.object({
     action: z.literal("reopen"),
     taskId: TASK_ID,
+    clientId: CLIENT_ID,
     reason: z.string().min(10, {
       message: "reason must be at least 10 characters — describe why this task is being reopened.",
     }),
@@ -128,6 +141,23 @@ export const taskLifecycleSchema = z.discriminatedUnion("action", [
   z.object({
     action: z.literal("archive"),
     taskId: TASK_ID,
+    clientId: CLIENT_ID,
+  }),
+  // Wave 1 §10.C — heartbeat extends `claim_expires_at` for the live
+  // claim held by `clientId`. Returns TASK_LOCKED if the caller is not
+  // the holder (or the claim has already expired).
+  z.object({
+    action: z.literal("heartbeat"),
+    taskId: TASK_ID,
+    clientId: CLIENT_ID,
+  }),
+  // Wave 1 §10.C — release drops the claim and flips status to PENDING
+  // (the abandonment path that Wave 2 §10.F upgrades with LLM narration).
+  z.object({
+    action: z.literal("release"),
+    taskId: TASK_ID,
+    clientId: CLIENT_ID,
+    note: z.string().optional(),
   }),
 ]);
 

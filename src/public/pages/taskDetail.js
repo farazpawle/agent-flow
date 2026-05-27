@@ -52,7 +52,6 @@ export async function mount(container, { params }) {
   render(container, task);
   attachHandlers(container, task);
   void loadFindings(container, task);
-  void loadConversation(container, id);
 }
 
 function render(container, task) {
@@ -185,9 +184,6 @@ function renderAdvancedSection(task) {
 
         <h4 style="margin-top: var(--space-4);">Findings</h4>
         <div id="findings-panel"><p class="placeholder tiny">Loading findings…</p></div>
-
-        <h4 style="margin-top: var(--space-4);">Conversation History</h4>
-        <div id="conversation-list"><p class="placeholder tiny">Loading…</p></div>
 
         <h4 style="margin-top: var(--space-4);">Run this task (MCP)</h4>
         <p class="muted tiny">Paste this into your agent's MCP chat to drive the lifecycle.</p>
@@ -486,31 +482,5 @@ function stringify(v) {
     return JSON.stringify(v, null, 2);
   } catch {
     return String(v);
-  }
-}
-
-async function loadConversation(container, id) {
-  const wrap = container.querySelector("#conversation-list");
-  if (!wrap) return;
-  try {
-    const { conversationHistory } = await api.get(
-      `/api/tasks/${encodeURIComponent(id)}/conversation`
-    );
-    if (!conversationHistory || !conversationHistory.length) {
-      wrap.innerHTML = `<p class="placeholder tiny">No conversation history yet. Run this task via MCP to record the conversation.</p>`;
-      return;
-    }
-    wrap.innerHTML = conversationHistory
-      .map(
-        (e) => `
-            <div class="conversation-entry">
-                <div class="role">${escapeHtml(e.role)}${e.toolName ? ` · ${escapeHtml(e.toolName)}` : ""}</div>
-                <pre>${escapeHtml(typeof e.content === "string" ? e.content : JSON.stringify(e.content, null, 2))}</pre>
-            </div>
-        `
-      )
-      .join("");
-  } catch (err) {
-    wrap.innerHTML = `<p class="placeholder tiny error">Failed to load history: ${escapeHtml(err.message)}</p>`;
   }
 }

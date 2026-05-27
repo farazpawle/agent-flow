@@ -11,6 +11,7 @@ export type AppErrorCode =
   | "VALIDATION"
   | "NOT_FOUND"
   | "CONFLICT"
+  | "TASK_LOCKED"
   | "AUTH"
   | "FORBIDDEN"
   | "RATE_LIMITED"
@@ -70,6 +71,20 @@ export class NotFoundError extends AppError {
 export class ConflictError extends AppError {
   constructor(message: string, options: AppErrorOptions = {}) {
     super("CONFLICT", 409, message, options);
+  }
+}
+
+/**
+ * Multi-agent lock conflict (Wave 1 §10.C). HTTP status 409 like a regular
+ * conflict, but the top-level `code` on the wire is `TASK_LOCKED` so callers
+ * can branch deterministically on lock contention vs other CONFLICT shapes
+ * (state-machine, optimistic-concurrency, etc.).
+ *
+ * Conventional `details` payload: `{ heldBy, since, expiresAt }`.
+ */
+export class TaskLockedError extends AppError {
+  constructor(message: string, options: AppErrorOptions = {}) {
+    super("TASK_LOCKED", 409, message, options);
   }
 }
 

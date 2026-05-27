@@ -92,6 +92,49 @@ async function dispatch(input: TaskEditInput) {
 // ────────────────────────────────────────────────────────────────────────
 
 async function create(input: Extract<TaskEditInput, { action: "create" }>) {
+  // Wave 1 §10.D — validate subtask invariants BEFORE any DB writes.
+  // Two-level hierarchy only: subtask's groupId must match its parent's,
+  // and the parent must not itself be a subtask (no grandchildren).
+  if (input.parentTaskId) {
+    const parent = await db.getTask(input.parentTaskId);
+    if (!parent) {
+      throw new ValidationError(
+        `parentTaskId '${input.parentTaskId}' does not refer to an existing task.`,
+        {
+          hint: "Call task_view(action='get', taskId) to confirm the parent exists.",
+        }
+      );
+    }
+    if (parent.parentTaskId) {
+      throw new ValidationError(
+        `parent ${parent.id} is already a subtask — subtasks can only be one level deep.`,
+        {
+          hint: "Pick a top-level task as the parent, or omit parentTaskId to create a sibling.",
+          details: {
+            code: "VALIDATION",
+            parentTaskId: parent.id,
+            grandparent: parent.parentTaskId,
+          },
+        }
+      );
+    }
+    const subtaskGroup = input.groupId ?? null;
+    const parentGroup = parent.groupId ?? null;
+    if (subtaskGroup !== parentGroup) {
+      throw new ValidationError(
+        `Subtask groupId (${subtaskGroup ?? "null"}) must match parent's groupId (${parentGroup ?? "null"}).`,
+        {
+          hint: "Either omit groupId so it inherits, or set it to the parent's groupId.",
+          details: {
+            code: "VALIDATION",
+            parentTaskId: parent.id,
+            parentGroupId: parentGroup,
+            subtaskGroupId: subtaskGroup,
+          },
+        }
+      );
+    }
+  }
   const now = new Date();
   const deps: TaskDependency[] = (input.dependencies ?? []).map((id) => ({ taskId: id }));
   const task: Task = {
@@ -108,6 +151,9 @@ async function create(input: Extract<TaskEditInput, { action: "create" }>) {
     createdAt: now,
     updatedAt: now,
     projectId: input.projectId,
+    // Wave 1 §10.D — group membership + subtask wiring persisted to columns.
+    groupId: input.groupId,
+    parentTaskId: input.parentTaskId,
   };
   // Inline priority into the JSON content (Task doesn't expose it as a
   // first-class field today; Group 5 introduces it as an optional one).

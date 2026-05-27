@@ -53,8 +53,6 @@ export const patchTaskBodySchema = z
           path: z.string().min(1).max(1024),
           type: z.string().min(1).max(64),
           description: z.string().max(2_000).optional(),
-          lineStart: z.number().int().positive().optional(),
-          lineEnd: z.number().int().positive().optional(),
         })
       )
       .max(100)

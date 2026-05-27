@@ -150,13 +150,7 @@ import {
 import { toHttpErrorBody } from "./utils/errors.js";
 
 // Import task model functions
-import {
-  updateTaskConversationHistory,
-  getTaskById,
-  getAllTasks,
-  ensureDataDir,
-  updateTask,
-} from "./models/taskModel.js";
+import { getTaskById, getAllTasks, ensureDataDir, updateTask } from "./models/taskModel.js";
 import { taskEvents, TASK_EVENTS } from "./utils/events.js";
 
 // Import client model
@@ -183,7 +177,6 @@ async function main() {
     // GUI server should start when explicitly invoked in GUI mode,
     // even if ENABLE_GUI is not set in environment.
     const ENABLE_GUI = process.env.ENABLE_GUI === "true" || GUI_ONLY || IS_SPAWNED_GUI;
-    const ENABLE_DETAILED_MODE = process.env.ENABLE_DETAILED_MODE === "true";
 
     // Initialize Database (SQLite/Supabase)
     try {
@@ -931,36 +924,6 @@ async function main() {
         }
       );
 
-      // Conversation history API endpoint (only when detailed mode is enabled)
-      if (ENABLE_DETAILED_MODE) {
-        app.get("/api/tasks/:taskId/conversation", async (req: Request, res: Response) => {
-          try {
-            const taskId = req.params.taskId;
-
-            // Validate taskId
-            if (!taskId) {
-              res.status(400).json({ error: "Task ID is required" });
-              return;
-            }
-
-            // Get task by ID
-            const task = await getTaskById(taskId);
-
-            // If task doesn't exist, return 404
-            if (!task) {
-              res.status(404).json({ error: "Task not found" });
-              return;
-            }
-
-            // Return conversation history or empty array if it doesn't exist
-            res.json({ conversationHistory: task.conversationHistory || [] });
-          } catch (error) {
-            console.error("Error retrieving conversation history:", error);
-            res.status(500).json({ error: "Failed to retrieve conversation history" });
-          }
-        });
-      }
-
       // Fixed port configuration
       const SERVER_PORT = parseInt(process.env.SERVER_PORT || "54544", 10);
 
@@ -1445,41 +1408,6 @@ async function main() {
         let taskId: string | undefined;
         let result;
 
-        // Save request to conversation history if detailed mode is enabled
-        // and this is a task-related tool request
-        const saveRequest = async () => {
-          if (ENABLE_DETAILED_MODE && taskId) {
-            try {
-              await updateTaskConversationHistory(
-                taskId,
-                "user",
-                JSON.stringify(request.params),
-                request.params.name
-              );
-            } catch (error) {
-              // Silently handle errors to avoid interrupting the main flow
-              console.error("Failed to save request to conversation history:", error);
-            }
-          }
-        };
-
-        // Save response to conversation history if detailed mode is enabled
-        const saveResponse = async (response: any) => {
-          if (ENABLE_DETAILED_MODE && taskId) {
-            try {
-              await updateTaskConversationHistory(
-                taskId,
-                "assistant",
-                JSON.stringify(response),
-                request.params.name
-              );
-            } catch (error) {
-              // Silently handle errors to avoid interrupting the main flow
-              console.error("Failed to save response to conversation history:", error);
-            }
-          }
-        };
-
         switch (request.params.name) {
           // Phase 1 Group 10 — workflow_run replaces plan_idea +
           // process_thought. Manual mode by default; per-call
@@ -1545,10 +1473,8 @@ async function main() {
             );
             if (!parsed.ok) return toToolErrorResponse("task_lifecycle", parsed.error);
             taskId = parsed.data.taskId;
-            await saveRequest();
             try {
               result = await taskLifecycle(parsed.data);
-              await saveResponse(result);
               return result;
             } catch (err) {
               return toToolErrorResponse("task_lifecycle", err);
@@ -1569,10 +1495,8 @@ async function main() {
             );
             if (!parsed.ok) return toToolErrorResponse("artifact_record", parsed.error);
             taskId = parsed.data.taskId;
-            await saveRequest();
             try {
               result = await artifactRecord(parsed.data);
-              await saveResponse(result);
               return result;
             } catch (err) {
               return toToolErrorResponse("artifact_record", err);

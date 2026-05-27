@@ -125,14 +125,6 @@ export function getExecuteTaskPrompt(params: ExecuteTaskPromptParams): string {
     });
   }
 
-  const analysisResultTemplate = loadPromptFromTemplate("executeTask/analysisResult.md");
-  let analysisResultPrompt = "";
-  if (task.analysisResult) {
-    analysisResultPrompt = generatePrompt(analysisResultTemplate, {
-      analysisResult: task.analysisResult,
-    });
-  }
-
   const dependencyTasksTemplate = loadPromptFromTemplate("executeTask/dependencyTasks.md");
   let dependencyTasksPrompt = "";
   if (dependencyTasks && dependencyTasks.length > 0) {
@@ -201,7 +193,6 @@ export function getExecuteTaskPrompt(params: ExecuteTaskPromptParams): string {
     notesTemplate: notesPrompt,
     implementationGuideTemplate: implementationGuidePrompt,
     verificationCriteriaTemplate: verificationCriteriaPrompt,
-    analysisResultTemplate: analysisResultPrompt,
     dependencyTasksTemplate: dependencyTasksPrompt,
     relatedFilesSummaryTemplate: relatedFilesSummaryPrompt,
     complexityTemplate: complexityPrompt,

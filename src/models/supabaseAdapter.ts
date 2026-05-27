@@ -1,10 +1,12 @@
 import { createClient, SupabaseClient, RealtimeChannel } from "@supabase/supabase-js";
 import { randomUUID } from "crypto";
 import {
+  ClaimTaskResult,
   ClientActiveProject,
   DatabaseAdapter,
   DestructiveAuditFilter,
   DestructiveAuditRow,
+  ExtendClaimResult,
   IncrementTaskVersionResult,
   LessonSummary,
   LessonSummaryInput,
@@ -15,7 +17,7 @@ import {
   TaskFinding,
   TaskFindingInput,
 } from "./interfaces.js";
-import { Task } from "../types/index.js";
+import { Task, TaskGroup, TaskGroupInput } from "../types/index.js";
 import { Project } from "./projectModel.js";
 import { Client } from "./clientModel.js";
 import { WorkflowStep, WorkflowStepType } from "./workflowModel.js";
@@ -95,7 +97,11 @@ export class SupabaseAdapter implements DatabaseAdapter {
   // --- Task Operations ---
 
   async getAllTasks(projectId?: string): Promise<Task[]> {
-    let query = this.getSupabase().from("tasks").select("content, execution_order, version");
+    let query = this.getSupabase()
+      .from("tasks")
+      .select(
+        "content, execution_order, version, claimed_by, claimed_at, claim_expires_at, group_id, parent_task_id"
+      );
 
     if (projectId) {
       query = query.eq("project_id", projectId);
@@ -112,6 +118,11 @@ export class SupabaseAdapter implements DatabaseAdapter {
           ...task,
           executionOrder: row.execution_order ?? task.executionOrder,
           version: row.version, // Group 1.3 — OCC column is source of truth
+          claimedBy: row.claimed_by ?? undefined,
+          claimedAt: row.claimed_at ? new Date(row.claimed_at) : undefined,
+          claimExpiresAt: row.claim_expires_at ? new Date(row.claim_expires_at) : undefined,
+          groupId: row.group_id ?? undefined,
+          parentTaskId: row.parent_task_id ?? undefined,
           createdAt: task.createdAt ? new Date(task.createdAt) : new Date(),
           updatedAt: task.updatedAt ? new Date(task.updatedAt) : new Date(),
           completedAt: task.completedAt ? new Date(task.completedAt) : undefined,
@@ -144,7 +155,9 @@ export class SupabaseAdapter implements DatabaseAdapter {
   async getTask(id: string): Promise<Task | null> {
     const { data, error } = await this.getSupabase()
       .from("tasks")
-      .select("content, execution_order, version")
+      .select(
+        "content, execution_order, version, claimed_by, claimed_at, claim_expires_at, group_id, parent_task_id"
+      )
       .eq("id", id)
       .single();
 
@@ -159,6 +172,11 @@ export class SupabaseAdapter implements DatabaseAdapter {
       ...task,
       executionOrder: data.execution_order ?? task.executionOrder,
       version: data.version, // Group 1.3 — OCC column is source of truth
+      claimedBy: data.claimed_by ?? undefined,
+      claimedAt: data.claimed_at ? new Date(data.claimed_at) : undefined,
+      claimExpiresAt: data.claim_expires_at ? new Date(data.claim_expires_at) : undefined,
+      groupId: data.group_id ?? undefined,
+      parentTaskId: data.parent_task_id ?? undefined,
       createdAt: task.createdAt ? new Date(task.createdAt) : new Date(),
       updatedAt: task.updatedAt ? new Date(task.updatedAt) : new Date(),
       completedAt: task.completedAt ? new Date(task.completedAt) : undefined,
@@ -195,6 +213,22 @@ export class SupabaseAdapter implements DatabaseAdapter {
       // (or 1 for new rows) so `incrementTaskVersion`'s bump is
       // never clobbered by a downstream saveTask.
       version: (task as Task & { version?: number }).version ?? 1,
+      // Wave 1 §10.C — lock columns persisted as their own columns, not
+      // inside the JSON blob, so atomic claim/extend can target them.
+      claimed_by: task.claimedBy ?? null,
+      claimed_at: task.claimedAt
+        ? task.claimedAt instanceof Date
+          ? task.claimedAt.toISOString()
+          : new Date(task.claimedAt).toISOString()
+        : null,
+      claim_expires_at: task.claimExpiresAt
+        ? task.claimExpiresAt instanceof Date
+          ? task.claimExpiresAt.toISOString()
+          : new Date(task.claimExpiresAt).toISOString()
+        : null,
+      // Wave 1 §10.D — group/hierarchy columns.
+      group_id: task.groupId ?? null,
+      parent_task_id: task.parentTaskId ?? null,
     };
 
     try {
@@ -264,6 +298,21 @@ export class SupabaseAdapter implements DatabaseAdapter {
       content: task,
       // Group 1.3 OCC column — see saveTask for rationale.
       version: (task as Task & { version?: number }).version ?? 1,
+      // Wave 1 §10.C — lock columns.
+      claimed_by: task.claimedBy ?? null,
+      claimed_at: task.claimedAt
+        ? task.claimedAt instanceof Date
+          ? task.claimedAt.toISOString()
+          : new Date(task.claimedAt).toISOString()
+        : null,
+      claim_expires_at: task.claimExpiresAt
+        ? task.claimExpiresAt instanceof Date
+          ? task.claimExpiresAt.toISOString()
+          : new Date(task.claimExpiresAt).toISOString()
+        : null,
+      // Wave 1 §10.D — group/hierarchy columns.
+      group_id: task.groupId ?? null,
+      parent_task_id: task.parentTaskId ?? null,
     };
     if (includeOrder) {
       row.execution_order = task.executionOrder || 0;
@@ -608,6 +657,238 @@ export class SupabaseAdapter implements DatabaseAdapter {
     if (readError) throw readError;
 
     return { ok: false, currentVersion: (currentRow?.version as number | undefined) ?? null };
+  }
+
+  // --- Multi-agent lock (Wave 1 §10.C) ---
+  // Postgres has no straightforward client-side equivalent of SQLite's
+  // single-statement conditional UPDATE; the SDK does not let us bump a
+  // numeric column in-place. We use a read → conditional-update sequence
+  // and rely on the `version` OCC column as the race guard. If another
+  // claimant slipped in between read and write, the version mismatch
+  // makes our UPDATE affect zero rows and we surface the contention.
+
+  async claimTask(taskId: string, clientId: string, ttlMs: number): Promise<ClaimTaskResult> {
+    const sb = this.getSupabase();
+    const now = Date.now();
+    const expiresAt = now + ttlMs;
+
+    const { data: cur, error: readErr } = await sb
+      .from("tasks")
+      .select("version, claimed_by, claimed_at, claim_expires_at")
+      .eq("id", taskId)
+      .maybeSingle();
+    if (readErr) throw readErr;
+    if (!cur) {
+      return {
+        ok: false,
+        heldBy: "(unknown)",
+        claimedAt: new Date(0),
+        claimExpiresAt: new Date(0),
+      };
+    }
+
+    const heldByOther =
+      cur.claimed_by &&
+      cur.claimed_by !== clientId &&
+      cur.claim_expires_at &&
+      new Date(cur.claim_expires_at).getTime() > now;
+    if (heldByOther) {
+      return {
+        ok: false,
+        heldBy: cur.claimed_by as string,
+        claimedAt: cur.claimed_at ? new Date(cur.claimed_at) : new Date(0),
+        claimExpiresAt: cur.claim_expires_at ? new Date(cur.claim_expires_at) : new Date(0),
+      };
+    }
+
+    const newVersion = (cur.version ?? 1) + 1;
+    const { data, error } = await sb
+      .from("tasks")
+      .update({
+        claimed_by: clientId,
+        claimed_at: new Date(now).toISOString(),
+        claim_expires_at: new Date(expiresAt).toISOString(),
+        version: newVersion,
+      })
+      .eq("id", taskId)
+      .eq("version", cur.version)
+      .select("version");
+    if (error) throw error;
+
+    if (data && data.length === 1) {
+      return {
+        ok: true,
+        newVersion,
+        claimedAt: new Date(now),
+        claimExpiresAt: new Date(expiresAt),
+      };
+    }
+
+    // Lost the race against another claimant — re-read and surface holder.
+    const { data: lost } = await sb
+      .from("tasks")
+      .select("claimed_by, claimed_at, claim_expires_at")
+      .eq("id", taskId)
+      .maybeSingle();
+    return {
+      ok: false,
+      heldBy: (lost?.claimed_by as string | null | undefined) ?? "(unknown)",
+      claimedAt: lost?.claimed_at ? new Date(lost.claimed_at) : new Date(0),
+      claimExpiresAt: lost?.claim_expires_at ? new Date(lost.claim_expires_at) : new Date(0),
+    };
+  }
+
+  async extendTaskClaim(
+    taskId: string,
+    clientId: string,
+    ttlMs: number
+  ): Promise<ExtendClaimResult> {
+    const sb = this.getSupabase();
+    const now = Date.now();
+    const expiresAt = now + ttlMs;
+
+    const { data: cur, error: readErr } = await sb
+      .from("tasks")
+      .select("version, claimed_by, claim_expires_at")
+      .eq("id", taskId)
+      .maybeSingle();
+    if (readErr) throw readErr;
+    if (
+      !cur ||
+      cur.claimed_by !== clientId ||
+      !cur.claim_expires_at ||
+      new Date(cur.claim_expires_at).getTime() < now
+    ) {
+      return { ok: false };
+    }
+
+    const newVersion = (cur.version ?? 1) + 1;
+    const { data, error } = await sb
+      .from("tasks")
+      .update({
+        claim_expires_at: new Date(expiresAt).toISOString(),
+        version: newVersion,
+      })
+      .eq("id", taskId)
+      .eq("version", cur.version)
+      .select("version");
+    if (error) throw error;
+    if (data && data.length === 1) {
+      return { ok: true, newVersion, claimExpiresAt: new Date(expiresAt) };
+    }
+    return { ok: false };
+  }
+
+  async clearTaskClaim(taskId: string): Promise<void> {
+    const { error } = await this.getSupabase()
+      .from("tasks")
+      .update({ claimed_by: null, claimed_at: null, claim_expires_at: null })
+      .eq("id", taskId);
+    if (error) throw error;
+  }
+
+  // --- Task groups (Wave 1 §10.D) ---
+
+  private mapGroupRow(row: any): TaskGroup {
+    return {
+      id: row.id,
+      projectId: row.project_id,
+      name: row.name,
+      description: row.description ?? undefined,
+      status: (row.status ?? "active") as "active" | "completed" | "archived",
+      createdAt: row.created_at ? new Date(row.created_at) : new Date(),
+      updatedAt: row.updated_at ? new Date(row.updated_at) : new Date(),
+    };
+  }
+
+  async createGroup(input: TaskGroupInput): Promise<TaskGroup> {
+    const id = input.id ?? randomUUID();
+    const status = input.status ?? "active";
+    const nowIso = new Date().toISOString();
+    const { error } = await this.getSupabase()
+      .from("task_groups")
+      .insert({
+        id,
+        project_id: input.projectId,
+        name: input.name,
+        description: input.description ?? null,
+        status,
+        created_at: nowIso,
+        updated_at: nowIso,
+      });
+    if (error) throw error;
+    return {
+      id,
+      projectId: input.projectId,
+      name: input.name,
+      description: input.description,
+      status,
+      createdAt: new Date(nowIso),
+      updatedAt: new Date(nowIso),
+    };
+  }
+
+  async getGroup(id: string): Promise<TaskGroup | null> {
+    const { data, error } = await this.getSupabase()
+      .from("task_groups")
+      .select("id, project_id, name, description, status, created_at, updated_at")
+      .eq("id", id)
+      .maybeSingle();
+    if (error) throw error;
+    if (!data) return null;
+    return this.mapGroupRow(data);
+  }
+
+  async listGroups(projectId: string): Promise<TaskGroup[]> {
+    const { data, error } = await this.getSupabase()
+      .from("task_groups")
+      .select("id, project_id, name, description, status, created_at, updated_at")
+      .eq("project_id", projectId)
+      .order("created_at", { ascending: false });
+    if (error) throw error;
+    return (data ?? []).map((r) => this.mapGroupRow(r));
+  }
+
+  async updateGroup(
+    id: string,
+    patch: Partial<Pick<TaskGroup, "name" | "description" | "status">>
+  ): Promise<TaskGroup | null> {
+    const updates: Record<string, unknown> = { updated_at: new Date().toISOString() };
+    if (patch.name !== undefined) updates.name = patch.name;
+    if (patch.description !== undefined) updates.description = patch.description;
+    if (patch.status !== undefined) updates.status = patch.status;
+    const { error } = await this.getSupabase().from("task_groups").update(updates).eq("id", id);
+    if (error) throw error;
+    return this.getGroup(id);
+  }
+
+  async deleteGroup(id: string): Promise<void> {
+    // Supabase FK ON DELETE SET NULL handles dependent tasks; the
+    // statement here is the actual delete.
+    const { error } = await this.getSupabase().from("task_groups").delete().eq("id", id);
+    if (error) throw error;
+  }
+
+  async getGroupCounts(
+    projectId: string
+  ): Promise<Array<{ groupId: string | null; status: string; count: number }>> {
+    // No SQL GROUP BY in the JS client; pull rows and aggregate in JS.
+    // Scoped to a single project so the cost is bounded.
+    const { data, error } = await this.getSupabase()
+      .from("tasks")
+      .select("group_id, status")
+      .eq("project_id", projectId);
+    if (error) throw error;
+    const counts = new Map<string, { groupId: string | null; status: string; count: number }>();
+    for (const r of data ?? []) {
+      const groupId = (r as { group_id?: string | null }).group_id ?? null;
+      const status = (r as { status: string }).status;
+      const key = `${groupId ?? ""}|${status}`;
+      const existing = counts.get(key);
+      if (existing) existing.count += 1;
+      else counts.set(key, { groupId, status, count: 1 });
+    }
+    return Array.from(counts.values());
   }
 
   // --- Findings (Group 1.1 / 1.7 / 1.8) ---

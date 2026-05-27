@@ -34,6 +34,11 @@ export const projectViewSchema = z.discriminatedUnion("action", [
     // exposing the field on the schema lets callers override.
     clientId: z.string().optional(),
   }),
+  // Wave 1 §10.D — list groups with per-group status counts.
+  z.object({
+    action: z.literal("groups_list"),
+    projectId: z.string().min(1),
+  }),
 ]);
 
 export type ProjectViewInput = z.infer<typeof projectViewSchema>;
@@ -83,6 +88,14 @@ export const taskViewSchema = z.discriminatedUnion("action", [
     action: z.literal("by_status"),
     status: TASK_STATUS_STRICT_ENUM,
     projectId: z.string().optional(),
+  }),
+  // Wave 1 §10.D — flat tree of parent/child tasks scoped to a project,
+  // optionally narrowed to a group. Returns skinny `{ id, name, status,
+  // parentTaskId, children: [...] }` nodes.
+  z.object({
+    action: z.literal("tree"),
+    projectId: z.string().min(1),
+    groupId: z.string().min(1).optional(),
   }),
 ]);
 

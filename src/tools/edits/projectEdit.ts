@@ -12,7 +12,7 @@
 import { v4 as uuidv4 } from "uuid";
 import { createHash } from "crypto";
 import { db } from "../../models/db.js";
-import { NotFoundError } from "../../utils/errors.js";
+import { NotFoundError, ValidationError } from "../../utils/errors.js";
 import { withToolTelemetry } from "../../utils/telemetry.js";
 import type { ProjectEditInput } from "./schemas.js";
 
@@ -86,6 +86,49 @@ export async function projectEdit(input: ProjectEditInput) {
           activeProject: project,
           setAt: result.setAt instanceof Date ? result.setAt.toISOString() : result.setAt,
         });
+      }
+
+      // Wave 1 §10.D — task group management.
+
+      case "create_group": {
+        const project = await db.getProject(input.projectId);
+        if (!project) {
+          throw new NotFoundError(`Project not found: ${input.projectId}`, {
+            hint: "Cannot create a group inside a non-existent project; create the project first.",
+          });
+        }
+        const group = await db.createGroup({
+          projectId: input.projectId,
+          name: input.name,
+          description: input.description,
+        });
+        return asToolText({ action: "create_group", group });
+      }
+
+      case "update_group": {
+        const existing = await db.getGroup(input.groupId);
+        if (!existing) {
+          throw new NotFoundError(`Group not found: ${input.groupId}`, {
+            hint: "Call project_view(action='groups_list', projectId) to see available groups.",
+          });
+        }
+        // Build a strictly-typed patch so we don't paste through arbitrary
+        // schema keys onto the model layer.
+        const patch: Partial<{
+          name: string;
+          description: string;
+          status: "active" | "completed" | "archived";
+        }> = {};
+        if (input.name !== undefined) patch.name = input.name;
+        if (input.description !== undefined) patch.description = input.description;
+        if (input.status !== undefined) patch.status = input.status;
+        if (Object.keys(patch).length === 0) {
+          throw new ValidationError("update_group requires at least one updatable field.", {
+            hint: "Provide one of: name, description, status.",
+          });
+        }
+        const updated = await db.updateGroup(input.groupId, patch);
+        return asToolText({ action: "update_group", group: updated });
       }
     }
   });

@@ -1,5 +1,5 @@
 import { Project } from "./projectModel.js";
-import { Task } from "../types/index.js";
+import { Task, TaskGroup, TaskGroupInput } from "../types/index.js";
 import { WorkflowStep } from "./workflowModel.js";
 import { Client } from "./clientModel.js";
 
@@ -105,6 +105,24 @@ export type LlmSettingsInput = Partial<Omit<LlmSettings, "updatedAt">>;
 export type IncrementTaskVersionResult =
   | { ok: true; newVersion: number }
   | { ok: false; currentVersion: number | null };
+
+/**
+ * Result of `claimTask` — the atomic lock-take primitive (Wave 1 §10.C).
+ * Returns the new version + claim window on success, or the current
+ * holder's identity + claim window on contention.
+ */
+export type ClaimTaskResult =
+  | { ok: true; newVersion: number; claimedAt: Date; claimExpiresAt: Date }
+  | { ok: false; heldBy: string; claimedAt: Date; claimExpiresAt: Date };
+
+/**
+ * Result of `extendTaskClaim` — heartbeat. `ok: false` covers both "not
+ * the holder" and "claim already expired"; the caller should re-claim in
+ * either case.
+ */
+export type ExtendClaimResult =
+  | { ok: true; newVersion: number; claimExpiresAt: Date }
+  | { ok: false };
 
 /**
  * Interface for database adapters
@@ -242,6 +260,58 @@ export interface DatabaseAdapter {
     taskId: string,
     expectedVersion: number
   ): Promise<IncrementTaskVersionResult>;
+
+  // --- Multi-agent lock (Wave 1 §10.C) ---
+  /**
+   * Atomically take or renew the lock on a task. Same-client re-claim is
+   * idempotent (renews). Returns `ok: false` with the current holder's
+   * identity when another live client holds the lock.
+   */
+  claimTask(taskId: string, clientId: string, ttlMs: number): Promise<ClaimTaskResult>;
+
+  /**
+   * Heartbeat: extend `claim_expires_at` for an existing live claim held
+   * by `clientId`. Returns `ok: false` when the caller is not the holder
+   * (or the claim already expired).
+   */
+  extendTaskClaim(taskId: string, clientId: string, ttlMs: number): Promise<ExtendClaimResult>;
+
+  /**
+   * Clear the lock columns on a task. Caller is responsible for any
+   * accompanying state changes (status flip, version bump).
+   */
+  clearTaskClaim(taskId: string): Promise<void>;
+
+  // --- Task groups (Wave 1 §10.D) ---
+  /**
+   * Insert a new group. ID defaults to a UUID when not supplied.
+   * Status defaults to `'active'`.
+   */
+  createGroup(input: TaskGroupInput): Promise<TaskGroup>;
+
+  /** Fetch one group by ID. */
+  getGroup(id: string): Promise<TaskGroup | null>;
+
+  /** List groups in a project (newest first). */
+  listGroups(projectId: string): Promise<TaskGroup[]>;
+
+  /** Patch the mutable fields on a group (name/description/status). */
+  updateGroup(
+    id: string,
+    patch: Partial<Pick<TaskGroup, "name" | "description" | "status">>
+  ): Promise<TaskGroup | null>;
+
+  /**
+   * Delete a group and null out `tasks.group_id` for any dependent tasks
+   * (SQLite enforces this in the model layer; Postgres via FK ON DELETE
+   * SET NULL).
+   */
+  deleteGroup(id: string): Promise<void>;
+
+  /** Aggregate per-group task counts by status, scoped to one project. */
+  getGroupCounts(
+    projectId: string
+  ): Promise<Array<{ groupId: string | null; status: string; count: number }>>;
 
   /**
    * Run `fn` inside a database-level transaction (Group 3.2).

@@ -230,32 +230,6 @@ export async function updateTaskSummary(taskId: string, summary: string): Promis
   return await updateTask(taskId, { summary });
 }
 
-/**
- * Update task conversation history
- */
-export async function updateTaskConversationHistory(
-  taskId: string,
-  role: "user" | "assistant",
-  content: string,
-  toolName?: string
-): Promise<Task | null> {
-  const task = await getTaskById(taskId);
-  if (!task) return null;
-
-  const message = {
-    timestamp: new Date(),
-    role,
-    content,
-    toolName,
-  };
-
-  const conversationHistory = task.conversationHistory || [];
-  const updatedConversationHistory = [...conversationHistory, message];
-
-  // We use updateTask which handles db save and notification
-  return await updateTask(taskId, { conversationHistory: updatedConversationHistory });
-}
-
 // Update task content
 export async function updateTaskContent(
   taskId: string,
@@ -362,9 +336,7 @@ export async function batchCreateOrUpdateTasks(
     technicalPlan?: string;
   }>,
   updateMode: "append" | "overwrite" | "selective" | "clearAllTasks",
-  globalAnalysisResult?: string,
-  projectId?: string,
-  sourceStepId?: string
+  projectId?: string
 ): Promise<Task[]> {
   await ensureDataDir();
   const existingTasks = await db.getAllTasks();
@@ -429,8 +401,6 @@ export async function batchCreateOrUpdateTasks(
           verificationCriteria: taskData.verificationCriteria,
           problemStatement: taskData.problemStatement,
           technicalPlan: taskData.technicalPlan,
-          analysisResult: globalAnalysisResult,
-          sourceStepId: sourceStepId,
         };
         if (taskData.relatedFiles) updatedTask.relatedFiles = taskData.relatedFiles;
 
@@ -454,9 +424,7 @@ export async function batchCreateOrUpdateTasks(
         verificationCriteria: taskData.verificationCriteria,
         problemStatement: taskData.problemStatement,
         technicalPlan: taskData.technicalPlan,
-        analysisResult: globalAnalysisResult,
         projectId: resolvedProjectId,
-        sourceStepId: sourceStepId,
       };
       newTasks.push(newTask);
       tasksToSave.push(newTask);

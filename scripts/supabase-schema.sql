@@ -17,6 +17,18 @@ create table if not exists projects (
     deleted_at timestamptz
 );
 
+-- Wave 1 §10.D — Task Groups Table (created before `tasks` so the FK resolves).
+create table if not exists task_groups (
+    id text primary key,
+    project_id text not null references projects(id) on delete cascade,
+    name text not null,
+    description text,
+    status text not null default 'active',
+    created_at timestamptz not null default now(),
+    updated_at timestamptz not null default now()
+);
+create index if not exists idx_task_groups_project on task_groups(project_id);
+
 -- Tasks Table
 create table if not exists tasks (
     id text primary key,
@@ -29,8 +41,25 @@ create table if not exists tasks (
     project_id text references projects(id) on delete cascade,
     execution_order integer default 0,
     content jsonb not null,
+    -- 10.I (2026): the following JSON keys were dropped from Task and may linger on
+    -- legacy rows: analysisResult, sourceStepId, conversationHistory,
+    -- relatedFiles.lineStart, relatedFiles.lineEnd. Readers ignore them.
+    -- Wave 1 §10.C — multi-agent lock columns.
+    claimed_by text,
+    claimed_at timestamptz,
+    claim_expires_at timestamptz,
+    -- Wave 1 §10.D — group membership + parent/child hierarchy.
+    group_id text references task_groups(id) on delete set null,
+    parent_task_id text references tasks(id) on delete set null,
     deleted_at timestamptz
 );
+
+-- Wave 1 §10.C — lock contention filter index.
+create index if not exists idx_tasks_claim on tasks(claimed_by, claim_expires_at);
+
+-- Wave 1 §10.D — group + parent lookup indexes.
+create index if not exists idx_tasks_project_group on tasks(project_id, group_id);
+create index if not exists idx_tasks_parent on tasks(parent_task_id);
 
 -- Workflow Steps Table
 create table if not exists workflow_steps (

@@ -39,16 +39,6 @@ export interface RelatedFile {
   path: string; // File path, can be relative to the project root directory or an absolute path
   type: RelatedFileType; // Type of relationship between the file and the task
   description?: string; // Supplementary description of the file, explaining its specific relationship or purpose to the task
-  lineStart?: number; // Starting line of the relevant code block (optional)
-  lineEnd?: number; // Ending line of the relevant code block (optional)
-}
-
-// Conversation message: defines the structure of a message in the task conversation history
-export interface ConversationMessage {
-  timestamp: Date; // Timestamp when the message was created
-  role: "user" | "assistant"; // Role of the message sender (user or assistant)
-  content: string; // Content of the message
-  toolName?: string; // Name of the tool associated with the message (if applicable)
 }
 
 // Task interface: defines the complete data structure of a task
@@ -72,21 +62,12 @@ export interface Task {
   summary?: string; // Task completion summary, concisely describing implementation results and important decisions (only applicable to completed tasks)
   relatedFiles?: RelatedFile[]; // List of files related to the task (optional)
 
-  // Additional field: save complete technical analysis results
-  analysisResult?: string; // Complete analysis results from the Idea Phase (analyze/review)
-
   // Additional field: save specific implementation guidelines
   implementationGuide?: string; // Specific implementation methods, steps, and suggestions
 
   // Additional field: save verification standards and testing methods
   verificationCriteria?: string; // Clear verification standards, test points, and acceptance conditions
   verificationStatus?: string; // Verification status (e.g. 'passed') per workflow spec
-
-  // Bridge field: Link to the Idea Phase step that generated this task
-  sourceStepId?: string; // ID of the workflow_steps row (Idea Phase)
-
-  // Additional field: save conversation history for detailed mode
-  conversationHistory?: ConversationMessage[]; // History of conversations related to this task (only used when detailed mode is enabled)
 
   // Project association: links task to a specific project
   projectId?: string; // ID of the project this task belongs to
@@ -98,6 +79,41 @@ export interface Task {
   // DB column; bumped by `incrementTaskVersion`. Returned by every task read so the
   // caller can echo it back as `expectedVersion` on the next mutating tool call.
   version?: number;
+
+  // Wave 1 §10.C — multi-agent lock. Source of truth is the dedicated
+  // `claimed_by` / `claimed_at` / `claim_expires_at` columns (NOT the JSON
+  // blob). Set by `claim`/`start`/`heartbeat`, cleared by `release`/
+  // `finalize`/`block`/`archive` or by read-time recovery when expired.
+  claimedBy?: string;
+  claimedAt?: Date;
+  claimExpiresAt?: Date;
+
+  // Wave 1 §10.D — task groups + parent/child hierarchy. Source of truth
+  // is the dedicated `group_id` / `parent_task_id` columns (NOT the JSON
+  // blob) so DAG queries can join cheaply.
+  groupId?: string;
+  parentTaskId?: string;
+}
+
+// Wave 1 §10.D — task group definition (one `task.md` ≈ one group). Tasks
+// in the same group form a feature/epic cluster within a project.
+export interface TaskGroup {
+  id: string;
+  projectId: string;
+  name: string;
+  description?: string;
+  /** Lifecycle status of the group itself: 'active' | 'completed' | 'archived'. */
+  status: "active" | "completed" | "archived";
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface TaskGroupInput {
+  id?: string;
+  projectId: string;
+  name: string;
+  description?: string;
+  status?: "active" | "completed" | "archived";
 }
 
 // Parameters for planning a task: used to initialize the task planning phase
@@ -129,9 +145,6 @@ export interface SplitTasksArgs {
    * - "clearAllTasks": Clear all tasks and create a backup
    */
   updateMode: "append" | "overwrite" | "selective" | "clearAllTasks";
-
-  // Global analysis result: shared analysis data for all tasks
-  globalAnalysisResult?: string; // Complete analysis result from Idea Phase review, applicable to common parts of all tasks
 
   tasks: Array<{
     name: string; // Concise and clear task name that should clearly express the task purpose

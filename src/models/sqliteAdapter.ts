@@ -3,10 +3,12 @@ import path from "path";
 import fs from "fs/promises";
 import { randomUUID } from "crypto";
 import {
+  ClaimTaskResult,
   ClientActiveProject,
   DatabaseAdapter,
   DestructiveAuditFilter,
   DestructiveAuditRow,
+  ExtendClaimResult,
   IncrementTaskVersionResult,
   LessonSummary,
   LessonSummaryInput,
@@ -18,7 +20,7 @@ import {
   TaskFindingInput,
 } from "./interfaces.js";
 import { DATA_DIR } from "./persistence.js";
-import { Task } from "../types/index.js";
+import { Task, TaskGroup, TaskGroupInput } from "../types/index.js";
 import { Project } from "./projectModel.js";
 import { Client } from "./clientModel.js";
 import { WorkflowStep, WorkflowStepType } from "./workflowModel.js";
@@ -177,6 +179,52 @@ export class SQLiteAdapter implements DatabaseAdapter {
           this.db!.run(`ALTER TABLE tasks ADD COLUMN version INTEGER NOT NULL DEFAULT 1`, () => {
             /* idempotent */
           });
+
+          // Wave 1 §10.C — multi-agent lock columns.
+          // Nullable on purpose: existing rows are simply unclaimed.
+          this.db!.run(`ALTER TABLE tasks ADD COLUMN claimed_by TEXT`, () => {
+            /* idempotent */
+          });
+          this.db!.run(`ALTER TABLE tasks ADD COLUMN claimed_at INTEGER`, () => {
+            /* idempotent */
+          });
+          this.db!.run(`ALTER TABLE tasks ADD COLUMN claim_expires_at INTEGER`, () => {
+            /* idempotent */
+          });
+          this.db!.run(
+            `CREATE INDEX IF NOT EXISTS idx_tasks_claim ON tasks(claimed_by, claim_expires_at)`
+          );
+
+          // Wave 1 §10.D — task groups + parent/child hierarchy.
+          this.db!.run(`
+                        CREATE TABLE IF NOT EXISTS task_groups (
+                            id TEXT PRIMARY KEY,
+                            project_id TEXT NOT NULL,
+                            name TEXT NOT NULL,
+                            description TEXT,
+                            status TEXT NOT NULL DEFAULT 'active',
+                            created_at INTEGER NOT NULL,
+                            updated_at INTEGER NOT NULL,
+                            FOREIGN KEY(project_id) REFERENCES projects(id) ON DELETE CASCADE
+                        )
+                    `);
+          this.db!.run(
+            `CREATE INDEX IF NOT EXISTS idx_task_groups_project ON task_groups(project_id)`
+          );
+          // The FK is added via a NULLable column without REFERENCES because
+          // SQLite cannot retroactively add a REFERENCES constraint via
+          // ALTER TABLE. ON DELETE SET NULL semantics are emulated in the
+          // model layer (`deleteGroup` first nulls dependent tasks).
+          this.db!.run(`ALTER TABLE tasks ADD COLUMN group_id TEXT`, () => {
+            /* idempotent */
+          });
+          this.db!.run(`ALTER TABLE tasks ADD COLUMN parent_task_id TEXT`, () => {
+            /* idempotent */
+          });
+          this.db!.run(
+            `CREATE INDEX IF NOT EXISTS idx_tasks_project_group ON tasks(project_id, group_id)`
+          );
+          this.db!.run(`CREATE INDEX IF NOT EXISTS idx_tasks_parent ON tasks(parent_task_id)`);
 
           // Phase 1 Group 1.1 — append-only findings/artifacts.
           this.db!.run(`
@@ -355,7 +403,8 @@ export class SQLiteAdapter implements DatabaseAdapter {
 
   async getAllTasks(projectId?: string): Promise<Task[]> {
     return new Promise((resolve, reject) => {
-      let query = "SELECT content, execution_order, version FROM tasks";
+      let query =
+        "SELECT content, execution_order, version, claimed_by, claimed_at, claim_expires_at, group_id, parent_task_id FROM tasks";
       const params: any[] = [];
       if (projectId) {
         query += " WHERE project_id = ?";
@@ -373,6 +422,13 @@ export class SQLiteAdapter implements DatabaseAdapter {
                 ...t,
                 executionOrder: row.execution_order, // Ensure column value takes precedence
                 version: row.version, // Group 1.3 — OCC column is source of truth
+                // Wave 1 §10.C — lock columns are the source of truth.
+                claimedBy: row.claimed_by ?? undefined,
+                claimedAt: row.claimed_at ? new Date(row.claimed_at) : undefined,
+                claimExpiresAt: row.claim_expires_at ? new Date(row.claim_expires_at) : undefined,
+                // Wave 1 §10.D — group/hierarchy columns are the source of truth.
+                groupId: row.group_id ?? undefined,
+                parentTaskId: row.parent_task_id ?? undefined,
                 createdAt: t.createdAt ? new Date(t.createdAt) : new Date(),
                 updatedAt: t.updatedAt ? new Date(t.updatedAt) : new Date(),
                 completedAt: t.completedAt ? new Date(t.completedAt) : undefined,
@@ -390,7 +446,7 @@ export class SQLiteAdapter implements DatabaseAdapter {
   async getTask(id: string): Promise<Task | null> {
     return new Promise((resolve, reject) => {
       this.getDb().get(
-        "SELECT content, execution_order, version FROM tasks WHERE id = ?",
+        "SELECT content, execution_order, version, claimed_by, claimed_at, claim_expires_at, group_id, parent_task_id FROM tasks WHERE id = ?",
         [id],
         (err, row: any) => {
           if (err) reject(err);
@@ -402,6 +458,13 @@ export class SQLiteAdapter implements DatabaseAdapter {
                 ...t,
                 executionOrder: row.execution_order, // Ensure column value takes precedence
                 version: row.version, // Group 1.3 — OCC column is source of truth
+                // Wave 1 §10.C — lock columns are the source of truth.
+                claimedBy: row.claimed_by ?? undefined,
+                claimedAt: row.claimed_at ? new Date(row.claimed_at) : undefined,
+                claimExpiresAt: row.claim_expires_at ? new Date(row.claim_expires_at) : undefined,
+                // Wave 1 §10.D — group/hierarchy columns are the source of truth.
+                groupId: row.group_id ?? undefined,
+                parentTaskId: row.parent_task_id ?? undefined,
                 createdAt: t.createdAt ? new Date(t.createdAt) : new Date(),
                 updatedAt: t.updatedAt ? new Date(t.updatedAt) : new Date(),
                 completedAt: t.completedAt ? new Date(t.completedAt) : undefined,
@@ -434,8 +497,10 @@ export class SQLiteAdapter implements DatabaseAdapter {
       const stmt = this.getDb().prepare(`
                 INSERT INTO tasks (
                     id, name, status, created_at, updated_at, completed_at,
-                    client_id, project_id, content, execution_order, version
-                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                    client_id, project_id, content, execution_order, version,
+                    claimed_by, claimed_at, claim_expires_at,
+                    group_id, parent_task_id
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                 ON CONFLICT(id) DO UPDATE SET
                     name             = excluded.name,
                     status           = excluded.status,
@@ -446,7 +511,12 @@ export class SQLiteAdapter implements DatabaseAdapter {
                     project_id       = excluded.project_id,
                     content          = excluded.content,
                     execution_order  = excluded.execution_order,
-                    version          = excluded.version
+                    version          = excluded.version,
+                    claimed_by       = excluded.claimed_by,
+                    claimed_at       = excluded.claimed_at,
+                    claim_expires_at = excluded.claim_expires_at,
+                    group_id         = excluded.group_id,
+                    parent_task_id   = excluded.parent_task_id
             `);
       const createdAt =
         task.createdAt instanceof Date
@@ -462,6 +532,17 @@ export class SQLiteAdapter implements DatabaseAdapter {
           : new Date(task.completedAt).getTime()
         : null;
       const version = (task as Task & { version?: number }).version ?? 1;
+      const claimedBy = task.claimedBy ?? null;
+      const claimedAt = task.claimedAt
+        ? task.claimedAt instanceof Date
+          ? task.claimedAt.getTime()
+          : new Date(task.claimedAt).getTime()
+        : null;
+      const claimExpiresAt = task.claimExpiresAt
+        ? task.claimExpiresAt instanceof Date
+          ? task.claimExpiresAt.getTime()
+          : new Date(task.claimExpiresAt).getTime()
+        : null;
 
       stmt.run(
         task.id,
@@ -475,6 +556,11 @@ export class SQLiteAdapter implements DatabaseAdapter {
         JSON.stringify(task),
         task.executionOrder || 0,
         version,
+        claimedBy,
+        claimedAt,
+        claimExpiresAt,
+        task.groupId ?? null,
+        task.parentTaskId ?? null,
         (err: Error | null) => {
           if (err) reject(err);
           else resolve();
@@ -501,8 +587,10 @@ export class SQLiteAdapter implements DatabaseAdapter {
         const stmt = db.prepare(`
                     INSERT OR REPLACE INTO tasks (
                         id, name, status, created_at, updated_at, completed_at,
-                        client_id, project_id, content, execution_order, version
-                    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                        client_id, project_id, content, execution_order, version,
+                        claimed_by, claimed_at, claim_expires_at,
+                        group_id, parent_task_id
+                    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                 `);
 
         let errorOccurred = false;
@@ -521,6 +609,16 @@ export class SQLiteAdapter implements DatabaseAdapter {
               : new Date(task.completedAt).getTime()
             : null;
           const version = (task as Task & { version?: number }).version ?? 1;
+          const claimedAt = task.claimedAt
+            ? task.claimedAt instanceof Date
+              ? task.claimedAt.getTime()
+              : new Date(task.claimedAt).getTime()
+            : null;
+          const claimExpiresAt = task.claimExpiresAt
+            ? task.claimExpiresAt instanceof Date
+              ? task.claimExpiresAt.getTime()
+              : new Date(task.claimExpiresAt).getTime()
+            : null;
           stmt.run(
             task.id,
             task.name,
@@ -533,6 +631,11 @@ export class SQLiteAdapter implements DatabaseAdapter {
             JSON.stringify(task),
             task.executionOrder || 0,
             version,
+            task.claimedBy ?? null,
+            claimedAt,
+            claimExpiresAt,
+            task.groupId ?? null,
+            task.parentTaskId ?? null,
             (err: Error | null) => {
               if (err) {
                 errorOccurred = true;
@@ -943,6 +1046,309 @@ export class SQLiteAdapter implements DatabaseAdapter {
           }
         );
       });
+    });
+  }
+
+  // --- Multi-agent lock (Wave 1 §10.C) ---
+
+  /**
+   * Atomically take or renew the lock on a task. The conditional WHERE
+   * encodes the "lock-free or mine or expired" predicate so two competing
+   * callers cannot both believe they got the claim.
+   *
+   * Bumps `tasks.version` by exactly one on success (since holding the
+   * claim is observable state). Heartbeat-style re-claim by the same
+   * client is treated as a renewal and also bumps version.
+   */
+  async claimTask(taskId: string, clientId: string, ttlMs: number): Promise<ClaimTaskResult> {
+    const now = Date.now();
+    const expiresAt = now + ttlMs;
+    const db = this.getDb();
+    return new Promise((resolve, reject) => {
+      db.serialize(() => {
+        db.run(
+          `UPDATE tasks SET claimed_by = ?, claimed_at = ?, claim_expires_at = ?, version = version + 1
+             WHERE id = ?
+               AND (claimed_by IS NULL OR claimed_by = ? OR claim_expires_at IS NULL OR claim_expires_at < ?)`,
+          [clientId, now, expiresAt, taskId, clientId, now],
+          function (updateErr) {
+            if (updateErr) {
+              reject(updateErr);
+              return;
+            }
+            if (this.changes === 1) {
+              db.get(
+                `SELECT version FROM tasks WHERE id = ?`,
+                [taskId],
+                (selErr, row: { version?: number } | undefined) => {
+                  if (selErr) reject(selErr);
+                  else
+                    resolve({
+                      ok: true,
+                      newVersion: row?.version ?? 1,
+                      claimedAt: new Date(now),
+                      claimExpiresAt: new Date(expiresAt),
+                    });
+                }
+              );
+              return;
+            }
+            // No row matched → either the task does not exist or the lock is
+            // held by another live client. Read the current claim state so
+            // the caller can render a TASK_LOCKED CONFLICT body.
+            db.get(
+              `SELECT claimed_by, claimed_at, claim_expires_at FROM tasks WHERE id = ?`,
+              [taskId],
+              (
+                selErr,
+                row:
+                  | {
+                      claimed_by?: string | null;
+                      claimed_at?: number | null;
+                      claim_expires_at?: number | null;
+                    }
+                  | undefined
+              ) => {
+                if (selErr) {
+                  reject(selErr);
+                  return;
+                }
+                if (!row || !row.claimed_by) {
+                  // Task gone — surface as a lock failure with a synthetic
+                  // holder. The lifecycle layer translates a missing task
+                  // into NotFoundError via loadOrThrow before calling here,
+                  // so this branch should be unreachable in practice.
+                  resolve({
+                    ok: false,
+                    heldBy: "(unknown)",
+                    claimedAt: new Date(0),
+                    claimExpiresAt: new Date(0),
+                  });
+                  return;
+                }
+                resolve({
+                  ok: false,
+                  heldBy: row.claimed_by,
+                  claimedAt: row.claimed_at ? new Date(row.claimed_at) : new Date(0),
+                  claimExpiresAt: row.claim_expires_at
+                    ? new Date(row.claim_expires_at)
+                    : new Date(0),
+                });
+              }
+            );
+          }
+        );
+      });
+    });
+  }
+
+  /**
+   * Heartbeat — push out `claim_expires_at` for a claim already held by
+   * `clientId`. Returns `{ ok: false }` if the lock is not held by this
+   * client (or has already expired); callers should re-claim in that case.
+   * Bumps version on success.
+   */
+  async extendTaskClaim(
+    taskId: string,
+    clientId: string,
+    ttlMs: number
+  ): Promise<ExtendClaimResult> {
+    const now = Date.now();
+    const expiresAt = now + ttlMs;
+    const db = this.getDb();
+    return new Promise((resolve, reject) => {
+      db.serialize(() => {
+        db.run(
+          `UPDATE tasks SET claim_expires_at = ?, version = version + 1
+             WHERE id = ? AND claimed_by = ? AND claim_expires_at IS NOT NULL AND claim_expires_at >= ?`,
+          [expiresAt, taskId, clientId, now],
+          function (updateErr) {
+            if (updateErr) {
+              reject(updateErr);
+              return;
+            }
+            if (this.changes !== 1) {
+              resolve({ ok: false });
+              return;
+            }
+            db.get(
+              `SELECT version FROM tasks WHERE id = ?`,
+              [taskId],
+              (selErr, row: { version?: number } | undefined) => {
+                if (selErr) reject(selErr);
+                else
+                  resolve({
+                    ok: true,
+                    newVersion: row?.version ?? 1,
+                    claimExpiresAt: new Date(expiresAt),
+                  });
+              }
+            );
+          }
+        );
+      });
+    });
+  }
+
+  /**
+   * Clear claim columns unconditionally. Caller is responsible for any
+   * accompanying state changes (status flip, version bump). Used by
+   * `release` / `block` / `archive` / `finalize` and by Wave 2 read-time
+   * recovery once it lands.
+   */
+  async clearTaskClaim(taskId: string): Promise<void> {
+    const db = this.getDb();
+    return new Promise((resolve, reject) => {
+      db.run(
+        `UPDATE tasks SET claimed_by = NULL, claimed_at = NULL, claim_expires_at = NULL WHERE id = ?`,
+        [taskId],
+        (err) => {
+          if (err) reject(err);
+          else resolve();
+        }
+      );
+    });
+  }
+
+  // --- Task groups (Wave 1 §10.D) ---
+
+  private mapGroupRow(row: any): TaskGroup {
+    return {
+      id: row.id,
+      projectId: row.project_id,
+      name: row.name,
+      description: row.description ?? undefined,
+      status: (row.status ?? "active") as "active" | "completed" | "archived",
+      createdAt: row.created_at ? new Date(row.created_at) : new Date(),
+      updatedAt: row.updated_at ? new Date(row.updated_at) : new Date(),
+    };
+  }
+
+  async createGroup(input: TaskGroupInput): Promise<TaskGroup> {
+    const id = input.id ?? randomUUID();
+    const now = Date.now();
+    const status = input.status ?? "active";
+    return new Promise((resolve, reject) => {
+      this.getDb().run(
+        `INSERT INTO task_groups (id, project_id, name, description, status, created_at, updated_at)
+           VALUES (?, ?, ?, ?, ?, ?, ?)`,
+        [id, input.projectId, input.name, input.description ?? null, status, now, now],
+        (err) => {
+          if (err) reject(err);
+          else
+            resolve({
+              id,
+              projectId: input.projectId,
+              name: input.name,
+              description: input.description,
+              status,
+              createdAt: new Date(now),
+              updatedAt: new Date(now),
+            });
+        }
+      );
+    });
+  }
+
+  async getGroup(id: string): Promise<TaskGroup | null> {
+    return new Promise((resolve, reject) => {
+      this.getDb().get(
+        `SELECT id, project_id, name, description, status, created_at, updated_at
+           FROM task_groups WHERE id = ?`,
+        [id],
+        (err, row: any) => {
+          if (err) reject(err);
+          else if (!row) resolve(null);
+          else resolve(this.mapGroupRow(row));
+        }
+      );
+    });
+  }
+
+  async listGroups(projectId: string): Promise<TaskGroup[]> {
+    return new Promise((resolve, reject) => {
+      this.getDb().all(
+        `SELECT id, project_id, name, description, status, created_at, updated_at
+           FROM task_groups
+           WHERE project_id = ?
+           ORDER BY created_at DESC`,
+        [projectId],
+        (err, rows: any[]) => {
+          if (err) reject(err);
+          else resolve((rows ?? []).map((r) => this.mapGroupRow(r)));
+        }
+      );
+    });
+  }
+
+  async updateGroup(
+    id: string,
+    patch: Partial<Pick<TaskGroup, "name" | "description" | "status">>
+  ): Promise<TaskGroup | null> {
+    const sets: string[] = [];
+    const params: unknown[] = [];
+    if (patch.name !== undefined) {
+      sets.push("name = ?");
+      params.push(patch.name);
+    }
+    if (patch.description !== undefined) {
+      sets.push("description = ?");
+      params.push(patch.description);
+    }
+    if (patch.status !== undefined) {
+      sets.push("status = ?");
+      params.push(patch.status);
+    }
+    if (sets.length === 0) return this.getGroup(id);
+    sets.push("updated_at = ?");
+    params.push(Date.now());
+    params.push(id);
+    await new Promise<void>((resolve, reject) => {
+      this.getDb().run(`UPDATE task_groups SET ${sets.join(", ")} WHERE id = ?`, params, (err) =>
+        err ? reject(err) : resolve()
+      );
+    });
+    return this.getGroup(id);
+  }
+
+  async deleteGroup(id: string): Promise<void> {
+    // Emulate ON DELETE SET NULL — SQLite cannot add the constraint
+    // retroactively on the column, so we null dependent rows here first.
+    const db = this.getDb();
+    await new Promise<void>((resolve, reject) => {
+      db.run(`UPDATE tasks SET group_id = NULL WHERE group_id = ?`, [id], (err) =>
+        err ? reject(err) : resolve()
+      );
+    });
+    await new Promise<void>((resolve, reject) => {
+      db.run(`DELETE FROM task_groups WHERE id = ?`, [id], (err) =>
+        err ? reject(err) : resolve()
+      );
+    });
+  }
+
+  async getGroupCounts(
+    projectId: string
+  ): Promise<Array<{ groupId: string | null; status: string; count: number }>> {
+    return new Promise((resolve, reject) => {
+      this.getDb().all(
+        `SELECT group_id, status, COUNT(*) as count
+           FROM tasks
+           WHERE project_id = ?
+           GROUP BY group_id, status`,
+        [projectId],
+        (err, rows: any[]) => {
+          if (err) reject(err);
+          else
+            resolve(
+              (rows ?? []).map((r) => ({
+                groupId: (r.group_id as string | null) ?? null,
+                status: r.status as string,
+                count: r.count as number,
+              }))
+            );
+        }
+      );
     });
   }
 

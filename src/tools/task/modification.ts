@@ -167,29 +167,6 @@ export async function updateTaskContent({
     };
   }
 
-  if (relatedFiles) {
-    for (const file of relatedFiles) {
-      if (
-        (file.lineStart && !file.lineEnd) ||
-        (!file.lineStart && file.lineEnd) ||
-        (file.lineStart && file.lineEnd && file.lineStart > file.lineEnd)
-      ) {
-        return {
-          content: [
-            {
-              type: "text" as const,
-              text: getUpdateTaskContentPrompt({
-                taskId,
-                validationError:
-                  "Invalid line number settings: must set both start and end lines, and the start line must be less than the end line",
-              }),
-            },
-          ],
-        };
-      }
-    }
-  }
-
   if (
     !(
       name ||
@@ -337,12 +314,11 @@ export async function splitTasks({
     };
   }
 
-  let contextGlobalAnalysis = "";
-  let sourceStep: Awaited<ReturnType<typeof getStepById>> | null = null;
-
-  // IF inputStepId is provided, we fetch the REFLECT/SPECIFICATION step content to use as "Global Analysis"
+  // Optional inputStepId: validate it exists and belongs to the project. Its content
+  // is no longer copied onto tasks (Task.analysisResult was dropped in 10.I) but the
+  // existence + project-match check still protects against stray references.
   if (inputStepId) {
-    sourceStep = await getStepById(inputStepId);
+    const sourceStep = await getStepById(inputStepId);
 
     if (!sourceStep) {
       return {
@@ -377,18 +353,6 @@ export async function splitTasks({
         isError: true,
       };
     }
-
-    // content may be { analysis: "..." } or roadmap payload
-    try {
-      const parsed = JSON.parse(sourceStep.content);
-      if (parsed.analysis) {
-        contextGlobalAnalysis = parsed.analysis;
-      } else if (parsed.roadmap) {
-        contextGlobalAnalysis = parsed.roadmap;
-      }
-    } catch (e) {
-      contextGlobalAnalysis = sourceStep.content; // Fallback if regular string
-    }
   }
 
   // Snapshot counts before sync to compute stats
@@ -418,9 +382,7 @@ export async function splitTasks({
       })),
     })),
     updateMode,
-    contextGlobalAnalysis, // Pass the analysis result to be stored in tasks
-    projectValidation.projectId,
-    inputStepId // Pass the Idea Phase Step ID to link tasks back to the plan
+    projectValidation.projectId
   );
 
   // Compute sync stats
