@@ -6,7 +6,72 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
-_(Empty — the next release will land here.)_
+### Added / Changed — v2 redesign Waves 1–4 (`Plan/redesign.md`, workstreams 10.A–10.I)
+
+Shipped on `feat/redesign-wave1` (commits `d224f59` wave1, `b361ae7` wave2,
+`c5200f0` wave3, `53fe16d` wave4). SQLite auto-migrates; Supabase needs
+`scripts/supabase-remediation-{locks,groups,skills}.sql` (or a re-run of
+`scripts/supabase-schema.sql`).
+
+**Wave 1 — schema foundation**
+
+- **10.I Field cleanup** — removed `analysisResult`, `sourceStepId`,
+  `conversationHistory`, and `relatedFiles.lineStart` / `.lineEnd` from the
+  `Task` model, schemas, prompts, and dashboard. Legacy JSON blobs carrying
+  the old keys still deserialise (keys ignored).
+- **10.C Multi-agent lock** — `tasks` gains `claimed_by` / `claimed_at` /
+  `claim_expires_at` (+ `idx_tasks_claim`). New `task_lifecycle` actions
+  `claim` / `heartbeat` / `release`; `start` implicitly claims. New
+  `TaskLockedError` (HTTP 409, code `TASK_LOCKED`). `task_view(action='get')`
+  returns a top-level `lock: { heldBy, since, expiresAt } | null`.
+  `LOCK_TTL_MS` defaults to 30 min; 15-min heartbeat cadence.
+- **10.D Task groups + hierarchy** — new `task_groups` table; `tasks` gains
+  `group_id` / `parent_task_id`. `project_edit` gains `create_group` /
+  `update_group`; `project_view(action='groups_list')` and
+  `task_view(action='tree')` added. Subtasks are one level deep
+  (grandchildren rejected).
+
+**Wave 2 — lifecycle polish**
+
+- **10.F Auto-revert** — `finalize(fail|partial)` flips IN_PROGRESS → PENDING
+  and clears the claim; `finalize(needs_review)` keeps the slot.
+  `recoverExpiredClaim` CAS-flips IN_PROGRESS+expired tasks to PENDING at read
+  time (via `task_view(get)` / lifecycle load).
+- **10.G `available_tasks`** — `task_view(action='available')` returns a
+  skinny ranked feed (priority · execution_order · createdAt) excluding
+  blocked, unmet-deps, and live-claimed-by-other tasks.
+- **10.H Notes audit** — `task_edit(action='append_note')` prepends an
+  ISO-timestamped, newest-first, append-only block (never overwrites).
+
+**Wave 3 — LLM-driven flows**
+
+- **10.A Plan upload** — two-step `POST /api/plan/upload/preview`
+  (LLM parse, no DB writes, 5-min `previewId`) → `/commit` (transactional
+  insert). 200 KB cap (413) + MIME allowlist (415); `LLM_PROVIDER=none` → 503
+  `LLM_NOT_CONFIGURED`, no regex fallback. `# Feature: …` header creates a
+  group. New `ingest_plan` workflow.
+- **10.E Project Skill** — new `project_skills` / `project_skill_references`
+  tables; `compile_skill` workflow (gather → cluster → trim-to-3000-tokens →
+  LLM → split). `context_get` gains `skill_index` + `skill_section`. One skill
+  per project; manual recompile only.
+- **10.F narration** — `narrate_abandonment` workflow wired into `release` and
+  read-time recovery; templated fallback when provider unset / on error.
+
+**Wave 4 — UI surfaces (10.B)**
+
+- Dashboard SPA gains `/groups/:id` and `/skills` routes; shared todo-marker
+  tree component (`[ ]`/`[~]`/`[x]`) reused across group detail, task subtasks,
+  and the plan-upload preview; plan-upload dropzone (provider-gated); Project
+  Skill card + viewer with lazy reference sections; notes audit-log card with
+  append composer; lock badge + **Force release** button.
+- `task_lifecycle(action='release')` gains an optional `force` flag (admin
+  override of another client's claim; narrates `force-released`).
+- Boot log line: `[AgentFlow] Tools:N verbs · Resources:M views · Prompts:K
+workflows · MCP_REDUCED_TOOL_SURFACE=<bool>`.
+
+**Tests**: 384 passing (Vitest). Schema fixtures regenerated for the
+`task_lifecycle` `force` field; `task_view`/`task_edit`/`context_get`/
+`project_view`/`project_edit`/`workflow_run` for the new actions.
 
 ## [1.2.0] - 2026-05-25
 
