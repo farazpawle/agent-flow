@@ -29,11 +29,16 @@ const NARRATION_TIMEOUT_MS = 10_000;
 
 export interface AbandonmentNarrationInput {
   task: Task;
-  trigger: "released" | "expired";
+  trigger: "released" | "expired" | "force-released";
   /** Who held the claim before the abandonment. */
   heldBy: string;
   /** Optional caller-supplied note (e.g. release reason). */
   releaseNote?: string;
+}
+
+/** True for both holder-initiated and admin-forced releases. */
+function isReleaseTrigger(trigger: AbandonmentNarrationInput["trigger"]): boolean {
+  return trigger === "released" || trigger === "force-released";
 }
 
 export interface AbandonmentNarrationResult {
@@ -46,10 +51,11 @@ export interface AbandonmentNarrationResult {
 }
 
 function templatedSummary(input: AbandonmentNarrationInput, nowIso: string): string {
-  if (input.trigger === "released") {
+  if (isReleaseTrigger(input.trigger)) {
+    const verb = input.trigger === "force-released" ? "force-released" : "released";
     return input.releaseNote
-      ? `released ${nowIso} by ${input.heldBy}: ${input.releaseNote}`
-      : `released ${nowIso} by ${input.heldBy}`;
+      ? `${verb} ${nowIso} by ${input.heldBy}: ${input.releaseNote}`
+      : `${verb} ${nowIso} by ${input.heldBy}`;
   }
   return `abandoned ${nowIso}, claim expired`;
 }
@@ -141,10 +147,10 @@ export async function narrateAbandonment(
     }
     // Always frame the LLM body inside the same envelope so audit
     // parsers (§10.H) can split on the timestamp marker.
-    const framed =
-      input.trigger === "released"
-        ? `released ${nowIso} by ${input.heldBy}: ${summary}`
-        : `abandoned ${nowIso}, claim expired — ${summary}`;
+    const verb = input.trigger === "force-released" ? "force-released" : "released";
+    const framed = isReleaseTrigger(input.trigger)
+      ? `${verb} ${nowIso} by ${input.heldBy}: ${summary}`
+      : `abandoned ${nowIso}, claim expired — ${summary}`;
     return { summary: framed, fromLlm: true };
   } catch (err) {
     log.warn(

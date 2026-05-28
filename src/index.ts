@@ -127,6 +127,10 @@ import {
   VIEW_TOOL_NAMES,
 } from "./mcp/resources.js";
 
+// Wave 4 §10.B (4.17) — boot-surface log line counts tools from the
+// single-source registry so the number can't drift from `ListTools`.
+import { listToolNames } from "./tools/toolRegistry.js";
+
 // Runtime configuration snapshot for the GUI Settings page.
 import { buildRuntimeConfig } from "./http/runtimeConfig.js";
 import { updateEnvVar, EDITABLE_FIELD_NAMES } from "./http/envWriter.js";
@@ -178,6 +182,32 @@ import {
 } from "./http/planUpload.js";
 // Wave 3 §10.E — Project Skill compile.
 import { compileSkill } from "./llm/skillCompiler.js";
+
+/**
+ * Wave 4 §10.B (4.17) — emit a one-line summary of the MCP surface at
+ * boot so operators can confirm the reduced/legacy toggle at a glance.
+ * Stderr-only (`console.error`) to keep MCP stdout clean JSON-RPC.
+ * Idempotent per process via `bootSurfaceLogged`: the GUI and MCP boot
+ * paths are mutually exclusive, but the guard makes "exactly once"
+ * robust even if both ever run.
+ */
+let bootSurfaceLogged = false;
+function logBootSurface(): void {
+  if (bootSurfaceLogged) return;
+  bootSurfaceLogged = true;
+  const reduced =
+    process.env.MCP_REDUCED_TOOL_SURFACE === undefined
+      ? true
+      : process.env.MCP_REDUCED_TOOL_SURFACE === "true";
+  // Reduced mode pulls the three view tools off `tools/list` (they remain
+  // reachable as Resources), so subtract them from the registry total.
+  const toolCount = listToolNames().length - (reduced ? VIEW_TOOL_NAMES.length : 0);
+  const resourceCount = listResources().length;
+  const promptCount = listPrompts().length;
+  console.error(
+    `[AgentFlow] Tools:${toolCount} verbs · Resources:${resourceCount} views · Prompts:${promptCount} workflows · MCP_REDUCED_TOOL_SURFACE=${reduced}`
+  );
+}
 
 async function main() {
   try {
@@ -1198,6 +1228,7 @@ async function main() {
           // currently emits to it.
 
           console.error(`(AgentFlow) Web GUI available at: http://localhost:${SERVER_PORT}`);
+          logBootSurface();
 
           // Write the URL to WebGUI.md
           try {
@@ -1658,6 +1689,7 @@ async function main() {
         });
 
         await server.connect(transport);
+        logBootSurface();
       } catch (err) {
         console.error(
           "(AgentFlow) MCP stdio connect failed; continuing without MCP transport:",

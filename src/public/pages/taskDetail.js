@@ -17,15 +17,18 @@
 
 import { api } from "../lib/api.js";
 import { toast } from "../lib/toast.js";
-import { escapeHtml, statusKey, statusLabel, formatDate } from "../lib/utils.js";
+import { escapeHtml, statusKey, statusLabel, formatDate, formatRelative } from "../lib/utils.js";
 import { postWithConflictResolution } from "../lib/conflict.js";
+import { renderTaskTree } from "../components/treeView.js";
 
+// Wave 4 §10.H — `notes` is intentionally NOT in this list: it is an
+// append-only audit trail edited via task_edit(action='append_note'),
+// not the update path. Putting it back here would overwrite the trail.
 const EDITABLE_FIELDS = [
   { key: "name", label: "Name", rows: 1, section: "work" },
   { key: "description", label: "Description", rows: 4, section: "work" },
   { key: "implementationGuide", label: "Implementation Guide", rows: 4, section: "work" },
   { key: "verificationCriteria", label: "Verification Criteria", rows: 3, section: "work" },
-  { key: "notes", label: "Notes", rows: 2, section: "work" },
   { key: "problemStatement", label: "Problem Statement", rows: 3, section: "context" },
   { key: "technicalPlan", label: "Technical Plan", rows: 5, section: "context" },
 ];
@@ -41,20 +44,25 @@ export async function mount(container, { params }) {
   container.innerHTML = `<div class="placeholder">Loading task…</div>`;
 
   let task;
+  let lock = null;
   try {
-    const res = await api.get(`/api/tasks/${encodeURIComponent(id)}`);
+    // Wave 4 §10.B/§10.C — the view endpoint returns the task PLUS the
+    // resolved `lock` field (and recovers expired claims at read time).
+    const res = await api.post("/api/tasks/view", { action: "get", taskId: id });
     task = res.task;
+    lock = res.lock ?? null;
   } catch (err) {
     container.innerHTML = `<div class="page-empty error"><h2>Task not found</h2><p>${escapeHtml(err.message)}</p><a class="btn btn-primary" href="#/tasks">Back to tasks</a></div>`;
     return;
   }
 
-  render(container, task);
-  attachHandlers(container, task);
+  render(container, task, lock);
+  attachHandlers(container, task, lock);
   void loadFindings(container, task);
+  void loadSubtasks(container, task);
 }
 
-function render(container, task) {
+function render(container, task, lock) {
   container.innerHTML = `
         <div class="page-header">
             <div>
@@ -63,10 +71,12 @@ function render(container, task) {
                     <span class="badge badge-${statusKey(task.status).replace(/_/g, "-")}">${escapeHtml(statusLabel(task.status))}</span>
                     <span class="muted">· Updated ${escapeHtml(formatDate(task.updatedAt))}</span>
                     <span class="muted">· v${escapeHtml(String(task.version ?? 1))}</span>
+                    ${renderLockBadge(lock)}
                 </div>
             </div>
             <div class="page-actions">
                 <a class="btn btn-secondary" href="#/tasks">Back</a>
+                ${lock ? `<button class="btn btn-secondary" id="btn-force-release" title="Drop another agent's claim">Force release</button>` : ""}
                 <button class="btn btn-danger" id="btn-delete-task">Delete…</button>
             </div>
         </div>
@@ -130,7 +140,85 @@ function render(container, task) {
                 </div>
             </section>
         </form>
+
+        <!-- ── Wave 4 §10.B — Subtasks (rendered only when children exist) -->
+        <div id="subtasks-card"></div>
+
+        <!-- ── Wave 4 §10.H — Notes audit log (append-only) ───────────── -->
+        ${renderNotesAuditCard(task)}
     `;
+}
+
+/**
+ * Wave 4 §10.C — lock badge. `lock` is the top-level field from
+ * task_view(action='get'): { heldBy, since, expiresAt } | null.
+ */
+function renderLockBadge(lock) {
+  if (!lock) return "";
+  const since = lock.since ? formatRelative(lock.since) : "";
+  return `<span class="lock-badge" title="Claimed by ${escapeHtml(lock.heldBy)}${lock.expiresAt ? ` · expires ${formatDate(lock.expiresAt)}` : ""}">🔒 ${escapeHtml(lock.heldBy)}${since ? ` · ${escapeHtml(since)}` : ""}</span>`;
+}
+
+/**
+ * Wave 4 §10.H — render the append-only notes trail newest-first plus an
+ * append composer. Entries are split on leading `[…]` brackets; any ISO
+ * timestamp inside the bracket drives the sort (entries without one sink
+ * to the bottom in original order).
+ */
+function renderNotesAuditCard(task) {
+  const entries = parseNotes(task.notes || "");
+  const list = entries.length
+    ? `<ul class="notes-audit">
+        ${entries
+          .map(
+            (e) => `
+          <li class="notes-entry">
+            ${e.ts ? `<span class="notes-ts muted tiny">${escapeHtml(formatDate(e.ts))}</span>` : ""}
+            <div class="notes-text">${escapeHtml(e.text)}</div>
+          </li>`
+          )
+          .join("")}
+      </ul>`
+    : `<p class="placeholder tiny">No notes yet. Append context, decisions, or course-corrections below — the trail is append-only.</p>`;
+
+  return `
+    <div class="card" id="notes-audit-card">
+      <h4>Notes (audit log)</h4>
+      ${list}
+      <div class="field-block" style="margin-top: var(--space-3);">
+        <textarea class="textarea" id="note-composer" rows="2" placeholder="Append a note (pushback, scope change, course-correction, blocker resolution)…"></textarea>
+        <div class="page-actions" style="justify-content:flex-end; margin-top: var(--space-2);">
+          <button class="btn btn-secondary" id="btn-append-note">Append note</button>
+        </div>
+      </div>
+    </div>`;
+}
+
+/**
+ * Parse the heterogeneous notes string into ordered entries. append_note
+ * blocks are `[<iso>] text`; lifecycle tags are `[blocked: …]`,
+ * `[released <iso> by …]`, `[abandoned <iso>, …]`, etc. We split on a
+ * `[` that starts a line, pull the first ISO-8601 timestamp out of each
+ * entry for sorting, and present newest-first.
+ */
+function parseNotes(notes) {
+  if (!notes || !notes.trim()) return [];
+  const chunks = notes
+    .split(/\n(?=\[)/) // split before any line beginning with "["
+    .map((c) => c.trim())
+    .filter(Boolean);
+  const isoRe = /\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?Z?/;
+  const entries = chunks.map((text, i) => {
+    const m = text.match(isoRe);
+    return { ts: m ? new Date(m[0]) : null, text, _i: i };
+  });
+  entries.sort((a, b) => {
+    if (a.ts && b.ts) return b.ts - a.ts;
+    if (a.ts) return -1;
+    if (b.ts) return 1;
+    return a._i - b._i;
+  });
+  return entries;
 }
 
 function renderSummarySection(task) {
@@ -220,7 +308,7 @@ function readOnlyFieldHtml(f, task) {
     `;
 }
 
-function attachHandlers(container, taskInitial) {
+function attachHandlers(container, taskInitial, lock) {
   // taskState is shared by all handlers so retries can read the
   // currently-loaded version after a CONFLICT-driven reload.
   const taskState = { current: taskInitial };
@@ -249,6 +337,111 @@ function attachHandlers(container, taskInitial) {
   container.querySelector("#btn-delete-task").addEventListener("click", async () => {
     await showDeleteDialog(taskState.current);
   });
+
+  // Wave 4 §10.B — Force release (admin override of another agent's claim)
+  const forceBtn = container.querySelector("#btn-force-release");
+  if (forceBtn) {
+    forceBtn.addEventListener("click", async () => {
+      const heldBy = lock?.heldBy ?? "another agent";
+      if (!confirm(`Force-release this task? It is currently claimed by ${heldBy}.`)) return;
+      try {
+        await api.post("/api/tasks/lifecycle", {
+          action: "release",
+          taskId: taskState.current.id,
+          force: true,
+          note: "Force-released from the dashboard",
+        });
+        toast.success("Claim released");
+        location.reload();
+      } catch (err) {
+        toast.error("Force release failed: " + err.message);
+      }
+    });
+  }
+
+  // Wave 4 §10.H — append a note (append-only audit trail)
+  wireAppendNote(container, taskState);
+}
+
+/**
+ * Wire the append-note button. Re-callable: after a successful append we
+ * re-render the audit card in place (preserving unsaved form edits) and
+ * re-bind, so this function attaches to whichever button is current.
+ */
+function wireAppendNote(container, taskState) {
+  const btn = container.querySelector("#btn-append-note");
+  if (!btn) return;
+  btn.addEventListener("click", async () => {
+    const composer = container.querySelector("#note-composer");
+    const text = (composer.value || "").trim();
+    if (!text) {
+      toast.error("Note is empty.");
+      return;
+    }
+    btn.disabled = true;
+    try {
+      const res = await api.post("/api/tasks/edit", {
+        action: "append_note",
+        taskId: taskState.current.id,
+        text,
+        expectedVersion: taskState.current.version ?? 1,
+      });
+      const newTask = res.task;
+      if (newTask) {
+        taskState.current = newTask;
+        const card = container.querySelector("#notes-audit-card");
+        const fresh = document.createElement("div");
+        fresh.innerHTML = renderNotesAuditCard(newTask);
+        card.replaceWith(fresh.firstElementChild);
+        wireAppendNote(container, taskState); // re-bind to the new button
+        paintMcpSnippets(newTask);
+      }
+      toast.success("Note appended");
+    } catch (err) {
+      if (err.status === 409 || err.body?.code === "CONFLICT") {
+        toast.error("Version conflict — reload the task and try again.");
+      } else {
+        toast.error("Append failed: " + err.message);
+      }
+    } finally {
+      btn.disabled = false;
+    }
+  });
+}
+
+/**
+ * Wave 4 §10.B — render the subtask tree when the task has children.
+ * §10.D guarantees one-level nesting, so children are leaves. We build
+ * the roots array from the project's task list filtered by
+ * parentTaskId.
+ */
+async function loadSubtasks(container, task) {
+  const host = container.querySelector("#subtasks-card");
+  if (!host) return;
+  try {
+    const { tasks } = await api.get("/api/tasks");
+    const children = tasks
+      .filter((t) => t.parentTaskId === task.id)
+      .map((t) => ({
+        id: t.id,
+        name: t.name,
+        status: t.status,
+        groupId: t.groupId ?? null,
+        parentTaskId: t.parentTaskId ?? null,
+        children: [],
+      }));
+    if (!children.length) {
+      host.innerHTML = "";
+      return;
+    }
+    host.innerHTML = `
+      <div class="card">
+        <h4>Subtasks (${children.length})</h4>
+        ${renderTaskTree(children)}
+      </div>`;
+  } catch {
+    host.innerHTML = "";
+  }
 }
 
 function paintMcpSnippets(task) {

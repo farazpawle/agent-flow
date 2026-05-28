@@ -39,6 +39,21 @@ export const api = {
 };
 
 /**
+ * Wave 4 §10.B — true when an LLM provider is active (not "none").
+ * The plan-upload + skill-compile routes return 503 when the active
+ * provider is "none", so the GUI gates those affordances on this.
+ * Best-effort: resolves false on any error rather than throwing.
+ */
+export async function isLlmConfigured() {
+  try {
+    const settings = await request("GET", "/api/llm/settings");
+    return Boolean(settings && settings.provider && settings.provider !== "none");
+  } catch {
+    return false;
+  }
+}
+
+/**
  * Open a Server-Sent Events stream. Returns an object with `close()` and event handlers.
  */
 export function sse(url, { onMessage, onEvent, onError, onOpen } = {}) {

@@ -101,3 +101,114 @@
 }
 .tabs .tab:hover { color: var(--text-main); }
 .tabs .tab.active { color: var(--primary); border-bottom-color: var(--primary); }
+
+/* ── Wave 4 §10.B — filter pills, groups, available feed, skill, notes ── */
+.pill-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+.pill {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 4px 12px;
+  font-size: 12px;
+  color: var(--text-secondary);
+  cursor: pointer;
+}
+.pill:hover { color: var(--text-main); border-color: var(--border-strong); }
+.pill.active {
+  color: #fff;
+  background: var(--primary);
+  border-color: var(--primary);
+}
+
+.group-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: var(--space-3);
+  margin-top: var(--space-2);
+}
+.group-tile {
+  display: block;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: var(--space-3);
+  text-decoration: none;
+  color: var(--text-main);
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+.group-tile:hover { border-color: var(--primary); background: var(--bg-card-hover); }
+.group-tile-name { font-weight: 600; margin-bottom: var(--space-2); }
+.group-tile-counts { display: flex; flex-wrap: wrap; gap: 4px; }
+
+.available-list {
+  list-style: none;
+  margin: var(--space-2) 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+.available-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+}
+.available-item:hover { border-color: var(--primary); }
+.available-item.is-locked {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.available-name { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+.available-priority { text-transform: capitalize; }
+
+.skill-frontmatter,
+.skill-body-text {
+  white-space: pre-wrap;
+  word-break: break-word;
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  line-height: 1.55;
+  background: var(--bg-input);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: var(--space-3);
+  margin: var(--space-2) 0 0;
+  max-height: 480px;
+  overflow: auto;
+}
+.skill-frontmatter { color: var(--text-secondary); }
+.skill-refs { display: flex; flex-direction: column; gap: var(--space-2); }
+.skill-ref {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: var(--space-2) var(--space-3);
+}
+.skill-ref summary { cursor: pointer; }
+
+.lock-badge {
+  color: var(--warning);
+  font-size: 12px;
+  margin-left: var(--space-1);
+}
+.notes-audit {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+.notes-entry {
+  border-left: 2px solid var(--border-strong);
+  padding: 2px 0 2px var(--space-3);
+}
+.notes-ts { display: block; }
+.notes-text { white-space: pre-wrap; word-break: break-word; }

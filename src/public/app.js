@@ -14,6 +14,8 @@ import * as projectDetail from "./pages/projectDetail.js";
 import * as tasksBoard from "./pages/tasksBoard.js";
 import * as tasksGraph from "./pages/tasksGraph.js";
 import * as taskDetail from "./pages/taskDetail.js";
+import * as groupDetail from "./pages/groupDetail.js";
+import * as skill from "./pages/skill.js";
 import * as agents from "./pages/agents.js";
 import * as settings from "./pages/settings.js";
 
@@ -32,6 +34,7 @@ const NAV = [
       { route: "/tasks/graph", label: "Graph", labelKey: "nav_tasks_graph" },
     ],
   },
+  { route: "/skills", icon: "🧠", labelKey: "nav_skills", label: "Skills" },
   { section: "System" },
   { route: "/agents", icon: "🤖", labelKey: "nav_agents", label: "Agents" },
   { route: "/settings", icon: "⚙️", labelKey: "nav_settings", label: "Settings" },
@@ -76,6 +79,8 @@ async function boot() {
     .on("/tasks", tasksBoard)
     .on("/tasks/graph", tasksGraph)
     .on("/tasks/:id", taskDetail)
+    .on("/groups/:id", groupDetail)
+    .on("/skills", skill)
     .on("/agents", agents)
     .on("/settings", settings)
     .notFound({
@@ -164,6 +169,14 @@ function buildBreadcrumbs(route) {
   if (p === "/tasks/graph") return [{ label: "Tasks", href: "#/tasks" }, { label: "Graph" }];
   if (/^\/tasks\/[^/]+$/.test(p))
     return [{ label: "Tasks", href: "#/tasks" }, { label: route.params.id }];
+  if (/^\/groups\/[^/]+$/.test(p)) {
+    const proj = route.query && route.query.project;
+    const crumbs = [];
+    if (proj) crumbs.push({ label: "Project", href: `#/projects/${encodeURIComponent(proj)}` });
+    crumbs.push({ label: "Group" });
+    return crumbs;
+  }
+  if (p === "/skills") return [{ label: "Skills" }];
   if (p === "/agents") return [{ label: "Agents" }];
   if (p === "/settings") return [{ label: "Settings" }];
   return [{ label: p }];

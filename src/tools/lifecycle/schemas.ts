@@ -153,11 +153,15 @@ export const taskLifecycleSchema = z.discriminatedUnion("action", [
   }),
   // Wave 1 §10.C — release drops the claim and flips status to PENDING
   // (the abandonment path that Wave 2 §10.F upgrades with LLM narration).
+  // Wave 4 §10.B — `force` lets the dashboard's "Force release" button
+  // drop another client's claim without holding it (admin override). The
+  // handler skips `assertLockHeldBy` when set.
   z.object({
     action: z.literal("release"),
     taskId: TASK_ID,
     clientId: CLIENT_ID,
     note: z.string().optional(),
+    force: z.boolean().optional(),
   }),
 ]);
 

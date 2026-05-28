@@ -84,6 +84,19 @@
   "nav_tasks": "Tasks",
   "nav_tasks_board": "Board",
   "nav_tasks_graph": "Graph",
+  "nav_skills": "Skills",
   "nav_agents": "Agents",
-  "nav_settings": "Settings"
+  "nav_settings": "Settings",
+  "skill_title": "Project Skill",
+  "skill_recompile": "Recompile",
+  "skill_none_yet": "No skill compiled yet",
+  "group_tab_tree": "Tree",
+  "group_tab_dag": "Dependency graph",
+  "plan_upload_title": "Upload a plan",
+  "plan_upload_drop": "Drop a plan (.md / .txt) or browse",
+  "plan_upload_disabled": "Plan upload disabled — no LLM provider configured.",
+  "available_tasks_title": "Available tasks",
+  "available_tasks_empty": "No available tasks. Try removing the group filter or finalizing in-progress tasks.",
+  "notes_audit_title": "Notes (audit log)",
+  "lock_badge_title": "Lock"
 }

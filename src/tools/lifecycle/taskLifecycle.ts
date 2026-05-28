@@ -409,13 +409,18 @@ async function release(input: Extract<TaskLifecycleInput, { action: "release" }>
   const task = await loadOrThrow(input.taskId);
   ensureTransition("release", task);
   const clientId = resolveClientId(input);
-  assertLockHeldBy(task, clientId);
+  // Wave 4 §10.B — `force` is an admin override (dashboard "Force release"
+  // button) that drops another client's live claim. Skip the holder check
+  // when set; otherwise only the holder may release.
+  if (!input.force) {
+    assertLockHeldBy(task, clientId);
+  }
   // Wave 3 §10.F — LLM-narrated abandonment summary. Provider=`none`
   // or any provider error falls back to the Wave-2 templated form.
   const narration = await narrateAbandonment({
     task,
-    trigger: "released",
-    heldBy: clientId,
+    trigger: input.force ? "force-released" : "released",
+    heldBy: task.claimedBy ?? clientId,
     releaseNote: input.note,
   });
   const tag = `[${narration.summary}]`;
