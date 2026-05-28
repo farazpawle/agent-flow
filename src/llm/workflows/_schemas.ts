@@ -193,21 +193,26 @@ export const detectDuplicatesOutputSchema = z.object({
 // ingest_plan (Wave 3 §10.A)
 // ────────────────────────────────────────────────────────────────────────
 
+// NOTE: optional fields are expressed as `.nullable()` (required + null),
+// NOT `.optional()` — OpenAI/OpenRouter strict structured-output json_schema
+// requires every property to appear in `required`. The boundary normaliser
+// in `src/http/planUpload.ts` maps `null` back to `undefined` for the
+// `ParsedPlanPayload` consumers.
 export const ingestPlanOutputSchema = z.object({
   group: z
     .object({
       name: z.string().min(1),
-      description: z.string().optional(),
+      description: z.string().nullable(),
     })
-    .optional(),
+    .nullable(),
   tasks: z
     .array(
       z.object({
         name: z.string().min(1),
         description: z.string().min(1),
-        verificationCriteria: z.string().optional(),
+        verificationCriteria: z.string().nullable(),
         dependsOnPreviousIndex: z.boolean(),
-        parentIndex: z.number().int().nonnegative().optional(),
+        parentIndex: z.number().int().nonnegative().nullable(),
       })
     )
     .min(1),
@@ -225,20 +230,22 @@ export const narrateAbandonmentOutputSchema = z.object({
 // compile_skill (Wave 3 §10.E)
 // ────────────────────────────────────────────────────────────────────────
 
+// Strict-mode compatible (see ingestPlanOutputSchema note): all fields
+// required, optionals as `.nullable()`, no `.passthrough()` (strict
+// json_schema forbids additionalProperties:true). `skillCompiler` reads
+// frontmatter fields defensively and treats null like absent.
 export const compileSkillOutputSchema = z.object({
-  frontmatter: z
-    .object({
-      name: z.string().optional(),
-      description: z.string().optional(),
-      compiledAt: z.string().optional(),
-    })
-    .passthrough(),
+  frontmatter: z.object({
+    name: z.string().nullable(),
+    description: z.string().nullable(),
+    compiledAt: z.string().nullable(),
+  }),
   topics: z
     .array(
       z.object({
         topic: z.string().min(1),
         rules: z.array(z.string().min(1)).min(1),
-        sourceFindingIds: z.array(z.string()).optional(),
+        sourceFindingIds: z.array(z.string()).nullable(),
       })
     )
     .min(1),

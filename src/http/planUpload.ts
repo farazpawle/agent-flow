@@ -137,6 +137,36 @@ export const __testing = {
 // in hand than via a Zod refinement.
 // ────────────────────────────────────────────────────────────────────────
 
+/**
+ * Map the strict-mode LLM output (nullable fields) back to the
+ * `ParsedPlanPayload` shape used everywhere downstream (optional fields).
+ * `ingestPlanOutputSchema` uses `.nullable()` so OpenAI/OpenRouter strict
+ * json_schema accepts it; here we collapse `null` → `undefined`.
+ */
+function normalizeParsedPlan(raw: unknown): ParsedPlanPayload {
+  const obj = (raw ?? {}) as {
+    group?: { name: string; description?: string | null } | null;
+    tasks?: Array<{
+      name: string;
+      description: string;
+      verificationCriteria?: string | null;
+      dependsOnPreviousIndex: boolean;
+      parentIndex?: number | null;
+    }>;
+  };
+  const group = obj.group
+    ? { name: obj.group.name, description: obj.group.description ?? undefined }
+    : undefined;
+  const tasks = (obj.tasks ?? []).map((t) => ({
+    name: t.name,
+    description: t.description,
+    verificationCriteria: t.verificationCriteria ?? undefined,
+    dependsOnPreviousIndex: t.dependsOnPreviousIndex,
+    parentIndex: t.parentIndex ?? undefined,
+  }));
+  return { group, tasks };
+}
+
 function validateTaskTree(tasks: ParsedPlanTask[]): void {
   if (tasks.length === 0) {
     throw new ValidationError("ingest_plan produced zero tasks.", {
@@ -283,7 +313,7 @@ export async function handlePlanUploadPreview(req: Request, res: Response): Prom
       projectId,
       correlationId,
     });
-    const payload = agentResult.object as ParsedPlanPayload;
+    const payload = normalizeParsedPlan(agentResult.object);
 
     // 6. Defensive re-validate the tree.
     validateTaskTree(payload.tasks);
