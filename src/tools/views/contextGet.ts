@@ -17,6 +17,11 @@
 import { db } from "../../models/db.js";
 import { getProjectById } from "../../models/projectModel.js";
 import { searchTasksWithCommand } from "../../models/taskModel.js";
+import {
+  getSkillByProject,
+  getSkillReference,
+  listSkillReferences,
+} from "../../models/skillModel.js";
 import { NotFoundError } from "../../utils/errors.js";
 import { withToolTelemetry } from "../../utils/telemetry.js";
 import { estimateTokens, truncateList, truncateText } from "../../utils/tokenBudget.js";
@@ -376,6 +381,65 @@ async function buildFindings(
 }
 
 // ────────────────────────────────────────────────────────────────────────
+// skill_index / skill_section (Wave 3 §10.E)
+// ────────────────────────────────────────────────────────────────────────
+
+async function buildSkillIndex(projectId: string, maxTokens: number) {
+  const skill = await getSkillByProject(projectId);
+  if (!skill) {
+    return {
+      type: "skill_index",
+      projectId,
+      skill: null,
+      note: "no skill compiled yet — run compile_skill once at least 2 lessons/decisions have been recorded.",
+    };
+  }
+  const references = await listSkillReferences(skill.id);
+  const truncated = truncateText(skill.body, { maxTokens, strategy: "tail" });
+  return {
+    type: "skill_index",
+    projectId,
+    skill: {
+      id: skill.id,
+      frontmatter: skill.frontmatter,
+      body: truncated,
+      bodyTruncated: truncated !== skill.body,
+      compiledAt: isoOrNull(skill.compiledAt),
+      tokenCount: skill.tokenCount,
+    },
+    references: references.map((r) => ({
+      topic: r.topic,
+      sourceFindingIds: r.sourceFindingIds ?? [],
+    })),
+  };
+}
+
+async function buildSkillSection(projectId: string, topic: string, maxTokens: number) {
+  const skill = await getSkillByProject(projectId);
+  if (!skill) {
+    throw new NotFoundError(`No skill compiled for project ${projectId}.`, {
+      hint: "Call compile_skill (via workflow_run or the GUI Recompile button) first.",
+    });
+  }
+  const ref = await getSkillReference(skill.id, topic);
+  if (!ref) {
+    throw new NotFoundError(`Skill reference '${topic}' not found.`, {
+      hint: "Inline-only topics live inside `skill_index.body`; only overflowed topics have references.",
+    });
+  }
+  const truncated = truncateText(ref.content, { maxTokens, strategy: "middle" });
+  return {
+    type: "skill_section",
+    projectId,
+    skillId: skill.id,
+    topic: ref.topic,
+    content: truncated,
+    truncated: truncated !== ref.content,
+    sourceFindingIds: ref.sourceFindingIds ?? [],
+  };
+}
+
+// ────────────────────────────────────────────────────────────────────────
 // Dispatcher
 // ────────────────────────────────────────────────────────────────────────
 
@@ -412,6 +476,10 @@ async function dispatch(input: ContextGetInput) {
       return asToolText(
         await buildFindings(input.taskId, input.kinds, input.limit, input.maxTokens)
       );
+    case "skill_index":
+      return asToolText(await buildSkillIndex(input.projectId, input.maxTokens));
+    case "skill_section":
+      return asToolText(await buildSkillSection(input.projectId, input.topic, input.maxTokens));
   }
 }
 

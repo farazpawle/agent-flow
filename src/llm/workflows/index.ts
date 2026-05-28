@@ -25,6 +25,9 @@ import { buildContextPackWorkflow } from "./buildContextPack.js";
 import { summarizeLessonsWorkflow } from "./summarizeLessons.js";
 import { detectDuplicatesWorkflow } from "./detectDuplicates.js";
 import { generateReleaseSummaryWorkflow } from "./generateReleaseSummary.js";
+import { ingestPlanWorkflow } from "./ingestPlan.js";
+import { narrateAbandonmentWorkflow } from "./narrateAbandonment.js";
+import { compileSkillWorkflow } from "./compileSkill.js";
 
 export const WORKFLOW_MODULES: Readonly<Record<WorkflowName, WorkflowModule>> = Object.freeze({
   plan: planWorkflow,
@@ -38,6 +41,9 @@ export const WORKFLOW_MODULES: Readonly<Record<WorkflowName, WorkflowModule>> = 
   summarize_lessons: summarizeLessonsWorkflow,
   detect_duplicates: detectDuplicatesWorkflow,
   generate_release_summary: generateReleaseSummaryWorkflow,
+  ingest_plan: ingestPlanWorkflow,
+  narrate_abandonment: narrateAbandonmentWorkflow,
+  compile_skill: compileSkillWorkflow,
 });
 
 export { WORKFLOW_OUTPUT_SCHEMAS } from "./_schemas.js";

@@ -170,6 +170,15 @@ import {
 import { db } from "./models/db.js";
 import { startFindingsCleanup } from "./utils/findingsCleanup.js";
 
+// Wave 3 §10.A — plan upload (preview + commit) routes.
+import {
+  handlePlanUploadPreview,
+  handlePlanUploadCommit,
+  startPreviewSweeper,
+} from "./http/planUpload.js";
+// Wave 3 §10.E — Project Skill compile.
+import { compileSkill } from "./llm/skillCompiler.js";
+
 async function main() {
   try {
     const GUI_ONLY = process.argv.includes("--gui") || process.env.GUI_ONLY === "true";
@@ -617,6 +626,54 @@ async function main() {
       // default; per-call `mode` overrides `WORKFLOW_MODE` env.
       app.post("/api/workflow/run", async (req: Request, res: Response) => {
         await viewBodyRoute("workflow_run", workflowRunSchema, workflowRun, res, req.body);
+      });
+
+      // Wave 3 §10.A — plan upload (preview + commit). LLM-driven.
+      // preview = parse, no DB writes; commit = transactional insert.
+      app.post("/api/plan/upload/preview", async (req: Request, res: Response) => {
+        await handlePlanUploadPreview(req, res);
+      });
+      app.post("/api/plan/upload/commit", async (req: Request, res: Response) => {
+        await handlePlanUploadCommit(req, res);
+      });
+      startPreviewSweeper();
+
+      // Wave 3 §10.E — Project Skill compile. Triggered manually by the
+      // GUI "Recompile" button. Returns 503 LLM_NOT_CONFIGURED when no
+      // provider is configured.
+      app.post("/api/skill/compile", async (req: Request, res: Response) => {
+        const correlationId = (req as Request & { correlationId?: string }).correlationId;
+        try {
+          const projectId = (req.body as { projectId?: unknown } | undefined)?.projectId;
+          if (typeof projectId !== "string" || projectId.length === 0) {
+            res.status(400).json({
+              code: "VALIDATION",
+              error: "POST /api/skill/compile requires a `projectId` string in the body.",
+            });
+            return;
+          }
+          const result = await compileSkill({ projectId, correlationId });
+          res.json({
+            skillId: result.skill.id,
+            compiledAt: result.skill.compiledAt.toISOString(),
+            tokenCount: result.skill.tokenCount,
+            topicsWritten: result.topicsWritten,
+            referencesWritten: result.referencesWritten,
+            inputItems: result.inputItems,
+            clustersIn: result.clustersIn,
+            clustersUsed: result.clustersUsed,
+            droppedClusters: result.droppedClusters,
+          });
+        } catch (err) {
+          const appErr = err as { details?: { code?: string } };
+          if (appErr?.details?.code === "LLM_NOT_CONFIGURED") {
+            const { body } = toHttpErrorBody(err);
+            res.status(503).json(body);
+            return;
+          }
+          const { status, body } = toHttpErrorBody(err);
+          res.status(status).json(body);
+        }
       });
 
       // ==================== LLM HTTP ROUTES (Phase 2 Group 16) ====================
@@ -1313,7 +1370,7 @@ async function main() {
             {
               name: "context_get",
               description:
-                "Token-budgeted, LLM-free context bundle assembler. Discriminated on `type`: project_summary, implementation_context, verification_context, lessons (deterministic fallback chain: lesson_summaries → recent lessonsLearned + findings → empty), similar_tasks, decisions, findings.",
+                "Token-budgeted, LLM-free context bundle assembler. Discriminated on `type`: project_summary, implementation_context, verification_context, lessons (deterministic fallback chain: lesson_summaries → recent lessonsLearned + findings → empty), similar_tasks, decisions, findings, skill_index (Wave 3 §10.E — compiled Project Skill body + reference pointers), skill_section (lazy-fetch a single oversized topic referenced by skill_index).",
               inputSchema: zodToJsonSchema(contextGetSchema),
             },
           ];
@@ -1332,7 +1389,7 @@ async function main() {
           {
             name: "workflow_run",
             description:
-              "Run a structured workflow. Discriminated on `workflow`: plan, analyze, review, split_plan, process_thought, record_decision, review_task_quality, build_context_pack, summarize_lessons, detect_duplicates, generate_release_summary. In `WORKFLOW_MODE=manual` (default), returns the structured contract (purpose, inputRequired, steps, outputSchema, qualityChecklist, nextRecommendedCalls) for the agent to execute. `WORKFLOW_MODE=disabled` returns a typed WORKFLOW_DISABLED payload. Per-call `mode` overrides env. (Phase 3: plan/analyze/review are ALSO available via MCP Prompts — `prompts/list` + `prompts/get`.)",
+              "Run a structured workflow. Discriminated on `workflow`: plan, analyze, review, split_plan, process_thought, record_decision, review_task_quality, build_context_pack, summarize_lessons, detect_duplicates, generate_release_summary, ingest_plan, narrate_abandonment, compile_skill. In `WORKFLOW_MODE=manual` (default), returns the structured contract (purpose, inputRequired, steps, outputSchema, qualityChecklist, nextRecommendedCalls) for the agent to execute. `WORKFLOW_MODE=disabled` returns a typed WORKFLOW_DISABLED payload. Per-call `mode` overrides env. (Phase 3: plan/analyze/review are ALSO available via MCP Prompts — `prompts/list` + `prompts/get`.)",
             inputSchema: zodToJsonSchema(workflowRunSchema),
           },
           // Phase 3 Group 19.2: view tools moved behind Resources by

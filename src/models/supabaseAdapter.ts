@@ -14,6 +14,10 @@ import {
   ListLessonsFilter,
   LlmSettings,
   LlmSettingsInput,
+  ProjectSkill,
+  ProjectSkillInput,
+  ProjectSkillReference,
+  ProjectSkillReferenceInput,
   TaskFinding,
   TaskFindingInput,
 } from "./interfaces.js";
@@ -1153,5 +1157,118 @@ export class SupabaseAdapter implements DatabaseAdapter {
       correlationId: r.correlation_id ?? undefined,
       createdAt: new Date(r.created_at),
     }));
+  }
+
+  // --- Wave 3 §10.E — Project Skill ---
+
+  async getSkillByProject(projectId: string): Promise<ProjectSkill | null> {
+    const { data, error } = await this.getSupabase()
+      .from("project_skills")
+      .select("*")
+      .eq("project_id", projectId)
+      .maybeSingle();
+    if (error) throw error;
+    if (!data) return null;
+    return {
+      id: data.id,
+      projectId: data.project_id,
+      frontmatter: data.frontmatter ?? {},
+      body: data.body,
+      compiledAt: new Date(data.compiled_at),
+      tokenCount: data.token_count ?? 0,
+    };
+  }
+
+  async upsertSkill(input: ProjectSkillInput): Promise<ProjectSkill> {
+    const id = input.id ?? randomUUID();
+    const compiledAt = input.compiledAt ?? new Date();
+    const row = {
+      id,
+      project_id: input.projectId,
+      frontmatter: input.frontmatter ?? {},
+      body: input.body,
+      compiled_at: compiledAt.toISOString(),
+      token_count: input.tokenCount,
+    };
+    // onConflict on project_id (UNIQUE) — replays of the same project
+    // reuse the existing row id rather than churning.
+    const { error } = await this.getSupabase()
+      .from("project_skills")
+      .upsert(row, { onConflict: "project_id" });
+    if (error) throw error;
+    const fresh = await this.getSkillByProject(input.projectId);
+    return (
+      fresh ?? {
+        id,
+        projectId: input.projectId,
+        frontmatter: input.frontmatter,
+        body: input.body,
+        compiledAt,
+        tokenCount: input.tokenCount,
+      }
+    );
+  }
+
+  async replaceSkillReferences(
+    skillId: string,
+    refs: ProjectSkillReferenceInput[]
+  ): Promise<ProjectSkillReference[]> {
+    const sb = this.getSupabase();
+    const { error: delErr } = await sb
+      .from("project_skill_references")
+      .delete()
+      .eq("skill_id", skillId);
+    if (delErr) throw delErr;
+    if (refs.length === 0) return [];
+    const rows = refs.map((r) => ({
+      id: randomUUID(),
+      skill_id: skillId,
+      topic: r.topic,
+      content: r.content,
+      source_finding_ids: r.sourceFindingIds ?? null,
+    }));
+    const { error: insErr } = await sb.from("project_skill_references").insert(rows);
+    if (insErr) throw insErr;
+    return rows.map((r) => ({
+      id: r.id,
+      skillId,
+      topic: r.topic,
+      content: r.content,
+      sourceFindingIds: r.source_finding_ids ?? undefined,
+    }));
+  }
+
+  async listSkillReferences(skillId: string): Promise<ProjectSkillReference[]> {
+    const { data, error } = await this.getSupabase()
+      .from("project_skill_references")
+      .select("*")
+      .eq("skill_id", skillId)
+      .order("topic", { ascending: true });
+    if (error) throw error;
+    return (data || []).map((r: any) => ({
+      id: r.id,
+      skillId: r.skill_id,
+      topic: r.topic,
+      content: r.content,
+      sourceFindingIds: r.source_finding_ids ?? undefined,
+    }));
+  }
+
+  async getSkillReference(skillId: string, topic: string): Promise<ProjectSkillReference | null> {
+    const { data, error } = await this.getSupabase()
+      .from("project_skill_references")
+      .select("*")
+      .eq("skill_id", skillId)
+      .eq("topic", topic)
+      .maybeSingle();
+    if (error) throw error;
+    if (!data) return null;
+    return {
+      id: data.id,
+      skillId: data.skill_id,
+      topic: data.topic,
+      content: data.content,
+      sourceFindingIds: data.source_finding_ids ?? undefined,
+    };
   }
 }

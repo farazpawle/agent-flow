@@ -177,6 +177,23 @@ export const contextGetSchema = z.discriminatedUnion("type", [
     limit: z.number().int().positive().max(100).default(20),
     maxTokens: z.number().int().positive().default(3000),
   }),
+  // Wave 3 §10.E — Project Skill index. Returns frontmatter + body +
+  // an array of reference pointers (one per oversized topic). The body
+  // already inlines the small topics; references are fetched lazily
+  // via `type=skill_section`.
+  z.object({
+    type: z.literal("skill_index"),
+    projectId: z.string().min(1),
+    maxTokens: z.number().int().positive().default(4000),
+  }),
+  // Wave 3 §10.E — single reference section. Used by the GUI when a
+  // user expands an overflowed topic.
+  z.object({
+    type: z.literal("skill_section"),
+    projectId: z.string().min(1),
+    topic: z.string().min(1),
+    maxTokens: z.number().int().positive().default(3000),
+  }),
 ]);
 
 export type ContextGetInput = z.infer<typeof contextGetSchema>;

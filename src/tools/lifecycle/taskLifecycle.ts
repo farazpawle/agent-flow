@@ -37,6 +37,7 @@ import {
 } from "../../utils/errors.js";
 import { withToolTelemetry } from "../../utils/telemetry.js";
 import { recoverExpiredClaim, withVersionCheck } from "../../models/concurrency.js";
+import { narrateAbandonment } from "../../llm/narration.js";
 import type { Task } from "../../types/index.js";
 import { TaskStatus } from "../../types/index.js";
 import type { FinalizeResult, TaskLifecycleInput } from "./schemas.js";
@@ -409,12 +410,15 @@ async function release(input: Extract<TaskLifecycleInput, { action: "release" }>
   ensureTransition("release", task);
   const clientId = resolveClientId(input);
   assertLockHeldBy(task, clientId);
-  // Wave 2 §10.F will swap the templated tag below for an LLM-narrated
-  // abandonment summary. Provider=`none` keeps the templated form.
-  const nowIso = new Date().toISOString();
-  const tag = input.note
-    ? `[released ${nowIso} by ${clientId}: ${input.note}]`
-    : `[released ${nowIso} by ${clientId}]`;
+  // Wave 3 §10.F — LLM-narrated abandonment summary. Provider=`none`
+  // or any provider error falls back to the Wave-2 templated form.
+  const narration = await narrateAbandonment({
+    task,
+    trigger: "released",
+    heldBy: clientId,
+    releaseNote: input.note,
+  });
+  const tag = `[${narration.summary}]`;
   task.status = TaskStatus.PENDING;
   task.claimedBy = undefined;
   task.claimedAt = undefined;
@@ -422,7 +426,12 @@ async function release(input: Extract<TaskLifecycleInput, { action: "release" }>
   task.notes = task.notes ? `${task.notes}\n${tag}` : tag;
   (task as TaskWithVersion & { verificationStatus?: string }).verificationStatus = undefined;
   const saved = await persistBumped(task);
-  return asToolText({ action: "release", task: saved, newVersion: saved.version });
+  return asToolText({
+    action: "release",
+    task: saved,
+    newVersion: saved.version,
+    narration: { fromLlm: narration.fromLlm },
+  });
 }
 
 // ────────────────────────────────────────────────────────────────────────

@@ -27,8 +27,11 @@ import {
   WORKFLOW_OUTPUT_SCHEMAS,
   analyzeOutputSchema,
   buildContextPackOutputSchema,
+  compileSkillOutputSchema,
   detectDuplicatesOutputSchema,
   generateReleaseSummaryOutputSchema,
+  ingestPlanOutputSchema,
+  narrateAbandonmentOutputSchema,
   planOutputSchema,
   processThoughtOutputSchema,
   recordDecisionOutputSchema,
@@ -49,7 +52,10 @@ export type WorkflowName =
   | "build_context_pack"
   | "summarize_lessons"
   | "detect_duplicates"
-  | "generate_release_summary";
+  | "generate_release_summary"
+  | "ingest_plan"
+  | "narrate_abandonment"
+  | "compile_skill";
 
 export const WORKFLOW_NAMES: readonly WorkflowName[] = [
   "plan",
@@ -63,6 +69,9 @@ export const WORKFLOW_NAMES: readonly WorkflowName[] = [
   "summarize_lessons",
   "detect_duplicates",
   "generate_release_summary",
+  "ingest_plan",
+  "narrate_abandonment",
+  "compile_skill",
 ] as const;
 
 export interface WorkflowDefinition {
@@ -351,6 +360,81 @@ const GENERATE_RELEASE_SUMMARY: WorkflowDefinition = {
   ],
 };
 
+const INGEST_PLAN: WorkflowDefinition = {
+  purpose:
+    "Parse an uploaded markdown plan into a structured task tree the server can ingest. Used internally by POST /api/plan/upload/preview — not typically invoked directly by agents.",
+  inputRequired: [
+    "planMarkdown: the raw markdown body uploaded by the user",
+    "projectName: the destination project's name (for context)",
+  ],
+  steps: [
+    "1. Identify the optional `# Feature: <name>` header → group.name.",
+    "2. Top-level `- [ ]` bullets become parent tasks.",
+    "3. Indented bullets become subtasks with parentIndex pointing at their parent.",
+    "4. Reject grandchildren (parent itself has a parentIndex).",
+    "5. Mark dependsOnPreviousIndex when the bullet text implies sequence ('After …').",
+  ],
+  outputSchema: toJsonSchema(ingestPlanOutputSchema),
+  qualityChecklist: [
+    "Did every checkbox bullet become exactly one task?",
+    "Are subtasks one level deep (no grandchildren)?",
+    "Did you preserve the author's ordering?",
+  ],
+  nextRecommendedCalls: [
+    "// internal: handler stores result in preview cache then issues task_edit(action='create') in a transaction",
+  ],
+};
+
+const NARRATE_ABANDONMENT: WorkflowDefinition = {
+  purpose:
+    "Produce a one-paragraph audit note (≤120 words) when a task is released or its claim expires. Appended to task.notes to replace the templated `[released …]` / `[abandoned …]` tag.",
+  inputRequired: [
+    "taskName, trigger ('released'|'expired'), heldBy",
+    "lastFindings (up to 5 most recent)",
+    "notesTail (~500 chars from task.notes)",
+  ],
+  steps: [
+    "1. Read the trigger + holder identity.",
+    "2. Summarise what was attempted (from findings + notes tail).",
+    "3. Name the unfinished work in one sentence.",
+    "4. State the next agent's starting point.",
+  ],
+  outputSchema: toJsonSchema(narrateAbandonmentOutputSchema),
+  qualityChecklist: [
+    "Is the note past-tense and factual (no speculation)?",
+    "Did you keep the body ≤120 words?",
+    "Does the next agent have a clear pickup point?",
+  ],
+  nextRecommendedCalls: [
+    "// internal: lifecycle handler appends `summary` to task.notes via task_edit(append_note)",
+  ],
+};
+
+const COMPILE_SKILL: WorkflowDefinition = {
+  purpose:
+    "Roll up a project's completed-task lessons + decisions into a forward-looking Skill document keyed by topic.",
+  inputRequired: [
+    "projectName",
+    "clusters: lexically-pre-grouped lessons/decisions/findings (≥2 items each)",
+    "priorSummary (optional): the previous compile result to avoid restating identical rules",
+  ],
+  steps: [
+    "1. For each cluster, identify the recurring theme → `topic`.",
+    "2. Distil 1–5 actionable rules per topic in second-person ('When X, do Y…').",
+    "3. Carry the source findingIds verbatim for the audit trail.",
+    "4. Emit frontmatter with project name + ISO compile timestamp.",
+  ],
+  outputSchema: toJsonSchema(compileSkillOutputSchema),
+  qualityChecklist: [
+    "Is every rule grounded in ≥2 source items from its cluster?",
+    "Did you avoid inventing rules outside the supplied evidence?",
+    "Are rules forward-looking and actionable, not folkloric?",
+  ],
+  nextRecommendedCalls: [
+    "// internal: skillModel.upsertSkill persists `body`; topics >150 lines fan out to project_skill_references",
+  ],
+};
+
 export const WORKFLOW_DEFINITIONS: Readonly<Record<WorkflowName, WorkflowDefinition>> =
   Object.freeze({
     plan: PLAN,
@@ -364,4 +448,7 @@ export const WORKFLOW_DEFINITIONS: Readonly<Record<WorkflowName, WorkflowDefinit
     summarize_lessons: SUMMARIZE_LESSONS,
     detect_duplicates: DETECT_DUPLICATES,
     generate_release_summary: GENERATE_RELEASE_SUMMARY,
+    ingest_plan: INGEST_PLAN,
+    narrate_abandonment: NARRATE_ABANDONMENT,
+    compile_skill: COMPILE_SKILL,
   });

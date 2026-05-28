@@ -46,6 +46,13 @@ export const workflowRunSchema = z.discriminatedUnion("workflow", [
   z.object({ workflow: z.literal("summarize_lessons"), ...COMMON_SHAPE }),
   z.object({ workflow: z.literal("detect_duplicates"), ...COMMON_SHAPE }),
   z.object({ workflow: z.literal("generate_release_summary"), ...COMMON_SHAPE }),
+  // Wave 3 §10.A — markdown plan ingestion (used internally by the
+  // `/api/plan/upload/preview` handler, but exposed here for parity).
+  z.object({ workflow: z.literal("ingest_plan"), ...COMMON_SHAPE }),
+  // Wave 3 §10.F — LLM narration of abandonment / release events.
+  z.object({ workflow: z.literal("narrate_abandonment"), ...COMMON_SHAPE }),
+  // Wave 3 §10.E — project Skill compilation.
+  z.object({ workflow: z.literal("compile_skill"), ...COMMON_SHAPE }),
 ]);
 
 export type WorkflowRunInput = z.infer<typeof workflowRunSchema>;
@@ -63,4 +70,7 @@ export const WORKFLOW_NAME_ENUM = z.enum([
   "summarize_lessons",
   "detect_duplicates",
   "generate_release_summary",
+  "ingest_plan",
+  "narrate_abandonment",
+  "compile_skill",
 ]);

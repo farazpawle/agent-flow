@@ -279,6 +279,26 @@ export async function recoverExpiredClaim(
   if (!task.claimExpiresAt) return task;
   if (task.claimExpiresAt.getTime() >= Date.now()) return task;
   const expectedVersion = (task as Task & { version?: number }).version ?? 1;
+
+  // Wave 3 §10.F — narrate the abandonment when an LLM is available;
+  // otherwise fall back to the Wave-2 templated tag. Narration runs
+  // BEFORE the CAS so the saved row carries the final tag (no second
+  // round trip after a successful flip). If we lose the CAS race, the
+  // narration was cheap insurance — the winner's tag is authoritative.
+  let tag = `[abandoned ${new Date().toISOString()}, claim expired]`;
+  try {
+    const { narrateAbandonment } = await import("../llm/narration.js");
+    const heldBy = task.claimedBy ?? "(unknown)";
+    const narration = await narrateAbandonment({
+      task,
+      trigger: "expired",
+      heldBy,
+    });
+    tag = `[${narration.summary}]`;
+  } catch {
+    // Templated fallback — keep the existing tag.
+  }
+
   try {
     const { value } = await withVersionCheck(
       task.id,
@@ -291,7 +311,6 @@ export async function recoverExpiredClaim(
         next.claimExpiresAt = undefined;
         next.version = expectedVersion + 1;
         next.updatedAt = new Date();
-        const tag = `[abandoned ${new Date().toISOString()}, claim expired]`;
         next.notes = next.notes ? `${next.notes}\n${tag}` : tag;
         await adapter.saveTask(next);
         return next;

@@ -16,6 +16,10 @@ import {
   ListLessonsFilter,
   LlmSettings,
   LlmSettingsInput,
+  ProjectSkill,
+  ProjectSkillInput,
+  ProjectSkillReference,
+  ProjectSkillReferenceInput,
   TaskFinding,
   TaskFindingInput,
 } from "./interfaces.js";
@@ -317,6 +321,39 @@ export class SQLiteAdapter implements DatabaseAdapter {
           );
           this.db!.run(
             `CREATE INDEX IF NOT EXISTS idx_destructive_audits_tool ON destructive_audits(tool, created_at DESC)`
+          );
+
+          // Wave 3 §10.E — Project Skill (one row per project) + overflow
+          // references (per-topic blocks pulled out of `body` when oversized).
+          this.db!.run(`
+                        CREATE TABLE IF NOT EXISTS project_skills (
+                            id TEXT PRIMARY KEY,
+                            project_id TEXT NOT NULL UNIQUE,
+                            frontmatter TEXT NOT NULL,
+                            body TEXT NOT NULL,
+                            compiled_at INTEGER NOT NULL,
+                            token_count INTEGER NOT NULL DEFAULT 0,
+                            FOREIGN KEY(project_id) REFERENCES projects(id) ON DELETE CASCADE
+                        )
+                    `);
+          this.db!.run(
+            `CREATE INDEX IF NOT EXISTS idx_project_skills_project ON project_skills(project_id)`
+          );
+          this.db!.run(`
+                        CREATE TABLE IF NOT EXISTS project_skill_references (
+                            id TEXT PRIMARY KEY,
+                            skill_id TEXT NOT NULL,
+                            topic TEXT NOT NULL,
+                            content TEXT NOT NULL,
+                            source_finding_ids TEXT,
+                            FOREIGN KEY(skill_id) REFERENCES project_skills(id) ON DELETE CASCADE
+                        )
+                    `);
+          this.db!.run(
+            `CREATE INDEX IF NOT EXISTS idx_project_skill_refs_skill ON project_skill_references(skill_id)`
+          );
+          this.db!.run(
+            `CREATE INDEX IF NOT EXISTS idx_project_skill_refs_topic ON project_skill_references(skill_id, topic)`
           );
 
           this.migrateProjectsTable()
@@ -1702,6 +1739,147 @@ export class SQLiteAdapter implements DatabaseAdapter {
                 createdAt: new Date(r.created_at),
               }))
             );
+        }
+      );
+    });
+  }
+
+  // --- Wave 3 §10.E — Project Skill ---
+
+  async getSkillByProject(projectId: string): Promise<ProjectSkill | null> {
+    return new Promise((resolve, reject) => {
+      this.getDb().get(
+        `SELECT id, project_id, frontmatter, body, compiled_at, token_count FROM project_skills WHERE project_id = ?`,
+        [projectId],
+        (err, row: any) => {
+          if (err) reject(err);
+          else if (!row) resolve(null);
+          else
+            resolve({
+              id: row.id,
+              projectId: row.project_id,
+              frontmatter: JSON.parse(row.frontmatter),
+              body: row.body,
+              compiledAt: new Date(row.compiled_at),
+              tokenCount: row.token_count ?? 0,
+            });
+        }
+      );
+    });
+  }
+
+  async upsertSkill(input: ProjectSkillInput): Promise<ProjectSkill> {
+    const id = input.id ?? randomUUID();
+    const compiledAt = input.compiledAt ?? new Date();
+    const frontmatterJson = JSON.stringify(input.frontmatter ?? {});
+    // ON CONFLICT(project_id) — project_id is UNIQUE in the table — so
+    // repeat compiles reuse the same row id (idempotent semantics).
+    await new Promise<void>((resolve, reject) => {
+      this.getDb().run(
+        `INSERT INTO project_skills (id, project_id, frontmatter, body, compiled_at, token_count)
+                 VALUES (?, ?, ?, ?, ?, ?)
+                 ON CONFLICT(project_id) DO UPDATE SET
+                     frontmatter = excluded.frontmatter,
+                     body        = excluded.body,
+                     compiled_at = excluded.compiled_at,
+                     token_count = excluded.token_count`,
+        [id, input.projectId, frontmatterJson, input.body, compiledAt.getTime(), input.tokenCount],
+        (err) => (err ? reject(err) : resolve())
+      );
+    });
+    // Re-read so the returned id reflects an existing row when the upsert
+    // hit the ON CONFLICT branch (UPDATE doesn't overwrite the primary key).
+    const existing = await this.getSkillByProject(input.projectId);
+    return (
+      existing ?? {
+        id,
+        projectId: input.projectId,
+        frontmatter: input.frontmatter,
+        body: input.body,
+        compiledAt,
+        tokenCount: input.tokenCount,
+      }
+    );
+  }
+
+  async replaceSkillReferences(
+    skillId: string,
+    refs: ProjectSkillReferenceInput[]
+  ): Promise<ProjectSkillReference[]> {
+    const db = this.getDb();
+    // Delete first so re-runs don't accumulate stale topics.
+    await new Promise<void>((resolve, reject) => {
+      db.run(`DELETE FROM project_skill_references WHERE skill_id = ?`, [skillId], (err) =>
+        err ? reject(err) : resolve()
+      );
+    });
+    const inserted: ProjectSkillReference[] = [];
+    for (const ref of refs) {
+      const id = randomUUID();
+      const ids = ref.sourceFindingIds ? JSON.stringify(ref.sourceFindingIds) : null;
+      await new Promise<void>((resolve, reject) => {
+        db.run(
+          `INSERT INTO project_skill_references (id, skill_id, topic, content, source_finding_ids)
+                     VALUES (?, ?, ?, ?, ?)`,
+          [id, skillId, ref.topic, ref.content, ids],
+          (err) => (err ? reject(err) : resolve())
+        );
+      });
+      inserted.push({
+        id,
+        skillId,
+        topic: ref.topic,
+        content: ref.content,
+        sourceFindingIds: ref.sourceFindingIds,
+      });
+    }
+    return inserted;
+  }
+
+  async listSkillReferences(skillId: string): Promise<ProjectSkillReference[]> {
+    return new Promise((resolve, reject) => {
+      this.getDb().all(
+        `SELECT id, skill_id, topic, content, source_finding_ids
+                 FROM project_skill_references WHERE skill_id = ? ORDER BY topic ASC`,
+        [skillId],
+        (err, rows: any[]) => {
+          if (err) reject(err);
+          else
+            resolve(
+              (rows || []).map((r) => ({
+                id: r.id,
+                skillId: r.skill_id,
+                topic: r.topic,
+                content: r.content,
+                sourceFindingIds: r.source_finding_ids
+                  ? JSON.parse(r.source_finding_ids)
+                  : undefined,
+              }))
+            );
+        }
+      );
+    });
+  }
+
+  async getSkillReference(skillId: string, topic: string): Promise<ProjectSkillReference | null> {
+    return new Promise((resolve, reject) => {
+      this.getDb().get(
+        `SELECT id, skill_id, topic, content, source_finding_ids
+                 FROM project_skill_references WHERE skill_id = ? AND topic = ?`,
+        [skillId, topic],
+        (err, row: any) => {
+          if (err) reject(err);
+          else if (!row) resolve(null);
+          else
+            resolve({
+              id: row.id,
+              skillId: row.skill_id,
+              topic: row.topic,
+              content: row.content,
+              sourceFindingIds: row.source_finding_ids
+                ? JSON.parse(row.source_finding_ids)
+                : undefined,
+            });
         }
       );
     });

@@ -85,6 +85,48 @@ export interface ClientActiveProject {
   setAt: Date;
 }
 
+// ─── Wave 3 §10.E — Project Skill compilation ──────────────────────────
+
+/**
+ * One-per-project rolled-up "Skill" document compiled from completed-task
+ * lessons + decisions + success findings. `body` is the rendered markdown
+ * that the GUI shows; oversized topics live in `project_skill_references`
+ * with a one-line pointer in `body`.
+ */
+export interface ProjectSkill {
+  id: string;
+  projectId: string;
+  frontmatter: Record<string, unknown>;
+  body: string;
+  compiledAt: Date;
+  tokenCount: number;
+}
+
+export interface ProjectSkillInput {
+  id?: string;
+  projectId: string;
+  frontmatter: Record<string, unknown>;
+  body: string;
+  compiledAt?: Date;
+  tokenCount: number;
+}
+
+/** Topic body that overflowed `body` (kept >150-line rules out of `body`). */
+export interface ProjectSkillReference {
+  id: string;
+  skillId: string;
+  topic: string;
+  content: string;
+  sourceFindingIds?: string[];
+}
+
+export interface ProjectSkillReferenceInput {
+  skillId: string;
+  topic: string;
+  content: string;
+  sourceFindingIds?: string[];
+}
+
 /**
  * Single-row settings record. Provider/model/strategy/workflow_mode are
  * the user-facing overrides for the LLM layer (Phase 2). Stored in DB so
@@ -349,6 +391,21 @@ export interface DatabaseAdapter {
   // --- Lesson summaries ---
   createLessonSummary(input: LessonSummaryInput): Promise<LessonSummary>;
   listLessonSummaries(filter: ListLessonsFilter): Promise<LessonSummary[]>;
+
+  // --- Wave 3 §10.E — Project Skill (one row per project) ---
+  /** Read the project's skill row, or null if compile has never run. */
+  getSkillByProject(projectId: string): Promise<ProjectSkill | null>;
+  /** Upsert the project's skill row (replaces body / frontmatter wholesale). */
+  upsertSkill(input: ProjectSkillInput): Promise<ProjectSkill>;
+  /** Delete all references for the skill, then insert the new set. */
+  replaceSkillReferences(
+    skillId: string,
+    refs: ProjectSkillReferenceInput[]
+  ): Promise<ProjectSkillReference[]>;
+  /** List references for a skill (ordered by topic ASC). */
+  listSkillReferences(skillId: string): Promise<ProjectSkillReference[]>;
+  /** Fetch one reference by skill + topic for `context_get(type=skill_section)`. */
+  getSkillReference(skillId: string, topic: string): Promise<ProjectSkillReference | null>;
 
   // --- Per-client active project pointer ---
   getActiveProjectForClient(clientId: string): Promise<ClientActiveProject | null>;

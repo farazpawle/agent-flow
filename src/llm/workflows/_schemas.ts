@@ -190,6 +190,61 @@ export const detectDuplicatesOutputSchema = z.object({
 });
 
 // ────────────────────────────────────────────────────────────────────────
+// ingest_plan (Wave 3 §10.A)
+// ────────────────────────────────────────────────────────────────────────
+
+export const ingestPlanOutputSchema = z.object({
+  group: z
+    .object({
+      name: z.string().min(1),
+      description: z.string().optional(),
+    })
+    .optional(),
+  tasks: z
+    .array(
+      z.object({
+        name: z.string().min(1),
+        description: z.string().min(1),
+        verificationCriteria: z.string().optional(),
+        dependsOnPreviousIndex: z.boolean(),
+        parentIndex: z.number().int().nonnegative().optional(),
+      })
+    )
+    .min(1),
+});
+
+// ────────────────────────────────────────────────────────────────────────
+// narrate_abandonment (Wave 3 §10.F)
+// ────────────────────────────────────────────────────────────────────────
+
+export const narrateAbandonmentOutputSchema = z.object({
+  summary: z.string().min(1).max(800),
+});
+
+// ────────────────────────────────────────────────────────────────────────
+// compile_skill (Wave 3 §10.E)
+// ────────────────────────────────────────────────────────────────────────
+
+export const compileSkillOutputSchema = z.object({
+  frontmatter: z
+    .object({
+      name: z.string().optional(),
+      description: z.string().optional(),
+      compiledAt: z.string().optional(),
+    })
+    .passthrough(),
+  topics: z
+    .array(
+      z.object({
+        topic: z.string().min(1),
+        rules: z.array(z.string().min(1)).min(1),
+        sourceFindingIds: z.array(z.string()).optional(),
+      })
+    )
+    .min(1),
+});
+
+// ────────────────────────────────────────────────────────────────────────
 // generate_release_summary
 // ────────────────────────────────────────────────────────────────────────
 
@@ -227,4 +282,7 @@ export const WORKFLOW_OUTPUT_SCHEMAS: Readonly<Record<WorkflowName, z.ZodTypeAny
   summarize_lessons: summarizeLessonsOutputSchema,
   detect_duplicates: detectDuplicatesOutputSchema,
   generate_release_summary: generateReleaseSummaryOutputSchema,
+  ingest_plan: ingestPlanOutputSchema,
+  narrate_abandonment: narrateAbandonmentOutputSchema,
+  compile_skill: compileSkillOutputSchema,
 });
