@@ -46,16 +46,47 @@ async function checkSupabase() {
     { name: "llm_settings", column: "id" },
     // Phase 1 (Group 6.3) — destructive audit log
     { name: "destructive_audits", column: "id" },
+    // Wave 1 §10.D — task groups (run supabase-remediation-groups.sql)
+    { name: "task_groups", column: "id", remediation: "supabase-remediation-groups.sql" },
+    // Wave 3 §10.E — project skill (run supabase-remediation-skills.sql)
+    { name: "project_skills", column: "id", remediation: "supabase-remediation-skills.sql" },
+    {
+      name: "project_skill_references",
+      column: "id",
+      remediation: "supabase-remediation-skills.sql",
+    },
   ];
+
+  // Base-table existence checks left a gap: the Wave 1/3/4 migrations add
+  // *columns* to existing tables, which a table-level check can't see. A
+  // deployment missing these passes the table scan yet 500s at runtime
+  // (e.g. task_edit create INSERTs claimed_by/group_id). Verify each
+  // explicitly so the check matches what the adapters actually write.
+  const columns = [
+    // Wave 1 §10.C — lock columns (supabase-remediation-locks.sql)
+    { table: "tasks", column: "claimed_by", remediation: "supabase-remediation-locks.sql" },
+    { table: "tasks", column: "claimed_at", remediation: "supabase-remediation-locks.sql" },
+    { table: "tasks", column: "claim_expires_at", remediation: "supabase-remediation-locks.sql" },
+    // Wave 1 §10.D — task hierarchy (supabase-remediation-groups.sql)
+    { table: "tasks", column: "group_id", remediation: "supabase-remediation-groups.sql" },
+    { table: "tasks", column: "parent_task_id", remediation: "supabase-remediation-groups.sql" },
+    // Phase 1 — ordering + optimistic concurrency (supabase-remediation-3.sql)
+    { table: "tasks", column: "execution_order", remediation: "supabase-remediation-3.sql" },
+    { table: "tasks", column: "version", remediation: "supabase-remediation-3.sql" },
+  ];
+
   let allOk = true;
 
-  for (const { name, column } of tables) {
+  for (const { name, column, remediation } of tables) {
     const { error } = await supabase.from(name).select(column).limit(1);
     if (error) {
+      // PostgREST reports a missing table as 42P01 or, via the schema
+      // cache, PGRST205. Treat both as "table missing".
+      const missing = error.code === "42P01" || error.code === "PGRST205";
       console.error(`❌ Table "${name}" check failed: ${error.message}`);
-      if (error.code === "42P01") {
+      if (missing) {
         console.error(
-          `   👉 Hint: Table "${name}" does not exist. Please run scripts/supabase-remediation-3.sql in your Supabase SQL Editor.`
+          `   👉 Hint: run scripts/${remediation ?? "supabase-remediation-3.sql"} in your Supabase SQL Editor.`
         );
       }
       allOk = false;
@@ -64,11 +95,25 @@ async function checkSupabase() {
     }
   }
 
+  for (const { table, column, remediation } of columns) {
+    const { error } = await supabase.from(table).select(column).limit(1);
+    if (error) {
+      // 42703 = undefined_column. The table exists but lacks the column.
+      console.error(`❌ Column "${table}.${column}" check failed: ${error.message}`);
+      if (error.code === "42703") {
+        console.error(`   👉 Hint: run scripts/${remediation} in your Supabase SQL Editor.`);
+      }
+      allOk = false;
+    } else {
+      console.log(`✅ Column "${table}.${column}" is present.`);
+    }
+  }
+
   if (allOk) {
-    console.log("✨ Supabase is correctly configured and all tables are present!");
+    console.log("✨ Supabase is correctly configured — all tables and columns are present!");
   } else {
     console.error(
-      "⚠️ Some tables are missing. Please initialize them using scripts/supabase-schema.sql"
+      "⚠️ Schema drift detected. Apply the remediation script(s) named above in the Supabase SQL Editor (all are idempotent), then re-run `npm run supabase:check`."
     );
     process.exit(1);
   }
