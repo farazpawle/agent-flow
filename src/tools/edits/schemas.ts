@@ -168,13 +168,30 @@ export const taskEditSchema = z.discriminatedUnion("action", [
   }),
   // Wave 2 §10.H — append-only notes audit. The server prepends an ISO-
   // timestamped block to `task.notes` so the most-recent entry surfaces
-  // first. NEVER overwrites — to "delete" a note, append a correction.
+  // first. Appends never overwrite. NOTE: the dashboard now exposes a
+  // permanent per-note hard delete via the `delete_note` branch below
+  // (task-detail-ux-improvements §A), so the trail is no longer strictly
+  // append-only from the GUI — programmatic callers should still prefer
+  // appending a correction over deleting.
   z.object({
     action: z.literal("append_note"),
     taskId: z.string().min(1),
     expectedVersion: z.number().int().positive(),
     text: z.string().min(1, {
       message: "text must be at least 1 character — note body cannot be empty.",
+    }),
+  }),
+  // task-detail-ux-improvements §A — permanent per-note hard delete.
+  // Identifies the target note by its exact (trimmed) block text and is
+  // guarded by optimistic concurrency, so it is safe under concurrent
+  // edits. `noteText` must match a block produced by the same split the
+  // frontend `parseNotes()` uses (`/\n(?=\[)/`, trimmed).
+  z.object({
+    action: z.literal("delete_note"),
+    taskId: z.string().min(1),
+    expectedVersion: z.number().int().positive(),
+    noteText: z.string().min(1, {
+      message: "noteText must be the exact trimmed block text of the note to remove.",
     }),
   }),
 ]);

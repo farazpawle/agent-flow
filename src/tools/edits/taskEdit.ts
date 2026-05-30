@@ -86,6 +86,8 @@ async function dispatch(input: TaskEditInput) {
       return merge(input);
     case "append_note":
       return appendNote(input);
+    case "delete_note":
+      return deleteNote(input);
   }
 }
 
@@ -265,6 +267,49 @@ async function appendNote(input: Extract<TaskEditInput, { action: "append_note" 
     async () => persistTask({ ...existing, notes: nextNotes }, input.expectedVersion + 1)
   );
   return asToolText({ action: "append_note", task: saved, newVersion, appendedAt: isoStamp });
+}
+
+// ────────────────────────────────────────────────────────────────────────
+// task-detail-ux-improvements §A — delete_note (permanent per-note delete)
+//
+// The notes blob is heterogeneous: `[<iso>] text` (append_note) interleaved
+// with lifecycle tags (`[blocked: …]`, `[unblocked: …]`, `[released …]`).
+// We identify the target note by its exact (trimmed) block text. Guarded by
+// optimistic concurrency so a stale GUI tab can't delete the wrong note.
+// ────────────────────────────────────────────────────────────────────────
+
+async function deleteNote(input: Extract<TaskEditInput, { action: "delete_note" }>) {
+  const target = input.noteText.trim();
+  const existing = await loadOrThrow(input.taskId);
+
+  // COUPLING: this split MUST stay in sync with the frontend `parseNotes()`
+  // in src/public/pages/taskDetail.js (`/\n(?=\[)/`, trim, drop empties).
+  // The delete button maps a clicked entry → its exact trimmed block text,
+  // so any divergence here would make notes undeletable from the GUI.
+  const blocks = (existing.notes ?? "")
+    .split(/\n(?=\[)/)
+    .map((c) => c.trim())
+    .filter(Boolean);
+
+  const idx = blocks.findIndex((b) => b === target);
+  if (idx === -1) {
+    throw new ValidationError("delete_note: note not found — reload the task and retry.", {
+      hint: "The exact (trimmed) block text didn't match any note; the view is likely stale.",
+      details: { code: "VALIDATION", taskId: input.taskId },
+    });
+  }
+
+  // Remove the matched block; rejoin the remainder with a blank line so the
+  // trail stays scannable (parseNotes re-splits on any leading `[`).
+  blocks.splice(idx, 1);
+  const next = blocks.join("\n\n");
+
+  const { value: saved, newVersion } = await withVersionCheck(
+    input.taskId,
+    input.expectedVersion,
+    async () => persistTask({ ...existing, notes: next }, input.expectedVersion + 1)
+  );
+  return asToolText({ action: "delete_note", task: saved, newVersion });
 }
 
 // ────────────────────────────────────────────────────────────────────────

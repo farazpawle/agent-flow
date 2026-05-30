@@ -207,11 +207,33 @@
   gap: var(--space-2);
 }
 .notes-entry {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-2);
   border-left: 2px solid var(--border-strong);
   padding: 2px 0 2px var(--space-3);
 }
+.notes-body {
+  flex: 1;
+  min-width: 0;
+}
 .notes-ts { display: block; }
 .notes-text { white-space: pre-wrap; word-break: break-word; }
+/* T7 — per-note hard-delete affordance: small, muted, danger on hover. */
+.note-delete-btn {
+  flex: 0 0 auto;
+  border: none;
+  background: transparent;
+  color: var(--text-secondary);
+  font-size: 16px;
+  line-height: 1;
+  padding: 0 var(--space-1);
+  cursor: pointer;
+  border-radius: var(--radius-sm);
+}
+.note-delete-btn:hover {
+  color: var(--danger);
+}
 
 /* ══════════════════════════════════════════════════════════════════════
    Project detail — redesigned skill · groups · tasks layout.

@@ -56,13 +56,27 @@ export async function mount(container, { params }) {
     return;
   }
 
-  render(container, task, lock);
+  // T2 — single /api/tasks fetch → id→{name} map. Reused for dependency,
+  // blocked-by, and prerequisite names (T3/T5) AND for the subtask tree
+  // (collapses what used to be two /api/tasks fetches into one). Best-effort:
+  // an empty map degrades gracefully to showing raw ids.
+  let allTasks = [];
+  const nameMap = new Map();
+  try {
+    const res = await api.get("/api/tasks");
+    allTasks = res.tasks || [];
+    for (const t of allTasks) nameMap.set(t.id, { name: t.name });
+  } catch {
+    /* network/parse error → fall back to raw ids */
+  }
+
+  render(container, task, lock, nameMap);
   attachHandlers(container, task, lock);
   void loadFindings(container, task);
-  void loadSubtasks(container, task);
+  loadSubtasks(container, task, allTasks);
 }
 
-function render(container, task, lock) {
+function render(container, task, lock, nameMap) {
   container.innerHTML = `
         <div class="page-header">
             <div>
@@ -76,14 +90,15 @@ function render(container, task, lock) {
             </div>
             <div class="page-actions">
                 <a class="btn btn-secondary" href="#/tasks">Back</a>
+                ${isTaskBlocked(task) ? `<button class="btn btn-secondary" id="btn-unblock" title="Clear the block so this task can start">Unblock</button>` : ""}
                 ${lock ? `<button class="btn btn-secondary" id="btn-force-release" title="Drop another agent's claim">Force release</button>` : ""}
                 <button class="btn btn-danger" id="btn-delete-task">Delete…</button>
             </div>
         </div>
 
         <form id="task-edit-form">
-            <!-- ── Section 1 — Summary (read-only header) ─────────── -->
-            ${renderSummarySection(task)}
+            <!-- ── Section 1 — Task Information (read-only header) ─────────── -->
+            ${renderSummarySection(task, nameMap)}
 
             <!-- ── Section 2 — Work Definition (editable) ─────────── -->
             <section class="task-section" data-section="work">
@@ -136,7 +151,7 @@ function render(container, task, lock) {
                     <button type="button" class="task-section-toggle" data-toggle="advanced">+</button>
                 </h3>
                 <div class="task-section-body">
-                    ${renderAdvancedSection(task)}
+                    ${renderAdvancedSection()}
                 </div>
             </section>
         </form>
@@ -167,19 +182,25 @@ function renderLockBadge(lock) {
  */
 function renderNotesAuditCard(task) {
   const entries = parseNotes(task.notes || "");
+  // T6 — `data-note-i` indexes into THIS parseNotes() result (sorted
+  // newest-first). wireDeleteNotes() re-parses the same way, so the index
+  // → exact trimmed block text mapping stays stable across re-renders.
   const list = entries.length
     ? `<ul class="notes-audit">
         ${entries
           .map(
-            (e) => `
+            (e, i) => `
           <li class="notes-entry">
-            ${e.ts ? `<span class="notes-ts muted tiny">${escapeHtml(formatDate(e.ts))}</span>` : ""}
-            <div class="notes-text">${escapeHtml(e.text)}</div>
+            <div class="notes-body">
+              ${e.ts ? `<span class="notes-ts muted tiny">${escapeHtml(formatDate(e.ts))}</span>` : ""}
+              <div class="notes-text">${escapeHtml(e.text)}</div>
+            </div>
+            <button type="button" class="note-delete-btn" data-note-i="${i}" title="Delete note permanently">×</button>
           </li>`
           )
           .join("")}
       </ul>`
-    : `<p class="placeholder tiny">No notes yet. Append context, decisions, or course-corrections below — the trail is append-only.</p>`;
+    : `<p class="placeholder tiny">No notes yet. Append context, decisions, or course-corrections below.</p>`;
 
   return `
     <div class="card" id="notes-audit-card">
@@ -221,20 +242,79 @@ function parseNotes(notes) {
   return entries;
 }
 
-function renderSummarySection(task) {
-  // feature-hierarchy Workstream C — derived auto-BLOCKED. When the server
-  // marks the task blocked, surface it instead of the raw "Pending" and list
-  // the prerequisites; `task_lifecycle(start|claim)` is rejected server-side
-  // (TASK_BLOCKED) until they complete, so we present it as non-startable.
-  const blocked = task.blocked === true;
+/**
+ * T2/T3/T5 — resolve a task id to its human name via the map built in
+ * mount(). Falls back to the raw id when the task isn't in the map.
+ */
+function resolveTaskName(taskId, nameMap) {
+  const hit = nameMap && typeof nameMap.get === "function" ? nameMap.get(taskId) : null;
+  return hit && hit.name ? hit.name : taskId;
+}
+
+/**
+ * T5 — pull the most-recent `[blocked: <reason>]` tag out of the notes
+ * trail. The lifecycle `block` handler appends one per block (newest last),
+ * single-line and free of `]`, so we return the last match.
+ */
+function extractBlockedReason(notes) {
+  if (!notes) return null;
+  const re = /\[blocked:\s*([^\]]*)\]/g;
+  let m;
+  let last = null;
+  while ((m = re.exec(notes)) !== null) last = m[1].trim();
+  return last || null;
+}
+
+/**
+ * T5 — true when the task is blocked either way: a manual BLOCKED status or
+ * the derived auto-block (PENDING with incomplete prerequisites).
+ */
+function isTaskBlocked(task) {
+  return task.blocked === true || statusKey(task.status) === "blocked";
+}
+
+function renderSummarySection(task, nameMap) {
+  // feature-hierarchy Workstream C — two blocked states surface a readable
+  // "Blocked reason" (T5):
+  //   • auto-block: status PENDING + incomplete prerequisites (task.blocked).
+  //     `task_lifecycle(start|claim)` is rejected server-side (TASK_BLOCKED)
+  //     until they complete; list the prerequisite names.
+  //   • manual block: status BLOCKED; pull the latest `[blocked: …]` note.
+  const autoBlocked = task.blocked === true;
+  const manualBlocked = statusKey(task.status) === "blocked";
   const blockedBy = task.blockedBy || [];
-  const statusHtml = blocked
+  const statusHtml = autoBlocked
     ? `<span class="badge badge-blocked">Blocked</span> <span class="muted tiny">(prerequisites incomplete — cannot start yet)</span>`
     : `${escapeHtml(statusLabel(task.status))} (use <code>task_lifecycle</code> to transition)`;
+
+  // Blocked reason — supersedes the old raw-UUID "Blocked by" block.
+  let blockedReasonHtml = "";
+  if (autoBlocked) {
+    const names = blockedBy.length
+      ? blockedBy.map((tid) => escapeHtml(resolveTaskName(tid, nameMap))).join(", ")
+      : "upstream prerequisites";
+    blockedReasonHtml = `<div class="field-block"><label class="label">Blocked reason</label><div>Prerequisites incomplete — waiting on: ${names}</div></div>`;
+  } else if (manualBlocked) {
+    const reason = extractBlockedReason(task.notes) || "— (no reason recorded)";
+    blockedReasonHtml = `<div class="field-block"><label class="label">Blocked reason</label><div>${escapeHtml(reason)}</div></div>`;
+  }
+
+  // T3 — Dependencies surfaced here (moved out of Advanced) and rendered by
+  // task name via the T2 map, falling back to the raw id when unknown.
+  const depsHtml =
+    task.dependencies && task.dependencies.length
+      ? `<div class="field-block"><label class="label">Dependencies</label><div>${task.dependencies
+          .map((d) => {
+            const tid = typeof d === "object" ? d.taskId : d;
+            return `<a href="#/tasks/${encodeURIComponent(tid)}">${escapeHtml(resolveTaskName(tid, nameMap))}</a>`;
+          })
+          .join("<br>")}</div></div>`
+      : "";
+
   return `
         <section class="task-section" data-section="summary">
             <h3>
-                Summary
+                Task Information
                 <button type="button" class="task-section-toggle" data-toggle="summary">−</button>
             </h3>
             <div class="task-section-body">
@@ -242,61 +322,31 @@ function renderSummarySection(task) {
                     <label class="label">Status</label>
                     <div class="muted">${statusHtml}</div>
                 </div>
-                ${
-                  blocked && blockedBy.length
-                    ? `<div class="field-block"><label class="label">Blocked by</label><div>${blockedBy
-                        .map(
-                          (tid) =>
-                            `<a href="#/tasks/${encodeURIComponent(tid)}">${escapeHtml(tid)}</a>`
-                        )
-                        .join("<br>")}</div></div>`
-                    : ""
-                }
+                ${blockedReasonHtml}
                 ${task.projectId ? `<div class="field-block"><label class="label">Project</label><div>${escapeHtml(task.projectId)}</div></div>` : ""}
                 ${task.priority ? `<div class="field-block"><label class="label">Priority</label><div>${escapeHtml(task.priority)}</div></div>` : ""}
+                <div class="field-block">
+                    <label class="label">Task ID</label>
+                    <div style="font-family: var(--font-mono); font-size: 12px; word-break: break-all;">${escapeHtml(task.id)}</div>
+                </div>
+                ${
+                  task.executionOrder != null
+                    ? `<div class="field-block"><label class="label">Execution order</label><div>${escapeHtml(String(task.executionOrder))}</div></div>`
+                    : ""
+                }
+                ${depsHtml}
             </div>
         </section>
     `;
 }
 
-function renderAdvancedSection(task) {
+function renderAdvancedSection() {
+  // T3 — Task ID / Execution order / Dependencies moved to Task Information.
+  // T4 — the "Run this task (MCP)" snippet block was removed. Only the
+  // findings panel remains here.
   return `
-        <div class="field-block">
-            <label class="label">Task ID</label>
-            <div style="font-family: var(--font-mono); font-size: 12px; word-break: break-all;">${escapeHtml(task.id)}</div>
-        </div>
-        ${
-          task.executionOrder != null
-            ? `
-            <div class="field-block">
-                <label class="label">Execution order</label>
-                <div>${escapeHtml(String(task.executionOrder))}</div>
-            </div>`
-            : ""
-        }
-        ${
-          task.dependencies && task.dependencies.length
-            ? `
-            <div class="field-block">
-                <label class="label">Dependencies</label>
-                <div>${task.dependencies
-                  .map((d) => {
-                    const tid = typeof d === "object" ? d.taskId : d;
-                    return `<a href="#/tasks/${encodeURIComponent(tid)}">${escapeHtml(tid)}</a>`;
-                  })
-                  .join("<br>")}</div>
-            </div>`
-            : ""
-        }
-
-        <h4 style="margin-top: var(--space-4);">Findings</h4>
+        <h4 style="margin-top: 0;">Findings</h4>
         <div id="findings-panel"><p class="placeholder tiny">Loading findings…</p></div>
-
-        <h4 style="margin-top: var(--space-4);">Run this task (MCP)</h4>
-        <p class="muted tiny">Paste this into your agent's MCP chat to drive the lifecycle.</p>
-        <pre id="mcp-call-start"></pre>
-        <pre id="mcp-call-request-review" style="margin-top: 8px;"></pre>
-        <pre id="mcp-call-finalize" style="margin-top: 8px;"></pre>
     `;
 }
 
@@ -342,9 +392,6 @@ function attachHandlers(container, taskInitial, lock) {
     });
   });
 
-  // MCP call snippets
-  paintMcpSnippets(taskState.current);
-
   // Save (Work Definition + Context)
   const form = container.querySelector("#task-edit-form");
   form.addEventListener("submit", async (e) => {
@@ -378,8 +425,130 @@ function attachHandlers(container, taskInitial, lock) {
     });
   }
 
-  // Wave 4 §10.H — append a note (append-only audit trail)
+  // T5 — Unblock (manual block → lifecycle unblock; auto block → clear deps)
+  wireUnblock(container, taskState);
+
+  // Wave 4 §10.H — append a note; T6 — per-note hard delete.
   wireAppendNote(container, taskState);
+  wireDeleteNotes(container, taskState);
+}
+
+/**
+ * T5 — wire the header "Unblock" button. Two paths:
+ *   • manual block (status BLOCKED) → task_lifecycle(action='unblock'),
+ *     which transitions BLOCKED → PENDING and records an `[unblocked: …]`
+ *     note. clientId is optional server-side (anonymous dashboard caller).
+ *   • auto block (PENDING + blockedBy) → confirm, then clear each blocking
+ *     dependency via task_edit(action='clear_dependency'), threading the
+ *     bumped version from each response into the next call.
+ * On success → reload so every derived field (blocked, badges) re-resolves.
+ */
+function wireUnblock(container, taskState) {
+  const btn = container.querySelector("#btn-unblock");
+  if (!btn) return;
+  btn.addEventListener("click", async () => {
+    const task = taskState.current;
+    const manualBlocked = statusKey(task.status) === "blocked";
+    const autoBlocked = task.blocked === true;
+    btn.disabled = true;
+    try {
+      if (manualBlocked) {
+        await api.post("/api/tasks/lifecycle", {
+          action: "unblock",
+          taskId: task.id,
+          note: "Unblocked from dashboard to rework",
+        });
+        toast.success("Task unblocked");
+        location.reload();
+        return;
+      }
+      if (autoBlocked) {
+        const blockers = task.blockedBy || [];
+        if (!blockers.length) {
+          toast.success("No prerequisite links to clear");
+          btn.disabled = false;
+          return;
+        }
+        if (
+          !confirm("This removes the blocking prerequisite link(s) so the task can start. Proceed?")
+        ) {
+          btn.disabled = false;
+          return;
+        }
+        let version = task.version ?? 1;
+        for (const blockerId of blockers) {
+          const res = await api.post("/api/tasks/edit", {
+            action: "clear_dependency",
+            taskId: task.id,
+            dependsOn: blockerId,
+            expectedVersion: version,
+          });
+          // Thread the bumped version into the next clear so the CAS chain
+          // doesn't trip a false CONFLICT on the second+ blocker.
+          version = res.newVersion ?? res.task?.version ?? version + 1;
+        }
+        toast.success("Prerequisite link(s) cleared");
+        location.reload();
+        return;
+      }
+      btn.disabled = false;
+    } catch (err) {
+      if (err.status === 409 || err.body?.code === "CONFLICT") {
+        toast.error("Version conflict — reload the task and try again.");
+      } else {
+        toast.error("Unblock failed: " + err.message);
+      }
+      btn.disabled = false;
+    }
+  });
+}
+
+/**
+ * T6 — wire the per-note "×" delete buttons. Re-callable: after a delete (or
+ * append) the notes card is re-rendered in place, so this re-binds against
+ * whichever buttons are current. `data-note-i` indexes into a FRESH
+ * parseNotes() of the current notes — identical ordering to the render — so
+ * the click maps to the exact trimmed block text the backend expects.
+ */
+function wireDeleteNotes(container, taskState) {
+  container.querySelectorAll(".note-delete-btn").forEach((btn) => {
+    btn.addEventListener("click", async () => {
+      const entries = parseNotes(taskState.current.notes || "");
+      const entry = entries[Number(btn.dataset.noteI)];
+      if (!entry) {
+        toast.error("Note not found — reload the task and try again.");
+        return;
+      }
+      if (!confirm("Delete this note permanently?")) return;
+      btn.disabled = true;
+      try {
+        const res = await api.post("/api/tasks/edit", {
+          action: "delete_note",
+          taskId: taskState.current.id,
+          expectedVersion: taskState.current.version ?? 1,
+          noteText: entry.text,
+        });
+        const newTask = res.task;
+        if (newTask) {
+          taskState.current = newTask;
+          const card = container.querySelector("#notes-audit-card");
+          const fresh = document.createElement("div");
+          fresh.innerHTML = renderNotesAuditCard(newTask);
+          card.replaceWith(fresh.firstElementChild);
+          wireAppendNote(container, taskState); // re-bind to the new buttons
+          wireDeleteNotes(container, taskState);
+        }
+        toast.success("Note deleted");
+      } catch (err) {
+        if (err.status === 409 || err.body?.code === "CONFLICT") {
+          toast.error("Version conflict — reload the task and try again.");
+        } else {
+          toast.error("Delete failed: " + err.message);
+        }
+        btn.disabled = false;
+      }
+    });
+  });
 }
 
 /**
@@ -413,7 +582,7 @@ function wireAppendNote(container, taskState) {
         fresh.innerHTML = renderNotesAuditCard(newTask);
         card.replaceWith(fresh.firstElementChild);
         wireAppendNote(container, taskState); // re-bind to the new button
-        paintMcpSnippets(newTask);
+        wireDeleteNotes(container, taskState); // re-bind the per-note × buttons
       }
       toast.success("Note appended");
     } catch (err) {
@@ -434,66 +603,29 @@ function wireAppendNote(container, taskState) {
  * the roots array from the project's task list filtered by
  * parentTaskId.
  */
-async function loadSubtasks(container, task) {
+function loadSubtasks(container, task, allTasks) {
   const host = container.querySelector("#subtasks-card");
   if (!host) return;
-  try {
-    const { tasks } = await api.get("/api/tasks");
-    const children = tasks
-      .filter((t) => t.parentTaskId === task.id)
-      .map((t) => ({
-        id: t.id,
-        name: t.name,
-        status: t.status,
-        groupId: t.groupId ?? null,
-        parentTaskId: t.parentTaskId ?? null,
-        children: [],
-      }));
-    if (!children.length) {
-      host.innerHTML = "";
-      return;
-    }
-    host.innerHTML = `
+  // T2 — reuse the task list fetched once in mount() (no second /api/tasks).
+  const children = (allTasks || [])
+    .filter((t) => t.parentTaskId === task.id)
+    .map((t) => ({
+      id: t.id,
+      name: t.name,
+      status: t.status,
+      groupId: t.groupId ?? null,
+      parentTaskId: t.parentTaskId ?? null,
+      children: [],
+    }));
+  if (!children.length) {
+    host.innerHTML = "";
+    return;
+  }
+  host.innerHTML = `
       <div class="card">
         <h4>Subtasks (${children.length})</h4>
         ${renderTaskTree(children)}
       </div>`;
-  } catch {
-    host.innerHTML = "";
-  }
-}
-
-function paintMcpSnippets(task) {
-  const startEl = document.getElementById("mcp-call-start");
-  const reviewEl = document.getElementById("mcp-call-request-review");
-  const finalizeEl = document.getElementById("mcp-call-finalize");
-  if (!startEl) return; // Advanced section may be collapsed; HTML hidden, not removed
-  startEl.textContent = JSON.stringify(
-    { tool: "task_lifecycle", arguments: { action: "start", taskId: task.id } },
-    null,
-    2
-  );
-  reviewEl.textContent = JSON.stringify(
-    {
-      tool: "task_lifecycle",
-      arguments: { action: "request_review", taskId: task.id, reviewQuestion: "<question>" },
-    },
-    null,
-    2
-  );
-  finalizeEl.textContent = JSON.stringify(
-    {
-      tool: "task_lifecycle",
-      arguments: {
-        action: "finalize",
-        taskId: task.id,
-        expectedVersion: task.version ?? 1,
-        result: { verdict: "pass", summary: "<summary>", lessonsLearned: "<lesson>" },
-      },
-    },
-    null,
-    2
-  );
 }
 
 function collectUpdates(form) {
@@ -542,7 +674,6 @@ async function submitSave(container, form, taskState) {
     const newTask = outcome.result?.task;
     if (newTask) {
       taskState.current = newTask;
-      paintMcpSnippets(newTask);
     }
     toast.success(`Saved (v${newTask?.version ?? "?"})`);
   } catch (err) {
