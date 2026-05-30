@@ -211,7 +211,11 @@ export const ingestPlanOutputSchema = z.object({
         name: z.string().min(1),
         description: z.string().min(1),
         verificationCriteria: z.string().nullable(),
-        dependsOnPreviousIndex: z.boolean(),
+        // Indices of EARLIER tasks that must finish first (genuine
+        // prerequisites only). `.nullable()` per the strict-mode note
+        // above; the boundary normaliser in `planUpload.ts` maps
+        // `null` → `[]`.
+        dependsOnIndexes: z.array(z.number().int().nonnegative()).nullable(),
         parentIndex: z.number().int().nonnegative().nullable(),
       })
     )

@@ -72,7 +72,8 @@ export interface ParsedPlanTask {
   name: string;
   description: string;
   verificationCriteria?: string;
-  dependsOnPreviousIndex: boolean;
+  /** Indices of earlier tasks that must finish before this one starts. */
+  dependsOnIndexes: number[];
   parentIndex?: number;
 }
 
@@ -150,7 +151,7 @@ function normalizeParsedPlan(raw: unknown): ParsedPlanPayload {
       name: string;
       description: string;
       verificationCriteria?: string | null;
-      dependsOnPreviousIndex: boolean;
+      dependsOnIndexes?: number[] | null;
       parentIndex?: number | null;
     }>;
   };
@@ -161,7 +162,7 @@ function normalizeParsedPlan(raw: unknown): ParsedPlanPayload {
     name: t.name,
     description: t.description,
     verificationCriteria: t.verificationCriteria ?? undefined,
-    dependsOnPreviousIndex: t.dependsOnPreviousIndex,
+    dependsOnIndexes: t.dependsOnIndexes ?? [],
     parentIndex: t.parentIndex ?? undefined,
   }));
   return { group, tasks };
@@ -170,11 +171,26 @@ function normalizeParsedPlan(raw: unknown): ParsedPlanPayload {
 function validateTaskTree(tasks: ParsedPlanTask[]): void {
   if (tasks.length === 0) {
     throw new ValidationError("ingest_plan produced zero tasks.", {
-      hint: "Add at least one `- [ ]` checkbox bullet to the uploaded plan.",
+      hint: "Add at least one actionable item to the uploaded plan.",
     });
   }
   for (let i = 0; i < tasks.length; i += 1) {
     const t = tasks[i];
+
+    // Dependencies must reference earlier tasks (no self/forward refs or
+    // cycles). Applies to every task, parent or child.
+    for (const dep of t.dependsOnIndexes) {
+      if (dep >= i) {
+        throw new ValidationError(
+          `Task at index ${i} depends on index ${dep}, which is not earlier in the list.`,
+          {
+            hint: "Dependencies must point at tasks that appear before this one.",
+            details: { code: "VALIDATION", index: i, dependsOnIndex: dep },
+          }
+        );
+      }
+    }
+
     if (t.parentIndex === undefined) continue;
     if (t.parentIndex >= i) {
       throw new ValidationError(
@@ -435,7 +451,7 @@ export function applyPlanEdits(
     }
   }
 
-  // Re-thread parentIndex / dependsOnPreviousIndex through the dropped indices.
+  // Re-thread parentIndex / dependsOnIndexes through the dropped indices.
   // If a parent is dropped, drop all its children too (they'd dangle).
   const closed = new Set<number>(dropSet);
   let grew = true;
@@ -461,6 +477,8 @@ export function applyPlanEdits(
   }
   for (const t of survivors) {
     if (t.parentIndex !== undefined) t.parentIndex = remap[t.parentIndex];
+    // Drop deps whose target was removed, then remap the survivors.
+    t.dependsOnIndexes = t.dependsOnIndexes.filter((d) => !closed.has(d)).map((d) => remap[d]);
   }
 
   return { group, tasks: survivors };
@@ -530,18 +548,19 @@ export async function handlePlanUploadCommit(req: Request, res: Response): Promi
         });
       }
 
-      // Pre-allocate ids so `dependsOnPreviousIndex` can resolve
-      // against any predecessor regardless of insert order. Parents
-      // still go in first to avoid an FK violation on `parent_task_id`.
+      // Pre-allocate ids so `dependsOnIndexes` can resolve against any
+      // earlier task regardless of insert order. Parents still go in
+      // first to avoid an FK violation on `parent_task_id`.
       const taskIds: string[] = finalPayload.tasks.map(() => uuidv4());
       const now = new Date();
 
       const writeOne = async (i: number) => {
         const t = finalPayload.tasks[i];
-        const deps: TaskDependency[] = [];
-        if (t.dependsOnPreviousIndex && i > 0) {
-          deps.push({ taskId: taskIds[i - 1] });
-        }
+        // `validateTaskTree` guarantees every index is earlier than `i`;
+        // de-dupe so a repeated index doesn't create duplicate edges.
+        const deps: TaskDependency[] = [...new Set(t.dependsOnIndexes)].map((di) => ({
+          taskId: taskIds[di],
+        }));
         const task: Task = {
           id: taskIds[i],
           name: t.name,

@@ -12,7 +12,7 @@
  *   2. Editable plan-upload preview (planUpload) — fed the FLAT
  *      `{ group, tasks }` payload from POST /api/plan/upload/preview
  *      where each task is { name, description, verificationCriteria?,
- *      dependsOnPreviousIndex, parentIndex? }. `mountPlanEditTree`
+ *      dependsOnIndexes, parentIndex? }. `mountPlanEditTree`
  *      builds a one-level nest from `parentIndex`, lets the user rename
  *      / edit / drop rows + the group, and emits the `edits` object the
  *      commit route expects: { group?:{drop?,name?,description?},
