@@ -4,10 +4,12 @@
  * Two-step flow:
  *   1. POST /api/plan/upload/preview — JSON `{ planMarkdown, projectId,
  *      filename?, contentType? }`. LLM runs, no DB writes, returns
- *      `{ previewId, group?, tasks }`.
+ *      `{ previewId, feature?, groups, tasks }`.
  *   2. POST /api/plan/upload/commit  — JSON `{ previewId, projectId, edits? }`.
- *      Wraps the writes in `runInTransaction`: optional group → parent
- *      tasks → subtasks → dependency wiring.
+ *      Wraps the writes in `runInTransaction` (feature-hierarchy):
+ *      Feature (parent group) → section Groups → Tasks (each in its group) →
+ *      dependency wiring. After the txn, `recalculateTaskOrder` assigns
+ *      `executionOrder` so DAG nodes carry real numbers (not `0`).
  *
  * Constraints:
  *   - MIME allowlist applied to body `contentType` (else 415): text/markdown,
@@ -43,9 +45,12 @@ import { safeParseTool } from "../utils/schemaParse.js";
 import { runAgentWorkflow, WORKFLOW_MODULES, WorkflowQuotaError } from "../llm/workflows/index.js";
 import { resolveLlmConfig } from "../llm/factory.js";
 import { PROVIDER_NOT_CONFIGURED_CODE } from "../llm/providers/none.js";
+import { recalculateTaskOrder } from "../models/taskModel.js";
 import type { Task, TaskDependency } from "../types/index.js";
 import { TaskStatus } from "../types/index.js";
-import type { TaskGroup } from "../types/index.js";
+
+/** Default feature name when the plan has no title / the user drops it. */
+const DEFAULT_FEATURE_NAME = "Imported plan";
 
 const log = childLogger({ component: "plan_upload" });
 
@@ -74,7 +79,8 @@ export interface ParsedPlanTask {
   verificationCriteria?: string;
   /** Indices of earlier tasks that must finish before this one starts. */
   dependsOnIndexes: number[];
-  parentIndex?: number;
+  /** Index into `ParsedPlanPayload.groups` of the section this task belongs to. */
+  groupIndex: number;
 }
 
 export interface ParsedPlanGroup {
@@ -82,8 +88,17 @@ export interface ParsedPlanGroup {
   description?: string;
 }
 
+/** The plan's parent group — one Feature per uploaded plan. */
+export interface ParsedPlanFeature {
+  name: string;
+  description?: string;
+}
+
 export interface ParsedPlanPayload {
-  group?: ParsedPlanGroup;
+  /** Parent group for the whole plan; defaults to "Imported plan" at commit if absent. */
+  feature?: ParsedPlanFeature;
+  /** Section groups, in document order. Always at least one. */
+  groups: ParsedPlanGroup[];
   tasks: ParsedPlanTask[];
 }
 
@@ -146,39 +161,54 @@ export const __testing = {
  */
 function normalizeParsedPlan(raw: unknown): ParsedPlanPayload {
   const obj = (raw ?? {}) as {
-    group?: { name: string; description?: string | null } | null;
+    feature?: { name: string; description?: string | null } | null;
+    groups?: Array<{ name: string; description?: string | null }> | null;
     tasks?: Array<{
       name: string;
       description: string;
       verificationCriteria?: string | null;
       dependsOnIndexes?: number[] | null;
-      parentIndex?: number | null;
+      groupIndex?: number | null;
     }>;
   };
-  const group = obj.group
-    ? { name: obj.group.name, description: obj.group.description ?? undefined }
+  const feature = obj.feature
+    ? { name: obj.feature.name, description: obj.feature.description ?? undefined }
     : undefined;
+  const groups = (obj.groups ?? []).map((g) => ({
+    name: g.name,
+    description: g.description ?? undefined,
+  }));
   const tasks = (obj.tasks ?? []).map((t) => ({
     name: t.name,
     description: t.description,
     verificationCriteria: t.verificationCriteria ?? undefined,
     dependsOnIndexes: t.dependsOnIndexes ?? [],
-    parentIndex: t.parentIndex ?? undefined,
+    groupIndex: t.groupIndex ?? 0,
   }));
-  return { group, tasks };
+  return { feature, groups, tasks };
 }
 
-function validateTaskTree(tasks: ParsedPlanTask[]): void {
+/**
+ * Defensive re-check after the Zod parse (feature-hierarchy): every task must
+ * point at an existing section group, and dependencies must reference EARLIER
+ * tasks (no self/forward refs or cycles).
+ */
+function validatePlanShape(payload: ParsedPlanPayload): void {
+  const { groups, tasks } = payload;
   if (tasks.length === 0) {
     throw new ValidationError("ingest_plan produced zero tasks.", {
       hint: "Add at least one actionable item to the uploaded plan.",
     });
   }
+  if (groups.length === 0) {
+    throw new ValidationError("ingest_plan produced zero groups.", {
+      hint: "Every plan needs at least one section group for its tasks.",
+      details: { code: "VALIDATION", groups: 0 },
+    });
+  }
   for (let i = 0; i < tasks.length; i += 1) {
     const t = tasks[i];
 
-    // Dependencies must reference earlier tasks (no self/forward refs or
-    // cycles). Applies to every task, parent or child.
     for (const dep of t.dependsOnIndexes) {
       if (dep >= i) {
         throw new ValidationError(
@@ -191,27 +221,16 @@ function validateTaskTree(tasks: ParsedPlanTask[]): void {
       }
     }
 
-    if (t.parentIndex === undefined) continue;
-    if (t.parentIndex >= i) {
+    if (!Number.isInteger(t.groupIndex) || t.groupIndex < 0 || t.groupIndex >= groups.length) {
       throw new ValidationError(
-        `Task at index ${i} has parentIndex=${t.parentIndex}, which is not earlier in the list.`,
+        `Task at index ${i} has groupIndex=${t.groupIndex}, out of range [0, ${groups.length - 1}].`,
         {
-          hint: "Subtasks must follow their parent in the array.",
-          details: { code: "VALIDATION", index: i, parentIndex: t.parentIndex },
-        }
-      );
-    }
-    const parent = tasks[t.parentIndex];
-    if (parent.parentIndex !== undefined) {
-      throw new ValidationError(
-        `Task at index ${i} would be a grandchild — subtasks may only be one level deep.`,
-        {
-          hint: "Flatten the hierarchy: every subtask's parent must itself be a top-level task.",
+          hint: "Every task must reference an existing section group.",
           details: {
             code: "VALIDATION",
             index: i,
-            parentIndex: t.parentIndex,
-            grandparentIndex: parent.parentIndex,
+            groupIndex: t.groupIndex,
+            groups: groups.length,
           },
         }
       );
@@ -331,8 +350,8 @@ export async function handlePlanUploadPreview(req: Request, res: Response): Prom
     });
     const payload = normalizeParsedPlan(agentResult.object);
 
-    // 6. Defensive re-validate the tree.
-    validateTaskTree(payload.tasks);
+    // 6. Defensive re-validate the parsed plan shape.
+    validatePlanShape(payload);
 
     // 7. Stash in preview cache.
     const previewId = randomUUID();
@@ -351,7 +370,8 @@ export async function handlePlanUploadPreview(req: Request, res: Response): Prom
     res.status(200).json({
       previewId,
       projectId,
-      group: payload.group ?? null,
+      feature: payload.feature ?? null,
+      groups: payload.groups,
       tasks: payload.tasks,
       expiresAt: new Date(now + PLAN_UPLOAD_PREVIEW_TTL_MS).toISOString(),
     });
@@ -384,25 +404,33 @@ const editTaskShape = z.object({
   verificationCriteria: z.string().optional(),
 });
 
+const editGroupShape = z.object({
+  index: z.number().int().nonnegative(),
+  name: z.string().min(1).optional(),
+  description: z.string().optional(),
+});
+
 const commitBodySchema = z.object({
   previewId: z.string().min(1),
   projectId: z.string().min(1),
   edits: z
     .object({
-      group: z
+      feature: z
         .object({
           drop: z.boolean().optional(),
           name: z.string().min(1).optional(),
           description: z.string().optional(),
         })
         .optional(),
+      groups: z.array(editGroupShape).optional(),
       tasks: z.array(editTaskShape).optional(),
     })
     .optional(),
 });
 
 interface CommitResultBody {
-  groupId: string | null;
+  featureId: string;
+  groupIds: string[];
   taskIds: string[];
   insertedCount: number;
   droppedIndices: number[];
@@ -415,21 +443,38 @@ export function applyPlanEdits(
 ): ParsedPlanPayload {
   if (!edits) return payload;
 
-  let group = payload.group;
-  if (edits.group) {
-    if (edits.group.drop) {
-      group = undefined;
-    } else if (group) {
-      group = {
-        name: edits.group.name ?? group.name,
-        description: edits.group.description ?? group.description,
+  // ── Feature: rename, or drop → fall back to the default name at commit. ──
+  let feature = payload.feature;
+  if (edits.feature) {
+    if (edits.feature.drop) {
+      feature = undefined;
+    } else if (feature) {
+      feature = {
+        name: edits.feature.name ?? feature.name,
+        description: edits.feature.description ?? feature.description,
       };
-    } else if (edits.group.name) {
-      group = { name: edits.group.name, description: edits.group.description };
+    } else if (edits.feature.name) {
+      feature = { name: edits.feature.name, description: edits.feature.description };
     }
   }
 
-  // Apply per-task patches by index, then drop and re-thread parentIndex.
+  // ── Group renames by index (sections are never dropped directly; an empty
+  //    group is pruned below once all its tasks are removed). ──
+  const groups = payload.groups.map((g) => ({ ...g }));
+  for (const patch of edits.groups ?? []) {
+    if (patch.index >= groups.length) {
+      throw new ValidationError(
+        `edits.groups[*].index ${patch.index} is out of range (have ${groups.length} groups).`,
+        { hint: "Re-fetch the preview before committing." }
+      );
+    }
+    const g = groups[patch.index];
+    if (patch.name) g.name = patch.name;
+    if (patch.description !== undefined) g.description = patch.description;
+  }
+
+  // ── Per-task patches + drops. groupIndex points at groups[] (stable across
+  //    task drops), so only dependsOnIndexes needs re-threading here. ──
   const patched = payload.tasks.map((t) => ({ ...t }));
   const dropSet = new Set<number>();
   for (const patch of edits.tasks ?? []) {
@@ -451,37 +496,32 @@ export function applyPlanEdits(
     }
   }
 
-  // Re-thread parentIndex / dependsOnIndexes through the dropped indices.
-  // If a parent is dropped, drop all its children too (they'd dangle).
-  const closed = new Set<number>(dropSet);
-  let grew = true;
-  while (grew) {
-    grew = false;
-    for (let i = 0; i < patched.length; i += 1) {
-      if (closed.has(i)) continue;
-      const t = patched[i];
-      if (t.parentIndex !== undefined && closed.has(t.parentIndex)) {
-        closed.add(i);
-        grew = true;
-      }
-    }
-  }
-
-  // Build the survivor list and an old→new index map.
-  const remap: Record<number, number> = {};
+  // Build the task survivor list and an old→new task-index map; remap deps.
+  const taskRemap: Record<number, number> = {};
   const survivors: ParsedPlanTask[] = [];
   for (let i = 0; i < patched.length; i += 1) {
-    if (closed.has(i)) continue;
-    remap[i] = survivors.length;
+    if (dropSet.has(i)) continue;
+    taskRemap[i] = survivors.length;
     survivors.push(patched[i]);
   }
   for (const t of survivors) {
-    if (t.parentIndex !== undefined) t.parentIndex = remap[t.parentIndex];
-    // Drop deps whose target was removed, then remap the survivors.
-    t.dependsOnIndexes = t.dependsOnIndexes.filter((d) => !closed.has(d)).map((d) => remap[d]);
+    t.dependsOnIndexes = t.dependsOnIndexes.filter((d) => !dropSet.has(d)).map((d) => taskRemap[d]);
   }
 
-  return { group, tasks: survivors };
+  // Prune groups left with zero surviving tasks, then re-thread groupIndex
+  // through the surviving groups (this is the groupIndex re-threading the
+  // feature-hierarchy plan calls for).
+  const usedGroups = new Set<number>(survivors.map((t) => t.groupIndex));
+  const groupRemap: Record<number, number> = {};
+  const survivingGroups: ParsedPlanGroup[] = [];
+  for (let g = 0; g < groups.length; g += 1) {
+    if (!usedGroups.has(g)) continue;
+    groupRemap[g] = survivingGroups.length;
+    survivingGroups.push(groups[g]);
+  }
+  for (const t of survivors) t.groupIndex = groupRemap[t.groupIndex];
+
+  return { feature, groups: survivingGroups, tasks: survivors };
 }
 
 export async function handlePlanUploadCommit(req: Request, res: Response): Promise<void> {
@@ -530,7 +570,7 @@ export async function handlePlanUploadCommit(req: Request, res: Response): Promi
 
     // Apply edits and re-validate before writing.
     const finalPayload = applyPlanEdits(entry.payload, edits);
-    validateTaskTree(finalPayload.tasks);
+    validatePlanShape(finalPayload);
 
     // Drop preview before the writes — if the commit fails the caller
     // gets a clean error and a fresh preview, not a half-applied state.
@@ -539,24 +579,36 @@ export async function handlePlanUploadCommit(req: Request, res: Response): Promi
     const dropped = entry.payload.tasks.length - finalPayload.tasks.length;
 
     const result = await db.runInTransaction<CommitResultBody>(async () => {
-      let groupRecord: TaskGroup | null = null;
-      if (finalPayload.group) {
-        groupRecord = await db.createGroup({
+      // 1. Feature — one parent group for the whole plan (parentGroupId omitted
+      //    ⇒ stored NULL). Default name when the plan had no title / was dropped.
+      const feature = await db.createGroup({
+        projectId,
+        name: finalPayload.feature?.name ?? DEFAULT_FEATURE_NAME,
+        description: finalPayload.feature?.description,
+      });
+
+      // 2. Section groups — children of the feature, ordered by document order.
+      const sectionGroupIds: string[] = [];
+      for (let g = 0; g < finalPayload.groups.length; g += 1) {
+        const grp = await db.createGroup({
           projectId,
-          name: finalPayload.group.name,
-          description: finalPayload.group.description,
+          name: finalPayload.groups[g].name,
+          description: finalPayload.groups[g].description,
+          parentGroupId: feature.id,
+          executionOrder: g,
         });
+        sectionGroupIds.push(grp.id);
       }
 
-      // Pre-allocate ids so `dependsOnIndexes` can resolve against any
-      // earlier task regardless of insert order. Parents still go in
-      // first to avoid an FK violation on `parent_task_id`.
+      // 3. Tasks — pre-allocate ids so `dependsOnIndexes` resolves against any
+      //    earlier task. No parentTaskId from ingest; each task lives in its
+      //    section group. A single forward pass suffices since deps only point
+      //    at earlier tasks (already written by the time we reach `i`).
       const taskIds: string[] = finalPayload.tasks.map(() => uuidv4());
       const now = new Date();
 
-      const writeOne = async (i: number) => {
+      for (let i = 0; i < finalPayload.tasks.length; i += 1) {
         const t = finalPayload.tasks[i];
-        // `validateTaskTree` guarantees every index is earlier than `i`;
         // de-dupe so a repeated index doesn't create duplicate edges.
         const deps: TaskDependency[] = [...new Set(t.dependsOnIndexes)].map((di) => ({
           taskId: taskIds[di],
@@ -571,34 +623,38 @@ export async function handlePlanUploadCommit(req: Request, res: Response): Promi
           updatedAt: now,
           projectId,
           verificationCriteria: t.verificationCriteria,
-          groupId: groupRecord?.id,
-          ...(t.parentIndex !== undefined ? { parentTaskId: taskIds[t.parentIndex] } : {}),
+          groupId: sectionGroupIds[t.groupIndex],
         };
         await db.saveTask(task);
-      };
-
-      // Two passes by parent/child role so parent rows exist before
-      // FK-referencing child rows hit `tasks.parent_task_id`.
-      for (let i = 0; i < finalPayload.tasks.length; i += 1) {
-        if (finalPayload.tasks[i].parentIndex === undefined) await writeOne(i);
-      }
-      for (let i = 0; i < finalPayload.tasks.length; i += 1) {
-        if (finalPayload.tasks[i].parentIndex !== undefined) await writeOne(i);
       }
 
       return {
-        groupId: groupRecord?.id ?? null,
+        featureId: feature.id,
+        groupIds: sectionGroupIds,
         taskIds,
         insertedCount: taskIds.length,
         droppedIndices: Array.from({ length: dropped }, (_, k) => k),
       };
     });
 
+    // After the txn: assign executionOrder so the DAG nodes carry real
+    // numbers (root cause #2 — the `0` badge). Outside the txn so a recalc
+    // hiccup can't roll back a successful commit.
+    try {
+      await recalculateTaskOrder(projectId);
+    } catch (recalcErr) {
+      log.warn(
+        { err: (recalcErr as Error)?.message, projectId, correlationId },
+        "recalculateTaskOrder after plan commit failed (tasks committed; ordering deferred)"
+      );
+    }
+
     log.info(
       {
         previewId,
         projectId,
-        groupId: result.groupId,
+        featureId: result.featureId,
+        groupCount: result.groupIds.length,
         insertedCount: result.insertedCount,
         correlationId,
       },

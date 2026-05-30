@@ -362,23 +362,23 @@ const GENERATE_RELEASE_SUMMARY: WorkflowDefinition = {
 
 const INGEST_PLAN: WorkflowDefinition = {
   purpose:
-    "Parse an uploaded markdown plan into a structured task tree the server can ingest. Used internally by POST /api/plan/upload/preview — not typically invoked directly by agents.",
+    "Parse an uploaded markdown plan into a Feature → Group → Task hierarchy the server can ingest. Used internally by POST /api/plan/upload/preview — not typically invoked directly by agents.",
   inputRequired: [
     "planMarkdown: the raw markdown body uploaded by the user",
     "projectName: the destination project's name (for context)",
   ],
   steps: [
-    "1. Identify a document title / `# Feature: <name>` → optional group.name.",
-    "2. Map each section heading or top-level unit of work → a top-level task; the steps under it → one-level subtasks (parentIndex).",
-    "3. Decompose coarse sections into right-sized (~½–1 day) tasks; never split an already-atomic item or pad with work the plan omits.",
-    "4. Flatten any nesting deeper than one level up into the nearest section task (never emit a grandchild, never error).",
+    "1. Identify a document title / `# Feature: <name>` → `feature` { name, description } (null if absent).",
+    "2. Map each `##`/`###` section → an entry in `groups[]`, in document order (a section-less plan → a single group).",
+    "3. Map the steps/bullets under a section → entries in `tasks[]`, each with groupIndex into groups[] (no subtask nesting; parentIndex is retired).",
+    "4. Decompose coarse sections into right-sized (~½–1 day) tasks within the same group; never split an already-atomic item or pad with work the plan omits.",
     "5. Set dependsOnIndexes to earlier tasks that must finish first — genuine prerequisites only; independent tasks get [].",
   ],
   outputSchema: toJsonSchema(ingestPlanOutputSchema),
   qualityChecklist: [
     "Were coarse sections decomposed into right-sized tasks (not one giant task, not over-split)?",
     "Does every task have a concrete name, description, and verificationCriteria?",
-    "Are subtasks one level deep, and do all dependsOnIndexes point at earlier tasks?",
+    "Does every task have a valid groupIndex, and do all dependsOnIndexes point at earlier tasks?",
   ],
   nextRecommendedCalls: [
     "// internal: handler stores result in preview cache then issues task_edit(action='create') in a transaction",

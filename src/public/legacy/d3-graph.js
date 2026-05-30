@@ -125,8 +125,12 @@ export function createDependencyGraph(container, { onNodeClick } = {}) {
       return {
         id: t.id,
         name: t.name,
-        status: t.status,
+        // feature-hierarchy Workstream C: prefer the derived effectiveStatus so
+        // a PENDING-but-dependency-blocked task colours as Blocked.
+        status: t.effectiveStatus ?? t.status,
         executionOrder: t.executionOrder,
+        // feature-hierarchy: derived `<g>.<t>` number from /api/tasks.
+        displayNumber: t.displayNumber ?? null,
         x: prev?.x,
         y: prev?.y,
         fx: prev?.fx,
@@ -198,7 +202,15 @@ export function createDependencyGraph(container, { onNodeClick } = {}) {
       .attr("font-size", "11px")
       .attr("font-weight", "700")
       .attr("fill", "#fff")
-      .text((d) => (typeof d.executionOrder === "number" ? d.executionOrder : "?"));
+      // feature-hierarchy: prefer the derived `<g>.<t>` number; fall back to
+      // the raw executionOrder, then "?" — never a bare 0 from a missing field.
+      .text((d) =>
+        d.displayNumber != null
+          ? d.displayNumber
+          : typeof d.executionOrder === "number"
+            ? d.executionOrder
+            : "?"
+      );
     enter
       .append("text")
       .attr("class", "node-name")

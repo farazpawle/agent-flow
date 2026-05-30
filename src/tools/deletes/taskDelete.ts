@@ -15,7 +15,7 @@
  */
 
 import { db } from "../../models/db.js";
-import { ForbiddenError, NotFoundError, ValidationError } from "../../utils/errors.js";
+import { ForbiddenError, NotFoundError } from "../../utils/errors.js";
 import { withToolTelemetry } from "../../utils/telemetry.js";
 import { writeDestructiveAudit } from "../../utils/auditLog.js";
 import { isInvokedFrom } from "../../utils/callerContext.js";
@@ -23,6 +23,16 @@ import type { Task } from "../../types/index.js";
 import type { TaskDeleteInput } from "./schemas.js";
 
 const SAMPLE_LIMIT = 5;
+
+// feature-hierarchy Workstream A: `reason` is no longer a user input. The
+// append-only audit trail still needs a value, so the server supplies a
+// fixed, action-specific reason on every confirmed execute. Accurate whether
+// the call comes from the dashboard or an MCP client.
+const DEFAULT_DELETE_REASON: Record<TaskDeleteInput["action"], string> = {
+  delete_one: "Single task deleted (confirmed via task_delete)",
+  delete_many: "Multiple tasks deleted (confirmed via task_delete)",
+  clear_all_for_project: "All project tasks cleared (confirmed via task_delete)",
+};
 
 function asToolText(payload: unknown) {
   return {
@@ -76,14 +86,15 @@ async function handleDeleteOne(input: Extract<TaskDeleteInput, { action: "delete
       mode: "dry_run",
       affectedTaskCount: 1,
       affectedTaskSample: [{ id: task.id, name: task.name, status: task.status }],
-      note: "No writes. Re-call with mode='execute', reason, confirm=true to proceed.",
+      note: "No writes. Re-call with mode='execute', confirm=true to proceed.",
     });
   }
 
+  const reason = DEFAULT_DELETE_REASON.delete_one;
   await writeDestructiveAudit({
     tool: "task_delete",
     projectId: task.projectId ?? "(orphan)",
-    reason: input.reason,
+    reason,
     affectedIds: [task.id],
     metadata: { action: "delete_one" },
   });
@@ -93,7 +104,7 @@ async function handleDeleteOne(input: Extract<TaskDeleteInput, { action: "delete
     mode: "execute",
     deleted: true,
     taskId: task.id,
-    reason: input.reason,
+    reason,
   });
 }
 
@@ -120,15 +131,16 @@ async function handleDeleteMany(input: Extract<TaskDeleteInput, { action: "delet
         name: t.name,
         status: t.status,
       })),
-      note: "No writes. Re-call with mode='execute', reason, confirm=true to proceed.",
+      note: "No writes. Re-call with mode='execute', confirm=true to proceed.",
     });
   }
 
   const projectId = pickProjectIdFor(tasks) ?? "(orphan)";
+  const reason = DEFAULT_DELETE_REASON.delete_many;
   await writeDestructiveAudit({
     tool: "task_delete",
     projectId,
-    reason: input.reason,
+    reason,
     affectedIds: tasks.map((t) => t.id),
     metadata: { action: "delete_many", requestedCount: input.taskIds.length },
   });
@@ -142,7 +154,7 @@ async function handleDeleteMany(input: Extract<TaskDeleteInput, { action: "delet
     action: "delete_many",
     mode: "execute",
     deletedTaskCount: deleted,
-    reason: input.reason,
+    reason,
   });
 }
 
@@ -167,21 +179,15 @@ async function handleClearAll(
         name: t.name,
         status: t.status,
       })),
-      note: "No writes. Re-call with mode='execute', reason (≥20 chars), confirm=true to proceed.",
+      note: "No writes. Re-call with mode='execute', confirm=true to proceed.",
     });
   }
 
-  // Defence in depth — schema already enforces, but a runtime check
-  // here means any future refactor that bypasses the schema still
-  // hits the floor.
-  if (input.reason.length < 20) {
-    throw new ValidationError("clear_all_for_project execute requires reason ≥ 20 characters.");
-  }
-
+  const reason = DEFAULT_DELETE_REASON.clear_all_for_project;
   await writeDestructiveAudit({
     tool: "task_delete",
     projectId: project.id,
-    reason: input.reason,
+    reason,
     affectedIds: tasks.map((t) => t.id),
     metadata: {
       action: "clear_all_for_project",
@@ -196,7 +202,7 @@ async function handleClearAll(
     mode: "execute",
     projectId: project.id,
     deletedTaskCount: tasks.length,
-    reason: input.reason,
+    reason,
   });
 }
 

@@ -198,13 +198,30 @@ export const detectDuplicatesOutputSchema = z.object({
 // requires every property to appear in `required`. The boundary normaliser
 // in `src/http/planUpload.ts` maps `null` back to `undefined` for the
 // `ParsedPlanPayload` consumers.
+// feature-hierarchy: the ingest emits Feature → Group → Task instead of the
+// old flat task→subtask tree.
+//   - `feature`  → one parent group for the whole plan (a `# Feature:`/H1 or
+//     the plan title). `null` when the plan has no obvious title.
+//   - `groups[]` → the plan's `##`/`###` sections, in document order. At least
+//     one group is always emitted (a section-less plan collapses to a single
+//     group). Each task points at one via `groupIndex`.
+//   - `tasks[]`  → the work items, each carrying a `groupIndex` into `groups[]`
+//     (replaces the old `parentIndex` into `tasks[]`).
 export const ingestPlanOutputSchema = z.object({
-  group: z
+  feature: z
     .object({
       name: z.string().min(1),
       description: z.string().nullable(),
     })
     .nullable(),
+  groups: z
+    .array(
+      z.object({
+        name: z.string().min(1),
+        description: z.string().nullable(),
+      })
+    )
+    .min(1),
   tasks: z
     .array(
       z.object({
@@ -216,7 +233,8 @@ export const ingestPlanOutputSchema = z.object({
         // above; the boundary normaliser in `planUpload.ts` maps
         // `null` → `[]`.
         dependsOnIndexes: z.array(z.number().int().nonnegative()).nullable(),
-        parentIndex: z.number().int().nonnegative().nullable(),
+        // Index into `groups[]` of the section this task belongs to.
+        groupIndex: z.number().int().nonnegative(),
       })
     )
     .min(1),

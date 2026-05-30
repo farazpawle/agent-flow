@@ -209,9 +209,13 @@ function renderTasks(tasks) {
     activeProjectId === "all" ? tasks : tasks.filter((t) => t.projectId === activeProjectId);
   const buckets = { pending: [], in_progress: [], completed: [], blocked: [] };
   for (const t of filtered) {
+    // feature-hierarchy Workstream C: a derived-blocked task (PENDING with
+    // incomplete deps) carries effectiveStatus="Blocked" — bucket by that so
+    // it lands in the Blocked column instead of Pending.
+    const colStatus = t.effectiveStatus ?? t.status;
     let placed = false;
     for (const col of COLUMNS) {
-      if (col.match(t.status)) {
+      if (col.match(colStatus)) {
         buckets[col.key].push(t);
         placed = true;
         break;
@@ -234,6 +238,13 @@ function renderTasks(tasks) {
   // Attach drag handlers + click-to-detail
   document.querySelectorAll(".kanban-card").forEach((card) => {
     card.addEventListener("dragstart", (e) => {
+      // feature-hierarchy Workstream C: blocked cards can't be moved (status
+      // change is gated server-side). Cancel the drag defensively even though
+      // the element is also draggable="false".
+      if (card.dataset.blocked === "true") {
+        e.preventDefault();
+        return;
+      }
       e.dataTransfer.setData("text/task-id", card.dataset.id);
       card.classList.add("dragging");
     });
@@ -247,10 +258,17 @@ function renderTasks(tasks) {
 function taskCard(t) {
   const proj = projectsCache.find((p) => p.id === t.projectId);
   const updated = t.updatedAt ? formatRelative(t.updatedAt) : "";
+  const blocked = t.blocked === true;
+  const num = t.displayNumber
+    ? `<span class="kanban-card-num muted tiny">${escapeHtml(String(t.displayNumber))}</span> `
+    : "";
   return `
-    <div class="kanban-card" draggable="true" data-id="${escapeHtml(t.id)}">
-      <div class="kanban-card-title">${escapeHtml(t.name)}</div>
+    <div class="kanban-card ${blocked ? "is-blocked" : ""}" draggable="${blocked ? "false" : "true"}"
+         data-id="${escapeHtml(t.id)}" data-blocked="${blocked ? "true" : "false"}"
+         ${blocked ? `title="Blocked — prerequisites incomplete"` : ""}>
+      <div class="kanban-card-title">${num}${escapeHtml(t.name)}</div>
       <div class="kanban-card-meta">
+        ${blocked ? `<span class="badge badge-blocked">Blocked</span>` : ""}
         ${proj ? `<span>${escapeHtml(proj.name)}</span>` : ""}
         ${updated ? `<span>· ${escapeHtml(updated)}</span>` : ""}
       </div>

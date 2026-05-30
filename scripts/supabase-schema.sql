@@ -18,16 +18,25 @@ create table if not exists projects (
 );
 
 -- Wave 1 §10.D — Task Groups Table (created before `tasks` so the FK resolves).
+-- feature-hierarchy: `parent_group_id` makes the table self-referential — a
+-- Feature is a row with parent_group_id IS NULL; a section Group points at its
+-- feature. ON DELETE CASCADE removes child groups when a feature is deleted.
 create table if not exists task_groups (
     id text primary key,
     project_id text not null references projects(id) on delete cascade,
     name text not null,
     description text,
     status text not null default 'active',
+    parent_group_id text references task_groups(id) on delete cascade,
+    execution_order integer default 0,
     created_at timestamptz not null default now(),
     updated_at timestamptz not null default now()
 );
+-- Idempotent migration for existing deployments (run in the Supabase SQL editor).
+alter table task_groups add column if not exists parent_group_id text references task_groups(id) on delete cascade;
+alter table task_groups add column if not exists execution_order integer default 0;
 create index if not exists idx_task_groups_project on task_groups(project_id);
+create index if not exists idx_task_groups_parent on task_groups(parent_group_id);
 
 -- Tasks Table
 create table if not exists tasks (

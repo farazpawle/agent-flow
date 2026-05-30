@@ -14,7 +14,12 @@
  */
 
 import { db } from "../../models/db.js";
-import { findAvailableTasks, searchTasksWithCommand } from "../../models/taskModel.js";
+import {
+  findAvailableTasks,
+  searchTasksWithCommand,
+  canExecuteTask,
+} from "../../models/taskModel.js";
+import { computeDisplayNumbers } from "../../models/numbering.js";
 import { TaskGraph } from "../../utils/taskGraph.js";
 import { NotFoundError } from "../../utils/errors.js";
 import { withToolTelemetry } from "../../utils/telemetry.js";
@@ -106,7 +111,21 @@ async function dispatch(input: TaskViewInput) {
               expiresAt: task.claimExpiresAt ? task.claimExpiresAt.toISOString() : null,
             }
           : null;
-      return asToolText({ action: "get", task: withVersion, lock });
+      // feature-hierarchy Workstream C — derived auto-BLOCKED. A PENDING task
+      // whose deps aren't all COMPLETED is shown as "Blocked" without mutating
+      // the row, so it clears automatically once a dependency finalizes.
+      const gate =
+        task.status === TaskStatus.PENDING
+          ? await canExecuteTask(task.id)
+          : { canExecute: true, blockedBy: undefined as string[] | undefined };
+      const blocked = task.status === TaskStatus.PENDING && !gate.canExecute;
+      const enriched = {
+        ...withVersion,
+        blocked,
+        blockedBy: blocked ? (gate.blockedBy ?? []) : [],
+        effectiveStatus: blocked ? "Blocked" : String(task.status),
+      };
+      return asToolText({ action: "get", task: enriched, lock });
     }
 
     case "search": {
@@ -169,6 +188,11 @@ async function dispatch(input: TaskViewInput) {
     // hydrate individual tasks via `task_view(action='get')`.
     case "tree": {
       const all = await db.getAllTasks(input.projectId);
+      // feature-hierarchy: derive per-feature `<g>.<t>` numbers from the full
+      // project (groups + tasks) so the displayed number is stable even when
+      // the tree is narrowed to one group.
+      const groups = input.projectId ? await db.listGroups(input.projectId) : [];
+      const { taskNumbers } = computeDisplayNumbers(groups, all);
       const inGroup = input.groupId ? all.filter((t) => t.groupId === input.groupId) : all;
       type TreeNode = {
         id: string;
@@ -176,6 +200,7 @@ async function dispatch(input: TaskViewInput) {
         status: string;
         groupId: string | null;
         parentTaskId: string | null;
+        displayNumber: string | null;
         children: TreeNode[];
       };
       const nodes = new Map<string, TreeNode>();
@@ -186,6 +211,7 @@ async function dispatch(input: TaskViewInput) {
           status: String(t.status),
           groupId: t.groupId ?? null,
           parentTaskId: t.parentTaskId ?? null,
+          displayNumber: taskNumbers.get(t.id) ?? null,
           children: [],
         });
       }
@@ -218,13 +244,20 @@ async function dispatch(input: TaskViewInput) {
         limit: input.limit,
         clientId: input.clientId,
       });
+      // Look up each available task's derived number from the full project.
+      const all = await db.getAllTasks(input.projectId);
+      const groups = input.projectId ? await db.listGroups(input.projectId) : [];
+      const { taskNumbers } = computeDisplayNumbers(groups, all);
       return asToolText({
         action: "available",
         projectId: input.projectId,
         groupId: input.groupId ?? null,
         count: result.tasks.length,
         truncated: result.truncated,
-        tasks: result.tasks,
+        tasks: result.tasks.map((t) => ({
+          ...t,
+          displayNumber: taskNumbers.get(t.id) ?? null,
+        })),
       });
     }
   }

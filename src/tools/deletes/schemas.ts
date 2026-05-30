@@ -7,11 +7,11 @@
  * Safety contract per plan §3.3 / §3.6:
  *   - `mode = "dry_run"` is frictionless — no `confirm`, no `reason`.
  *     Returns affected count + sample so callers can sanity-check.
- *   - `mode = "execute"` requires `reason` (min length depends on scope)
- *     and a literal `confirm: true`. A schema-level literal makes
- *     "pasted defaults" impossible to slip through.
- *   - `clear_all_for_project` raises the reason floor to 20 chars
- *     because the blast radius is larger.
+ *   - `mode = "execute"` requires only a literal `confirm: true`. A
+ *     schema-level literal makes "pasted defaults" impossible to slip
+ *     through. The audit `reason` is no longer typed by the user —
+ *     `task_delete` fills it server-side (feature-hierarchy Workstream A:
+ *     single-confirm delete). `project_delete` still requires a typed reason.
  *
  * The schemas are co-located so the audit-script (Group 6.7) can scan a
  * single file when verifying no other code path can reach mass-delete.
@@ -81,7 +81,6 @@ export const taskDeleteSchema = z.discriminatedUnion("op", [
     action: z.literal("delete_one"),
     mode: z.literal("execute"),
     taskId: z.string().min(1),
-    reason: z.string().min(10),
     confirm: z.literal(true),
   }),
 
@@ -97,7 +96,6 @@ export const taskDeleteSchema = z.discriminatedUnion("op", [
     action: z.literal("delete_many"),
     mode: z.literal("execute"),
     taskIds: z.array(z.string().min(1)).min(1),
-    reason: z.string().min(10),
     confirm: z.literal(true),
   }),
 
@@ -113,10 +111,6 @@ export const taskDeleteSchema = z.discriminatedUnion("op", [
     action: z.literal("clear_all_for_project"),
     mode: z.literal("execute"),
     projectId: z.string().min(1),
-    reason: z.string().min(20, {
-      message:
-        "clear_all_for_project execute requires reason ≥ 20 chars — larger blast radius needs a longer justification.",
-    }),
     confirm: z.literal(true),
   }),
 ]);

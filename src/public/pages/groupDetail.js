@@ -30,10 +30,12 @@ export async function mount(container, { params, query } = {}) {
   // Resolve the owning project.
   let projectId = query && query.project ? query.project : null;
   let group = null;
+  let feature = null;
   try {
     const resolved = await resolveGroup(groupId, projectId);
     projectId = resolved.projectId;
     group = resolved.group;
+    feature = resolved.feature;
   } catch (err) {
     container.innerHTML = `<div class="page-empty error"><h2>Group not found</h2><p>${escapeHtml(err.message)}</p><a class="btn btn-primary" href="#/projects">Back to projects</a></div>`;
     return;
@@ -43,11 +45,16 @@ export async function mount(container, { params, query } = {}) {
   const countChips = Object.entries(counts)
     .map(([k, v]) => `<span class="badge badge-default">${escapeHtml(k)}: ${v}</span>`)
     .join(" ");
+  // feature-hierarchy: breadcrumb to the parent feature + the derived `<g>` number.
+  const featureCrumb = feature
+    ? `<span class="muted tiny">${escapeHtml(feature.name)} ›</span> `
+    : "";
+  const numPrefix = group.displayNumber ? `${escapeHtml(String(group.displayNumber))}. ` : "";
 
   container.innerHTML = `
     <div class="page-header">
       <div>
-        <h1>${escapeHtml(group.name)}</h1>
+        <h1>${featureCrumb}${numPrefix}${escapeHtml(group.name)}</h1>
         <div class="page-subtitle">${escapeHtml(group.description || "No description")} ${countChips}</div>
       </div>
       <div class="page-actions">
@@ -96,11 +103,24 @@ export function unmount() {
   }
 }
 
+// feature-hierarchy: groups_list nests sections under their feature, so search
+// both top-level entries and their `children`. Returns the parent feature when
+// the match is a section.
+function findGroupInList(groups, groupId) {
+  for (const f of groups || []) {
+    if (f.id === groupId) return { group: f, feature: null };
+    for (const c of f.children || []) {
+      if (c.id === groupId) return { group: c, feature: f };
+    }
+  }
+  return null;
+}
+
 async function resolveGroup(groupId, projectId) {
   if (projectId) {
     const res = await api.post("/api/projects/view", { action: "groups_list", projectId });
-    const group = (res.groups || []).find((g) => g.id === groupId);
-    if (group) return { projectId, group };
+    const found = findGroupInList(res.groups, groupId);
+    if (found) return { projectId, ...found };
   }
   // Fallback: scan projects for the group.
   const { projects = [] } = await api.get("/api/projects").catch(() => ({ projects: [] }));
@@ -108,8 +128,8 @@ async function resolveGroup(groupId, projectId) {
     const res = await api
       .post("/api/projects/view", { action: "groups_list", projectId: p.id })
       .catch(() => ({ groups: [] }));
-    const group = (res.groups || []).find((g) => g.id === groupId);
-    if (group) return { projectId: p.id, group };
+    const found = findGroupInList(res.groups, groupId);
+    if (found) return { projectId: p.id, ...found };
   }
   throw new Error(`Group ${groupId} not found in any project.`);
 }

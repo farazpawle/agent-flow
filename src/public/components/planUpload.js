@@ -24,14 +24,14 @@ const ACCEPT_EXT = /\.(md|markdown|txt)$/i;
  * @param {{
  *   projectId: string,
  *   providerConfigured: boolean,
- *   onCommitted?: (result: { groupId: string|null, taskIds: string[] }) => void
+ *   onCommitted?: (result: { featureId: string, groupIds: string[], taskIds: string[], insertedCount: number }) => void
  * }} opts
  */
 export function mountPlanUpload(container, opts) {
   const { projectId, providerConfigured } = opts;
   const onCommitted = opts.onCommitted || (() => {});
 
-  let preview = null; // { previewId, group, tasks, expiresAt }
+  let preview = null; // { previewId, feature, groups, tasks, expiresAt }
   let editTree = null; // handle from mountPlanEditTree
 
   function renderDropzone() {
@@ -124,11 +124,12 @@ export function mountPlanUpload(container, opts) {
 
   function renderPreview() {
     const taskCount = preview.tasks?.length ?? 0;
+    const groupCount = preview.groups?.length ?? 0;
     container.innerHTML = `
       <div class="plan-preview">
         <div class="plan-preview-header">
-          <h4>Preview — ${taskCount} task${taskCount === 1 ? "" : "s"}</h4>
-          <p class="muted tiny">Rename, edit, or remove rows below, then commit. Removing a parent removes its subtasks. (Adding new rows isn't supported — re-upload an edited plan instead.)</p>
+          <h4>Preview — ${groupCount} group${groupCount === 1 ? "" : "s"}, ${taskCount} task${taskCount === 1 ? "" : "s"}</h4>
+          <p class="muted tiny">Rename the feature/groups, edit or remove tasks below, then commit. Emptying a group drops it. (Adding new rows isn't supported — re-upload an edited plan instead.)</p>
         </div>
         <div id="plan-edit-tree"></div>
         <div class="page-actions" style="justify-content:flex-end; margin-top: var(--space-3);">
@@ -138,7 +139,8 @@ export function mountPlanUpload(container, opts) {
       </div>`;
 
     editTree = mountPlanEditTree(container.querySelector("#plan-edit-tree"), {
-      group: preview.group,
+      feature: preview.feature,
+      groups: preview.groups,
       tasks: preview.tasks,
     });
 

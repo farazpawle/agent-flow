@@ -9,14 +9,16 @@
  *      task detail page. `treeToMarkdown` serialises the same shape to a
  *      `- [ ]` / `- [x]` checkbox list (4.3.5).
  *
- *   2. Editable plan-upload preview (planUpload) — fed the FLAT
- *      `{ group, tasks }` payload from POST /api/plan/upload/preview
+ *   2. Editable plan-upload preview (planUpload) — fed the
+ *      `{ feature, groups, tasks }` payload from POST /api/plan/upload/preview
  *      where each task is { name, description, verificationCriteria?,
- *      dependsOnIndexes, parentIndex? }. `mountPlanEditTree`
- *      builds a one-level nest from `parentIndex`, lets the user rename
- *      / edit / drop rows + the group, and emits the `edits` object the
- *      commit route expects: { group?:{drop?,name?,description?},
- *      tasks?:[{index,drop?,name?,description?,verificationCriteria?}] }.
+ *      dependsOnIndexes, groupIndex }. `mountPlanEditTree` (feature-hierarchy)
+ *      renders Feature → section Groups → Tasks, lets the user rename / edit /
+ *      drop rows + rename the feature/groups, and emits the `edits` object the
+ *      commit route expects:
+ *        { feature?:{drop?,name?,description?},
+ *          groups?:[{index,name?,description?}],
+ *          tasks?:[{index,drop?,name?,description?,verificationCriteria?}] }.
  *
  *      The commit API only supports patch + drop on existing preview
  *      indices — there is no "add" verb — so the edit tree deliberately
@@ -63,11 +65,15 @@ function taskNodeHtml(node, linkTasks) {
     Array.isArray(node.children) && node.children.length
       ? `<ul>${node.children.map((c) => taskNodeHtml(c, linkTasks)).join("")}</ul>`
       : "";
+  // feature-hierarchy: show the derived `<g>.<t>` number when present.
+  const num = node.displayNumber
+    ? `<span class="tree-num muted tiny">${escapeHtml(String(node.displayNumber))}</span> `
+    : "";
   return `
     <li class="tree-node" data-id="${escapeHtml(node.id || "")}">
       <span class="tree-row">
         <span class="tree-marker tree-marker-${sKey}" aria-hidden="true">${markerFor(node.status)}</span>
-        <span class="tree-label">${label}</span>
+        ${num}<span class="tree-label">${label}</span>
         ${node.status ? `<span class="tree-status muted tiny">${escapeHtml(statusLabel(node.status))}</span>` : ""}
       </span>
       ${kids}
@@ -93,80 +99,94 @@ export function treeToMarkdown(roots, depth = 0) {
 // ── Editable plan-upload preview ──────────────────────────────────────
 
 /**
- * Mount an editable preview tree into `container`.
+ * Mount an editable preview tree into `container` (feature-hierarchy).
  *
  * @param {HTMLElement} container
- * @param {{ group: {name:string,description?:string}|null, tasks: Array }} preview
+ * @param {{
+ *   feature: {name:string,description?:string}|null,
+ *   groups: Array<{name:string,description?:string}>,
+ *   tasks: Array<{name:string,description?:string,verificationCriteria?:string,groupIndex:number}>
+ * }} preview
  * @returns {{ getEdits: () => object, hasSurvivors: () => boolean }}
  *   getEdits() returns the minimal `edits` object for the commit route
  *   (only changed fields + drops); hasSurvivors() is false when every
  *   task is dropped (commit would 400 on a zero-task tree).
  */
 export function mountPlanEditTree(container, preview) {
-  const originalGroup = preview.group ? { ...preview.group } : null;
+  const originalFeature = preview.feature ? { ...preview.feature } : null;
+  const originalGroups = (preview.groups || []).map((g) => ({ ...g }));
   const originalTasks = (preview.tasks || []).map((t) => ({ ...t }));
 
-  // Working model — index-stable clone the user edits in place.
-  const group = originalGroup ? { ...originalGroup, dropped: false } : null;
+  // Working model — index-stable clones the user edits in place.
+  const feature = originalFeature ? { ...originalFeature, dropped: false } : null;
+  const groups = originalGroups.map((g) => ({ name: g.name, description: g.description ?? "" }));
   const model = originalTasks.map((t) => ({
     name: t.name,
     description: t.description ?? "",
     verificationCriteria: t.verificationCriteria ?? "",
-    parentIndex: t.parentIndex,
+    groupIndex: typeof t.groupIndex === "number" ? t.groupIndex : 0,
     dropped: false,
   }));
 
   function render() {
-    const rootIdx = [];
-    const childrenOf = new Map();
+    // Bucket tasks by their section group.
+    const tasksByGroup = new Map();
     model.forEach((t, i) => {
-      if (t.parentIndex === undefined || t.parentIndex === null) rootIdx.push(i);
-      else {
-        const arr = childrenOf.get(t.parentIndex) || [];
-        arr.push(i);
-        childrenOf.set(t.parentIndex, arr);
-      }
+      const arr = tasksByGroup.get(t.groupIndex) || [];
+      arr.push(i);
+      tasksByGroup.set(t.groupIndex, arr);
     });
 
-    const groupHtml = group
+    const featureHtml = feature
       ? `
-      <div class="tree-group-card ${group.dropped ? "tree-dropped" : ""}" data-group-card>
+      <div class="tree-feature-card ${feature.dropped ? "tree-dropped" : ""}" data-feature-card>
         <div class="tree-row">
-          <span class="badge badge-default">group</span>
-          <input class="input tree-edit-name" data-group-name value="${escapeHtml(group.name)}" ${group.dropped ? "disabled" : ""} />
-          <button type="button" class="btn btn-sm ${group.dropped ? "btn-secondary" : "btn-danger"}" data-group-drop>
-            ${group.dropped ? "Restore" : "Drop group"}
+          <span class="badge badge-default">feature</span>
+          <input class="input tree-edit-name" data-feature-name value="${escapeHtml(feature.name)}" ${feature.dropped ? "disabled" : ""} />
+          <button type="button" class="btn btn-sm ${feature.dropped ? "btn-secondary" : "btn-danger"}" data-feature-drop>
+            ${feature.dropped ? "Restore" : "Use default name"}
           </button>
         </div>
-        <textarea class="textarea tree-edit-desc" data-group-desc rows="2" placeholder="Group description (optional)" ${group.dropped ? "disabled" : ""}>${escapeHtml(group.description ?? "")}</textarea>
+        <textarea class="textarea tree-edit-desc" data-feature-desc rows="2" placeholder="Feature description (optional)" ${feature.dropped ? "disabled" : ""}>${escapeHtml(feature.description ?? "")}</textarea>
       </div>`
       : "";
 
+    const groupsHtml = groups
+      .map((g, gi) => {
+        const taskIdx = tasksByGroup.get(gi) || [];
+        const tasksHtml = taskIdx.map((i, pos) => editTaskHtml(i, `${gi + 1}.${pos + 1}`)).join("");
+        return `
+        <li class="tree-group-section" data-group-idx="${gi}">
+          <div class="tree-row">
+            <span class="badge badge-default">${gi + 1}</span>
+            <input class="input tree-edit-name" data-group-name value="${escapeHtml(g.name)}" />
+          </div>
+          <ul>${tasksHtml || `<li class="placeholder tiny">No tasks in this section.</li>`}</ul>
+        </li>`;
+      })
+      .join("");
+
     container.innerHTML = `
-      ${groupHtml}
+      ${featureHtml}
       <ul class="tree-view tree-edit">
-        ${rootIdx.map((i) => editNodeHtml(i, childrenOf)).join("")}
+        ${groupsHtml}
       </ul>`;
     attachHandlers();
   }
 
-  function editNodeHtml(i, childrenOf) {
+  function editTaskHtml(i, displayNumber) {
     const t = model[i];
-    const kidsIdx = childrenOf.get(i) || [];
-    const kids = kidsIdx.length
-      ? `<ul>${kidsIdx.map((k) => editNodeHtml(k, childrenOf)).join("")}</ul>`
-      : "";
     return `
       <li class="tree-node tree-edit-node ${t.dropped ? "tree-dropped" : ""}" data-idx="${i}">
         <div class="tree-row">
           <span class="tree-marker tree-marker-pending" aria-hidden="true">[ ]</span>
+          <span class="tree-num muted tiny">${escapeHtml(displayNumber)}</span>
           <input class="input tree-edit-name" data-name value="${escapeHtml(t.name)}" ${t.dropped ? "disabled" : ""} />
           <button type="button" class="btn btn-sm ${t.dropped ? "btn-secondary" : "btn-danger"}" data-drop>
             ${t.dropped ? "Restore" : "Remove"}
           </button>
         </div>
         <textarea class="textarea tree-edit-desc" data-desc rows="2" placeholder="Description" ${t.dropped ? "disabled" : ""}>${escapeHtml(t.description)}</textarea>
-        ${kids}
       </li>`;
   }
 
@@ -182,19 +202,26 @@ export function mountPlanEditTree(container, preview) {
       if (dropEl)
         dropEl.addEventListener("click", () => {
           model[idx].dropped = !model[idx].dropped;
-          render(); // re-render so dropping a parent visually cascades
+          render();
         });
     });
 
-    if (group) {
-      const gName = container.querySelector("[data-group-name]");
-      const gDesc = container.querySelector("[data-group-desc]");
-      const gDrop = container.querySelector("[data-group-drop]");
-      if (gName) gName.addEventListener("input", () => (group.name = gName.value));
-      if (gDesc) gDesc.addEventListener("input", () => (group.description = gDesc.value));
-      if (gDrop)
-        gDrop.addEventListener("click", () => {
-          group.dropped = !group.dropped;
+    // Per-group rename.
+    container.querySelectorAll(".tree-group-section").forEach((li) => {
+      const gi = Number(li.dataset.groupIdx);
+      const gName = li.querySelector(":scope > .tree-row > [data-group-name]");
+      if (gName) gName.addEventListener("input", () => (groups[gi].name = gName.value));
+    });
+
+    if (feature) {
+      const fName = container.querySelector("[data-feature-name]");
+      const fDesc = container.querySelector("[data-feature-desc]");
+      const fDrop = container.querySelector("[data-feature-drop]");
+      if (fName) fName.addEventListener("input", () => (feature.name = fName.value));
+      if (fDesc) fDesc.addEventListener("input", () => (feature.description = fDesc.value));
+      if (fDrop)
+        fDrop.addEventListener("click", () => {
+          feature.dropped = !feature.dropped;
           render();
         });
     }
@@ -203,16 +230,33 @@ export function mountPlanEditTree(container, preview) {
   function getEdits() {
     const edits = {};
 
-    if (group) {
-      const g = {};
-      if (group.dropped) g.drop = true;
+    if (feature) {
+      const f = {};
+      if (feature.dropped) f.drop = true;
       else {
-        if (group.name !== originalGroup.name) g.name = group.name;
-        if ((group.description ?? "") !== (originalGroup.description ?? ""))
-          g.description = group.description ?? "";
+        if (feature.name !== originalFeature.name) f.name = feature.name;
+        if ((feature.description ?? "") !== (originalFeature.description ?? ""))
+          f.description = feature.description ?? "";
       }
-      if (Object.keys(g).length) edits.group = g;
+      if (Object.keys(f).length) edits.feature = f;
     }
+
+    const groupEdits = [];
+    groups.forEach((g, gi) => {
+      const o = originalGroups[gi];
+      const patch = { index: gi };
+      let touched = false;
+      if (g.name !== o.name && g.name.trim()) {
+        patch.name = g.name;
+        touched = true;
+      }
+      if ((g.description ?? "") !== (o.description ?? "")) {
+        patch.description = g.description ?? "";
+        touched = true;
+      }
+      if (touched) groupEdits.push(patch);
+    });
+    if (groupEdits.length) edits.groups = groupEdits;
 
     const taskEdits = [];
     model.forEach((t, i) => {

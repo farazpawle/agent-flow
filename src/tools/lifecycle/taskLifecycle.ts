@@ -37,6 +37,7 @@ import {
 } from "../../utils/errors.js";
 import { withToolTelemetry } from "../../utils/telemetry.js";
 import { recoverExpiredClaim, withVersionCheck } from "../../models/concurrency.js";
+import { canExecuteTask } from "../../models/taskModel.js";
 import { narrateAbandonment } from "../../llm/narration.js";
 import type { Task } from "../../types/index.js";
 import { TaskStatus } from "../../types/index.js";
@@ -130,6 +131,30 @@ const TRANSITIONS: Record<LifecycleAction, readonly TaskStatus[]> = {
   release: [TaskStatus.IN_PROGRESS],
 };
 
+/**
+ * feature-hierarchy Workstream C — hard dependency gate. A task whose
+ * prerequisites aren't all COMPLETED cannot be claimed or started: the status
+ * can't change and no agent can perform it. Surfaces as MCP CONFLICT /
+ * HTTP 409 with the same body family as TASK_LOCKED.
+ *
+ * Wire body: `{ code: 'TASK_BLOCKED', details: { taskId, blockedBy } }`.
+ * The block is derived (not persisted) — it clears automatically once the
+ * dependency finalizes, so no row mutation is needed here.
+ */
+async function assertDependenciesMet(taskId: string): Promise<void> {
+  const { canExecute, blockedBy } = await canExecuteTask(taskId);
+  if (!canExecute) {
+    throw new ConflictError(`Task ${taskId} is blocked by incomplete dependencies`, {
+      hint: "Complete the prerequisite task(s) first; the block clears automatically once they finalize.",
+      details: {
+        code: "TASK_BLOCKED",
+        taskId,
+        blockedBy: blockedBy ?? [],
+      },
+    });
+  }
+}
+
 function ensureTransition(action: LifecycleAction, task: TaskWithVersion): void {
   const allowed = TRANSITIONS[action];
   if (!allowed.includes(task.status)) {
@@ -202,6 +227,8 @@ async function dispatch(input: TaskLifecycleInput) {
 async function claim(input: Extract<TaskLifecycleInput, { action: "claim" }>) {
   const task = await loadOrThrow(input.taskId);
   ensureTransition("claim", task);
+  // Dependency gate before taking the lock — a blocked task can't be claimed.
+  await assertDependenciesMet(input.taskId);
   const clientId = resolveClientId(input);
   const result = await db.claimTask(input.taskId, clientId, lockTtlMs());
   if (!result.ok) {
@@ -242,6 +269,9 @@ async function claim(input: Extract<TaskLifecycleInput, { action: "claim" }>) {
 async function start(input: Extract<TaskLifecycleInput, { action: "start" }>) {
   const task = await loadOrThrow(input.taskId);
   ensureTransition("start", task);
+  // Dependency gate before the implicit claim — closes the bypass where an
+  // agent could start a task whose prerequisites aren't complete.
+  await assertDependenciesMet(input.taskId);
   const clientId = resolveClientId(input);
   // Implicit-claim semantics: try to take the lock first. If someone else
   // holds a live claim we reject TASK_LOCKED. Re-claim by the same client

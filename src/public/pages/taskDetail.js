@@ -222,6 +222,15 @@ function parseNotes(notes) {
 }
 
 function renderSummarySection(task) {
+  // feature-hierarchy Workstream C — derived auto-BLOCKED. When the server
+  // marks the task blocked, surface it instead of the raw "Pending" and list
+  // the prerequisites; `task_lifecycle(start|claim)` is rejected server-side
+  // (TASK_BLOCKED) until they complete, so we present it as non-startable.
+  const blocked = task.blocked === true;
+  const blockedBy = task.blockedBy || [];
+  const statusHtml = blocked
+    ? `<span class="badge badge-blocked">Blocked</span> <span class="muted tiny">(prerequisites incomplete — cannot start yet)</span>`
+    : `${escapeHtml(statusLabel(task.status))} (use <code>task_lifecycle</code> to transition)`;
   return `
         <section class="task-section" data-section="summary">
             <h3>
@@ -231,8 +240,18 @@ function renderSummarySection(task) {
             <div class="task-section-body">
                 <div class="field-block">
                     <label class="label">Status</label>
-                    <div class="muted">${escapeHtml(statusLabel(task.status))} (use <code>task_lifecycle</code> to transition)</div>
+                    <div class="muted">${statusHtml}</div>
                 </div>
+                ${
+                  blocked && blockedBy.length
+                    ? `<div class="field-block"><label class="label">Blocked by</label><div>${blockedBy
+                        .map(
+                          (tid) =>
+                            `<a href="#/tasks/${encodeURIComponent(tid)}">${escapeHtml(tid)}</a>`
+                        )
+                        .join("<br>")}</div></div>`
+                    : ""
+                }
                 ${task.projectId ? `<div class="field-block"><label class="label">Project</label><div>${escapeHtml(task.projectId)}</div></div>` : ""}
                 ${task.priority ? `<div class="field-block"><label class="label">Priority</label><div>${escapeHtml(task.priority)}</div></div>` : ""}
             </div>
@@ -560,7 +579,7 @@ async function showDeleteDialog(task) {
             <div class="modal-body">
                 <p>
                     Dry-run preview from <code>task_delete(mode='dry_run')</code>.
-                    Re-confirm with a reason to actually execute — the server will write an audit entry.
+                    Confirm to execute — the server writes an audit entry automatically.
                 </p>
                 <p>
                     <strong>Affected:</strong> ${affectedCount} task${affectedCount === 1 ? "" : "s"}.
@@ -581,10 +600,6 @@ async function showDeleteDialog(task) {
                           .join("")}
                     </tbody>
                 </table>
-                <div class="field-block" style="margin-top: var(--space-3);">
-                    <label class="label">Reason (≥ 10 chars, recorded in audit log)</label>
-                    <input class="input" id="delete-reason" />
-                </div>
             </div>
             <div class="modal-footer">
                 <button class="btn btn-secondary" data-action="cancel">Cancel</button>
@@ -606,17 +621,11 @@ async function showDeleteDialog(task) {
       }
     });
     wrap.querySelector('[data-action="execute"]').addEventListener("click", async () => {
-      const reason = (wrap.querySelector("#delete-reason").value || "").trim();
-      if (reason.length < 10) {
-        toast.error("Reason must be at least 10 characters.");
-        return;
-      }
       try {
         await api.post("/api/tasks/delete", {
           action: "delete_one",
           mode: "execute",
           taskId: task.id,
-          reason,
           confirm: true,
         });
         toast.success("Task deleted");

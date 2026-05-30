@@ -28,7 +28,7 @@ debugLog(`DATA_DIR: ${process.env.DATA_DIR}`);
 import { loadPromptFromTemplate } from "./prompts/loader.js";
 import { Server } from "@modelcontextprotocol/sdk/server/index.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
-import { zodToJsonSchema } from "zod-to-json-schema";
+import { toMcpInputSchema } from "./utils/mcpInputSchema.js";
 import {
   CallToolRequest,
   CallToolRequestSchema,
@@ -155,6 +155,7 @@ import { toHttpErrorBody } from "./utils/errors.js";
 
 // Import task model functions
 import { getTaskById, getAllTasks, ensureDataDir, updateTask } from "./models/taskModel.js";
+import { computeDisplayNumbers } from "./models/numbering.js";
 import { taskEvents, TASK_EVENTS } from "./utils/events.js";
 
 // Import client model
@@ -890,7 +891,40 @@ async function main() {
             tasks = tasks.filter((t) => (t as any).clientId === clientId);
           }
 
-          res.json({ tasks });
+          // feature-hierarchy: attach the derived per-feature `<g>.<t>` number
+          // so the DAG renders real numbers (root cause #2 — no more bare `0`).
+          // Numbering is computed across the projects present in the result.
+          const projectIds = new Set(
+            tasks.map((t) => (t as any).projectId as string | undefined).filter(Boolean) as string[]
+          );
+          const groupLists = await Promise.all([...projectIds].map((pid) => db.listGroups(pid)));
+          const { taskNumbers } = computeDisplayNumbers(groupLists.flat(), tasks as any);
+
+          // feature-hierarchy Workstream C — derived auto-BLOCKED, computed
+          // in-memory from the loaded set (no per-task query). A PENDING task
+          // with any non-COMPLETED dependency is surfaced as "Blocked"; it
+          // clears automatically on the next read once the dep finalizes.
+          const isCompleted = (s: unknown) => String(s).toLowerCase() === "completed";
+          const isPending = (s: unknown) => String(s).toLowerCase() === "pending";
+          const completedIds = new Set(
+            tasks.filter((t) => isCompleted((t as any).status)).map((t) => (t as any).id)
+          );
+          const enriched = tasks.map((t) => {
+            const deps = ((t as any).dependencies ?? []) as Array<{ taskId: string }>;
+            const blocked =
+              isPending((t as any).status) && deps.some((d) => !completedIds.has(d.taskId));
+            return {
+              ...(t as any),
+              displayNumber: taskNumbers.get((t as any).id) ?? null,
+              blocked,
+              blockedBy: blocked
+                ? deps.filter((d) => !completedIds.has(d.taskId)).map((d) => d.taskId)
+                : [],
+              effectiveStatus: blocked ? "Blocked" : (t as any).status,
+            };
+          });
+
+          res.json({ tasks: enriched });
         } catch (error) {
           res.status(500).json({ error: "Failed to read tasks data" });
         }
@@ -1390,19 +1424,19 @@ async function main() {
               name: "task_view",
               description:
                 "Read-only task view. Discriminated on `action`: list (filter by projectId/status), get (taskId), search (query + projectId), next_ready (next PENDING task with all deps COMPLETED), by_status. Every returned task includes `version` for use as `expectedVersion` on subsequent edits.",
-              inputSchema: zodToJsonSchema(taskViewSchema),
+              inputSchema: toMcpInputSchema(taskViewSchema),
             },
             {
               name: "project_view",
               description:
                 "Read-only project view. Discriminated on `action`: list, get (projectId), summary (projectId — adds task-count breakdown), active (resolves the per-client active project from client_active_project).",
-              inputSchema: zodToJsonSchema(projectViewSchema),
+              inputSchema: toMcpInputSchema(projectViewSchema),
             },
             {
               name: "context_get",
               description:
                 "Token-budgeted, LLM-free context bundle assembler. Discriminated on `type`: project_summary, implementation_context, verification_context, lessons (deterministic fallback chain: lesson_summaries → recent lessonsLearned + findings → empty), similar_tasks, decisions, findings, skill_index (Wave 3 §10.E — compiled Project Skill body + reference pointers), skill_section (lazy-fetch a single oversized topic referenced by skill_index).",
-              inputSchema: zodToJsonSchema(contextGetSchema),
+              inputSchema: toMcpInputSchema(contextGetSchema),
             },
           ];
       return {
@@ -1421,7 +1455,7 @@ async function main() {
             name: "workflow_run",
             description:
               "Run a structured workflow. Discriminated on `workflow`: plan, analyze, review, split_plan, process_thought, record_decision, review_task_quality, build_context_pack, summarize_lessons, detect_duplicates, generate_release_summary, ingest_plan, narrate_abandonment, compile_skill. In `WORKFLOW_MODE=manual` (default), returns the structured contract (purpose, inputRequired, steps, outputSchema, qualityChecklist, nextRecommendedCalls) for the agent to execute. `WORKFLOW_MODE=disabled` returns a typed WORKFLOW_DISABLED payload. Per-call `mode` overrides env. (Phase 3: plan/analyze/review are ALSO available via MCP Prompts — `prompts/list` + `prompts/get`.)",
-            inputSchema: zodToJsonSchema(workflowRunSchema),
+            inputSchema: toMcpInputSchema(workflowRunSchema),
           },
           // Phase 3 Group 19.2: view tools moved behind Resources by
           // default. Set MCP_REDUCED_TOOL_SURFACE=false to restore them
@@ -1435,7 +1469,7 @@ async function main() {
             name: "task_lifecycle",
             description:
               "Drive a task through its lifecycle. Discriminated on `action`: claim, start, block, unblock, request_review, finalize, reopen, archive. Only `finalize` requires `expectedVersion` (from task_view); every other action transitions atomically server-side. `finalize.result` is itself a discriminated union on `verdict` (pass / fail / partial / needs_review), each branch with its own required fields. Illegal transitions return a typed CONFLICT.",
-            inputSchema: zodToJsonSchema(taskLifecycleSchema),
+            inputSchema: toMcpInputSchema(taskLifecycleSchema),
           },
           // Phase 4 Group 20 — verify_task / complete_task deprecation
           // shims removed in v1.2.0 as advertised by
@@ -1450,7 +1484,7 @@ async function main() {
             name: "artifact_record",
             description:
               "Append-only artifact ingestion for a task. Discriminated on `kind`: finding (type+content), test_log (outcome+content), build_log (outcome+content), reference (url), commit (sha+message), pull_request (url+status), evidence (content). The server resolves `project_id` from `taskId`. Returns `findingId` for downstream reference. No UPDATE/DELETE — append-only by API contract.",
-            inputSchema: zodToJsonSchema(artifactRecordSchema),
+            inputSchema: toMcpInputSchema(artifactRecordSchema),
           },
           // Phase 1 Group 5 — non-destructive edit tools (replace
           // create_project, update_task, reorder_tasks).
@@ -1458,13 +1492,13 @@ async function main() {
             name: "task_edit",
             description:
               "Non-destructive task edits. Discriminated on `action`: create, update, reorder, set_priority, set_dependency, clear_dependency, split, merge. Single-task actions require `expectedVersion` (from task_view); reorder + merge require `expectedVersions` covering every affected task — any stale version aborts the whole batch with a CONFLICT carrying the current bodies.",
-            inputSchema: zodToJsonSchema(taskEditSchema),
+            inputSchema: toMcpInputSchema(taskEditSchema),
           },
           {
             name: "project_edit",
             description:
               "Non-destructive project edits. Discriminated on `action`: create, update, set_active. `set_active` is client-scoped — requires `clientId` and writes only the (client_id, project_id) row; never mutates global state.",
-            inputSchema: zodToJsonSchema(projectEditSchema),
+            inputSchema: toMcpInputSchema(projectEditSchema),
           },
           // Phase 1 Group 6 — destructive tools (replace delete_project,
           // delete_task, split_tasks(clearAllTasks)). Two-mode contract:
@@ -1474,13 +1508,13 @@ async function main() {
             name: "project_delete",
             description:
               "Project deletion with safety chain. Discriminated on `mode`: dry_run (projectId only) returns affected counts + sample; execute requires `projectId`, `reason ≥ 10`, `confirm: true`. Writes an audit row before deleting. Refused when invoked from inside workflow_run.",
-            inputSchema: zodToJsonSchema(projectDeleteSchema),
+            inputSchema: toMcpInputSchema(projectDeleteSchema),
           },
           {
             name: "task_delete",
             description:
               "Task deletion with safety chain. Compound discriminator `op = <action>.<mode>` (action ∈ delete_one | delete_many | clear_all_for_project; mode ∈ dry_run | execute). Execute branches require `reason` (≥10 chars, or ≥20 for clear_all_for_project) and `confirm: true`. Writes an audit row before deleting. Refused when invoked from inside workflow_run.",
-            inputSchema: zodToJsonSchema(taskDeleteSchema),
+            inputSchema: toMcpInputSchema(taskDeleteSchema),
           },
         ],
       };

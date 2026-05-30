@@ -19,8 +19,10 @@
 import { db } from "../../models/db.js";
 import { getAllProjects, getProjectById, type Project } from "../../models/projectModel.js";
 import { getCurrentClientId } from "../../models/clientModel.js";
+import { computeDisplayNumbers } from "../../models/numbering.js";
 import { NotFoundError, ValidationError } from "../../utils/errors.js";
 import { withToolTelemetry } from "../../utils/telemetry.js";
+import type { TaskGroup } from "../../types/index.js";
 import type { ProjectViewInput } from "./schemas.js";
 
 function projectPayload(p: Project) {
@@ -144,17 +146,44 @@ async function dispatch(input: ProjectViewInput) {
         bucket[c.status] = (bucket[c.status] ?? 0) + c.count;
         byGroup.set(key, bucket);
       }
+
+      // feature-hierarchy: derive section numbers and nest sections under
+      // their feature. Group numbering only needs the groups themselves.
+      const { groupNumbers } = computeDisplayNumbers(groups, []);
+      const groupDto = (g: TaskGroup) => ({
+        id: g.id,
+        name: g.name,
+        description: g.description ?? null,
+        status: g.status,
+        parentGroupId: g.parentGroupId ?? null,
+        executionOrder: g.executionOrder ?? 0,
+        displayNumber: groupNumbers.get(g.id) ?? null,
+        createdAt: g.createdAt instanceof Date ? g.createdAt.toISOString() : g.createdAt,
+        updatedAt: g.updatedAt instanceof Date ? g.updatedAt.toISOString() : g.updatedAt,
+        taskCounts: byGroup.get(g.id) ?? {},
+      });
+
+      // Sections grouped under their feature, ordered by executionOrder.
+      const childrenByParent = new Map<string, TaskGroup[]>();
+      for (const g of groups) {
+        if (!g.parentGroupId) continue;
+        const bucket = childrenByParent.get(g.parentGroupId);
+        if (bucket) bucket.push(g);
+        else childrenByParent.set(g.parentGroupId, [g]);
+      }
+      for (const bucket of childrenByParent.values()) {
+        bucket.sort((a, b) => (a.executionOrder ?? 0) - (b.executionOrder ?? 0));
+      }
+
+      // Top-level entries: features (and standalone manual groups). Each gets
+      // a nested `children` array of its section groups.
+      const topLevel = groups.filter((g) => !g.parentGroupId);
       return asToolText({
         action: "groups_list",
         projectId: input.projectId,
-        groups: groups.map((g) => ({
-          id: g.id,
-          name: g.name,
-          description: g.description ?? null,
-          status: g.status,
-          createdAt: g.createdAt instanceof Date ? g.createdAt.toISOString() : g.createdAt,
-          updatedAt: g.updatedAt instanceof Date ? g.updatedAt.toISOString() : g.updatedAt,
-          taskCounts: byGroup.get(g.id) ?? {},
+        groups: topLevel.map((feature) => ({
+          ...groupDto(feature),
+          children: (childrenByParent.get(feature.id) ?? []).map(groupDto),
         })),
         ungroupedTaskCounts: byGroup.get(null) ?? {},
       });

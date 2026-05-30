@@ -104,6 +104,14 @@ export interface TaskGroup {
   description?: string;
   /** Lifecycle status of the group itself: 'active' | 'completed' | 'archived'. */
   status: "active" | "completed" | "archived";
+  /**
+   * Self-referential parent (feature-hierarchy). A **Feature** is a group with
+   * `parentGroupId === undefined`; a **section Group** points at its feature.
+   * Strictly one level deep: a group whose parent already has a parent is invalid.
+   */
+  parentGroupId?: string;
+  /** Ordinal of this group within its feature (drives derived `1, 2, …` numbering). */
+  executionOrder?: number;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -114,6 +122,10 @@ export interface TaskGroupInput {
   name: string;
   description?: string;
   status?: "active" | "completed" | "archived";
+  /** Feature id when creating a section group; omit/null for a feature. */
+  parentGroupId?: string;
+  /** Ordinal within the feature; defaults to 0. */
+  executionOrder?: number;
 }
 
 // Parameters for planning a task: used to initialize the task planning phase

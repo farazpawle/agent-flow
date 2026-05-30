@@ -800,6 +800,8 @@ export class SupabaseAdapter implements DatabaseAdapter {
       name: row.name,
       description: row.description ?? undefined,
       status: (row.status ?? "active") as "active" | "completed" | "archived",
+      parentGroupId: (row.parent_group_id as string | null) ?? undefined,
+      executionOrder: (row.execution_order as number | null) ?? 0,
       createdAt: row.created_at ? new Date(row.created_at) : new Date(),
       updatedAt: row.updated_at ? new Date(row.updated_at) : new Date(),
     };
@@ -808,6 +810,8 @@ export class SupabaseAdapter implements DatabaseAdapter {
   async createGroup(input: TaskGroupInput): Promise<TaskGroup> {
     const id = input.id ?? randomUUID();
     const status = input.status ?? "active";
+    const parentGroupId = input.parentGroupId ?? null;
+    const executionOrder = input.executionOrder ?? 0;
     const nowIso = new Date().toISOString();
     const { error } = await this.getSupabase()
       .from("task_groups")
@@ -817,6 +821,8 @@ export class SupabaseAdapter implements DatabaseAdapter {
         name: input.name,
         description: input.description ?? null,
         status,
+        parent_group_id: parentGroupId,
+        execution_order: executionOrder,
         created_at: nowIso,
         updated_at: nowIso,
       });
@@ -827,6 +833,8 @@ export class SupabaseAdapter implements DatabaseAdapter {
       name: input.name,
       description: input.description,
       status,
+      parentGroupId: parentGroupId ?? undefined,
+      executionOrder,
       createdAt: new Date(nowIso),
       updatedAt: new Date(nowIso),
     };
@@ -835,7 +843,9 @@ export class SupabaseAdapter implements DatabaseAdapter {
   async getGroup(id: string): Promise<TaskGroup | null> {
     const { data, error } = await this.getSupabase()
       .from("task_groups")
-      .select("id, project_id, name, description, status, created_at, updated_at")
+      .select(
+        "id, project_id, name, description, status, parent_group_id, execution_order, created_at, updated_at"
+      )
       .eq("id", id)
       .maybeSingle();
     if (error) throw error;
@@ -846,8 +856,11 @@ export class SupabaseAdapter implements DatabaseAdapter {
   async listGroups(projectId: string): Promise<TaskGroup[]> {
     const { data, error } = await this.getSupabase()
       .from("task_groups")
-      .select("id, project_id, name, description, status, created_at, updated_at")
+      .select(
+        "id, project_id, name, description, status, parent_group_id, execution_order, created_at, updated_at"
+      )
       .eq("project_id", projectId)
+      .order("execution_order", { ascending: true })
       .order("created_at", { ascending: false });
     if (error) throw error;
     return (data ?? []).map((r) => this.mapGroupRow(r));
@@ -867,8 +880,10 @@ export class SupabaseAdapter implements DatabaseAdapter {
   }
 
   async deleteGroup(id: string): Promise<void> {
-    // Supabase FK ON DELETE SET NULL handles dependent tasks; the
-    // statement here is the actual delete.
+    // Two FK cascades run in Postgres on this single delete:
+    //   - parent_group_id ON DELETE CASCADE → child section groups are removed.
+    //   - tasks.group_id ON DELETE SET NULL → dependent tasks (of this group and
+    //     of the cascade-deleted child groups) are detached.
     const { error } = await this.getSupabase().from("task_groups").delete().eq("id", id);
     if (error) throw error;
   }

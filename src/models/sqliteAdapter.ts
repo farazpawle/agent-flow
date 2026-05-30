@@ -215,6 +215,23 @@ export class SQLiteAdapter implements DatabaseAdapter {
           this.db!.run(
             `CREATE INDEX IF NOT EXISTS idx_task_groups_project ON task_groups(project_id)`
           );
+          // Feature-hierarchy — self-referential parent + ordinal so a Feature
+          // (parent_group_id IS NULL) can hold child section Groups, and group
+          // ordinals are deterministic. SQLite cannot add a REFERENCES constraint
+          // via ALTER TABLE, so the Feature→Group ON DELETE CASCADE is emulated
+          // in `deleteGroup` (it removes child groups + nulls their tasks).
+          this.db!.run(`ALTER TABLE task_groups ADD COLUMN parent_group_id TEXT`, () => {
+            /* idempotent */
+          });
+          this.db!.run(
+            `ALTER TABLE task_groups ADD COLUMN execution_order INTEGER DEFAULT 0`,
+            () => {
+              /* idempotent */
+            }
+          );
+          this.db!.run(
+            `CREATE INDEX IF NOT EXISTS idx_task_groups_parent ON task_groups(parent_group_id)`
+          );
           // The FK is added via a NULLable column without REFERENCES because
           // SQLite cannot retroactively add a REFERENCES constraint via
           // ALTER TABLE. ON DELETE SET NULL semantics are emulated in the
@@ -1256,6 +1273,8 @@ export class SQLiteAdapter implements DatabaseAdapter {
       name: row.name,
       description: row.description ?? undefined,
       status: (row.status ?? "active") as "active" | "completed" | "archived",
+      parentGroupId: (row.parent_group_id as string | null) ?? undefined,
+      executionOrder: (row.execution_order as number | null) ?? 0,
       createdAt: row.created_at ? new Date(row.created_at) : new Date(),
       updatedAt: row.updated_at ? new Date(row.updated_at) : new Date(),
     };
@@ -1265,11 +1284,24 @@ export class SQLiteAdapter implements DatabaseAdapter {
     const id = input.id ?? randomUUID();
     const now = Date.now();
     const status = input.status ?? "active";
+    const parentGroupId = input.parentGroupId ?? null;
+    const executionOrder = input.executionOrder ?? 0;
     return new Promise((resolve, reject) => {
       this.getDb().run(
-        `INSERT INTO task_groups (id, project_id, name, description, status, created_at, updated_at)
-           VALUES (?, ?, ?, ?, ?, ?, ?)`,
-        [id, input.projectId, input.name, input.description ?? null, status, now, now],
+        `INSERT INTO task_groups
+           (id, project_id, name, description, status, parent_group_id, execution_order, created_at, updated_at)
+           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+        [
+          id,
+          input.projectId,
+          input.name,
+          input.description ?? null,
+          status,
+          parentGroupId,
+          executionOrder,
+          now,
+          now,
+        ],
         (err) => {
           if (err) reject(err);
           else
@@ -1279,6 +1311,8 @@ export class SQLiteAdapter implements DatabaseAdapter {
               name: input.name,
               description: input.description,
               status,
+              parentGroupId: parentGroupId ?? undefined,
+              executionOrder,
               createdAt: new Date(now),
               updatedAt: new Date(now),
             });
@@ -1290,7 +1324,7 @@ export class SQLiteAdapter implements DatabaseAdapter {
   async getGroup(id: string): Promise<TaskGroup | null> {
     return new Promise((resolve, reject) => {
       this.getDb().get(
-        `SELECT id, project_id, name, description, status, created_at, updated_at
+        `SELECT id, project_id, name, description, status, parent_group_id, execution_order, created_at, updated_at
            FROM task_groups WHERE id = ?`,
         [id],
         (err, row: any) => {
@@ -1305,10 +1339,10 @@ export class SQLiteAdapter implements DatabaseAdapter {
   async listGroups(projectId: string): Promise<TaskGroup[]> {
     return new Promise((resolve, reject) => {
       this.getDb().all(
-        `SELECT id, project_id, name, description, status, created_at, updated_at
+        `SELECT id, project_id, name, description, status, parent_group_id, execution_order, created_at, updated_at
            FROM task_groups
            WHERE project_id = ?
-           ORDER BY created_at DESC`,
+           ORDER BY execution_order ASC, created_at DESC`,
         [projectId],
         (err, rows: any[]) => {
           if (err) reject(err);
@@ -1349,16 +1383,23 @@ export class SQLiteAdapter implements DatabaseAdapter {
   }
 
   async deleteGroup(id: string): Promise<void> {
-    // Emulate ON DELETE SET NULL — SQLite cannot add the constraint
-    // retroactively on the column, so we null dependent rows here first.
+    // Emulate two FK cascades SQLite cannot express on an ALTER-added column:
+    //   1. Feature→Group ON DELETE CASCADE — deleting a feature also deletes its
+    //      child section groups (one level deep).
+    //   2. tasks.group_id ON DELETE SET NULL — null the group_id of every task
+    //      that pointed at this group OR any of its child groups.
     const db = this.getDb();
     await new Promise<void>((resolve, reject) => {
-      db.run(`UPDATE tasks SET group_id = NULL WHERE group_id = ?`, [id], (err) =>
-        err ? reject(err) : resolve()
+      db.run(
+        `UPDATE tasks SET group_id = NULL
+           WHERE group_id = ?
+              OR group_id IN (SELECT id FROM task_groups WHERE parent_group_id = ?)`,
+        [id, id],
+        (err) => (err ? reject(err) : resolve())
       );
     });
     await new Promise<void>((resolve, reject) => {
-      db.run(`DELETE FROM task_groups WHERE id = ?`, [id], (err) =>
+      db.run(`DELETE FROM task_groups WHERE id = ? OR parent_group_id = ?`, [id, id], (err) =>
         err ? reject(err) : resolve()
       );
     });
